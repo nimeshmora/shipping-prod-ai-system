@@ -361,3 +361,47 @@ def test_broken_tools_raise_an_alert_even_when_every_turn_succeeds():
     assert monitor.stats()["error_rate"] == 0.0        # nothing "failed"
     assert any("tool fail" in a for a in monitor.alerts())
     monitor.reset()
+
+
+# ---- OpenTelemetry: the same trace, in the industry's shape ---------------
+def test_the_app_works_perfectly_with_otel_switched_off():
+    """The whole of Week 05 must keep running on a laptop with no key, no
+    cloud and no internet. OTel is a bonus layer, never a dependency."""
+    from app import otel
+    assert otel.ENABLED is False              # off unless you ask for it
+    with otel.span("anything", {"a": 1}) as s:
+        s.set("b", 2)                         # no-ops, no imports, no cost
+        s.failed("even this")
+
+
+def test_a_turn_produces_one_parent_span_with_children():
+    import os
+    import subprocess
+    import sys
+    # Run in a subprocess: the tracer provider is global and set once.
+    code = (
+        "from types import SimpleNamespace as NS\n"
+        "from app import otel, trace as tr\n"
+        "from app.agent import run_turn\n"
+        "st={'n':0}\n"
+        "def m(msgs, t=None):\n"
+        "    st['n']+=1\n"
+        "    if st['n']==1:\n"
+        "        b=NS(type='tool_use',name='lookup_order',"
+        "input={'order_id':'ORD-1002'},id='t')\n"
+        "        return NS(content=[b],stop_reason='tool_use',usage=None)\n"
+        "    return NS(content=[NS(type='text',text='ok')],"
+        "stop_reason='end_turn',usage=None)\n"
+        "with otel.span('chat_turn',{'turn.id':'abc'}):\n"
+        "    run_turn('hi',model_fn=m,trace=tr.new_trace('s'))\n"
+        "from opentelemetry import trace as ot\n"
+        "ot.get_tracer_provider().force_flush()\n"
+    )
+    env = {**os.environ, "OTEL_ENABLED": "1"}
+    out = subprocess.run([sys.executable, "-c", code], capture_output=True,
+                         text=True, env=env).stdout
+
+    assert '"name": "chat_turn"' in out       # the turn itself
+    assert '"name": "model_call"' in out      # each trip round the loop
+    assert '"name": "tool"' in out            # and each tool call
+    assert '"parent_id": null' in out         # chat_turn is the root

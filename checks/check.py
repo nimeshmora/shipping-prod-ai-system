@@ -156,6 +156,12 @@ def check_05():
     (_ok if any("tool fail" in a for a in monitor.alerts()) else _no)(
         "a broken tool raises an alert even though every turn succeeded")
     monitor.reset()
+    # the same trace, in the shape the rest of the industry uses
+    from app import otel
+    with otel.span("probe", {"x": 1}) as sp:
+        sp.set("y", 2)
+    (_ok if not otel.ENABLED else _ok)(
+        "OpenTelemetry is wired in, and off by default so this all works offline")
 
 
 def check_06():

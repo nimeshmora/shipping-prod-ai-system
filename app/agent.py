@@ -20,6 +20,7 @@ from types import SimpleNamespace as NS
 
 from app.guardrails import Budget, GuardrailError, check_tool_output
 from app.orders import lookup_order
+from app import otel
 
 MODEL = os.environ.get("MODEL", "claude-sonnet-5")
 FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "gpt-oss-120b")
@@ -242,7 +243,8 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
     while True:
         budget.add_step()                      # Week 04: cannot loop forever
         _t0 = time.time()                      # Week 05: time every step
-        resp = model_fn(messages, trace) if _accepts_trace(model_fn) else model_fn(messages)
+        with otel.span("model_call", {"step": budget.steps}):
+            resp = model_fn(messages, trace) if _accepts_trace(model_fn) else model_fn(messages)
         if trace is not None:
             trace["step_ms"].append(round((time.time() - _t0) * 1000))
 
@@ -265,7 +267,10 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
         for block in resp.content:
             if getattr(block, "type", None) == "tool_use":
                 _tt = time.time()
-                out = run_tool(block.name, block.input)
+                with otel.span("tool", {"tool.name": block.name}) as _sp:
+                    out = run_tool(block.name, block.input)
+                    if str(out).startswith(("tool error:", "unknown tool:")):
+                        _sp.failed(out)
                 # Week 07: a tool result is untrusted input too. It goes
                 # straight back into the model's context, and you did not
                 # write what a web page or a file says.

@@ -39,6 +39,22 @@ check-week-07:
 check-week-08:
 	python -m checks.check 08
 
+# ---- Week 05: a place to look at traces ----
+# Grafana + Tempo: the dashboard stack most teams actually use.
+trace-ui:
+	docker compose -f observability/docker-compose.yml up -d
+	@echo ""
+	@echo "Grafana:  http://localhost:3000   (no login)"
+	@echo "  Explore -> Tempo -> Search -> Run query"
+	@echo ""
+	@echo "Then, in the terminal you run the agent from:"
+	@echo "  export OTEL_ENABLED=1"
+	@echo "  export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318"
+	@echo "  make run"
+
+trace-ui-stop:
+	docker compose -f observability/docker-compose.yml down
+
 # ---- Week 06: the planted bug (instructor only) ----
 plant-bug:
 	python -m checks.plant_bug plant
