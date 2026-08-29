@@ -14,6 +14,8 @@ watching the SHAPE of your turns over time.
 The four agent signals worth watching, and what a bad number usually means:
 
     error_rate      turns that failed outright
+    tool_error_rate turns where one of YOUR tools broke - the turn still
+                    "succeeded", so this is the only place it shows up
     p95_duration    the slow tail users actually feel
     avg_steps       creeping up = the model is flailing, looping, confused
     fallback_rate   above ~0 means your primary provider is struggling
@@ -36,6 +38,7 @@ ALERT_ERROR_RATE = float(os.environ.get("ALERT_ERROR_RATE", "0.10"))
 ALERT_P95_MS = float(os.environ.get("ALERT_P95_MS", "15000"))
 ALERT_FALLBACK_RATE = float(os.environ.get("ALERT_FALLBACK_RATE", "0.20"))
 ALERT_AVG_STEPS = float(os.environ.get("ALERT_AVG_STEPS", "4.0"))
+ALERT_TOOL_ERROR_RATE = float(os.environ.get("ALERT_TOOL_ERROR_RATE", "0.05"))
 
 _turns = deque(maxlen=WINDOW)
 
@@ -47,6 +50,8 @@ def record(trace):
     _turns.append({
         "at": time.time(),
         "error": trace.get("error") is not None,
+        "tool_error": bool(trace.get("tool_errors")),
+        "slowest_step_ms": max(trace.get("step_ms") or [0]),
         "duration_ms": trace.get("duration_ms", 0),
         "steps": trace.get("steps", 0),
         "cost_usd": trace.get("cost_usd", 0.0),
@@ -79,6 +84,8 @@ def stats():
         "avg_cost_usd": round(sum(t["cost_usd"] for t in _turns) / n, 6),
         "total_cost_usd": round(sum(t["cost_usd"] for t in _turns), 4),
         "tool_outputs_filtered": sum(t["filtered"] for t in _turns),
+        "tool_error_rate": round(sum(t["tool_error"] for t in _turns) / n, 3),
+        "p95_slowest_step_ms": _p95([t["slowest_step_ms"] for t in _turns]),
     }
 
 
@@ -97,6 +104,9 @@ def alerts():
     if s["fallback_rate"] > ALERT_FALLBACK_RATE:
         out.append(f"fallback answered {s['fallback_rate']:.0%} of turns - "
                    f"the primary model is struggling")
+    if s["tool_error_rate"] > ALERT_TOOL_ERROR_RATE:
+        out.append(f"{s['tool_error_rate']:.0%} of turns had a tool fail - "
+                   f"one of your tools is broken")
     if s["avg_steps"] > ALERT_AVG_STEPS:
         out.append(f"average {s['avg_steps']} steps per turn - the model is "
                    f"looping or confused")

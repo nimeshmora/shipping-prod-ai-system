@@ -26,6 +26,9 @@ def new_trace(session_id):
         "steps": 0,
         "token_count": 0,
         "tools_used": [],
+        "tool_errors": [],        # tools that blew up - the model still sees the text
+        "step_ms": [],            # how long each trip round the loop took
+        "tool_ms": [],            # how long each tool call took
         "tool_output_filtered": False,
         "model_calls": [],
         "error": None,
@@ -64,8 +67,19 @@ def _redact(value):
 
 
 def emit(trace):
-    """Finish and print the trace as one JSON line to stdout."""
+    """Finish and print the trace as one JSON line to stdout.
+
+    Two of these fields are not for you - they are for the log platform.
+    Cloud Run (and most log tools) read stdout, and they look for a field
+    called "severity" to decide whether a line is routine or a problem.
+    Without it every line lands as INFO, so a failed turn looks exactly like
+    a successful one in the console and nothing ever pages anybody.
+    """
     trace["duration_ms"] = round((time.time() - trace["started_at"]) * 1000)
     trace["cost_usd"] = estimate_cost(trace.get("token_count", 0))
+    trace["severity"] = "ERROR" if trace.get("error") else "INFO"
+    trace["message"] = (f"turn {trace['turn_id'][:8]} "
+                        f"{'failed' if trace.get('error') else 'ok'} "
+                        f"in {trace['duration_ms']}ms")
     print(json.dumps(_redact(trace)))
     return trace

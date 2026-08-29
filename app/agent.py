@@ -15,6 +15,7 @@ Tests pass a fake model_fn so none of this needs an API key.
 import ast
 import operator
 import os
+import time
 from types import SimpleNamespace as NS
 
 from app.guardrails import Budget, GuardrailError, check_tool_output
@@ -240,7 +241,10 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
 
     while True:
         budget.add_step()                      # Week 04: cannot loop forever
+        _t0 = time.time()                      # Week 05: time every step
         resp = model_fn(messages, trace) if _accepts_trace(model_fn) else model_fn(messages)
+        if trace is not None:
+            trace["step_ms"].append(round((time.time() - _t0) * 1000))
 
         usage = getattr(resp, "usage", None)
         if usage is not None:
@@ -260,6 +264,7 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
         results = []
         for block in resp.content:
             if getattr(block, "type", None) == "tool_use":
+                _tt = time.time()
                 out = run_tool(block.name, block.input)
                 # Week 07: a tool result is untrusted input too. It goes
                 # straight back into the model's context, and you did not
@@ -267,6 +272,12 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
                 safe = check_tool_output(out)
                 if trace is not None:
                     trace["tools_used"].append(block.name)
+                    trace["tool_ms"].append(round((time.time() - _tt) * 1000))
+                    # A tool that failed still hands text back to the model, so
+                    # the turn carries on looking fine. Record it, or a broken
+                    # tool is invisible until a customer complains.
+                    if str(out).startswith(("tool error:", "unknown tool:")):
+                        trace["tool_errors"].append(block.name)
                     if safe != out:
                         trace["tool_output_filtered"] = True
                 results.append({

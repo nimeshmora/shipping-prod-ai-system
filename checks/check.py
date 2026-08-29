@@ -139,6 +139,22 @@ def check_05():
                         "cost_usd": 0.09, "model_calls": [{"provider": "fallback"}]})
     (_ok if len(monitor.alerts()) >= 3 else _no)(
         "a degrading agent raises alerts even though nothing crashed")
+    # you cannot debug a slow turn without knowing which part was slow
+    t3 = trace.new_trace("s3")
+    from app.agent import run_turn as _rt
+    _rt("hi", model_fn=_plain_model("hi"), trace=t3)
+    (_ok if t3["step_ms"] else _no)("the trace times every step, not just the whole turn")
+    t4 = trace.new_trace("s4"); t4["error"] = "boom"; trace.emit(t4)
+    (_ok if t4["severity"] == "ERROR" else _no)(
+        "a failed turn is marked ERROR so the log tool can page someone")
+    monitor.reset()
+    for i in range(20):
+        monitor.record({"error": None, "duration_ms": 900, "steps": 2,
+                        "cost_usd": 0.01, "step_ms": [400],
+                        "model_calls": [{"provider": "primary"}],
+                        "tool_errors": ["lookup_order"] if i % 3 == 0 else []})
+    (_ok if any("tool fail" in a for a in monitor.alerts()) else _no)(
+        "a broken tool raises an alert even though every turn succeeded")
     monitor.reset()
 
 

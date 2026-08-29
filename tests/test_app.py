@@ -280,3 +280,84 @@ def test_the_system_prompt_is_sent_on_every_turn():
     assert seen["messages"][0]["role"] == "system"
     assert "customer support" in seen["messages"][0]["content"].lower()
     assert seen["timeout"] == agent.MODEL_TIMEOUT_SECONDS   # calls are bounded
+
+
+# ---- observability: can you actually debug from a trace? ------------------
+def test_the_trace_shows_where_the_time_went():
+    """A turn that took 8 seconds is useless information on its own. The
+    trace must say WHICH part was slow - the model, or your own tool."""
+    from app import trace
+    from app.agent import run_turn
+    from types import SimpleNamespace as NS
+    import time
+
+    state = {"n": 0}
+
+    def slow_first_call(messages, tr=None):
+        state["n"] += 1
+        if state["n"] == 1:
+            time.sleep(0.05)
+            block = NS(type="tool_use", name="lookup_order",
+                       input={"order_id": "ORD-1002"}, id="t1")
+            return NS(content=[block], stop_reason="tool_use", usage=None)
+        return NS(content=[NS(type="text", text="done")],
+                  stop_reason="end_turn", usage=None)
+
+    t = trace.new_trace("s")
+    run_turn("where is ORD-1002?", model_fn=slow_first_call, trace=t)
+
+    assert len(t["step_ms"]) == 2            # one entry per trip round the loop
+    assert t["step_ms"][0] >= 50             # the slow one is visible
+    assert len(t["tool_ms"]) == 1            # and the tool was timed separately
+
+
+def test_a_broken_tool_is_recorded_even_though_the_turn_succeeds():
+    """A tool that fails hands its error text back to the model, so the turn
+    still returns 200. Without tool_errors the breakage is invisible."""
+    from app import trace
+    from app.agent import run_turn
+    from types import SimpleNamespace as NS
+
+    state = {"n": 0}
+
+    def asks_for_a_broken_call(messages, tr=None):
+        state["n"] += 1
+        if state["n"] == 1:
+            block = NS(type="tool_use", name="lookup_order",
+                       input={"wrong_argument": "x"}, id="t1")
+            return NS(content=[block], stop_reason="tool_use", usage=None)
+        return NS(content=[NS(type="text", text="sorry, I could not check")],
+                  stop_reason="end_turn", usage=None)
+
+    t = trace.new_trace("s")
+    reply, _, t = run_turn("where is my order?",
+                           model_fn=asks_for_a_broken_call, trace=t)
+
+    assert reply                              # the turn "succeeded"
+    assert t["error"] is None                 # no top-level error either
+    assert t["tool_errors"] == ["lookup_order"]   # but the breakage is recorded
+
+
+def test_a_failed_turn_is_marked_ERROR_for_the_log_platform():
+    from app import trace
+    ok = trace.new_trace("s")
+    trace.emit(ok)
+    assert ok["severity"] == "INFO"
+
+    bad = trace.new_trace("s")
+    bad["error"] = "provider is down"
+    trace.emit(bad)
+    assert bad["severity"] == "ERROR"         # so the log tool can page someone
+
+
+def test_broken_tools_raise_an_alert_even_when_every_turn_succeeds():
+    from app import monitor
+    monitor.reset()
+    for i in range(20):
+        monitor.record({"error": None, "duration_ms": 900, "steps": 2,
+                        "cost_usd": 0.01, "step_ms": [400, 500],
+                        "model_calls": [{"provider": "primary"}],
+                        "tool_errors": ["lookup_order"] if i % 3 == 0 else []})
+    assert monitor.stats()["error_rate"] == 0.0        # nothing "failed"
+    assert any("tool fail" in a for a in monitor.alerts())
+    monitor.reset()
