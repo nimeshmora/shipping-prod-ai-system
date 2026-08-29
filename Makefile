@@ -39,4 +39,11 @@ check-week-07:
 check-week-08:
 	python -m checks.check 08
 
+# ---- Week 06: the planted bug (instructor only) ----
+plant-bug:
+	python -m checks.plant_bug plant
+
+fix-bug:
+	python -m checks.plant_bug fix
+
 check-all: check-week-00 check-week-01 check-week-02 check-week-03 check-week-04 check-week-05 check-week-06 check-week-07 check-week-08

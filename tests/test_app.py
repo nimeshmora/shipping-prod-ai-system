@@ -219,3 +219,64 @@ def test_a_hostile_note_in_real_data_is_neutralised():
     assert "[filtered]" in cleaned
     assert "Ignore all previous instructions" not in cleaned
     assert "office chair" in cleaned                          # real data survives
+
+
+# ---- the dashboard must not lie -------------------------------------------
+def test_an_unexpected_crash_is_recorded_in_the_trace():
+    """The bug that makes monitoring useless: if an unexpected exception
+    escapes before the trace is filled, a total outage is reported as a 0%
+    error rate. Every request here fails; /metrics must say so."""
+    from fastapi.testclient import TestClient
+    import app.main as main
+    import app.agent as agent
+    from app import monitor
+
+    monitor.reset()
+
+    def boom(messages, trace=None):
+        raise RuntimeError("the model provider is down")
+
+    original = main.run_turn
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=boom, trace=trace)
+    try:
+        client = TestClient(main.app, raise_server_exceptions=False)
+        for _ in range(12):
+            assert client.post("/chat", json={"message": "hi"}).status_code == 500
+        body = client.get("/metrics").json()
+        assert body["error_rate"] == 1.0          # not 0.0
+        assert body["status"] == "degraded"
+        assert any("error rate" in a for a in body["alerts"])
+    finally:
+        main.run_turn = original
+        monitor.reset()
+
+
+# ---- the agent has standing instructions ----------------------------------
+def test_the_system_prompt_is_sent_on_every_turn():
+    import app.agent as agent
+    seen = {}
+
+    class FakeClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+
+        def create(self, model, messages, **kw):
+            seen["messages"] = messages
+            seen["timeout"] = kw.get("timeout")
+            msg = type("M", (), {"content": "ok", "tool_calls": None})()
+            choice = type("C", (), {"message": msg, "finish_reason": "stop"})()
+            usage = type("U", (), {"prompt_tokens": 1, "completion_tokens": 1})()
+            return type("R", (), {"choices": [choice], "usage": usage})()
+
+    original = agent._client
+    agent._client = lambda: FakeClient()
+    try:
+        agent.call_model([{"role": "user", "content": "hi"}])
+    finally:
+        agent._client = original
+
+    assert seen["messages"][0]["role"] == "system"
+    assert "customer support" in seen["messages"][0]["content"].lower()
+    assert seen["timeout"] == agent.MODEL_TIMEOUT_SECONDS   # calls are bounded

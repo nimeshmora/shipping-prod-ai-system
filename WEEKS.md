@@ -46,7 +46,8 @@ Bad answers are silent. Write one JSON trace per turn - then read them, because
 a broken agent still returns 200 OK.
 
 - Files: `app/trace.py` (write), `app/monitor.py` (read), `/metrics` in
-  `app/main.py`
+  `app/main.py`; `app/main.py` catches *every* exception so a failed turn is
+  recorded - without that, a total outage reports a 0% error rate
 - Settings: `COST_PER_1M_INPUT`, `COST_PER_1M_OUTPUT`, `MONITOR_WINDOW`,
   `ALERT_ERROR_RATE`, `ALERT_P95_MS`, `ALERT_FALLBACK_RATE`, `ALERT_AVG_STEPS`
 - Done when: every request prints one JSON line with steps, tools, tokens and
@@ -57,8 +58,10 @@ a broken agent still returns 200 OK.
 
 Find a planted bug from traces, then survive a model outage with a fallback.
 
-- Files: `app/agent.py` (`call_model` tries primary then fallback)
-- Settings: `FALLBACK_MODEL`
+- Files: `app/agent.py` (`call_model` tries primary then fallback, with a
+  timeout on every call)
+- Settings: `FALLBACK_MODEL`, `MODEL_TIMEOUT_SECONDS`
+- Instructor: `make plant-bug` before the session, `make fix-bug` after
 - Done when: the primary failing still yields an answer; the trace shows
   `provider: fallback`
 

@@ -89,6 +89,9 @@ make check-all        # every weekly checkpoint at once
 
 make docker-build     # build the container
 make docker-run       # run the container
+
+make plant-bug        # instructor: hide a bug for the Week 06 hunt
+make fix-bug          # instructor: put it back
 ```
 
 Every checkpoint tells you in plain English whether that week's capability
@@ -100,7 +103,8 @@ actually works. **Green means done** — not "it looked right on my screen".
 
 ```
 app/
-  agent.py       the loop + tools + budget (Wk04) + trace (Wk05) + fallback (Wk06)
+  agent.py       the loop + tools + system prompt + budget (Wk04) + trace (Wk05)
+                 + fallback and per-call timeout (Wk06)
   orders.py      a stand-in order system — the data the agent goes and fetches
   main.py        the web service: /chat, /health, /metrics
   memory.py      session memory: a dict now, Redis when REDIS_URL is set (Wk02)

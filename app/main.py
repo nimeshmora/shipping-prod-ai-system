@@ -64,8 +64,19 @@ def chat(req: ChatRequest, x_api_key: str | None = Header(default=None)):
         memory.save(session_id, new_history)
         return {"reply": reply, "session_id": session_id, "turn_id": t["turn_id"]}
     except g.GuardrailError as e:
+        # A rule was broken. Expected, and the caller's fault: a clean 4xx.
         t["error"] = str(e)
         raise HTTPException(status_code=e.status, detail=str(e))
+    except Exception as e:
+        # Anything else: a provider outage, a timeout, a bug of ours.
+        #
+        # This except block is easy to leave out, and leaving it out is the
+        # bug that makes your dashboard lie. Without it the exception escapes
+        # before the trace is filled, so a total outage is recorded as
+        # "error": null - and /metrics cheerfully reports a 0% error rate
+        # while every single request is failing.
+        t["error"] = f"{type(e).__name__}: {e}"
+        raise HTTPException(status_code=500, detail="internal error") from e
     finally:
         trace.emit(t)
         monitor.record(t)      # Week 05: telemetry is only half of monitoring
