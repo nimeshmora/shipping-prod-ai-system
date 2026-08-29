@@ -1,0 +1,10 @@
+# Pinned to the minor version so your machine, CI and production all resolve
+# the same thing. Bump these deliberately, not by accident.
+openai~=3.6
+fastapi~=0.141
+uvicorn~=0.52
+redis~=8.1
+httpx~=0.28
+
+# Testing only. Kept here so `make install` gives you everything in one step.
+pytest~=9.1

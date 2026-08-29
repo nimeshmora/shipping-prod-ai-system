@@ -1,0 +1,29 @@
+name: eval gate
+
+# PRs only. Pushes to main are gated inside deploy.yml, where the deploy job
+# declares `needs: gate` - so main is checked there and there is no duplicate
+# run (and no false sense of safety from a gate that is not wired to anything).
+#
+# Make this job a REQUIRED STATUS CHECK in branch protection, and require pull
+# requests into main. Then a change that fails cannot even be merged, which is
+# the layer that actually protects you.
+on:
+  pull_request:
+
+concurrency:
+  group: eval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: run tests
+        run: python -m pytest -q
+      - name: run eval gate
+        run: python -m evals.run_evals
