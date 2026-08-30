@@ -1,9 +1,0 @@
-# Point Grafana at Tempo automatically, so students never configure anything.
-apiVersion: 1
-datasources:
-  - name: Tempo
-    type: tempo
-    uid: tempo
-    url: http://tempo:3200
-    access: proxy
-    isDefault: true

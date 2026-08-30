@@ -3,18 +3,7 @@
 openai~=3.6
 fastapi~=0.141
 uvicorn~=0.52
-redis~=8.1
 httpx~=0.28
 
 # Testing only. Kept here so `make install` gives you everything in one step.
 pytest~=9.1
-
-# ---- optional: OpenTelemetry (Week 05) ----
-# The same trace you already write, published in the format Grafana, Jaeger,
-# Honeycomb and Datadog all understand. Off unless OTEL_ENABLED=1, so the
-# course still runs with no key, no cloud and no internet.
-opentelemetry-api~=1.38
-opentelemetry-sdk~=1.38
-opentelemetry-exporter-otlp-proto-http~=1.38
-# Only needed if you set OTEL_TARGET=gcp (Google Cloud Trace).
-opentelemetry-exporter-gcp-trace~=1.9
