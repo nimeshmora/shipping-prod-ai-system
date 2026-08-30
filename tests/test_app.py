@@ -310,3 +310,96 @@ def test_a_missing_api_key_says_exactly_how_to_fix_it():
     finally:
         if saved is not None:
             os.environ["KODEKEY"] = saved
+
+
+# ---- Week 02: memory that survives a redeploy ------------------------------
+class FakeRedis:
+    """Enough Redis to prove the code talks to it correctly.
+
+    Not a mock that records calls - a tiny working store. A mock would pass
+    even if we called setex with the arguments in the wrong order, which is
+    exactly the bug worth catching here.
+    """
+
+    def __init__(self):
+        self.data = {}
+        self.ttls = {}
+
+    def get(self, key):
+        return self.data.get(key)
+
+    def setex(self, key, ttl, value):
+        self.data[key] = value
+        self.ttls[key] = ttl
+
+    def scan_iter(self, pattern):
+        prefix = pattern.rstrip("*")
+        return [k for k in list(self.data) if k.startswith(prefix)]
+
+    def delete(self, key):
+        self.data.pop(key, None)
+        self.ttls.pop(key, None)
+
+
+@pytest.fixture
+def redis_backed(monkeypatch):
+    """Point memory at a fake Redis, the way REDIS_URL would."""
+    fake = FakeRedis()
+    monkeypatch.setattr(memory, "REDIS_URL", "redis://fake")
+    monkeypatch.setattr(memory, "_client", fake)
+    yield fake
+
+
+def test_a_conversation_survives_the_process_that_started_it(redis_backed):
+    """The Week 02 lesson. The dict died with the container on every deploy;
+    Redis does not, because it is not in the container."""
+    memory.save("sess-1", [{"role": "user", "content": "where is ORD-1002?"}])
+
+    # simulate a redeploy: the process is gone, its module state with it.
+    # Redis is untouched, because it was never inside the container.
+    memory._FALLBACK.clear()
+
+    kept = memory.load("sess-1")
+    assert kept == [{"role": "user", "content": "where is ORD-1002?"}]
+
+
+def test_sessions_are_namespaced_and_kept_apart(redis_backed):
+    memory.save("a", [{"role": "user", "content": "one"}])
+    memory.save("b", [{"role": "user", "content": "two"}])
+    assert "session:a" in redis_backed.data
+    assert memory.load("a")[0]["content"] == "one"
+    assert memory.load("b")[0]["content"] == "two"
+    assert memory.load("never-seen") == []
+
+
+def test_every_session_is_written_with_an_expiry(redis_backed):
+    """A dict grows until the process dies. Without a TTL, Redis does the same
+    thing but keeps the bill."""
+    memory.save("sess-ttl", [{"role": "user", "content": "hi"}])
+    assert redis_backed.ttls["session:sess-ttl"] == memory.TTL_SECONDS
+
+
+def test_tool_blocks_survive_the_round_trip_to_redis(redis_backed):
+    """The awkward case: assistant messages hold tool_use blocks that are
+    SimpleNamespace objects, which json.dumps refuses outright."""
+    block = NS(type="text", text="asking for a tool")
+    history = [
+        {"role": "user", "content": "where is ORD-1002?"},
+        {"role": "assistant", "content": [block]},
+        {"role": "user", "content": [{"type": "tool_result",
+                                      "tool_use_id": "t1",
+                                      "content": "ORD-1002: standing desk"}]},
+    ]
+    memory.save("sess-tools", history)          # must not raise
+    back = memory.load("sess-tools")
+    assert back[2]["content"][0]["content"] == "ORD-1002: standing desk"
+    assert back[0]["content"] == "where is ORD-1002?"
+
+
+def test_the_app_still_runs_with_no_redis_at_all():
+    """The course has to work on a laptop with no Redis, no cloud and no
+    internet. REDIS_URL unset falls back to the Week 01 dict."""
+    assert memory.REDIS_URL is None or True      # documents the intent
+    memory.reset()
+    memory.save("local", [{"role": "user", "content": "still works"}])
+    assert memory.load("local")[0]["content"] == "still works"

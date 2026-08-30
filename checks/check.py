@@ -1,7 +1,7 @@
 """Guided checkpoints. Run one per week to confirm that week's capability works.
 
     python -m checks.check 00      # the loop you start from
-    python -m checks.check 01      # this week
+    python -m checks.check 02      # this week
     python -m checks.check setup   # tests all pass
 
 Each check uses a fake model, so it runs with no API key and no cloud, and
@@ -172,6 +172,82 @@ def check_01():
     _ok("and it listens on $PORT, not a hardcoded number")
 
 
+def check_02():
+    print("Week 02: memory survives the process that started it")
+    from app import memory
+
+    # A tiny working Redis stand-in, so this checkpoint needs no server.
+    class FakeRedis:
+        def __init__(self): self.data = {}; self.ttls = {}
+        def get(self, k): return self.data.get(k)
+        def setex(self, k, ttl, v): self.data[k] = v; self.ttls[k] = ttl
+        def scan_iter(self, p): return [k for k in list(self.data)
+                                        if k.startswith(p.rstrip("*"))]
+        def delete(self, k): self.data.pop(k, None); self.ttls.pop(k, None)
+
+    if not hasattr(memory, "REDIS_URL"):
+        _no("app/memory.py must read REDIS_URL from the environment")
+    _ok("app/memory.py reads REDIS_URL, so storage is a setting not a rewrite")
+
+    saved_url, saved_client = memory.REDIS_URL, memory._client
+    fake = FakeRedis()
+    memory.REDIS_URL, memory._client = "redis://fake", fake
+    try:
+        memory.save("chk-1", [{"role": "user", "content": "where is ORD-1002?"}])
+        if not fake.data:
+            _no("save() did not write to Redis when REDIS_URL is set - it is "
+                "still using the in-process dict")
+        _ok("save() writes to Redis when REDIS_URL is set")
+
+        key = next(iter(fake.data))
+        if not key.startswith("session:"):
+            _no(f"keys should be namespaced like 'session:<id>', got {key!r}")
+        _ok("keys are namespaced, so the keyspace stays readable")
+
+        if fake.ttls.get(key) is None:
+            _no("sessions are written without an expiry - use SETEX, or "
+                "abandoned conversations pile up forever")
+        _ok(f"sessions expire after {fake.ttls[key]}s, so they clean themselves up")
+
+        # the actual lesson: the process dies, the conversation does not
+        memory._FALLBACK.clear()
+        kept = memory.load("chk-1")
+        if not kept or kept[0].get("content") != "where is ORD-1002?":
+            _no("a conversation did not survive the process restarting - "
+                "load() must read from Redis, not the dict")
+        _ok("a conversation survives a redeploy")
+
+        # the awkward case that only breaks in production
+        block = NS(type="text", text="asking for a tool")
+        try:
+            memory.save("chk-2", [
+                {"role": "user", "content": "q"},
+                {"role": "assistant", "content": [block]},
+                {"role": "user", "content": [{"type": "tool_result",
+                                              "tool_use_id": "t",
+                                              "content": "ORD-1002: desk"}]}])
+        except TypeError as e:
+            _no("saving a turn with tool blocks raised "
+                f"{type(e).__name__}: {e} - content blocks are objects, not "
+                "dicts, and json.dumps refuses them. Convert them in save().")
+        back = memory.load("chk-2")
+        if back[2]["content"][0]["content"] != "ORD-1002: desk":
+            _no("tool results did not survive the round trip to Redis")
+        _ok("a turn containing tool blocks round-trips through Redis")
+    finally:
+        memory.REDIS_URL, memory._client = saved_url, saved_client
+        memory._FALLBACK.clear()
+
+    # and it must still work with no Redis at all
+    memory.reset()
+    memory.save("chk-local", [{"role": "user", "content": "no redis here"}])
+    if memory.load("chk-local")[0]["content"] != "no redis here":
+        _no("with REDIS_URL unset the in-process fallback must still work - "
+            "the course has to run on a laptop with no Redis")
+    _ok("with no REDIS_URL it falls back to the dict, so local dev still works")
+    memory.reset()
+
+
 def check_setup():
     print("Setup check: the tests pass")
     import subprocess
@@ -180,7 +256,8 @@ def check_setup():
     (_ok if t.returncode == 0 else _no)("unit tests pass")
 
 
-CHECKS = {"00": check_00, "01": check_01, "setup": check_setup}
+CHECKS = {"00": check_00, "01": check_01, "02": check_02,
+          "setup": check_setup}
 
 
 if __name__ == "__main__":

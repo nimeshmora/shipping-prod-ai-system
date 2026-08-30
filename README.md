@@ -1,8 +1,8 @@
-# Ship Production AI Systems — Week 1 · Package
+# Ship Production AI Systems — Week 2 · Deploy
 
-> **This branch is Week 1 complete.** It is the answer key. If you are doing the
-> week, start from `week-01-package` instead and check your work against this
-> one with `git diff week-01-package..week-01-solution`.
+> **This branch is Week 2 complete.** It is the answer key. If you are doing the
+> week, start from `week-02-deploy` instead and check your work against this one
+> with `git diff week-02-deploy..week-02-solution`.
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -15,13 +15,13 @@ Phase 1 built the agent. **Phase 2 ships it.**
 
 ```
   ┌─ SHIP IT ────────────┐  ┌─ OPERATE IT ─────────┐  ┌─ TRUST IT ──────┐
-  01 package  ← you are here
-      02 deploy              04 cap                    07 attack
-      03 automate            05 see                    08 gate
-                             06 survive
+  01 package  ✓           04 cap                    07 attack
+  02 deploy   ← you are here                        08 gate
+  03 automate             05 see
+                          06 survive
 ```
 
-**Week 1 turns an importable agent into a deployable service.**
+**Week 2 gives it a public URL, and durable memory to go with it.**
 
 ---
 
@@ -87,7 +87,8 @@ make run              # start the agent on http://localhost:8080
 make test             # unit tests (fake model, no key needed)
 
 make check-week-00    # the loop you started from
-make check-week-01    # this week's capability
+make check-week-01    # a deployable web service
+make check-week-02    # this week's capability
 make check-setup      # just runs the tests
 
 make docker-build     # build the container
@@ -104,7 +105,7 @@ app/
   orders.py      a stand-in order system — the data the agent goes and fetches
   main.py        the web service: /chat, /chat/stream, /health
   stream.py      server-sent events: the same turn, as it happens
-  memory.py      session memory — a dict for now, Redis in Week 02
+  memory.py      session memory: Redis when REDIS_URL is set, else a dict
 tests/           unit tests, all with a fake model
 checks/          the weekly checkpoints
 guide/           read guide/week-01.md
@@ -123,6 +124,24 @@ An agent whose tests need an API key is an agent nobody runs tests on.
 
 The fake model fakes only the model's *decisions* — which tool to ask for. The
 answers come back from your **real** code.
+
+---
+
+## Deploying it
+
+```bash
+gcloud run deploy ship-agent \
+  --source . --region us-central1 --allow-unauthenticated \
+  --set-env-vars "MODEL=claude-sonnet-5,BASE_URL=https://api.ai.kodekloud.com/v1" \
+  --set-secrets "KODEKEY=kodekey:latest" \
+  --timeout=3600 --concurrency=80 --min-instances=1
+```
+
+The key goes in Secret Manager, never in `--set-env-vars` — env vars are visible
+in the console and in `gcloud describe` output.
+
+Set `REDIS_URL` and conversations survive a redeploy. Leave it unset and they do
+not, which is Week 2's whole lesson and worth seeing for yourself.
 
 ---
 

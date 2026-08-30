@@ -5,5 +5,8 @@ fastapi~=0.141
 uvicorn~=0.52
 httpx~=0.28
 
+# Week 02: session memory that survives a redeploy.
+redis~=8.1
+
 # Testing only. Kept here so `make install` gives you everything in one step.
 pytest~=9.1
