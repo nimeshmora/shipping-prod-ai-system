@@ -328,13 +328,18 @@ def check_03():
     # does - inside guardrails until Week 07 moves it into app/store.py - so
     # find it rather than assuming.
     clock = {"t": 10_000.0}
-    _mod, _attr = g.time, "monotonic"
+    _mod = _attr = None
     try:
         from app import store as _s
         if hasattr(_s, "time") and hasattr(_s, "hit_count"):
-            _mod, _attr = _s.time, "time"
+            _mod, _attr = _s.time, "time"      # Week 07 onwards
     except ImportError:
-        pass                       # store.py arrives in Week 07
+        pass
+    if _mod is None and hasattr(g, "time"):
+        _mod, _attr = g.time, "monotonic"      # Weeks 03-06
+    if _mod is None:
+        _no("could not find the rate-limit clock - it should live wherever the "
+            "counter does")
     _real = getattr(_mod, _attr)
     setattr(_mod, _attr, lambda: clock["t"])
     try:
