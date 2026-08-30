@@ -47,7 +47,7 @@ def _clean_memory():
 
 # ---- the loop --------------------------------------------------------------
 def test_the_loop_runs_a_tool_then_answers():
-    reply, history = agent.run_turn(
+    reply, history, _ = agent.run_turn(
         "where is order ORD-1002?",
         model_fn=tool_then_answer("lookup_order", {"order_id": "ORD-1002"}))
     assert "standing desk" in reply
@@ -56,14 +56,14 @@ def test_the_loop_runs_a_tool_then_answers():
 
 
 def test_the_loop_returns_straight_away_when_no_tool_is_needed():
-    reply, history = agent.run_turn("hello", model_fn=plain_answer("hi there"))
+    reply, history, _ = agent.run_turn("hello", model_fn=plain_answer("hi there"))
     assert reply == "hi there"
     assert len(history) == 2
 
 
 def test_history_carries_forward_into_the_next_turn():
-    _, history = agent.run_turn("hello", model_fn=plain_answer("hi"))
-    _, history2 = agent.run_turn("again", history, model_fn=plain_answer("ok"))
+    _, history, _t = agent.run_turn("hello", model_fn=plain_answer("hi"))
+    _, history2, _t2 = agent.run_turn("again", history, model_fn=plain_answer("ok"))
     assert len(history2) == 4
 
 
@@ -134,8 +134,10 @@ def test_memory_keeps_a_session_apart_from_another():
 # ---- the web service -------------------------------------------------------
 def _client_with_fake_model(text="Your order is on its way"):
     import app.main as main
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=plain_answer(text))
+    from app import monitor
+    monitor.reset()
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=plain_answer(text), trace=trace)
     return TestClient(fastapi_app)
 
 
@@ -177,7 +179,7 @@ def test_an_internal_failure_never_leaks_details_to_the_caller():
     import app.main as main
     original = main.run_turn
 
-    def boom(m, history=None):
+    def boom(m, history=None, trace=None):
         raise RuntimeError("connection string: postgres://user:hunter2@db")
 
     main.run_turn = boom
@@ -207,8 +209,9 @@ def _frames(lines):
 def test_the_stream_sends_start_then_tokens_then_done():
     import app.main as main
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=plain_answer("Your standing desk arrives Thursday"))
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=plain_answer("Your standing desk arrives Thursday"),
+        trace=trace)
     try:
         client = TestClient(fastapi_app)
         with client.stream("POST", "/chat/stream",
@@ -233,7 +236,7 @@ def test_a_failure_mid_stream_arrives_as_an_error_frame():
     import app.main as main
     original = main.run_turn
 
-    def boom(m, history=None):
+    def boom(m, history=None, trace=None):
         raise RuntimeError("the provider is down")
 
     main.run_turn = boom
@@ -254,8 +257,9 @@ def test_the_stream_does_not_buffer_itself_into_one_lump():
     streamed answer arrives all at once and the feature is invisibly dead."""
     import app.main as main
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=plain_answer("a b c d e f g h i j k l m n o p"))
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=plain_answer("a b c d e f g h i j k l m n o p"),
+        trace=trace)
     try:
         client = TestClient(fastapi_app)
         with client.stream("POST", "/chat/stream", json={"message": "hi"}) as r:
@@ -477,6 +481,8 @@ def test_the_window_slides_rather_than_resetting_on_the_minute(monkeypatch):
 def _client():
     from fastapi.testclient import TestClient
     import app.main as main
+    from app import monitor
+    monitor.reset()
     return TestClient(main.app)
 
 
@@ -507,8 +513,8 @@ def test_a_valid_key_gets_through(monkeypatch):
     import app.main as main
     monkeypatch.setenv("API_KEYS", "secret")
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=plain_answer("ok"))
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=plain_answer("ok"), trace=trace)
     try:
         r = _client().post("/chat", json={"message": "hi"},
                            headers={"x-api-key": "secret"})
@@ -523,8 +529,8 @@ def test_flooding_one_endpoint_returns_429(monkeypatch):
     monkeypatch.setenv("API_KEYS", "secret")
     monkeypatch.setattr(g, "RATE_LIMIT", 3)
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=plain_answer("ok"))
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=plain_answer("ok"), trace=trace)
     try:
         client = _client()
         headers = {"x-api-key": "secret"}
@@ -548,8 +554,8 @@ def test_a_guardrail_rejection_never_reaches_the_model(monkeypatch):
         return NS(content=[NS(type="text", text="ok")], stop_reason="end_turn")
 
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=counting_model)
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=counting_model, trace=trace)
     try:
         _client().post("/chat", json={"message": "hi"})     # no key
         assert called["n"] == 0
@@ -628,8 +634,8 @@ def test_an_overspending_turn_is_a_4xx_not_a_500(monkeypatch):
         return NS(content=[block], stop_reason="tool_use")
 
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=always_tool)
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=always_tool, trace=trace)
     try:
         r = TestClient(main.app).post("/chat", json={"message": "go"})
         assert r.status_code == 400
@@ -669,3 +675,299 @@ def test_a_short_session_is_left_completely_alone():
     short = [{"role": "user", "content": "hi"}]
     memory.save("short", short)
     assert memory.load("short") == short
+
+
+# ---- Week 05: one trace per turn -------------------------------------------
+def test_the_trace_shows_where_the_time_went():
+    """A turn that took 8 seconds is useless information on its own. The trace
+    must say WHICH part was slow - the model, or your own tool."""
+    from app import trace
+    import time as _time
+
+    state = {"n": 0}
+
+    def slow_first_call(messages):
+        state["n"] += 1
+        if state["n"] == 1:
+            _time.sleep(0.05)
+            block = NS(type="tool_use", name="lookup_order",
+                       input={"order_id": "ORD-1002"}, id="t1")
+            return NS(content=[block], stop_reason="tool_use", usage=None)
+        return NS(content=[NS(type="text", text="done")],
+                  stop_reason="end_turn", usage=None)
+
+    t = trace.new_trace("s")
+    agent.run_turn("where is ORD-1002?", model_fn=slow_first_call, trace=t)
+
+    assert len(t["step_ms"]) == 2         # one entry per trip round the loop
+    assert t["step_ms"][0] >= 50          # the slow one is visible
+    assert len(t["tool_ms"]) == 1         # and the tool was timed separately
+    assert t["tools_used"] == ["lookup_order"]
+
+
+def test_a_broken_tool_is_recorded_even_though_the_turn_succeeds():
+    """A tool that fails hands its error text back to the model, so the turn
+    still returns 200. Without tool_errors the breakage is invisible."""
+    from app import trace
+    state = {"n": 0}
+
+    def asks_for_a_broken_call(messages):
+        state["n"] += 1
+        if state["n"] == 1:
+            block = NS(type="tool_use", name="lookup_order",
+                       input={"wrong_argument": "x"}, id="t1")
+            return NS(content=[block], stop_reason="tool_use", usage=None)
+        return NS(content=[NS(type="text", text="sorry, I could not check")],
+                  stop_reason="end_turn", usage=None)
+
+    t = trace.new_trace("s")
+    reply, _, t = agent.run_turn("where is my order?",
+                                 model_fn=asks_for_a_broken_call, trace=t)
+
+    assert reply                             # the turn "succeeded"
+    assert t["error"] is None                # no top-level error either
+    assert t["tool_errors"] == ["lookup_order"]   # but it is recorded
+
+
+def test_secrets_are_redacted_before_anything_is_written():
+    from app import trace
+    red = trace._redact({"api_key": "sk-secret", "authorization": "Bearer x",
+                         "ok": 1})
+    assert red["api_key"] == "[redacted]"
+    assert red["authorization"] == "[redacted]"
+    assert red["ok"] == 1
+
+
+def test_token_counters_are_not_mistaken_for_secrets():
+    """_REDACT matches on substring, so anything with 'token' in the name is
+    redacted by default. The counters must be allowed through, or the trace
+    lies about its own inputs."""
+    from app import trace
+    red = trace._redact({"input_tokens": 120, "output_tokens": 30,
+                         "token_count": 150, "api_token": "sk-secret"})
+    assert red["input_tokens"] == 120
+    assert red["output_tokens"] == 30
+    assert red["token_count"] == 150
+    assert red["api_token"] == "[redacted]"
+
+
+def test_cost_uses_the_real_input_output_split():
+    """Output tokens cost 3-5x input. A blended rate badly overstates an
+    input-heavy agent, which is most of them."""
+    from app import trace
+    t = trace.new_trace("s")
+    t["input_tokens"], t["output_tokens"] = 900_000, 100_000
+    trace.emit(t)
+    assert t["cost_usd"] == trace.cost_of(900_000, 100_000)
+    assert t["cost_usd"] < trace.estimate_cost(1_000_000)
+
+
+def test_a_failed_turn_is_marked_ERROR_for_the_log_platform():
+    """Cloud Logging reads a field called "severity" to decide whether a line
+    is routine. Without it every line lands as INFO and nothing pages."""
+    from app import trace
+    ok = trace.new_trace("s")
+    trace.emit(ok)
+    assert ok["severity"] == "INFO"
+
+    bad = trace.new_trace("s")
+    bad["error"] = "provider is down"
+    trace.emit(bad)
+    assert bad["severity"] == "ERROR"
+
+
+def test_emit_is_idempotent_so_a_turn_is_logged_once():
+    from app import trace
+    t = trace.new_trace("s")
+    trace.emit(t)
+    first = t["duration_ms"]
+    trace.emit(t)
+    assert t["duration_ms"] == first
+
+
+# ---- Week 05b: monitoring, not just telemetry ------------------------------
+def _fake_turn(error=None, ms=1000, steps=2, cost=0.01, tool_errors=None):
+    return {"error": error, "duration_ms": ms, "steps": steps,
+            "cost_usd": cost, "step_ms": [ms], "model_calls": [],
+            "tool_errors": tool_errors or []}
+
+
+def test_the_monitor_is_quiet_when_the_agent_is_healthy():
+    from app import monitor
+    monitor.reset()
+    for _ in range(30):
+        monitor.record(_fake_turn())
+    assert monitor.alerts() == []
+    assert monitor.stats()["error_rate"] == 0.0
+
+
+def test_the_monitor_says_nothing_before_it_has_enough_data():
+    """Two failures out of three is not an incident, it is a coincidence."""
+    from app import monitor
+    monitor.reset()
+    for _ in range(3):
+        monitor.record(_fake_turn(error="boom"))
+    assert monitor.alerts() == []
+
+
+def test_the_monitor_alerts_on_a_degrading_agent():
+    from app import monitor
+    monitor.reset()
+    for i in range(30):
+        monitor.record(_fake_turn(error="boom" if i % 2 else None,
+                                  ms=40000, steps=6))
+    fired = " ".join(monitor.alerts())
+    assert "error rate" in fired
+    assert "p95 latency" in fired
+    assert "steps" in fired
+
+
+def test_broken_tools_raise_an_alert_even_when_every_turn_succeeds():
+    """The signal that only exists here. Every turn returned 200; a third of
+    them had a tool fail."""
+    from app import monitor
+    monitor.reset()
+    for i in range(20):
+        monitor.record(_fake_turn(
+            tool_errors=["lookup_order"] if i % 3 == 0 else []))
+    assert monitor.stats()["error_rate"] == 0.0
+    assert any("tool fail" in a for a in monitor.alerts())
+
+
+def test_the_window_only_keeps_the_most_recent_turns():
+    from app import monitor
+    monitor.reset()
+    for _ in range(monitor.WINDOW + 50):
+        monitor.record(_fake_turn())
+    assert monitor.stats()["turns"] == monitor.WINDOW
+
+
+def test_metrics_reports_status_and_alerts():
+    from fastapi.testclient import TestClient
+    from app import monitor
+    import app.main as main
+    monitor.reset()
+    body = TestClient(main.app).get("/metrics").json()
+    assert body["status"] == "ok"
+    assert "alerts" in body
+
+
+def test_an_unexpected_crash_is_recorded_so_the_dashboard_cannot_lie():
+    """THE Week 05 lesson. If an unexpected exception escapes before the trace
+    is filled, a total outage is reported as a 0% error rate. Every request
+    here fails; /metrics must say so."""
+    from fastapi.testclient import TestClient
+    import app.main as main
+    from app import monitor
+    monitor.reset()
+
+    def boom(m, history=None, trace=None):
+        raise RuntimeError("the model provider is down")
+
+    original = main.run_turn
+    main.run_turn = boom
+    try:
+        client = TestClient(main.app, raise_server_exceptions=False)
+        for _ in range(12):
+            assert client.post("/chat", json={"message": "hi"}).status_code == 500
+        body = client.get("/metrics").json()
+        assert body["error_rate"] == 1.0          # not 0.0
+        assert body["status"] == "degraded"
+        assert any("error rate" in a for a in body["alerts"])
+    finally:
+        main.run_turn = original
+        monitor.reset()
+
+
+def test_a_streamed_turn_is_recorded_exactly_once():
+    from fastapi.testclient import TestClient
+    import app.main as main
+    from app import monitor
+    monitor.reset()
+    original = main.run_turn
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=plain_answer("hi there"), trace=trace)
+    try:
+        client = TestClient(main.app)
+        for _ in range(3):
+            with client.stream("POST", "/chat/stream",
+                               json={"message": "hi"}) as r:
+                list(r.iter_lines())
+        assert monitor.stats()["turns"] == 3        # not 6
+    finally:
+        main.run_turn = original
+        monitor.reset()
+
+
+def test_the_done_frame_carries_real_numbers_not_zeros():
+    """The trace is finalised before `done` is built. Without that, cost and
+    duration are still the zeros the trace was born with."""
+    from fastapi.testclient import TestClient
+    import app.main as main
+    from app import monitor
+    monitor.reset()
+
+    def model(messages):
+        return NS(content=[NS(type="text", text="Order ORD-1002 is shipped")],
+                  stop_reason="end_turn",
+                  usage=NS(input_tokens=140, output_tokens=25))
+
+    original = main.run_turn
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=model, trace=trace)
+    try:
+        client = TestClient(main.app)
+        with client.stream("POST", "/chat/stream",
+                           json={"message": "hi"}) as r:
+            frames = _frames([l for l in r.iter_lines() if l])
+    finally:
+        main.run_turn = original
+        monitor.reset()
+
+    done = [d for e, d in frames if e == "done"][0]
+    assert done["tokens"] == 165
+    assert done["cost_usd"] > 0
+
+
+# ---- Week 05: OpenTelemetry, the same trace in the industry's shape --------
+def test_the_app_works_perfectly_with_otel_switched_off():
+    """OTel is a bonus layer, never a dependency. Week 05 must keep running on
+    a laptop with no key, no cloud and no internet."""
+    from app import otel
+    assert otel.ENABLED is False
+    with otel.span("anything", {"a": 1}) as s:
+        s.set("b", 2)
+        s.failed("even this")
+
+
+def test_a_turn_produces_one_parent_span_with_children():
+    import os
+    import subprocess
+    import sys
+    # A subprocess: the tracer provider is global and set once per process.
+    code = (
+        "from types import SimpleNamespace as NS\n"
+        "from app import otel, trace as tr\n"
+        "from app.agent import run_turn\n"
+        "st={'n':0}\n"
+        "def m(msgs):\n"
+        "    st['n']+=1\n"
+        "    if st['n']==1:\n"
+        "        b=NS(type='tool_use',name='lookup_order',"
+        "input={'order_id':'ORD-1002'},id='t')\n"
+        "        return NS(content=[b],stop_reason='tool_use',usage=None)\n"
+        "    return NS(content=[NS(type='text',text='ok')],"
+        "stop_reason='end_turn',usage=None)\n"
+        "with otel.span('chat_turn',{'turn.id':'abc'}):\n"
+        "    run_turn('hi',model_fn=m,trace=tr.new_trace('s'))\n"
+        "from opentelemetry import trace as ot\n"
+        "ot.get_tracer_provider().force_flush()\n"
+    )
+    env = {**os.environ, "OTEL_ENABLED": "1"}
+    out = subprocess.run([sys.executable, "-c", code], capture_output=True,
+                         text=True, env=env).stdout
+
+    assert '"name": "chat_turn"' in out       # the turn itself
+    assert '"name": "model_call"' in out      # each trip round the loop
+    assert '"name": "tool"' in out            # and each tool call
+    assert '"parent_id": null' in out         # chat_turn is the root

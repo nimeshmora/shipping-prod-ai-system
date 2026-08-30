@@ -47,7 +47,7 @@ def sse(event, data):
     return f"event: {event}\ndata: {json.dumps(data)}\n\n"
 
 
-async def stream_turn(message, history, run):
+async def stream_turn(message, history, run, trace=None, finalise=None):
     """Yield SSE frames for one turn.
 
     `run` is a zero-argument callable that performs the blocking turn. It is
@@ -62,7 +62,9 @@ async def stream_turn(message, history, run):
         done    -> the turn finished cleanly
         error   -> the turn failed; always the last frame if present
     """
-    yield sse("start", {})
+    yield sse("start", {} if trace is None
+              else {"session_id": trace["session_id"],
+                    "turn_id": trace["turn_id"]})
 
     loop = asyncio.get_running_loop()
     try:
@@ -76,6 +78,14 @@ async def stream_turn(message, history, run):
         # to travel as a frame, and the client has to actually read it.
         # Forgetting this is how a streamed agent "succeeds" while showing the
         # user half an answer.
+        # Record it on the trace TOO. This is the same trap /chat has in
+        # main.py: catch the exception but forget the trace, and a total
+        # outage is logged as "error": null while /metrics reports a 0%
+        # error rate. The streaming path has its own copy of that trap.
+        if trace is not None:
+            trace["error"] = f"{type(e).__name__}: {e}"
+            if finalise is not None:
+                finalise(trace)
         yield sse("error", {"message": f"{type(e).__name__}: {e}"})
         return
 
@@ -84,4 +94,17 @@ async def stream_turn(message, history, run):
         yield sse("token", {"text": " ".join(words[i:i + CHUNK_WORDS]) + " "})
         await asyncio.sleep(0)        # let the server actually flush
 
-    yield sse("done", {})
+    for tool in (trace or {}).get("tools_used", []):
+        yield sse("status", {"tool": tool})
+
+    # Finalise before the summary frame, or `done` reports the zeros the trace
+    # was born with: duration_ms and cost_usd are computed by emit(), and the
+    # caller's finally block runs AFTER this generator is exhausted.
+    if finalise is not None and trace is not None:
+        finalise(trace)
+
+    yield sse("done", {} if trace is None else {
+        "steps": trace.get("steps", 0),
+        "tokens": trace.get("token_count", 0),
+        "cost_usd": trace.get("cost_usd", 0.0),
+        "duration_ms": trace.get("duration_ms", 0)})

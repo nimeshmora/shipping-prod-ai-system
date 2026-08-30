@@ -8,7 +8,7 @@ That is the whole idea. Everything else in this course is about making this loop
 survivable in production - but the loop itself never gets more complicated
 than it is here.
 
-  run_turn(message, history) -> (reply_text, new_history)
+  run_turn(message, history, trace=None) -> (reply_text, new_history, trace)
 
 A SYSTEM_PROMPT gives the agent its standing instructions, and a timeout bounds
 how long any single model call may take.
@@ -18,10 +18,12 @@ Tests pass a fake model_fn so none of this needs an API key.
 import ast
 import operator
 import os
+import time
 from types import SimpleNamespace as NS
 
 from app.guardrails import Budget, GuardrailError
 from app.orders import lookup_order
+from app import otel
 
 MODEL = os.environ.get("MODEL", "claude-sonnet-5")
 
@@ -222,7 +224,7 @@ def _to_openai_messages(messages):
     return out
 
 
-def call_model(messages):
+def call_model(messages, trace=None):
     """One call to the model. Week 06 adds retries and a fallback model."""
     client = _client()
     # The system prompt goes first, on every single turn. The model has no
@@ -232,12 +234,14 @@ def call_model(messages):
     completion = client.chat.completions.create(
         model=MODEL, max_tokens=1024, tools=_tools_openai(),
         messages=payload, timeout=MODEL_TIMEOUT_SECONDS)
+    if trace is not None:
+        trace["model_calls"].append({"provider": "primary", "model": MODEL})
     return _to_anthropic_shape(completion)
 
 
 # ---- the loop --------------------------------------------------------------
-def run_turn(message, history=None, model_fn=call_model):
-    """One turn of conversation. Returns (reply_text, new_history).
+def run_turn(message, history=None, model_fn=call_model, trace=None):
+    """One turn of conversation. Returns (reply_text, new_history, trace).
 
     The four moves, in order:
 
@@ -257,25 +261,50 @@ def run_turn(message, history=None, model_fn=call_model):
     while True:
         budget.add_step()          # Week 04: this turn cannot run forever
 
-        resp = model_fn(messages)
+        _t0 = time.time()          # Week 05: time every step
+        with otel.span("model_call", {"step": budget.steps}):
+            resp = (model_fn(messages, trace) if _accepts_trace(model_fn)
+                    else model_fn(messages))
+        if trace is not None:
+            trace["step_ms"].append(round((time.time() - _t0) * 1000))
 
         # Week 04: count what that call cost before deciding to make another.
         usage = getattr(resp, "usage", None)
         if usage is not None:
-            budget.add_tokens(getattr(usage, "input_tokens", 0)
-                              + getattr(usage, "output_tokens", 0))
+            _in = getattr(usage, "input_tokens", 0) or 0
+            _out = getattr(usage, "output_tokens", 0) or 0
+            budget.add_tokens(_in + _out)
+            if trace is not None:
+                # Kept apart because they are billed apart (Week 05).
+                trace["input_tokens"] += _in
+                trace["output_tokens"] += _out
 
         messages.append({"role": "assistant", "content": resp.content})
 
         if resp.stop_reason != "tool_use":
             text = "".join(b.text for b in resp.content
                            if getattr(b, "type", None) == "text")
-            return text, messages
+            if trace is not None:
+                trace["steps"] = budget.steps
+                trace["token_count"] = budget.tokens
+            return text, messages, trace
 
         results = []
         for block in resp.content:
             if getattr(block, "type", None) == "tool_use":
-                out = run_tool(block.name, block.input)
+                _tt = time.time()
+                with otel.span("tool", {"tool.name": block.name}) as _sp:
+                    out = run_tool(block.name, block.input)
+                    if str(out).startswith(("tool error:", "unknown tool:")):
+                        _sp.failed(out)
+                if trace is not None:
+                    trace["tools_used"].append(block.name)
+                    trace["tool_ms"].append(round((time.time() - _tt) * 1000))
+                    # A tool that failed still hands text back to the model, so
+                    # the turn carries on looking fine. Record it, or a broken
+                    # tool is invisible until a customer complains.
+                    if str(out).startswith(("tool error:", "unknown tool:")):
+                        trace["tool_errors"].append(block.name)
                 results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
@@ -285,3 +314,18 @@ def run_turn(message, history=None, model_fn=call_model):
         # view the tool is part of the outside world talking to it, not part
         # of its own reply.
         messages.append({"role": "user", "content": results})
+
+
+def _accepts_trace(fn):
+    """Does this model function want the trace passed to it?
+
+    Tests and the eval gate pass single-argument fakes, and the real
+    call_model wants the trace so it can record which provider answered.
+    Inspecting once here beats making every fake in the codebase grow a
+    parameter it does not use.
+    """
+    try:
+        import inspect
+        return len(inspect.signature(fn).parameters) >= 2
+    except (TypeError, ValueError):
+        return False
