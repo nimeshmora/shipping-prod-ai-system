@@ -25,8 +25,17 @@ check-week-05:
 	python -m checks.check 05
 check-week-06:
 	python -m checks.check 06
+check-week-07:
+	python -m checks.check 07
 
 # ---- the container ----
+# ---- Week 07: concurrency is where the honest bugs come due ----
+load:
+	python -m loadtest.run_load --n 60 --concurrency 12
+
+load-stream:
+	python -m loadtest.run_load --n 30 --concurrency 8 --stream
+
 # ---- Week 06: the planted bug (instructor only) ----
 plant-bug:
 	python -m checks.plant_bug plant

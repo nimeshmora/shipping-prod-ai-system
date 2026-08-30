@@ -25,7 +25,7 @@ import random
 import time
 from types import SimpleNamespace as NS
 
-from app.guardrails import Budget, GuardrailError
+from app.guardrails import Budget, GuardrailError, check_tool_output
 from app.orders import lookup_order
 from app import otel
 
@@ -44,6 +44,10 @@ MODEL_TIMEOUT_SECONDS = float(os.environ.get("MODEL_TIMEOUT_SECONDS", "30"))
 MAX_RETRIES = int(os.environ.get("MAX_RETRIES", "2"))
 RETRY_BASE_SECONDS = float(os.environ.get("RETRY_BASE_SECONDS", "0.5"))
 RETRY_MAX_SECONDS = float(os.environ.get("RETRY_MAX_SECONDS", "8"))
+
+# Week 07: the fetch tool's own bounds.
+FETCH_TIMEOUT_SECONDS = float(os.environ.get("FETCH_TIMEOUT_SECONDS", "5"))
+FETCH_MAX_CHARS = int(os.environ.get("FETCH_MAX_CHARS", "20000"))
 
 # The system prompt: the agent's standing instructions, sent with every turn.
 #
@@ -88,6 +92,39 @@ def word_count(text):
     return len(text.split())
 
 
+def fetch_url(url):
+    """Fetch a page and return its text. Week 07's real attack surface.
+
+    Every guard in this function exists because of a specific way a fetch tool
+    gets abused. This is the most dangerous tool in the file, and it is here
+    precisely because "let the agent read a web page" is the single most
+    commonly requested agent feature.
+
+      check_url         where it may connect at all (SSRF)
+      timeout           a slow host must not hold a worker open
+      no redirects      a permitted host can 302 you to somewhere forbidden
+      size cap          a 2GB response must not become a 2GB string
+      check_tool_output what comes back is untrusted text, always
+    """
+    import httpx
+    from app.guardrails import check_url
+
+    check_url(url)                            # raises if not allowed
+    try:
+        with httpx.Client(timeout=FETCH_TIMEOUT_SECONDS,
+                          # Do not chase redirects. A permitted host that
+                          # replies "302 -> http://169.254.169.254" walks
+                          # straight past the allowlist you just checked.
+                          follow_redirects=False) as client:
+            r = client.get(url)
+            r.raise_for_status()
+            # Read a bounded prefix. Trusting Content-Length is not enough;
+            # a hostile server can lie about it.
+            return r.text[:FETCH_MAX_CHARS]
+    except httpx.HTTPError as e:
+        return f"could not fetch that page: {type(e).__name__}"
+
+
 TOOLS = [
     {
         "name": "lookup_order",
@@ -123,11 +160,24 @@ TOOLS = [
             "required": ["text"],
         },
     },
+    {
+        "name": "fetch_url",
+        "description": (
+            "Fetch the text of a public web page by its https url. Only a "
+            "small allowlist of hosts can be reached."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {"url": {"type": "string"}},
+            "required": ["url"],
+        },
+    },
 ]
 
 _HANDLERS = {"lookup_order": lookup_order,
              "calculator": calculator,
-             "word_count": word_count}
+             "word_count": word_count,
+             "fetch_url": fetch_url}
 
 
 def run_tool(name, args):
@@ -383,9 +433,15 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
                     out = run_tool(block.name, block.input)
                     if str(out).startswith(("tool error:", "unknown tool:")):
                         _sp.failed(out)
+                # Week 07: a tool result is untrusted input too. It goes
+                # straight back into the model's context, and you did not
+                # write what a web page or a customer's note says.
+                safe = check_tool_output(out)
                 if trace is not None:
                     trace["tools_used"].append(block.name)
                     trace["tool_ms"].append(round((time.time() - _tt) * 1000))
+                    if safe != out:
+                        trace["tool_output_filtered"] = True
                     # A tool that failed still hands text back to the model, so
                     # the turn carries on looking fine. Record it, or a broken
                     # tool is invisible until a customer complains.
@@ -394,7 +450,7 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
                 results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
-                    "content": out,
+                    "content": safe,
                 })
         # Tool results go back as a USER message. From the model's point of
         # view the tool is part of the outside world talking to it, not part

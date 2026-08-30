@@ -23,15 +23,17 @@ The four agent signals worth watching, and what a bad number usually means:
     retry_rate      retries that SAVED a turn - the early warning that stops a
                     rising fallback_rate from being your first clue
 
-This keeps the last N turns in memory, which is honest for a single container
-and enough to teach the idea. In production you ship the same JSON lines to a
-log aggregator and compute exactly these numbers there - the concepts do not
-change, only where the arithmetic happens.
+Week 07 moves this window into shared storage, so the numbers describe the
+SERVICE rather than one container. Note the honest limit that remains: it is
+still a rolling sample your app computes for itself. At real volume you ship
+the JSON lines from trace.py to a log platform and compute exactly these
+numbers there - the concepts do not change, only where the arithmetic happens.
 """
 import os
 import statistics
 import time
-from collections import deque
+
+from app import store
 
 WINDOW = int(os.environ.get("MONITOR_WINDOW", "200"))
 
@@ -42,14 +44,12 @@ ALERT_AVG_STEPS = float(os.environ.get("ALERT_AVG_STEPS", "4.0"))
 ALERT_FALLBACK_RATE = float(os.environ.get("ALERT_FALLBACK_RATE", "0.20"))
 ALERT_TOOL_ERROR_RATE = float(os.environ.get("ALERT_TOOL_ERROR_RATE", "0.05"))
 
-# The last WINDOW turns, in this process. Honest for one container, and enough
-# to teach the idea. Week 07 moves it into shared storage, once a load test has
-# shown you why that matters.
-_turns = deque(maxlen=WINDOW)
-
-
+# Week 07: the window lives in app/store.py now, shared across containers.
+# With it in a local deque, /metrics described whichever container the load
+# balancer happened to route you to - so the same agent could look healthy or
+# broken depending on which answer you got.
 def _recent():
-    return list(_turns)
+    return store.recent_turns(WINDOW)
 
 
 def record(trace):
@@ -59,7 +59,7 @@ def record(trace):
     # would report a fallback that never happened.
     used_fallback = any(c.get("provider") == "fallback" and not c.get("error")
                         for c in trace.get("model_calls", []))
-    _turns.append({
+    store.push_turn({
         "fallback": used_fallback,
         "retries": trace.get("retries", 0),
         "at": time.time(),
@@ -70,7 +70,7 @@ def record(trace):
         "steps": trace.get("steps", 0),
         "cost_usd": trace.get("cost_usd", 0.0),
         "filtered": bool(trace.get("tool_output_filtered")),
-    })
+    }, WINDOW)
 
 
 def _p95(values):
@@ -86,10 +86,13 @@ def stats():
     turns = _recent()
     n = len(turns)
     if n == 0:
-        return {"turns": 0}
+        return {"turns": 0, "shared_state": store.available()}
     durations = [t["duration_ms"] for t in turns]
     return {
         "turns": n,
+        # Says whether these numbers describe the whole service or just the
+        # one container that answered you. Week 07.
+        "shared_state": store.available(),
         "error_rate": round(sum(t["error"] for t in turns) / n, 3),
         "fallback_rate": round(sum(t["fallback"] for t in turns) / n, 3),
         "retry_rate": round(sum(bool(t.get("retries")) for t in turns) / n, 3),
@@ -129,4 +132,4 @@ def alerts():
 
 
 def reset():
-    _turns.clear()
+    store.reset_turns()

@@ -1,8 +1,8 @@
-# Ship Production AI Systems — Week 6 · Debug and survive
+# Ship Production AI Systems — Week 7 · Attack
 
-> **This branch is Week 6 complete.** It is the answer key. If you are doing the
-> week, start from `week-06-survive` instead and check your work against this
-> one with `git diff week-06-survive..week-06-solution`.
+> **This branch is Week 7 complete.** It is the answer key. If you are doing the
+> week, start from `week-07-attack` instead and check your work against this one
+> with `git diff week-07-attack..week-07-solution`.
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -15,12 +15,12 @@ Phase 1 built the agent. **Phase 2 ships it.**
 
 ```
   ┌─ SHIP IT ────────────┐  ┌─ OPERATE IT ─────────┐  ┌─ TRUST IT ──────┐
-  01 package  ✓           04 cap  ✓                 07 attack
+  01 package  ✓           04 cap  ✓                 07 attack ← you are here
   02 deploy   ✓           05 see  ✓                 08 gate
-  03 automate ✓           06 survive ← you are here
+  03 automate ✓           06 survive ✓
 ```
 
-**Week 6 absorbs a blip, survives an outage, and teaches debugging from traces.**
+**Week 7 red-teams the agent: injection, cost, SSRF and load.**
 
 ---
 
@@ -34,9 +34,12 @@ agent →  "Standing desk, $340.00, shipped, arriving Thursday.
           A signature will be required on delivery."
 ```
 
-Three tools: `lookup_order`, `calculator`, `word_count`. The order lookup is the
-interesting one — it fetches data the model could not possibly know, which is
-what an agent is actually *for*.
+Four tools: `lookup_order`, `calculator`, `word_count` and `fetch_url`. The
+order lookup is the interesting one — it fetches data the model could not
+possibly know, which is what an agent is actually *for*. `fetch_url` is the
+dangerous one, and Week 7 is about why.
+
+Try `ORD-1043`. Its note is more interesting than it looks.
 
 ---
 
@@ -91,10 +94,14 @@ make check-week-02    # memory that survives a redeploy
 make check-week-03    # automatic deploys, keys, rate limits
 make check-week-04    # step, token and context budgets
 make check-week-05    # traces, monitoring and /metrics
-make check-week-06    # this week's capability
+make check-week-06    # retry, fallback, debugging from traces
+make check-week-07    # this week's capability
 make check-setup      # just runs the tests
 
 make trace-ui         # Grafana + Tempo, to look at traces locally
+
+make load             # flood it and check the rate limit holds
+make load-stream      # ... against /chat/stream, measuring TTFB
 
 make plant-bug        # instructor: hide a bug for the Week 06 hunt
 make fix-bug          # instructor: put it back
@@ -113,10 +120,12 @@ app/
   main.py        the web service: /chat, /chat/stream, /health
   stream.py      server-sent events: the same turn, as it happens
   memory.py      session memory (Redis or a dict), and trim() to bound context
-  guardrails.py  the rules: api key, rate limit, and the per-turn Budget
+  guardrails.py  the rules: keys, rate limit, Budget, input and tool-output
+  store.py       shared rate-limit and monitor state, so scaling out is safe
 tests/           unit tests, all with a fake model
 checks/          the weekly checkpoints
-guide/           read guide/week-06.md
+loadtest/        flood it; where per-container state stops being honest
+guide/           read guide/week-07.md
 Dockerfile       package it so it runs the same everywhere
 .github/workflows/
   test.yml       tests + checkpoints on every pull request

@@ -6,11 +6,13 @@
 
 Request flow, top to bottom:
 
-    1. api key      (Week 03)
-    2. rate limit   (Week 03)
-    3. run the turn: budget + trace  (Weeks 04, 05)
-    4. record the turn for monitoring (Week 05)
-    5. return, or a clean 4xx if a rule was broken
+    1. api key       (Week 03)
+    2. rate limit    (Week 03)
+    3. input size    (Week 07)
+    4. blocked input (Week 07)
+    5. run the turn: budget + trace + retry/fallback  (Weeks 04, 05, 06)
+    6. record the turn for monitoring                 (Week 05)
+    7. return, or a clean 4xx if a rule was broken
 
 One engine, two surfaces - and BOTH go through the same guardrails. A streaming
 endpoint is not a side door; the day you add a rule to one and forget the other
@@ -91,6 +93,8 @@ def chat(req: ChatRequest, x_api_key: str | None = Header(default=None)):
             # certainly not a model call.
             g.check_api_key(x_api_key)
             g.check_rate_limit(x_api_key or "anonymous")
+            g.check_input_length(req.message)
+            g.check_blocked_input(req.message)
 
             history = memory.load(session_id)
             reply, new_history, t = run_turn(req.message, history, trace=t)
@@ -143,6 +147,8 @@ async def chat_stream(req: ChatRequest,
     try:
         g.check_api_key(x_api_key)
         g.check_rate_limit(x_api_key or "anonymous")
+        g.check_input_length(req.message)
+        g.check_blocked_input(req.message)
     except g.GuardrailError as e:
         t["error"] = str(e)
         trace.emit(t)
