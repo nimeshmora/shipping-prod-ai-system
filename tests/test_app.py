@@ -10,8 +10,9 @@ from types import SimpleNamespace as NS
 import pytest
 from fastapi.testclient import TestClient
 
-from app import agent, memory
+from app import agent, guardrails as g, memory
 from app.agent import AgentError
+from app.guardrails import GuardrailError
 from app.main import app as fastapi_app
 
 
@@ -403,3 +404,154 @@ def test_the_app_still_runs_with_no_redis_at_all():
     memory.reset()
     memory.save("local", [{"role": "user", "content": "still works"}])
     assert memory.load("local")[0]["content"] == "still works"
+
+
+# ---- Week 03: who is calling, and how often --------------------------------
+@pytest.fixture(autouse=True)
+def _clean_rate_limits():
+    g.reset_rate_limits()
+    yield
+    g.reset_rate_limits()
+
+
+def test_a_request_without_a_valid_key_is_rejected(monkeypatch):
+    monkeypatch.setenv("API_KEYS", "secret,another")
+    with pytest.raises(GuardrailError) as e:
+        g.check_api_key("wrong")
+    assert e.value.status == 401                 # not 403: identity unproven
+    g.check_api_key("secret")                    # no raise
+    g.check_api_key("another")                   # more than one key works
+
+
+def test_keys_are_read_fresh_so_rotation_needs_no_deploy(monkeypatch):
+    """A set built once at import time would mean the only way to revoke a
+    leaked key is to ship new code."""
+    monkeypatch.setenv("API_KEYS", "old")
+    g.check_api_key("old")
+    monkeypatch.setenv("API_KEYS", "new")
+    with pytest.raises(GuardrailError):
+        g.check_api_key("old")                   # revoked without a restart
+    g.check_api_key("new")
+
+
+def test_with_no_keys_configured_auth_is_off(monkeypatch):
+    """A deliberate local-dev convenience, and a real production risk: a
+    service deployed without API_KEYS is wide open."""
+    monkeypatch.delenv("API_KEYS", raising=False)
+    g.check_api_key(None)                        # no raise
+
+
+def test_the_rate_limit_allows_exactly_its_allowance_then_refuses():
+    for _ in range(g.RATE_LIMIT):
+        g.check_rate_limit("flooder")
+    with pytest.raises(GuardrailError) as e:
+        g.check_rate_limit("flooder")
+    assert e.value.status == 429
+
+
+def test_one_caller_being_rate_limited_does_not_affect_another():
+    for _ in range(g.RATE_LIMIT):
+        g.check_rate_limit("noisy")
+    with pytest.raises(GuardrailError):
+        g.check_rate_limit("noisy")
+    g.check_rate_limit("quiet")                  # unaffected
+
+
+def test_the_window_slides_rather_than_resetting_on_the_minute(monkeypatch):
+    """The naive version - a counter on a per-minute key - lets a caller send
+    the full allowance either side of a minute boundary: a 20/min limit that
+    permits 40 requests in one second."""
+    clock = {"t": 1000.0}
+    monkeypatch.setattr(g.time, "monotonic", lambda: clock["t"])
+
+    for _ in range(g.RATE_LIMIT):
+        g.check_rate_limit("slider")
+    with pytest.raises(GuardrailError):
+        g.check_rate_limit("slider")
+
+    clock["t"] += 61                             # the oldest hits age out
+    g.check_rate_limit("slider")                 # and only then is there room
+
+
+# ---- Week 03: the guardrails guard BOTH endpoints --------------------------
+def _client():
+    from fastapi.testclient import TestClient
+    import app.main as main
+    return TestClient(main.app)
+
+
+def test_chat_returns_401_without_a_key(monkeypatch):
+    monkeypatch.setenv("API_KEYS", "secret")
+    r = _client().post("/chat", json={"message": "hi"})
+    assert r.status_code == 401
+
+
+def test_the_streaming_endpoint_is_not_a_side_door(monkeypatch):
+    """The day you add a rule to one endpoint and forget the other is the day
+    you have an unauthenticated path into a paid model."""
+    monkeypatch.setenv("API_KEYS", "secret")
+    r = _client().post("/chat/stream", json={"message": "hi"})
+    assert r.status_code == 401
+
+
+def test_a_rejected_stream_is_an_honest_4xx_not_an_error_frame(monkeypatch):
+    """Guardrails run BEFORE the response starts. Once the first frame is out,
+    200 has already been sent and there is no status code left to reject with."""
+    monkeypatch.setenv("API_KEYS", "secret")
+    r = _client().post("/chat/stream", json={"message": "hi"})
+    assert r.status_code == 401
+    assert "text/event-stream" not in r.headers.get("content-type", "")
+
+
+def test_a_valid_key_gets_through(monkeypatch):
+    import app.main as main
+    monkeypatch.setenv("API_KEYS", "secret")
+    original = main.run_turn
+    main.run_turn = lambda m, history=None: agent.run_turn(
+        m, history, model_fn=plain_answer("ok"))
+    try:
+        r = _client().post("/chat", json={"message": "hi"},
+                           headers={"x-api-key": "secret"})
+        assert r.status_code == 200
+        assert r.json()["reply"] == "ok"
+    finally:
+        main.run_turn = original
+
+
+def test_flooding_one_endpoint_returns_429(monkeypatch):
+    import app.main as main
+    monkeypatch.setenv("API_KEYS", "secret")
+    monkeypatch.setattr(g, "RATE_LIMIT", 3)
+    original = main.run_turn
+    main.run_turn = lambda m, history=None: agent.run_turn(
+        m, history, model_fn=plain_answer("ok"))
+    try:
+        client = _client()
+        headers = {"x-api-key": "secret"}
+        codes = [client.post("/chat", json={"message": "hi"},
+                             headers=headers).status_code for _ in range(5)]
+        assert codes.count(200) == 3
+        assert codes.count(429) == 2
+    finally:
+        main.run_turn = original
+
+
+def test_a_guardrail_rejection_never_reaches_the_model(monkeypatch):
+    """Rejecting a request that was never going to be allowed should cost
+    nothing - certainly not a model call."""
+    import app.main as main
+    monkeypatch.setenv("API_KEYS", "secret")
+    called = {"n": 0}
+
+    def counting_model(messages):
+        called["n"] += 1
+        return NS(content=[NS(type="text", text="ok")], stop_reason="end_turn")
+
+    original = main.run_turn
+    main.run_turn = lambda m, history=None: agent.run_turn(
+        m, history, model_fn=counting_model)
+    try:
+        _client().post("/chat", json={"message": "hi"})     # no key
+        assert called["n"] == 0
+    finally:
+        main.run_turn = original

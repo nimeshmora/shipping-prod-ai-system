@@ -1,22 +1,28 @@
 """The web service: the agent's front door.
 
-Two ways to read the same turn:
-
     POST /chat          the whole reply, as one JSON object
     POST /chat/stream   the same reply, streamed as server-sent events
     GET  /health        is this process up? the deploy pipeline asks this
 
-One engine, two surfaces. Every later week adds a layer here - auth and rate
-limits in Week 03, budgets in Week 04, tracing in Week 05 - and they all attach
-to the one loop in app/agent.py.
+Request flow, top to bottom:
+
+    1. api key      (Week 03)
+    2. rate limit   (Week 03)
+    3. run the turn
+    4. return, or a clean 4xx if a rule was broken
+
+One engine, two surfaces - and BOTH go through the same guardrails. A streaming
+endpoint is not a side door; the day you add a rule to one and forget the other
+is the day you have an unauthenticated path into a paid model.
 """
 import os
 import uuid
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+from app import guardrails as g
 from app import memory, stream
 from app.agent import AgentError, run_turn
 
@@ -44,7 +50,7 @@ def health():
 
 
 @app.post("/chat")
-def chat(req: ChatRequest):
+def chat(req: ChatRequest, x_api_key: str | None = Header(default=None)):
     """One turn of conversation.
 
     The session id is how a stateless HTTP service holds a conversation: the
@@ -53,10 +59,19 @@ def chat(req: ChatRequest):
     """
     session_id = req.session_id or uuid.uuid4().hex
     try:
+        # Guardrails first, before any work is done. Rejecting a request that
+        # was never going to be allowed should cost nothing - certainly not a
+        # model call.
+        g.check_api_key(x_api_key)
+        g.check_rate_limit(x_api_key or "anonymous")
+
         history = memory.load(session_id)
         reply, new_history = run_turn(req.message, history)
         memory.save(session_id, new_history)
         return {"reply": reply, "session_id": session_id}
+    except g.GuardrailError as e:
+        # A rule was broken. Expected, and the caller's fault: a clean 4xx.
+        raise HTTPException(status_code=e.status, detail=str(e))
     except AgentError as e:
         # Something the caller can understand and act on.
         raise HTTPException(status_code=e.status, detail=str(e))
@@ -68,15 +83,23 @@ def chat(req: ChatRequest):
 
 
 @app.post("/chat/stream")
-async def chat_stream(req: ChatRequest):
+async def chat_stream(req: ChatRequest,
+                      x_api_key: str | None = Header(default=None)):
     """The same turn, streamed as server-sent events.
 
-    Note where the work happens: `run` closes over the request, and
-    stream.stream_turn calls it on a worker thread. Everything before the
-    first frame is identical to /chat, because a streaming endpoint is not a
-    side door - in Week 03, when auth arrives, it has to guard both.
+    The guardrails run here too, and they run BEFORE the response starts. That
+    ordering is the whole trick: once the first frame goes out, HTTP 200 has
+    already been sent and there is no status code left to reject with. Check
+    first, and a rejected caller still gets an honest 401 or 429.
     """
     session_id = req.session_id or uuid.uuid4().hex
+
+    try:
+        g.check_api_key(x_api_key)
+        g.check_rate_limit(x_api_key or "anonymous")
+    except g.GuardrailError as e:
+        raise HTTPException(status_code=e.status, detail=str(e))
+
     history = memory.load(session_id)
 
     def run():

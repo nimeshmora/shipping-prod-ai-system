@@ -1,0 +1,103 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+
+# One workflow, two jobs, one arrow between them.
+#
+# `deploy` declares `needs: test`, so GitHub will not start it until the test
+# job has finished successfully. Failing tests mean the deploy never runs.
+#
+# This is the thing to get right: two SEPARATE workflows both triggered by
+# `push: main` do NOT gate each other. They race, and you get a green tick on a
+# broken deploy. `needs:` only works between jobs inside ONE workflow, which is
+# why the tests live here rather than in their own file.
+#
+# In a real repo you would also protect main: require this job as a status check
+# and require pull requests, so a bad commit cannot reach main at all. That
+# lives in repo settings, not in this file. Both layers are worth having.
+
+# Never let two deploys of the same branch overlap. A slow older run must not
+# land on top of a newer one - that is how you "roll back" to a version nobody
+# asked for.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ----------------------------------------------------------------- the gate
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: run tests
+        run: python -m pytest -q
+      - name: run the weekly checkpoints
+        run: |
+          python -m checks.check 00
+          python -m checks.check 01
+          python -m checks.check 02
+
+  # --------------------------------------------------------------- the deploy
+  deploy:
+    needs: test                # <-- the arrow. No tests, no deploy.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      # Tag the revision with the commit SHA. Without this you get
+      # ship-agent-00042-abc and no way to tell which commit it holds - so
+      # "roll back to the last good one" becomes guesswork at the worst
+      # possible moment.
+      - name: deploy to Cloud Run
+        run: |
+          gcloud run deploy ship-agent \
+            --source . \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --revision-suffix "${GITHUB_SHA::7}" \
+            --set-env-vars "MODEL=claude-sonnet-5,BASE_URL=https://api.ai.kodekloud.com/v1,RATE_LIMIT_PER_MIN=20" \
+            --set-secrets "KODEKEY=kodekey:latest,API_KEYS=api-keys:latest" \
+            --timeout=3600 --concurrency=80 --min-instances=1
+
+      # A deploy that exits 0 is not the same as a service that answers.
+      # gcloud reports success when the revision was CREATED, which tells you
+      # nothing about whether the process inside it can serve a request.
+      - name: verify the service is really up
+        run: |
+          URL=$(gcloud run services describe ship-agent \
+                  --region us-central1 --format='value(status.url)')
+          echo "deployed to $URL"
+          for i in $(seq 1 10); do
+            if curl -fsS --max-time 10 "$URL/health" | grep -q '"ok"'; then
+              echo "health check passed"
+              exit 0
+            fi
+            echo "  not ready yet, retrying ($i/10)"
+            sleep 6
+          done
+          echo "health check FAILED - rolling back to the previous revision"
+          PREV=$(gcloud run revisions list --service ship-agent \
+                   --region us-central1 --format='value(name)' \
+                   --sort-by=~metadata.creationTimestamp | sed -n 2p)
+          if [ -n "$PREV" ]; then
+            gcloud run services update-traffic ship-agent \
+              --region us-central1 --to-revisions "$PREV=100"
+            echo "rolled back to $PREV"
+          fi
+          exit 1

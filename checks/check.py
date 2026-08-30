@@ -1,7 +1,7 @@
 """Guided checkpoints. Run one per week to confirm that week's capability works.
 
     python -m checks.check 00      # the loop you start from
-    python -m checks.check 02      # this week
+    python -m checks.check 03      # this week
     python -m checks.check setup   # tests all pass
 
 Each check uses a fake model, so it runs with no API key and no cloud, and
@@ -248,6 +248,156 @@ def check_02():
     memory.reset()
 
 
+def check_03():
+    print("Week 03: strangers are kept out, and deploys are automatic")
+    import os
+    from fastapi.testclient import TestClient
+
+    try:
+        from app import guardrails as g
+    except ImportError:
+        _no("app/guardrails.py does not exist yet")
+    for name in ("check_api_key", "check_rate_limit", "GuardrailError"):
+        if not hasattr(g, name):
+            _no(f"app/guardrails.py must define {name}")
+    _ok("app/guardrails.py defines the rules and a GuardrailError to raise")
+
+    # --- the key ------------------------------------------------------------
+    saved = os.environ.get("API_KEYS")
+    os.environ["API_KEYS"] = "secret,second"
+    try:
+        try:
+            g.check_api_key("wrong")
+            _no("a wrong API key was accepted")
+        except g.GuardrailError as e:
+            if e.status != 401:
+                _no(f"a bad key should be 401 (identity unproven), got {e.status}")
+        _ok("a wrong API key is refused with 401")
+        g.check_api_key("secret")
+        g.check_api_key("second")
+        _ok("a valid key passes, and more than one key can be configured")
+
+        os.environ["API_KEYS"] = "rotated"
+        try:
+            g.check_api_key("secret")
+            _no("the old key still works after API_KEYS changed - read the keys "
+                "fresh on each call, or revoking a leaked key needs a deploy")
+        except g.GuardrailError:
+            pass
+        _ok("keys are read fresh, so rotating one needs no code change")
+    finally:
+        if saved is None:
+            os.environ.pop("API_KEYS", None)
+        else:
+            os.environ["API_KEYS"] = saved
+
+    os.environ.pop("API_KEYS", None)
+    g.check_api_key(None)
+    _ok("with API_KEYS unset, auth is off so local dev still works")
+
+    # --- the rate limit -----------------------------------------------------
+    g.reset_rate_limits()
+    for _ in range(g.RATE_LIMIT):
+        g.check_rate_limit("chk-flood")
+    try:
+        g.check_rate_limit("chk-flood")
+        _no(f"a caller sent more than {g.RATE_LIMIT} requests and was allowed")
+    except g.GuardrailError as e:
+        if e.status != 429:
+            _no(f"a rate-limited caller should get 429, got {e.status}")
+    _ok(f"a caller is cut off after {g.RATE_LIMIT} requests, with 429")
+
+    g.check_rate_limit("chk-quiet")
+    _ok("and one noisy caller does not lock out everybody else")
+
+    # a sliding window, not a fixed one
+    real_monotonic = g.time.monotonic
+    clock = {"t": 10_000.0}
+    g.time.monotonic = lambda: clock["t"]
+    try:
+        g.reset_rate_limits()
+        for _ in range(g.RATE_LIMIT):
+            g.check_rate_limit("chk-slide")
+        clock["t"] += 61
+        try:
+            g.check_rate_limit("chk-slide")
+        except g.GuardrailError:
+            _no("after 61 seconds the oldest requests should have aged out - "
+                "drop timestamps older than 60s rather than counting per minute")
+        _ok("the window slides, so it cannot be beaten across a minute boundary")
+    finally:
+        g.time.monotonic = real_monotonic
+        g.reset_rate_limits()
+
+    # --- both endpoints are guarded ----------------------------------------
+    import app.main as main
+    os.environ["API_KEYS"] = "secret"
+    try:
+        c = TestClient(main.app)
+        if c.post("/chat", json={"message": "hi"}).status_code != 401:
+            _no("POST /chat without a key must return 401")
+        _ok("POST /chat without a key returns 401")
+
+        r = c.post("/chat/stream", json={"message": "hi"})
+        if r.status_code != 401:
+            _no("POST /chat/stream without a key must return 401 too - a "
+                "streaming endpoint is not a side door")
+        if "text/event-stream" in r.headers.get("content-type", ""):
+            _no("the rejection arrived as a stream - check the guardrails "
+                "BEFORE the response starts, or there is no status code left "
+                "to reject with")
+        _ok("POST /chat/stream without a key returns 401, not an error frame")
+    finally:
+        os.environ.pop("API_KEYS", None)
+        g.reset_rate_limits()
+
+    # --- the pipeline -------------------------------------------------------
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    wf = os.path.join(root, ".github", "workflows")
+    if not os.path.isdir(wf):
+        _no("there is no .github/workflows - deploys are still manual")
+    files = {f: open(os.path.join(wf, f)).read() for f in os.listdir(wf)
+             if f.endswith((".yml", ".yaml"))}
+    if not files:
+        _no("no workflow files found in .github/workflows")
+    _ok(f"a pipeline exists ({', '.join(sorted(files))})")
+
+    deploying = {f: t for f, t in files.items() if "gcloud run deploy" in t}
+    if not deploying:
+        _no("no workflow deploys to Cloud Run")
+    for name, text in deploying.items():
+        if "needs:" not in text:
+            _no(f"{name} deploys without a `needs:` on a test job. Two separate "
+                "workflows on push:main do NOT gate each other - they race.")
+        if "pytest" not in text:
+            _no(f"{name} deploys without running the tests first")
+    _ok("the deploy job declares `needs:` on a job that runs the tests")
+
+    for name, text in deploying.items():
+        if "/health" not in text:
+            _no(f"{name} never checks /health after deploying. `gcloud run "
+                "deploy` exiting 0 means the revision was created, not that it "
+                "can serve a request.")
+    _ok("the pipeline verifies /health after deploying, not just the exit code")
+
+    # Check the --set-env-vars ARGUMENT only, not the rest of the command.
+    # The value is a quoted comma list on the same logical line.
+    import re
+    for name, text in files.items():
+        for match in re.finditer(r'--set-env-vars[ =]+"([^"]*)"', text):
+            for pair in match.group(1).split(","):
+                key = pair.split("=")[0].strip()
+                if key in ("KODEKEY", "API_KEYS") or "SECRET" in key.upper():
+                    _no(f"{name} passes {key} through --set-env-vars. Env vars "
+                        "are visible in the console and in `gcloud describe` "
+                        "output - use --set-secrets.")
+    if any("set-secrets" in t for t in deploying.values()):
+        _ok("secrets go through --set-secrets, not --set-env-vars")
+    else:
+        _no("no workflow uses --set-secrets; the key has to reach the service "
+            "somehow, and an env var is the wrong way")
+
+
 def check_setup():
     print("Setup check: the tests pass")
     import subprocess
@@ -257,7 +407,7 @@ def check_setup():
 
 
 CHECKS = {"00": check_00, "01": check_01, "02": check_02,
-          "setup": check_setup}
+          "03": check_03, "setup": check_setup}
 
 
 if __name__ == "__main__":
