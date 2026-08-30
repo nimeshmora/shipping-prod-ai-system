@@ -44,15 +44,19 @@ def _tool_then_answer(name, args):
 def check_00():
     print("Week 00: the loop runs a tool then answers")
     from app.agent import run_turn
-    reply, hist = run_turn(
+    # run_turn returns (reply, history) until Week 05 adds the trace and makes
+    # it (reply, history, trace). This checkpoint spans that change, so it
+    # accepts either.
+    result = run_turn(
         "where is order ORD-1002?",
         model_fn=_tool_then_answer("lookup_order", {"order_id": "ORD-1002"}))
+    reply, hist = result[0], result[1]
     (_ok if "standing desk" in reply else _no)(
         "the agent looked up a real order it could not have known")
     (_ok if len(hist) == 4 else _no)("history has all four moves")
-    reply, _ = run_turn(
+    reply = run_turn(
         "what is 12*41?",
-        model_fn=_tool_then_answer("calculator", {"expression": "12 * 41"}))
+        model_fn=_tool_then_answer("calculator", {"expression": "12 * 41"}))[0]
     (_ok if "492" in reply else _no)("and the calculator still works")
 
 
@@ -78,8 +82,18 @@ def check_01():
 
     # Swap in a fake model so this needs no API key.
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=_plain_model("Your order is on its way"))
+    # Week 05 gives run_turn a `trace` parameter. Accept and forward it only
+    # when the real function takes it, so this works either side of that.
+    import inspect
+    _takes_trace = "trace" in inspect.signature(agent.run_turn).parameters
+
+    def _fake_run_turn(m, history=None, trace=None):
+        model = _plain_model("Your order is on its way")
+        if _takes_trace:
+            return agent.run_turn(m, history, model_fn=model, trace=trace)
+        return agent.run_turn(m, history, model_fn=model)
+
+    main.run_turn = _fake_run_turn
     try:
         memory.reset()
         c = TestClient(main.app)
