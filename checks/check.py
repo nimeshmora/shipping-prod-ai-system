@@ -328,12 +328,13 @@ def check_03():
     # does - inside guardrails until Week 07 moves it into app/store.py - so
     # find it rather than assuming.
     clock = {"t": 10_000.0}
+    _mod, _attr = g.time, "monotonic"
     try:
-        from app import store as _counter_home
-        _attr = "time"
+        from app import store as _s
+        if hasattr(_s, "time") and hasattr(_s, "hit_count"):
+            _mod, _attr = _s.time, "time"
     except ImportError:
-        _counter_home, _attr = g, "monotonic"
-    _mod = getattr(_counter_home, "time")
+        pass                       # store.py arrives in Week 07
     _real = getattr(_mod, _attr)
     setattr(_mod, _attr, lambda: clock["t"])
     try:
