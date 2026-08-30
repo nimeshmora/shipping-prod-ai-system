@@ -45,13 +45,13 @@ def _tool_then_answer(name, args):
 def check_00():
     print("Week 00: the loop runs a tool then answers")
     from app.agent import run_turn
-    reply, hist, _ = run_turn(
+    reply, hist = run_turn(
         "where is order ORD-1002?",
         model_fn=_tool_then_answer("lookup_order", {"order_id": "ORD-1002"}))
     (_ok if "standing desk" in reply else _no)(
         "the agent looked up a real order it could not have known")
     (_ok if len(hist) == 4 else _no)("history has all four moves")
-    reply, _, _ = run_turn(
+    reply, _ = run_turn(
         "what is 12*41?",
         model_fn=_tool_then_answer("calculator", {"expression": "12 * 41"}))
     (_ok if "492" in reply else _no)("and the calculator still works")
@@ -79,9 +79,8 @@ def check_01():
 
     # Swap in a fake model so this needs no API key.
     original = main.run_turn
-    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
-        m, history, model_fn=_plain_model("Your order is on its way"),
-        trace=trace)
+    main.run_turn = lambda m, history=None: agent.run_turn(
+        m, history, model_fn=_plain_model("Your order is on its way"))
     try:
         memory.reset()
         c = TestClient(main.app)
