@@ -37,6 +37,8 @@ jobs:
       - run: pip install -r requirements.txt
       - name: run tests
         run: python -m pytest -q
+      - name: run the eval gate
+        run: python -m evals.run_evals
       - name: run the weekly checkpoints
         run: |
           python -m checks.check 00
@@ -47,6 +49,7 @@ jobs:
           python -m checks.check 05
           python -m checks.check 06
           python -m checks.check 07
+          python -m checks.check 08
 
   # --------------------------------------------------------------- the deploy
   deploy:
