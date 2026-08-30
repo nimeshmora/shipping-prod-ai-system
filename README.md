@@ -1,8 +1,16 @@
 # Ship Production AI Systems — Week 1 · Package
 
-> **This branch is Week 1 complete.** It is the answer key. If you are doing the
-> week, start from `week-01-package` instead and check your work against this
-> one with `git diff week-01-package..week-01-solution`.
+> **You are on `week-01-package`: the starting line for Week 1.**
+>
+> `app/agent.py` and its tools work — 12 tests prove it. Your job is to build
+> `app/main.py`, `app/stream.py`, the `Dockerfile` and a `.dockerignore`. Each
+> of those files holds a header comment telling you exactly what goes in it.
+>
+> Read **[`guide/week-01.md`](guide/week-01.md)**, then run
+> `make check-week-01` until it is green.
+>
+> Stuck on one file? The answer key is the `week-01-solution` branch:
+> `git diff week-01-package..week-01-solution -- app/main.py`
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -47,10 +55,11 @@ what an agent is actually *for*.
 cp .env.example .env          # paste your KodeKey into .env
 python -m venv .venv && source .venv/bin/activate
 make install
-make test                     # proves the loop works, no API key needed
+make test                     # 12 tests pass: the loop already works
+make check-week-01            # fails, and tells you what to build first
 ```
 
-Then talk to it for real:
+Once you have built the service, talk to it for real:
 
 ```bash
 set -a && source .env && set +a     # load your key into THIS terminal
@@ -100,15 +109,16 @@ make docker-run       # run the container
 
 ```
 app/
-  agent.py       the loop, three tools, the system prompt, a step cap
-  orders.py      a stand-in order system — the data the agent goes and fetches
-  main.py        the web service: /chat, /chat/stream, /health
-  stream.py      server-sent events: the same turn, as it happens
-  memory.py      session memory — a dict for now, Redis in Week 02
-tests/           unit tests, all with a fake model
-checks/          the weekly checkpoints
+  agent.py       GIVEN  the loop, three tools, the system prompt, a step cap
+  orders.py      GIVEN  a stand-in order system — the data the agent fetches
+  memory.py      GIVEN  session memory — a dict for now, Redis in Week 02
+  main.py        BUILD  the web service: /chat, /chat/stream, /health
+  stream.py      BUILD  server-sent events: the same turn, as it happens
+Dockerfile       BUILD  package it so it runs the same everywhere
+.dockerignore    BUILD  and keep .env out of the image
+tests/           unit tests for what you were given
+checks/          the weekly checkpoints — this is your test for the week
 guide/           read guide/week-01.md
-Dockerfile       package it so it runs the same everywhere
 ```
 
 ---

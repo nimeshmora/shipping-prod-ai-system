@@ -13,7 +13,7 @@ that runs the same on your laptop and in the cloud.
 
 ## Why this is a whole week
 
-The loop in `app/agent.py` already works. Run `make test` and watch 10 tests
+The loop in `app/agent.py` already works. Run `make test` and watch 12 tests
 prove it. So why isn't it shippable?
 
 Because nobody can call it. It has no address, no way to hold a conversation
@@ -125,7 +125,7 @@ an image layer.** Layers are cached, shared, and pushed to registries.
 
 ```bash
 make install
-make test                 # 10 tests pass: the loop already works
+make test                 # 12 tests pass: the loop already works
 
 # ... build main.py, stream.py, Dockerfile ...
 
