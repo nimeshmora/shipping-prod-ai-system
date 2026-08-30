@@ -23,8 +23,17 @@ check-week-04:
 	python -m checks.check 04
 check-week-05:
 	python -m checks.check 05
+check-week-06:
+	python -m checks.check 06
 
 # ---- the container ----
+# ---- Week 06: the planted bug (instructor only) ----
+plant-bug:
+	python -m checks.plant_bug plant
+
+fix-bug:
+	python -m checks.plant_bug fix
+
 # ---- Week 05: a place to look at traces ----
 # Grafana + Tempo: the dashboard stack most teams actually use.
 trace-ui:

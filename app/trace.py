@@ -27,6 +27,7 @@ def new_trace(session_id):
         "token_count": 0,
         "input_tokens": 0,        # billed at a different rate to output
         "output_tokens": 0,
+        "retries": 0,             # same model tried again after a blip
         "tools_used": [],
         "tool_errors": [],        # tools that blew up - the model still sees the text
         "step_ms": [],            # how long each trip round the loop took

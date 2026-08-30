@@ -19,9 +19,9 @@ The four agent signals worth watching, and what a bad number usually means:
     p95_duration    the slow tail users actually feel
     avg_steps       creeping up = the model is flailing, looping, confused
     avg_cost        creeping up = longer contexts or more tool calls per turn
-
-Week 06 adds fallback_rate and retry_rate here, once there is a fallback to
-measure.
+    fallback_rate   above ~0 means your primary provider is struggling
+    retry_rate      retries that SAVED a turn - the early warning that stops a
+                    rising fallback_rate from being your first clue
 
 This keeps the last N turns in memory, which is honest for a single container
 and enough to teach the idea. In production you ship the same JSON lines to a
@@ -39,6 +39,7 @@ WINDOW = int(os.environ.get("MONITOR_WINDOW", "200"))
 ALERT_ERROR_RATE = float(os.environ.get("ALERT_ERROR_RATE", "0.10"))
 ALERT_P95_MS = float(os.environ.get("ALERT_P95_MS", "15000"))
 ALERT_AVG_STEPS = float(os.environ.get("ALERT_AVG_STEPS", "4.0"))
+ALERT_FALLBACK_RATE = float(os.environ.get("ALERT_FALLBACK_RATE", "0.20"))
 ALERT_TOOL_ERROR_RATE = float(os.environ.get("ALERT_TOOL_ERROR_RATE", "0.05"))
 
 # The last WINDOW turns, in this process. Honest for one container, and enough
@@ -53,7 +54,14 @@ def _recent():
 
 def record(trace):
     """Called once per finished turn, straight after the trace is emitted."""
+    # A turn only counts as "fell back" if the fallback ANSWERED. With retries
+    # in place, model_calls also holds failed attempts, and counting those
+    # would report a fallback that never happened.
+    used_fallback = any(c.get("provider") == "fallback" and not c.get("error")
+                        for c in trace.get("model_calls", []))
     _turns.append({
+        "fallback": used_fallback,
+        "retries": trace.get("retries", 0),
         "at": time.time(),
         "error": trace.get("error") is not None,
         "tool_error": bool(trace.get("tool_errors")),
@@ -83,6 +91,8 @@ def stats():
     return {
         "turns": n,
         "error_rate": round(sum(t["error"] for t in turns) / n, 3),
+        "fallback_rate": round(sum(t["fallback"] for t in turns) / n, 3),
+        "retry_rate": round(sum(bool(t.get("retries")) for t in turns) / n, 3),
         "avg_steps": round(sum(t["steps"] for t in turns) / n, 2),
         "p95_duration_ms": _p95(durations),
         "avg_duration_ms": round(sum(durations) / n),
@@ -106,6 +116,9 @@ def alerts():
     if s["p95_duration_ms"] > ALERT_P95_MS:
         out.append(f"p95 latency {s['p95_duration_ms']}ms is above "
                    f"{ALERT_P95_MS:.0f}ms - the slow tail is bad")
+    if s["fallback_rate"] > ALERT_FALLBACK_RATE:
+        out.append(f"fallback answered {s['fallback_rate']:.0%} of turns - "
+                   f"the primary model is struggling")
     if s["tool_error_rate"] > ALERT_TOOL_ERROR_RATE:
         out.append(f"{s['tool_error_rate']:.0%} of turns had a tool fail - "
                    f"one of your tools is broken")

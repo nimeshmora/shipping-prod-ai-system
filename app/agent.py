@@ -10,6 +10,9 @@ than it is here.
 
   run_turn(message, history, trace=None) -> (reply_text, new_history, trace)
 
+Week 06 adds retries and a fallback model inside call_model, so the loop above
+never learns that a provider wobbled.
+
 A SYSTEM_PROMPT gives the agent its standing instructions, and a timeout bounds
 how long any single model call may take.
 
@@ -18,6 +21,7 @@ Tests pass a fake model_fn so none of this needs an API key.
 import ast
 import operator
 import os
+import random
 import time
 from types import SimpleNamespace as NS
 
@@ -26,11 +30,20 @@ from app.orders import lookup_order
 from app import otel
 
 MODEL = os.environ.get("MODEL", "claude-sonnet-5")
+FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "gpt-oss-120b")
 
 # How long to wait for the model before giving up on this attempt.
 # Without this, one hung connection holds a worker open until the platform's
 # own timeout - which on Cloud Run is an hour.
 MODEL_TIMEOUT_SECONDS = float(os.environ.get("MODEL_TIMEOUT_SECONDS", "30"))
+
+# Week 06: retry the SAME model before changing models.
+# A 429 or a 503 is a blip, not an outage. Retrying costs a few hundred
+# milliseconds; switching providers changes the quality of every answer your
+# users get, and nothing alerts you because the turn still succeeds.
+MAX_RETRIES = int(os.environ.get("MAX_RETRIES", "2"))
+RETRY_BASE_SECONDS = float(os.environ.get("RETRY_BASE_SECONDS", "0.5"))
+RETRY_MAX_SECONDS = float(os.environ.get("RETRY_MAX_SECONDS", "8"))
 
 # The system prompt: the agent's standing instructions, sent with every turn.
 #
@@ -224,19 +237,92 @@ def _to_openai_messages(messages):
     return out
 
 
+def _is_retryable(exc):
+    """Is this worth trying the SAME model again, or is it hopeless?
+
+    A 429 or a 503 means "not right now" - the request was fine, the provider
+    is busy. A 400 or a 401 means the request itself is wrong, and sending it
+    again a thousand times will not fix it. Retrying a permanent error just
+    turns one fast failure into a slow one.
+    """
+    status = getattr(exc, "status_code", None) or getattr(exc, "status", None)
+    if status is None:
+        # No status: a socket timeout, a DNS blip, a dropped connection.
+        # Those are exactly the transient faults retrying is for.
+        return True
+    return status == 429 or status >= 500
+
+
+def _sleep_for(attempt):
+    """Exponential backoff with full jitter.
+
+    Doubling the wait gives an overloaded provider room to recover. The jitter
+    matters just as much: without it, every container that failed at the same
+    moment retries at the same moment, and your own fleet keeps hammering the
+    thing it is waiting for. Jitter spreads the herd out.
+    """
+    ceiling = min(RETRY_BASE_SECONDS * (2 ** attempt), RETRY_MAX_SECONDS)
+    return random.uniform(0, ceiling)
+
+
+def _attempt(client, model, payload):
+    completion = client.chat.completions.create(
+        model=model, max_tokens=1024, tools=_tools_openai(),
+        messages=payload, timeout=MODEL_TIMEOUT_SECONDS)
+    return _to_anthropic_shape(completion)
+
+
 def call_model(messages, trace=None):
-    """One call to the model. Week 06 adds retries and a fallback model."""
+    """Ask the model, and do not give up at the first flicker.
+
+    The order here is the whole lesson:
+
+        1. try the primary model
+        2. if that failed transiently, RETRY THE PRIMARY with backoff
+        3. only when the primary is genuinely unavailable, fall back
+
+    Getting 2 and 3 the wrong way round is the common mistake, and it is
+    expensive in a way that is hard to see. A single 429 is normal traffic.
+    If one blip switches providers, your users silently start getting answers
+    from a different, usually weaker model - and because the turn succeeded,
+    nothing alerts. You would only find it in fallback_rate weeks later.
+
+    Retry the same model first. Change models only when you have to.
+    """
     client = _client()
     # The system prompt goes first, on every single turn. The model has no
     # memory, so its standing instructions have to be re-sent every time.
     payload = ([{"role": "system", "content": SYSTEM_PROMPT}]
                + _to_openai_messages(messages))
-    completion = client.chat.completions.create(
-        model=MODEL, max_tokens=1024, tools=_tools_openai(),
-        messages=payload, timeout=MODEL_TIMEOUT_SECONDS)
-    if trace is not None:
-        trace["model_calls"].append({"provider": "primary", "model": MODEL})
-    return _to_anthropic_shape(completion)
+
+    last_error = None
+    for provider, model in (("primary", MODEL), ("fallback", FALLBACK_MODEL)):
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                resp = _attempt(client, model, payload)
+                if trace is not None:
+                    trace["model_calls"].append(
+                        {"provider": provider, "model": model,
+                         "attempts": attempt + 1})
+                    if attempt:
+                        trace["retries"] += attempt
+                return resp
+            except Exception as e:
+                last_error = e
+                retryable = _is_retryable(e)
+                if trace is not None:
+                    trace["model_calls"].append(
+                        {"provider": provider, "model": model,
+                         "attempt": attempt + 1, "error": str(e),
+                         "retryable": retryable})
+                # Out of attempts, or an error no retry can fix: stop trying
+                # THIS model and let the loop move on to the fallback.
+                if attempt == MAX_RETRIES or not retryable:
+                    break
+                time.sleep(_sleep_for(attempt))
+
+    # Both models, every attempt, exhausted.
+    raise last_error if last_error else RuntimeError("no model answered")
 
 
 # ---- the loop --------------------------------------------------------------

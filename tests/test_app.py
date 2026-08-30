@@ -971,3 +971,180 @@ def test_a_turn_produces_one_parent_span_with_children():
     assert '"name": "model_call"' in out      # each trip round the loop
     assert '"name": "tool"' in out            # and each tool call
     assert '"parent_id": null' in out         # chat_turn is the root
+
+
+# ---- Week 06: retry the SAME model before changing models ------------------
+class _Boom(Exception):
+    def __init__(self, status=None):
+        super().__init__(f"http {status}")
+        self.status_code = status
+
+
+def _fake_client(behaviour):
+    """A stand-in gateway client. `behaviour(model, n)` either raises or
+    returns the text to answer with."""
+    calls = []
+
+    class FakeClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+
+        def create(self, model, messages, **kw):
+            calls.append(model)
+            text = behaviour(model, len(calls))
+            msg = type("M", (), {"content": text, "tool_calls": None})()
+            choice = type("C", (), {"message": msg})()
+            usage = type("U", (), {"prompt_tokens": 1, "completion_tokens": 1})()
+            return type("R", (), {"choices": [choice], "usage": usage})()
+
+    return FakeClient, calls
+
+
+def _no_sleeping(monkeypatch):
+    monkeypatch.setattr(agent.time, "sleep", lambda s: None)
+
+
+def test_a_transient_blip_is_retried_on_the_primary_not_failed_over(monkeypatch):
+    """The expensive mistake this prevents: one 429 is normal traffic. If a
+    blip switches providers, users silently get answers from a weaker model
+    and nothing alerts, because the turn still succeeded."""
+    def behaviour(model, n):
+        if n == 1:
+            raise _Boom(429)
+        return "ok"
+
+    Client, calls = _fake_client(behaviour)
+    _no_sleeping(monkeypatch)
+    monkeypatch.setattr(agent, "_client", lambda: Client())
+
+    t = {"model_calls": [], "retries": 0}
+    agent.call_model([{"role": "user", "content": "hi"}], trace=t)
+
+    assert calls == [agent.MODEL, agent.MODEL]     # retried the PRIMARY
+    assert agent.FALLBACK_MODEL not in calls       # never touched the fallback
+    assert t["retries"] == 1
+
+
+def test_a_permanent_error_is_not_retried(monkeypatch):
+    """A 400 means the request is wrong. Retrying just turns one fast failure
+    into a slow one."""
+    def behaviour(model, n):
+        raise _Boom(400)
+
+    Client, calls = _fake_client(behaviour)
+    _no_sleeping(monkeypatch)
+    monkeypatch.setattr(agent, "_client", lambda: Client())
+
+    with pytest.raises(Exception):
+        agent.call_model([{"role": "user", "content": "hi"}])
+
+    # one attempt per model, no retries: a 400 is hopeless on both
+    assert calls == [agent.MODEL, agent.FALLBACK_MODEL]
+
+
+def test_a_timeout_with_no_status_is_treated_as_transient(monkeypatch):
+    """A socket timeout or dropped connection has no status code, and is
+    exactly the kind of fault retrying is for."""
+    def behaviour(model, n):
+        if n == 1:
+            raise TimeoutError("connection timed out")
+        return "ok"
+
+    Client, calls = _fake_client(behaviour)
+    _no_sleeping(monkeypatch)
+    monkeypatch.setattr(agent, "_client", lambda: Client())
+
+    agent.call_model([{"role": "user", "content": "hi"}])
+    assert calls == [agent.MODEL, agent.MODEL]
+
+
+def test_the_fallback_takes_over_when_the_primary_is_really_down(monkeypatch):
+    def behaviour(model, n):
+        if model == agent.MODEL:
+            raise _Boom(503)
+        return "from the fallback"
+
+    Client, calls = _fake_client(behaviour)
+    _no_sleeping(monkeypatch)
+    monkeypatch.setattr(agent, "_client", lambda: Client())
+
+    t = {"model_calls": [], "retries": 0}
+    resp = agent.call_model([{"role": "user", "content": "hi"}], trace=t)
+
+    assert resp.content[0].text == "from the fallback"
+    # every primary attempt was exhausted BEFORE switching
+    assert calls.count(agent.MODEL) == agent.MAX_RETRIES + 1
+    assert calls[-1] == agent.FALLBACK_MODEL
+    assert any(c.get("provider") == "fallback" and not c.get("error")
+               for c in t["model_calls"])
+
+
+def test_backoff_grows_and_is_jittered():
+    """Doubling gives the provider room to recover. Jitter stops your whole
+    fleet retrying in lockstep and hammering the thing it is waiting for."""
+    for attempt in range(4):
+        ceiling = min(agent.RETRY_BASE_SECONDS * (2 ** attempt),
+                      agent.RETRY_MAX_SECONDS)
+        waits = [agent._sleep_for(attempt) for _ in range(50)]
+        assert all(0 <= w <= ceiling for w in waits)
+    assert len(set(agent._sleep_for(2) for _ in range(20))) > 1   # jittered
+
+
+def test_backoff_is_capped():
+    assert agent._sleep_for(50) <= agent.RETRY_MAX_SECONDS
+
+
+def test_a_failed_attempt_is_not_counted_as_a_fallback_answer():
+    """model_calls now holds failed attempts too. Counting those would report
+    a fallback that never actually answered."""
+    from app import monitor
+    monitor.reset()
+    for _ in range(20):
+        monitor.record({"error": None, "duration_ms": 100, "steps": 1,
+                        "cost_usd": 0.001, "step_ms": [100], "retries": 1,
+                        "tool_errors": [],
+                        "model_calls": [
+                            {"provider": "primary", "error": "429"},
+                            {"provider": "primary", "attempts": 2}]})
+    s = monitor.stats()
+    assert s["fallback_rate"] == 0.0     # the primary answered, after a retry
+    assert s["retry_rate"] == 1.0        # but the flakiness is visible
+    monitor.reset()
+
+
+def test_a_struggling_primary_raises_an_alert():
+    from app import monitor
+    monitor.reset()
+    for _ in range(20):
+        monitor.record({"error": None, "duration_ms": 100, "steps": 1,
+                        "cost_usd": 0.001, "step_ms": [100], "retries": 0,
+                        "tool_errors": [],
+                        "model_calls": [{"provider": "fallback",
+                                         "model": "backup"}]})
+    assert any("fallback" in a for a in monitor.alerts())
+    monitor.reset()
+
+
+def test_an_outage_still_answers_the_user_end_to_end(monkeypatch):
+    """The point of the week, from the caller's side."""
+    from fastapi.testclient import TestClient
+    from app import monitor
+    import app.main as main
+    monitor.reset()
+
+    def behaviour(model, n):
+        if model == agent.MODEL:
+            raise _Boom(503)
+        return "Your order is on its way"
+
+    Client, calls = _fake_client(behaviour)
+    _no_sleeping(monkeypatch)
+    monkeypatch.setattr(agent, "_client", lambda: Client())
+    try:
+        r = TestClient(main.app).post("/chat", json={"message": "hi"})
+        assert r.status_code == 200
+        assert r.json()["reply"] == "Your order is on its way"
+        assert monitor.stats()["fallback_rate"] == 1.0
+    finally:
+        monitor.reset()
