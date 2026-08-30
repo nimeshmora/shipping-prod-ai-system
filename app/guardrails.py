@@ -147,3 +147,93 @@ class Budget:
         self.tokens += int(n or 0)
         if self.tokens > self.max_tokens:
             raise GuardrailError(f"token budget reached ({self.max_tokens})")
+
+
+# ---- Week 07: hostile input, and hostile DATA ----------------------------
+# BUILD THIS.
+#
+# Four things, and the third is the one people miss.
+#
+# 1. check_input_length(text), against MAX_INPUT_CHARS (env, default 4000)
+#
+#    Not a nicety - input length is a COST attack. One 200KB message becomes
+#    200KB of prompt on EVERY trip round the loop, several times over, at your
+#    expense. Week 04's token budget catches it eventually; this catches it
+#    before you pay for a single call.
+#
+# 2. check_blocked_input(text), against a few obvious probe patterns
+#    (rm -rf, __import__, subprocess, eval(). Cheap, and honest about being a
+#    speed bump rather than the control.
+#
+# 3. check_tool_output(text), against MAX_TOOL_OUTPUT_CHARS
+#
+#    THE AGENT-SHAPED HALF OF INJECTION. The two functions above guard what the
+#    USER types. But a tool result also goes straight back into the model's
+#    context, and you did not write what a web page, a database row, or a
+#    customer's order note says.
+#
+#    Go and read app/orders.py, and look at ORD-1043's note. That is where
+#    injection actually lives: the request "what is happening with ORD-1043?"
+#    is completely innocent.
+#
+#    Truncate what is too long, then neutralise instructions aimed at the model
+#    ("ignore all previous instructions", "new instructions:", "system prompt:"
+#    and friends) by replacing them with "[filtered]".
+#
+#    IT MUST NEVER RAISE. A hostile page taking a whole turn down is just a
+#    different denial of service. Return something safe instead.
+#
+#    Be honest with yourself about what this is. Five regexes are a speed bump,
+#    and a paraphrase walks straight past them. The real defences are
+#    structural: the system prompt telling the model that order notes are
+#    information and never instructions, and the fact that this agent has no
+#    tool that could action a refund even if it were convinced to try. This
+#    layer buys you the obvious cases and a signal in the trace.
+#
+# 4. check_url(url), for the new fetch_url tool
+#
+#    This is the guard that stops SSRF. Your agent runs INSIDE your cloud
+#    account, so it can reach things the internet cannot:
+#
+#        http://169.254.169.254/computeMetadata/v1/instance/service-accounts/
+#
+#    A fetch tool without this check will read your instance's service-account
+#    token and put it in the chat reply. The model did nothing wrong. Your tool
+#    did.
+#
+#    Refuse, in this order:
+#      - any scheme that is not http/https. A tool that accepts file:// is a
+#        "read any file on the server" tool.
+#      - literal IPs that are private, loopback, link-local, reserved or
+#        multicast (ipaddress.ip_address, then the is_* properties)
+#      - any host not in an ALLOWED_HOSTS allowlist
+#
+#    The ALLOWLIST is what actually protects you. You cannot enumerate the
+#    hosts an attacker might think of; you can enumerate the ones you meant to
+#    talk to. The IP checks are depth for the day someone widens the list.
+#
+#    Know the hole you are leaving: a hostname ON the allowlist whose DNS points
+#    at 169.254.169.254 passes every check above. Closing it means resolving the
+#    name yourself and connecting to the validated address, because DNS can
+#    change its answer between your check and the library's lookup (DNS
+#    rebinding). In production you put egress behind a proxy that enforces this
+#    once, rather than in every tool.
+#
+# Then wire them in:
+#
+#   app/main.py    check_input_length and check_blocked_input on BOTH endpoints
+#   app/agent.py   check_tool_output on every tool result before it goes back
+#                  to the model, and set trace["tool_output_filtered"] when it
+#                  changed something - otherwise you cannot tell how often
+#                  someone is trying.
+#   app/agent.py   a fetch_url tool that calls check_url, with a timeout, a
+#                  size cap, and follow_redirects=False (a permitted host that
+#                  replies "302 -> 169.254.169.254" walks straight past the
+#                  allowlist you just checked). Register it in TOOLS and
+#                  _HANDLERS - a guardrail on a tool nobody wired up protects
+#                  nothing.
+#
+# And move the rate-limit counter into app/store.py - see that file.
+#
+# Done when:  make check-week-07
+# Stuck? git diff week-07-attack..week-07-solution -- app/guardrails.py

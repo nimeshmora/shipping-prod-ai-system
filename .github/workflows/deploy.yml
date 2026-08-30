@@ -46,6 +46,7 @@ jobs:
           python -m checks.check 04
           python -m checks.check 05
           python -m checks.check 06
+          python -m checks.check 07
 
   # --------------------------------------------------------------- the deploy
   deploy:
