@@ -1,0 +1,33 @@
+# Week 05: somewhere to look at your traces.
+#
+# Two containers:
+#   tempo    stores traces (it speaks OTLP, the same protocol your agent sends)
+#   grafana  draws them - the dashboard tool most teams actually use
+#
+#   make trace-ui         start both
+#   make trace-ui-stop    stop both
+#
+# Then open http://localhost:3000 -> Explore -> Tempo. No login, no account.
+services:
+  tempo:
+    image: grafana/tempo:2.6.0
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "4318:4318"     # OTLP over HTTP - this is where your agent sends spans
+      - "3200:3200"     # tempo's own API, which grafana reads
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      # No login screen. This is a local teaching setup, not production.
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    volumes:
+      - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/ds.yml
+    depends_on:
+      - tempo

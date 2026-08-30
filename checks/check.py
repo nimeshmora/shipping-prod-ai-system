@@ -1,7 +1,7 @@
 """Guided checkpoints. Run one per week to confirm that week's capability works.
 
     python -m checks.check 00      # the loop you start from
-    python -m checks.check 04      # this week
+    python -m checks.check 05      # this week
     python -m checks.check setup   # tests all pass
 
 Each check uses a fake model, so it runs with no API key and no cloud, and
@@ -500,6 +500,180 @@ def check_04():
     memory.reset()
 
 
+def check_05():
+    print("Week 05: you can see inside a turn, and tell if it is healthy")
+    from fastapi.testclient import TestClient
+    from app import monitor, trace
+    from app.agent import run_turn
+
+    # --- writing: one trace per turn ---------------------------------------
+    for name in ("new_trace", "emit"):
+        if not hasattr(trace, name):
+            _no(f"app/trace.py must define {name}")
+    _ok("app/trace.py defines new_trace() and emit()")
+
+    st = {"n": 0}
+
+    def tool_then_text(messages):
+        st["n"] += 1
+        if st["n"] == 1:
+            b = NS(type="tool_use", name="lookup_order",
+                   input={"order_id": "ORD-1002"}, id="t1")
+            return NS(content=[b], stop_reason="tool_use",
+                      usage=NS(input_tokens=100, output_tokens=20))
+        return NS(content=[NS(type="text", text="ok")], stop_reason="end_turn",
+                  usage=NS(input_tokens=150, output_tokens=30))
+
+    t = trace.new_trace("chk")
+    reply, _, t = run_turn("where is ORD-1002?", model_fn=tool_then_text, trace=t)
+
+    if t.get("steps") != 2:
+        _no(f"the trace says {t.get('steps')} steps; that turn took 2")
+    _ok("the trace records how many steps the turn took")
+    if t.get("tools_used") != ["lookup_order"]:
+        _no(f"tools_used is {t.get('tools_used')}, expected ['lookup_order']")
+    _ok("and which tools were called")
+    if len(t.get("step_ms") or []) != 2 or len(t.get("tool_ms") or []) != 1:
+        _no("step_ms and tool_ms must be timed separately - 'the turn took 8s' "
+            "is useless unless you know whether the model or your tool was slow")
+    _ok("and where the time went: the model, or your own tool")
+    if t.get("token_count") != 300:
+        _no(f"token_count is {t.get('token_count')}, expected 300")
+    _ok("and how many tokens it used")
+
+    trace.emit(t)
+    if not t.get("cost_usd"):
+        _no("emit() must put a cost on the turn - group these by session and "
+            "you have cost per user, the question every business asks")
+    _ok(f"emit() prices the turn (${t['cost_usd']})")
+    if t.get("severity") != "INFO":
+        _no("emit() must set severity - log platforms read that field to "
+            "decide whether a line is routine, and without it every line "
+            "lands as INFO and nothing ever pages anybody")
+    bad = trace.new_trace("chk")
+    bad["error"] = "provider down"
+    trace.emit(bad)
+    if bad.get("severity") != "ERROR":
+        _no("a failed turn must be severity ERROR")
+    _ok("a failed turn is marked ERROR so a log platform can page someone")
+
+    red = trace._redact({"api_key": "sk-secret", "input_tokens": 120})
+    if red.get("api_key") != "[redacted]":
+        _no("secrets must be redacted before anything is written")
+    if red.get("input_tokens") != 120:
+        _no("input_tokens was redacted. _REDACT matches on SUBSTRING, so any "
+            "field with 'token' in the name is caught by default - allow the "
+            "counters through, or the trace lies about its own inputs.")
+    _ok("secrets are redacted, and the token counters are not")
+
+    # a broken tool, on a turn that "succeeded"
+    st2 = {"n": 0}
+
+    def broken_tool(messages):
+        st2["n"] += 1
+        if st2["n"] == 1:
+            b = NS(type="tool_use", name="lookup_order",
+                   input={"wrong_arg": "x"}, id="t1")
+            return NS(content=[b], stop_reason="tool_use", usage=None)
+        return NS(content=[NS(type="text", text="sorry")],
+                  stop_reason="end_turn", usage=None)
+
+    t2 = trace.new_trace("chk")
+    reply2, _, t2 = run_turn("q", model_fn=broken_tool, trace=t2)
+    if not reply2 or t2.get("error"):
+        _no("that turn should have succeeded - a failing tool hands its error "
+            "text back to the model, it does not kill the turn")
+    if t2.get("tool_errors") != ["lookup_order"]:
+        _no("a tool that failed was not recorded in tool_errors. The turn still "
+            "returns 200, so this is the ONLY place the breakage shows up.")
+    _ok("a broken tool is recorded even though the turn succeeded")
+
+    # --- reading: monitoring ------------------------------------------------
+    for name in ("record", "stats", "alerts"):
+        if not hasattr(monitor, name):
+            _no(f"app/monitor.py must define {name}")
+    _ok("app/monitor.py defines record(), stats() and alerts()")
+
+    def turn(error=None, ms=1000, steps=2, tool_errors=None):
+        return {"error": error, "duration_ms": ms, "steps": steps,
+                "cost_usd": 0.01, "step_ms": [ms], "model_calls": [],
+                "tool_errors": tool_errors or []}
+
+    monitor.reset()
+    for _ in range(30):
+        monitor.record(turn())
+    if monitor.alerts():
+        _no(f"a healthy agent raised alerts: {monitor.alerts()}")
+    _ok("a healthy agent raises no alerts")
+
+    monitor.reset()
+    for _ in range(3):
+        monitor.record(turn(error="boom"))
+    if monitor.alerts():
+        _no("alerts fired on 3 turns - two failures out of three is a "
+            "coincidence, not an incident. Wait for enough data.")
+    _ok("and it stays quiet until it has enough data to judge")
+
+    monitor.reset()
+    for i in range(30):
+        monitor.record(turn(error="boom" if i % 2 else None, ms=40000, steps=6))
+    fired = " ".join(monitor.alerts())
+    for want in ("error rate", "p95", "steps"):
+        if want not in fired:
+            _no(f"a degrading agent did not raise an alert about {want}: {fired}")
+    _ok("a degrading agent raises alerts about errors, latency and steps")
+
+    monitor.reset()
+    for i in range(20):
+        monitor.record(turn(tool_errors=["lookup_order"] if i % 3 == 0 else []))
+    if monitor.stats()["error_rate"] != 0.0:
+        _no("those turns all succeeded; error_rate should be 0")
+    if not any("tool fail" in a for a in monitor.alerts()):
+        _no("a third of turns had a tool break and nothing alerted. Every turn "
+            "returned 200, so tool_error_rate is the only signal that sees it.")
+    _ok("broken tools alert even when every single turn returns 200")
+
+    # --- the endpoint, and the bug that makes it lie ------------------------
+    import app.main as main
+    monitor.reset()
+    body = TestClient(main.app).get("/metrics").json()
+    if "status" not in body or "alerts" not in body:
+        _no("/metrics must report a status and an alerts list")
+    _ok("/metrics reports status and alerts")
+
+    def boom(m, history=None, trace=None):
+        raise RuntimeError("the provider is down")
+
+    original = main.run_turn
+    main.run_turn = boom
+    try:
+        c = TestClient(main.app, raise_server_exceptions=False)
+        for _ in range(12):
+            c.post("/chat", json={"message": "hi"})
+        body = c.get("/metrics").json()
+        if body.get("error_rate") != 1.0:
+            _no(f"every request failed but error_rate is {body.get('error_rate')}. "
+                "The handler must catch EVERY exception and record it on the "
+                "trace - otherwise a total outage reports a 0% error rate and "
+                "your dashboard lies exactly when you need it.")
+        if body.get("status") != "degraded":
+            _no("with every request failing, /metrics must say degraded")
+    finally:
+        main.run_turn = original
+        monitor.reset()
+    _ok("a total outage is reported as a 100% error rate, not 0%")
+
+    # --- OpenTelemetry is optional -----------------------------------------
+    from app import otel
+    if otel.ENABLED:
+        _no("OTEL must be off unless asked for - the course has to run with no "
+            "cloud and no internet")
+    with otel.span("check", {"a": 1}) as s:
+        s.set("b", 2)
+        s.failed("and this")
+    _ok("OpenTelemetry is off by default and no-ops cleanly when disabled")
+
+
 def check_setup():
     print("Setup check: the tests pass")
     import subprocess
@@ -509,7 +683,8 @@ def check_setup():
 
 
 CHECKS = {"00": check_00, "01": check_01, "02": check_02,
-          "03": check_03, "04": check_04, "setup": check_setup}
+          "03": check_03, "04": check_04, "05": check_05,
+          "setup": check_setup}
 
 
 if __name__ == "__main__":

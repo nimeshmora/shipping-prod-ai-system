@@ -1,8 +1,16 @@
-# Ship Production AI Systems — Week 4 · Cap
+# Ship Production AI Systems — Week 5 · See
 
-> **This branch is Week 4 complete.** It is the answer key. If you are doing the
-> week, start from `week-04-cap` instead and check your work against this one
-> with `git diff week-04-cap..week-04-solution`.
+> **You are on `week-05-see`: the starting line for Week 5.**
+>
+> Weeks 1-4 are complete and passing. This week you build `app/trace.py` (write
+> one JSON record per turn) and `app/monitor.py` (read them back as health),
+> then wire both into the agent loop and the web layer, plus a `/metrics`
+> endpoint. `app/otel.py` is given - read it, it needs no changes.
+>
+> Read **[`guide/week-05.md`](guide/week-05.md)**, then run
+> `make check-week-05` until it is green.
+>
+> Stuck? `git diff week-05-see..week-05-solution -- app/trace.py`
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -15,12 +23,12 @@ Phase 1 built the agent. **Phase 2 ships it.**
 
 ```
   ┌─ SHIP IT ────────────┐  ┌─ OPERATE IT ─────────┐  ┌─ TRUST IT ──────┐
-  01 package  ✓           04 cap  ← you are here    07 attack
-  02 deploy   ✓           05 see                    08 gate
+  01 package  ✓           04 cap  ✓                 07 attack
+  02 deploy   ✓           05 see  ← you are here    08 gate
   03 automate ✓           06 survive
 ```
 
-**Week 4 makes it impossible for one turn to run forever or run up a bill.**
+**Week 5 makes the agent visible: a broken agent still returns 200 OK.**
 
 ---
 
@@ -89,9 +97,11 @@ make check-week-00    # the loop you started from
 make check-week-01    # a deployable web service
 make check-week-02    # memory that survives a redeploy
 make check-week-03    # automatic deploys, keys, rate limits
-make check-week-04    # this week's capability
+make check-week-04    # step, token and context budgets
+make check-week-05    # this week's capability
 make check-setup      # just runs the tests
 
+make trace-ui         # Grafana + Tempo, to look at traces locally
 make docker-build     # build the container
 make docker-run       # run the container
 ```
@@ -110,7 +120,7 @@ app/
   guardrails.py  the rules: api key, rate limit, and the per-turn Budget
 tests/           unit tests, all with a fake model
 checks/          the weekly checkpoints
-guide/           read guide/week-04.md
+guide/           read guide/week-05.md
 Dockerfile       package it so it runs the same everywhere
 .github/workflows/
   test.yml       tests + checkpoints on every pull request
