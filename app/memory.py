@@ -51,13 +51,32 @@ def _is_tool_result(msg):
         isinstance(b, dict) and b.get("type") == "tool_result" for b in content)
 
 
+def _block_to_dict(block):
+    """One content block as something json.dumps will accept.
+
+    Three shapes turn up here and all three have to work:
+
+      dict              a tool_result we built ourselves
+      pydantic model    a real block from the SDK - has .model_dump()
+      SimpleNamespace   a block from a fake model in the tests
+
+    Getting this wrong is a bug you only see in production, because the tests
+    use the third shape and the SDK returns the second. Handle all of them.
+    """
+    if isinstance(block, dict):
+        return block
+    dump = getattr(block, "model_dump", None)
+    if callable(dump):
+        return dump()
+    return dict(vars(block))
+
+
 def _serialise(history):
     plain = []
     for msg in history:
         content = msg["content"]
         if isinstance(content, list):
-            content = [b if isinstance(b, dict) else getattr(b, "model_dump", lambda: b)()
-                       for b in content]
+            content = [_block_to_dict(b) for b in content]
         plain.append({"role": msg["role"], "content": content})
     return json.dumps(plain)
 
@@ -77,3 +96,13 @@ def save(session_id, history):
         _FALLBACK[session_id] = history
         return
     r.setex(f"session:{session_id}", TTL_SECONDS, _serialise(history))
+
+
+def reset():
+    """Clear all sessions. Used by the tests and checkpoints, so one cannot
+    leak into the next."""
+    _FALLBACK.clear()
+    r = _redis()
+    if r is not None:
+        for key in r.scan_iter("session:*"):
+            r.delete(key)
