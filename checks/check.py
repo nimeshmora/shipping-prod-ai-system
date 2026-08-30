@@ -963,6 +963,12 @@ def check_08():
     import json
     from evals import judge, run_evals
 
+    for name in ("run", "_fake_model"):
+        if not hasattr(run_evals, name):
+            _no(f"evals/run_evals.py must define {name}() - see the header "
+                "comment in that file")
+    _ok("evals/run_evals.py defines run() and _fake_model()")
+
     # --- the gate passes on good code --------------------------------------
     if run_evals.run(real=False) != 0:
         _no("the gate fails on the current (good) code")
@@ -1080,7 +1086,14 @@ def check_setup():
     t = subprocess.run([sys.executable, "-m", "pytest", "-q"],
                        capture_output=True, text=True)
     (_ok if t.returncode == 0 else _no)("unit tests pass")
-    from evals.run_evals import run
+    try:
+        from evals.run_evals import run
+    except ImportError:
+        print("  SKIP  eval gate (evals/run_evals.py not built yet - Week 08)")
+        return
+    if not callable(globals().get("run", run)):
+        print("  SKIP  eval gate (run() not defined yet - Week 08)")
+        return
     (_ok if run(real=False) == 0 else _no)("eval gate passes")
 
 
