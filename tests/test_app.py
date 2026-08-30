@@ -1294,3 +1294,143 @@ def test_a_malformed_record_does_not_break_metrics():
     store.push_turn({"ok": 1}, window=10)
     assert len(store.recent_turns(10)) == 1
     store.reset_turns()
+
+
+# ---- Week 08: the gate -----------------------------------------------------
+def test_the_gate_passes_on_good_code():
+    from evals import run_evals
+    assert run_evals.run(real=False) == 0
+
+
+def test_the_gate_fails_when_a_high_severity_case_breaks(monkeypatch, tmp_path):
+    """A gate you have never seen block anything is a gate you trust on
+    faith."""
+    import json
+    from evals import run_evals
+
+    cases = tmp_path / "cases.json"
+    cases.write_text(json.dumps([{
+        "id": "impossible", "message": "what is 12 * 41?",
+        "expect_contains": "this will never appear", "severity": "high",
+    }]))
+    monkeypatch.setattr(run_evals, "CASES", str(cases))
+    assert run_evals.run(real=False) == 1
+
+
+def test_a_medium_severity_failure_reports_but_does_not_block(monkeypatch,
+                                                              tmp_path):
+    """Not every regression should stop a release. Severity is how you say so."""
+    import json
+    from evals import run_evals
+
+    cases = tmp_path / "cases.json"
+    cases.write_text(json.dumps([{
+        "id": "cosmetic", "message": "what is 12 * 41?",
+        "expect_contains": "never appears", "severity": "medium",
+    }]))
+    monkeypatch.setattr(run_evals, "CASES", str(cases))
+    assert run_evals.run(real=False) == 0
+
+
+def test_the_gate_runs_the_real_tools_not_a_fake_answer():
+    """THE point of the harness. If the fake model returned '492' itself, the
+    gate would still pass after you broke the calculator - and Week 08 would be
+    teaching a lie. Fake the model's DECISIONS, never your own code."""
+    from evals.run_evals import _fake_model
+    resp = _fake_model([{"role": "user", "content": "what is 12 * 41?"}])
+    # it asks for the tool; it does not compute the answer
+    assert resp.stop_reason == "tool_use"
+    assert resp.content[0].name == "calculator"
+    text = "".join(getattr(b, "text", "") for b in resp.content)
+    assert "492" not in text
+
+
+def test_breaking_a_tool_is_caught_by_the_gate(monkeypatch):
+    """The proof that the harness works: sabotage real code, gate goes red."""
+    import app.agent as agent_mod
+    from evals import run_evals
+
+    monkeypatch.setitem(agent_mod._HANDLERS, "calculator",
+                        lambda expression: "wrong")
+    assert run_evals.run(real=False) == 1
+
+
+def test_every_case_declares_what_it_is_checking():
+    import json
+    from evals.run_evals import CASES
+    cases = json.load(open(CASES))
+    assert cases
+    for c in cases:
+        assert c.get("id")
+        assert c.get("severity") in ("high", "medium", "low")
+        # a case must assert something, or it is decoration
+        assert ("expect_contains" in c or c.get("expect_blocked")
+                or c.get("judge")), c["id"]
+
+
+# ---- Week 08: the judge tier ----------------------------------------------
+def test_the_judge_never_blocks_a_build_by_failing(monkeypatch):
+    """A non-deterministic grader wired to a blocking gate teaches the team to
+    ignore the gate."""
+    from evals import judge
+    monkeypatch.delenv("KODEKEY", raising=False)
+    passed, why = judge.grade("q", "a", "check")
+    assert passed is True
+    assert "unavailable" in why
+    assert judge._parse("not json at all")[0] is True
+
+
+def test_the_judge_reads_a_verdict_out_of_fenced_json():
+    """Models wrap JSON in prose and code fences however firmly you ask."""
+    from evals import judge
+    passed, why = judge._parse(
+        'Sure.\n```json\n{"pass": false, "reason": "promised a refund"}\n```')
+    assert passed is False
+    assert "refund" in why
+    assert judge._parse('{"pass": true, "reason": "fine"}')[0] is True
+
+
+def test_judge_cases_are_skipped_cleanly_with_no_key(monkeypatch):
+    """CI has no key, so the deterministic tier must still gate on its own."""
+    monkeypatch.delenv("KODEKEY", raising=False)
+    from evals import run_evals
+    assert run_evals.run(real=False, use_judge=True) == 0
+
+
+def test_quality_cases_exist_that_substring_matching_cannot_grade():
+    """expect_contains catches an answer going MISSING. The judge catches an
+    answer going BAD - a reply that names the right order and also promises a
+    refund nobody agreed to."""
+    import json
+    from evals.run_evals import CASES
+    cases = json.load(open(CASES))
+    judged = [c for c in cases if c.get("judge")]
+    assert len(judged) >= 3
+    assert any(c["severity"] == "high" for c in judged)
+
+
+# ---- Week 08: portability -------------------------------------------------
+def test_no_application_file_knows_which_platform_it_runs_on():
+    """The container, the 12-factor config and the OTel instrumentation are
+    portable. The deploy pipeline is not - and that boundary should be exactly
+    where you think it is."""
+    import pathlib
+    root = pathlib.Path(__file__).resolve().parent.parent
+    for folder in ("app", "evals", "loadtest"):
+        for path in (root / folder).rglob("*.py"):
+            text = path.read_text()
+            assert "gcloud" not in text, path
+            assert "GOOGLE_" not in text, path
+
+
+def test_every_setting_has_a_working_default():
+    """12-factor config: the same image is dev and prod, and it boots with
+    nothing set."""
+    import importlib
+    import app.agent as a
+    import app.guardrails as gr
+    import app.memory as mem
+    importlib.reload(a)
+    assert a.MODEL and a.MODEL_TIMEOUT_SECONDS > 0
+    assert gr.RATE_LIMIT > 0 and gr.MAX_INPUT_CHARS > 0
+    assert mem.MAX_HISTORY_MESSAGES > 0

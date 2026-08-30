@@ -1,8 +1,8 @@
-# Ship Production AI Systems — Week 7 · Attack
+# Ship Production AI Systems — Week 8 · Gate, roll back and port
 
-> **This branch is Week 7 complete.** It is the answer key. If you are doing the
-> week, start from `week-07-attack` instead and check your work against this one
-> with `git diff week-07-attack..week-07-solution`.
+> **This branch is Week 8 complete — the finished agent.** It is the answer key.
+> If you are doing the week, start from `week-08-gate` instead and check your
+> work with `git diff week-08-gate..week-08-solution`.
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -15,12 +15,12 @@ Phase 1 built the agent. **Phase 2 ships it.**
 
 ```
   ┌─ SHIP IT ────────────┐  ┌─ OPERATE IT ─────────┐  ┌─ TRUST IT ──────┐
-  01 package  ✓           04 cap  ✓                 07 attack ← you are here
-  02 deploy   ✓           05 see  ✓                 08 gate
+  01 package  ✓           04 cap  ✓                 07 attack ✓
+  02 deploy   ✓           05 see  ✓                 08 gate  ← you are here
   03 automate ✓           06 survive ✓
 ```
 
-**Week 7 red-teams the agent: injection, cost, SSRF and load.**
+**Week 8 stops a quality regression shipping, and shows what was portable.**
 
 ---
 
@@ -87,6 +87,8 @@ curl -N -X POST localhost:8080/chat/stream \
 make install          # install dependencies
 make run              # start the agent on http://localhost:8080
 make test             # unit tests (fake model, no key needed)
+make eval             # the eval gate (fake model, no key needed)
+make eval-judge       # + the quality tier, graded by a model (needs a key)
 
 make check-week-00    # the loop you started from
 make check-week-01    # a deployable web service
@@ -95,7 +97,9 @@ make check-week-03    # automatic deploys, keys, rate limits
 make check-week-04    # step, token and context budgets
 make check-week-05    # traces, monitoring and /metrics
 make check-week-06    # retry, fallback, debugging from traces
-make check-week-07    # this week's capability
+make check-week-07    # injection, cost, SSRF and load
+make check-week-08    # this week's capability
+make check-all        # every week at once
 make check-setup      # just runs the tests
 
 make trace-ui         # Grafana + Tempo, to look at traces locally
@@ -131,6 +135,23 @@ Dockerfile       package it so it runs the same everywhere
   test.yml       tests + checkpoints on every pull request
   deploy.yml     on push to main: test → deploy (needs: test) → verify
 ```
+
+---
+
+## The eight weeks
+
+**Ship it (01–03) → operate it (04–06) → trust it (07–08).**
+
+| Week | You add | You end up with |
+|------|---------|-----------------|
+| 01 | Package it; stream the reply | It runs anywhere, and feels fast |
+| 02 | Deploy it; move memory to Redis | It survives a redeploy |
+| 03 | A pipeline, keys, a rate limit | It ships itself, safely |
+| 04 | Step, token and context budgets | It cannot overspend |
+| 05 | A trace per turn, `/metrics`, OTel | You can see inside it |
+| 06 | Debug from traces; retry, then fall back | It survives an outage |
+| 07 | Injection, cost, SSRF and load hardening | It survives an attacker |
+| 08 | An eval gate, a rollback, a portability check | Bad code cannot ship |
 
 ---
 

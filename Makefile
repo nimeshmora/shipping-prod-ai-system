@@ -7,6 +7,13 @@ run:
 test:
 	python -m pytest -q
 
+eval:
+	python -m evals.run_evals
+
+# Week 08: also grade answer QUALITY, not just keywords. Needs KODEKEY.
+eval-judge:
+	python -m evals.run_evals --real --judge
+
 # ---- guided checkpoints (no API key needed) ----
 check-setup:
 	python -m checks.check setup
@@ -27,6 +34,12 @@ check-week-06:
 	python -m checks.check 06
 check-week-07:
 	python -m checks.check 07
+check-week-08:
+	python -m checks.check 08
+
+check-all: check-week-00 check-week-01 check-week-02 check-week-03 \
+           check-week-04 check-week-05 check-week-06 check-week-07 \
+           check-week-08
 
 # ---- the container ----
 # ---- Week 07: concurrency is where the honest bugs come due ----

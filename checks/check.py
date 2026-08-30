@@ -1,7 +1,7 @@
 """Guided checkpoints. Run one per week to confirm that week's capability works.
 
     python -m checks.check 00      # the loop you start from
-    python -m checks.check 07      # this week
+    python -m checks.check 08      # this week
     python -m checks.check setup   # tests all pass
 
 Each check uses a fake model, so it runs with no API key and no cloud, and
@@ -958,17 +958,136 @@ def check_07():
     _ok("a load test exists (make load)")
 
 
+def check_08():
+    print("Week 08: a bad change cannot ship, and you can roll back")
+    import json
+    from evals import judge, run_evals
+
+    # --- the gate passes on good code --------------------------------------
+    if run_evals.run(real=False) != 0:
+        _no("the gate fails on the current (good) code")
+    _ok("the gate passes on good code")
+
+    # --- and actually blocks a bad one -------------------------------------
+    import app.agent as agent_mod
+    saved = agent_mod._HANDLERS.get("calculator")
+    agent_mod._HANDLERS["calculator"] = lambda expression: "wrong"
+    try:
+        if run_evals.run(real=False) == 0:
+            _no("the calculator was sabotaged and the gate still PASSED. The "
+                "fake model must fake only the model's DECISIONS - if it "
+                "returns the answer itself, the gate proves nothing.")
+    finally:
+        agent_mod._HANDLERS["calculator"] = saved
+    _ok("sabotaging real code turns the gate red - it tests YOUR code")
+
+    from evals.run_evals import _fake_model
+    resp = _fake_model([{"role": "user", "content": "what is 12 * 41?"}])
+    if resp.stop_reason != "tool_use":
+        _no("the fake model answered directly instead of asking for the tool")
+    _ok("the fake model fakes decisions, not answers - so CI needs no API key")
+
+    # --- severity means something ------------------------------------------
+    cases = json.load(open(run_evals.CASES))
+    if not cases:
+        _no("evals/cases.json is empty")
+    for c in cases:
+        if not c.get("id") or c.get("severity") not in ("high", "medium", "low"):
+            _no(f"every case needs an id and a severity: {c}")
+        if not ("expect_contains" in c or c.get("expect_blocked")
+                or c.get("judge")):
+            _no(f"case {c['id']} asserts nothing - it is decoration")
+    if not any(c["severity"] == "high" for c in cases):
+        _no("no high-severity cases, so nothing can ever block a deploy")
+    _ok(f"{len(cases)} cases, each asserting something, with severities")
+
+    # --- the judge tier ----------------------------------------------------
+    judged = [c for c in cases if c.get("judge")]
+    if len(judged) < 3:
+        _no("there should be judge cases for the regressions substring "
+            "matching cannot see - a reply that names the right order AND "
+            "promises a refund passes expect_contains")
+    _ok(f"{len(judged)} quality cases that substring matching cannot grade")
+
+    saved_key = os.environ.pop("KODEKEY", None)
+    try:
+        passed, why = judge.grade("q", "a", "check")
+        if not passed:
+            _no("with no API key the judge must PASS, not fail. A "
+                "non-deterministic grader that can break the build teaches "
+                "the team to ignore the build.")
+        if run_evals.run(real=False, use_judge=True) != 0:
+            _no("--judge with no key must still let the deterministic tier gate")
+    finally:
+        if saved_key is not None:
+            os.environ["KODEKEY"] = saved_key
+    _ok("the judge never blocks a build by being unavailable or broken")
+
+    verdict, why = judge._parse(
+        'Sure.\n```json\n{"pass": false, "reason": "promised a refund"}\n```')
+    if verdict is not False or "refund" not in why:
+        _no("the judge cannot read a verdict out of fenced json - models wrap "
+            "JSON in prose however firmly you ask")
+    if judge._parse("total nonsense")[0] is not True:
+        _no("an unparseable judge reply must count as a pass, not a failure")
+    _ok("it reads fenced json, and fails safe on nonsense")
+
+    # --- the pipeline gates the deploy -------------------------------------
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    wf = os.path.join(root, ".github", "workflows")
+    files = {f: open(os.path.join(wf, f)).read() for f in os.listdir(wf)
+             if f.endswith((".yml", ".yaml"))}
+    deploying = {f: t for f, t in files.items() if "gcloud run deploy" in t}
+    for name, text in deploying.items():
+        if "run_evals" not in text:
+            _no(f"{name} deploys without running the eval gate")
+        if "needs:" not in text:
+            _no(f"{name} deploys without a `needs:` - two workflows on "
+                "push:main race, they do not gate each other")
+    _ok("the deploy job runs the eval gate and declares `needs:`")
+
+    if not any("run_evals" in t and "pull_request" in t
+               for t in files.values()):
+        _no("no workflow runs the gate on pull requests - make it a required "
+            "status check, or a bad change can be merged before it is caught")
+    _ok("and the gate also runs on pull requests")
+
+    for name, text in deploying.items():
+        if "revision-suffix" not in text:
+            _no(f"{name} does not tag revisions with the commit SHA - rolling "
+                "back becomes guesswork at the worst possible moment")
+    _ok("revisions are tagged with the commit, so a rollback is a choice")
+
+    # --- portability -------------------------------------------------------
+    import pathlib
+    for folder in ("app", "evals", "loadtest"):
+        for path in pathlib.Path(root, folder).rglob("*.py"):
+            body = path.read_text()
+            if "gcloud" in body or "GOOGLE_" in body:
+                _no(f"{path} mentions the platform - the container, the config "
+                    "contract and the telemetry should all be portable")
+    _ok("no application file knows which platform it runs on")
+
+    for doc in ("PORTABILITY.md", "KUBERNETES.md"):
+        if not os.path.exists(os.path.join(root, "deploy", doc)):
+            _no(f"deploy/{doc} is missing")
+    _ok("deploy/ documents what was Cloud Run and what never was")
+
+
 def check_setup():
-    print("Setup check: the tests pass")
+    print("Setup check: tests + eval gate")
     import subprocess
     t = subprocess.run([sys.executable, "-m", "pytest", "-q"],
                        capture_output=True, text=True)
     (_ok if t.returncode == 0 else _no)("unit tests pass")
+    from evals.run_evals import run
+    (_ok if run(real=False) == 0 else _no)("eval gate passes")
 
 
 CHECKS = {"00": check_00, "01": check_01, "02": check_02,
           "03": check_03, "04": check_04, "05": check_05,
-          "06": check_06, "07": check_07, "setup": check_setup}
+          "06": check_06, "07": check_07, "08": check_08,
+          "setup": check_setup}
 
 
 if __name__ == "__main__":
