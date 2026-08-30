@@ -20,6 +20,7 @@ import operator
 import os
 from types import SimpleNamespace as NS
 
+from app.guardrails import Budget, GuardrailError
 from app.orders import lookup_order
 
 MODEL = os.environ.get("MODEL", "claude-sonnet-5")
@@ -28,10 +29,6 @@ MODEL = os.environ.get("MODEL", "claude-sonnet-5")
 # Without this, one hung connection holds a worker open until the platform's
 # own timeout - which on Cloud Run is an hour.
 MODEL_TIMEOUT_SECONDS = float(os.environ.get("MODEL_TIMEOUT_SECONDS", "30"))
-
-# A hard cap on trips round the loop, so a confused model cannot spin forever.
-# Week 04 turns this into a real budget that also counts tokens and cost.
-MAX_STEPS = int(os.environ.get("MAX_STEPS", "6"))
 
 # The system prompt: the agent's standing instructions, sent with every turn.
 #
@@ -186,7 +183,14 @@ def _to_anthropic_shape(completion):
         blocks.append(NS(type="tool_use", name=call.function.name,
                          input=args, id=call.id))
     stop = "tool_use" if msg.tool_calls else "end_turn"
-    return NS(content=blocks, stop_reason=stop)
+
+    # Week 04: the budget needs to know what the call actually cost. The
+    # gateway reports prompt/completion; the loop reads input/output.
+    u = getattr(completion, "usage", None)
+    usage = None if u is None else NS(
+        input_tokens=getattr(u, "prompt_tokens", 0) or 0,
+        output_tokens=getattr(u, "completion_tokens", 0) or 0)
+    return NS(content=blocks, stop_reason=stop, usage=usage)
 
 
 def _to_openai_messages(messages):
@@ -244,18 +248,23 @@ def run_turn(message, history=None, model_fn=call_model):
 
     You never decide to call a tool. The model asks, and your code obeys. That
     inversion is what makes this an agent rather than a chatbot with functions.
+    It is also why Week 04's Budget exists: code that runs whatever it is told
+    needs a limit on how much of that it will do.
     """
     messages = list(history or []) + [{"role": "user", "content": message}]
-    steps = 0
+    budget = Budget()
 
     while True:
-        steps += 1
-        if steps > MAX_STEPS:
-            # A model that keeps asking for tools would loop forever, and
-            # every trip costs money. Week 04 makes this a proper budget.
-            raise AgentError(f"step limit reached ({MAX_STEPS})", status=400)
+        budget.add_step()          # Week 04: this turn cannot run forever
 
         resp = model_fn(messages)
+
+        # Week 04: count what that call cost before deciding to make another.
+        usage = getattr(resp, "usage", None)
+        if usage is not None:
+            budget.add_tokens(getattr(usage, "input_tokens", 0)
+                              + getattr(usage, "output_tokens", 0))
+
         messages.append({"role": "assistant", "content": resp.content})
 
         if resp.stop_reason != "tool_use":

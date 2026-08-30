@@ -1,8 +1,8 @@
-# Ship Production AI Systems — Week 3 · Automate and lock
+# Ship Production AI Systems — Week 4 · Cap
 
-> **This branch is Week 3 complete.** It is the answer key. If you are doing the
-> week, start from `week-03-automate` instead and check your work against this
-> one with `git diff week-03-automate..week-03-solution`.
+> **This branch is Week 4 complete.** It is the answer key. If you are doing the
+> week, start from `week-04-cap` instead and check your work against this one
+> with `git diff week-04-cap..week-04-solution`.
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -15,13 +15,12 @@ Phase 1 built the agent. **Phase 2 ships it.**
 
 ```
   ┌─ SHIP IT ────────────┐  ┌─ OPERATE IT ─────────┐  ┌─ TRUST IT ──────┐
-  01 package  ✓           04 cap                    07 attack
+  01 package  ✓           04 cap  ← you are here    07 attack
   02 deploy   ✓           05 see                    08 gate
-  03 automate ← you are here
-                          06 survive
+  03 automate ✓           06 survive
 ```
 
-**Week 3 makes deploys automatic and keeps strangers out.**
+**Week 4 makes it impossible for one turn to run forever or run up a bill.**
 
 ---
 
@@ -89,7 +88,8 @@ make test             # unit tests (fake model, no key needed)
 make check-week-00    # the loop you started from
 make check-week-01    # a deployable web service
 make check-week-02    # memory that survives a redeploy
-make check-week-03    # this week's capability
+make check-week-03    # automatic deploys, keys, rate limits
+make check-week-04    # this week's capability
 make check-setup      # just runs the tests
 
 make docker-build     # build the container
@@ -106,11 +106,11 @@ app/
   orders.py      a stand-in order system — the data the agent goes and fetches
   main.py        the web service: /chat, /chat/stream, /health
   stream.py      server-sent events: the same turn, as it happens
-  memory.py      session memory: Redis when REDIS_URL is set, else a dict
-  guardrails.py  the rules every request passes: api key, rate limit
+  memory.py      session memory (Redis or a dict), and trim() to bound context
+  guardrails.py  the rules: api key, rate limit, and the per-turn Budget
 tests/           unit tests, all with a fake model
 checks/          the weekly checkpoints
-guide/           read guide/week-03.md
+guide/           read guide/week-04.md
 Dockerfile       package it so it runs the same everywhere
 .github/workflows/
   test.yml       tests + checkpoints on every pull request

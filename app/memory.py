@@ -7,6 +7,9 @@ you swapped the storage underneath and no other file needed editing.
     REDIS_URL unset  -> a dict in this process (Week 01; still used by tests)
     REDIS_URL set    -> Redis, which survives a redeploy
 
+Week 04 adds trim(), because durable memory that grows forever is its own kind
+of bug.
+
 Why this had to change
 ----------------------
 Week 01's dict lived inside the container. Cloud Run replaces the container on
@@ -35,6 +38,19 @@ REDIS_URL = os.environ.get("REDIS_URL")
 # support chat: long enough to come back after lunch, short enough that you are
 # not storing last month's conversations forever.
 TTL_SECONDS = int(os.environ.get("SESSION_TTL", 60 * 60 * 24))
+
+# Week 04: context is a budget, not a container.
+#
+# Every turn sends the WHOLE history back to the model. Left alone, a long
+# session grows the prompt until the model refuses it outright - and the
+# per-turn token cap never sees this coming, because it resets at the start of
+# every turn. A 40-message session that costs a fortune per turn is under
+# budget on each individual turn.
+#
+# So we keep only the most recent messages. This is deliberately the cheapest
+# possible strategy: summarising the dropped turns, so the agent still knows
+# what was agreed an hour ago, is the real-world upgrade.
+MAX_HISTORY_MESSAGES = int(os.environ.get("MAX_HISTORY_MESSAGES", "40"))
 
 _client = None
 _FALLBACK = {}
@@ -102,6 +118,30 @@ def _serialise(history):
     return json.dumps(plain)
 
 
+def trim(history):
+    """Keep the last MAX_HISTORY_MESSAGES messages, without splitting a turn.
+
+    The subtlety: a tool_use block and the tool_result that answers it are one
+    exchange. Cut between them and you have a conversation where a tool result
+    replies to nothing - which providers reject as malformed, so a session that
+    grew too long starts failing every request with a 400 nobody can explain.
+
+    So if the cut would land on a tool result, step forward past it.
+    """
+    if len(history) <= MAX_HISTORY_MESSAGES:
+        return history
+    cut = len(history) - MAX_HISTORY_MESSAGES
+    while cut < len(history) and _is_tool_result(history[cut]):
+        cut += 1
+    return history[cut:]
+
+
+def _is_tool_result(msg):
+    content = msg.get("content")
+    return isinstance(content, list) and any(
+        isinstance(b, dict) and b.get("type") == "tool_result" for b in content)
+
+
 def load(session_id):
     """Everything said so far in this session, oldest first."""
     r = _redis()
@@ -112,6 +152,7 @@ def load(session_id):
 
 
 def save(session_id, history):
+    history = trim(history)          # Week 04: bound the context
     r = _redis()
     if r is None:
         _FALLBACK[session_id] = history

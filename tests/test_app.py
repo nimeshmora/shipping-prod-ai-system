@@ -69,13 +69,13 @@ def test_history_carries_forward_into_the_next_turn():
 
 def test_a_runaway_loop_stops_itself():
     """A model that always asks for a tool would spin forever, and every trip
-    costs money."""
+    costs money. Week 04 makes this the Budget's job."""
     def always_tool(messages):
         block = NS(type="tool_use", name="calculator",
                    input={"expression": "1+1"}, id="t")
         return NS(content=[block], stop_reason="tool_use")
 
-    with pytest.raises(AgentError):
+    with pytest.raises(GuardrailError):
         agent.run_turn("go", model_fn=always_tool)
 
 
@@ -555,3 +555,117 @@ def test_a_guardrail_rejection_never_reaches_the_model(monkeypatch):
         assert called["n"] == 0
     finally:
         main.run_turn = original
+
+
+# ---- Week 04: what one turn is allowed to cost -----------------------------
+def test_the_step_budget_counts_and_then_refuses():
+    b = g.Budget(max_steps=3, max_tokens=10**9)
+    for _ in range(3):
+        b.add_step()
+    with pytest.raises(GuardrailError) as e:
+        b.add_step()
+    assert "step limit" in str(e.value)
+    assert e.value.status == 400          # the caller's turn was too expensive
+
+
+def test_the_token_budget_catches_one_enormous_call():
+    """A step limit alone lets six colossal calls through. This is the other
+    half."""
+    b = g.Budget(max_steps=100, max_tokens=100)
+    b.add_tokens(60)
+    with pytest.raises(GuardrailError) as e:
+        b.add_tokens(60)
+    assert "token budget" in str(e.value)
+
+
+def test_the_token_budget_tolerates_a_provider_that_reports_nothing():
+    """Some gateways omit usage. That must not crash the turn."""
+    b = g.Budget(max_tokens=100)
+    b.add_tokens(None)
+    b.add_tokens(0)
+    assert b.tokens == 0
+
+
+def test_the_loop_stops_on_tokens_even_when_steps_are_fine():
+    def big_call(messages):
+        block = NS(type="tool_use", name="calculator",
+                   input={"expression": "1+1"}, id="t")
+        return NS(content=[block], stop_reason="tool_use",
+                  usage=NS(input_tokens=50_000, output_tokens=0))
+
+    with pytest.raises(GuardrailError) as e:
+        agent.run_turn("go", model_fn=big_call)
+    assert "token budget" in str(e.value)
+
+
+def test_the_loop_counts_tokens_from_every_step_not_just_the_last():
+    """The budget is cumulative across the turn. Reset it per step and a
+    hundred medium calls sail through."""
+    calls = {"n": 0}
+
+    def steady(messages):
+        calls["n"] += 1
+        block = NS(type="tool_use", name="calculator",
+                   input={"expression": "1+1"}, id=f"t{calls['n']}")
+        return NS(content=[block], stop_reason="tool_use",
+                  usage=NS(input_tokens=8_000, output_tokens=0))
+
+    with pytest.raises(GuardrailError) as e:
+        agent.run_turn("go", model_fn=steady)
+    assert "token budget" in str(e.value)
+    assert calls["n"] == 3                # 8k, 16k, 24k > 20k default
+
+
+def test_an_overspending_turn_is_a_4xx_not_a_500(monkeypatch):
+    """It is the request that was too expensive, not the server that broke.
+    Getting this backwards makes your error rate blame the wrong party."""
+    from fastapi.testclient import TestClient
+    import app.main as main
+
+    def always_tool(messages):
+        block = NS(type="tool_use", name="calculator",
+                   input={"expression": "1+1"}, id="t")
+        return NS(content=[block], stop_reason="tool_use")
+
+    original = main.run_turn
+    main.run_turn = lambda m, history=None: agent.run_turn(
+        m, history, model_fn=always_tool)
+    try:
+        r = TestClient(main.app).post("/chat", json={"message": "go"})
+        assert r.status_code == 400
+        assert "step limit" in r.json()["detail"]
+    finally:
+        main.run_turn = original
+
+
+# ---- Week 04: context is a budget too --------------------------------------
+def test_history_is_trimmed_so_context_cannot_grow_forever():
+    """Every turn re-sends the WHOLE history. Left alone, a long session grows
+    the prompt until the model refuses it - and the per-turn token cap never
+    sees it coming, because it resets at the start of each turn."""
+    memory.reset()
+    long_history = [{"role": "user", "content": f"msg {i}"} for i in range(200)]
+    memory.save("trim-test", long_history)
+    kept = memory.load("trim-test")
+    assert len(kept) == memory.MAX_HISTORY_MESSAGES
+    assert kept[-1]["content"] == "msg 199"          # the newest survives
+
+
+def test_trimming_never_orphans_a_tool_result():
+    """A tool_result whose tool_use is gone is a malformed conversation, and
+    the provider rejects the whole request."""
+    turn = [
+        {"role": "user", "content": "q"},
+        {"role": "assistant", "content": "asking for a tool"},
+        {"role": "user", "content": [{"type": "tool_result",
+                                      "tool_use_id": "t", "content": "r"}]},
+    ]
+    kept = memory.trim(turn * 40)
+    assert not memory._is_tool_result(kept[0])
+
+
+def test_a_short_session_is_left_completely_alone():
+    memory.reset()
+    short = [{"role": "user", "content": "hi"}]
+    memory.save("short", short)
+    assert memory.load("short") == short

@@ -1,7 +1,7 @@
 """Guided checkpoints. Run one per week to confirm that week's capability works.
 
     python -m checks.check 00      # the loop you start from
-    python -m checks.check 03      # this week
+    python -m checks.check 04      # this week
     python -m checks.check setup   # tests all pass
 
 Each check uses a fake model, so it runs with no API key and no cloud, and
@@ -398,6 +398,108 @@ def check_03():
             "somehow, and an env var is the wrong way")
 
 
+def check_04():
+    print("Week 04: one turn cannot run forever or run up a bill")
+    from app import guardrails as g, memory
+    from app.agent import run_turn
+
+    if not hasattr(g, "Budget"):
+        _no("app/guardrails.py must define a Budget class")
+    _ok("app/guardrails.py defines Budget")
+
+    b = g.Budget(max_steps=2, max_tokens=10 ** 9)
+    b.add_step(); b.add_step()
+    try:
+        b.add_step()
+        _no("the step budget allowed more steps than its limit")
+    except g.GuardrailError as e:
+        if e.status != 400:
+            _no(f"an overspending turn should be 400 (the request was too "
+                f"expensive), got {e.status}")
+    _ok("the step budget refuses the step past its limit, with 400")
+
+    b = g.Budget(max_steps=100, max_tokens=100)
+    b.add_tokens(60)
+    try:
+        b.add_tokens(60)
+        _no("the token budget allowed more tokens than its limit")
+    except g.GuardrailError:
+        pass
+    _ok("the token budget catches one enormous call, which steps cannot")
+
+    b = g.Budget(max_tokens=100)
+    try:
+        b.add_tokens(None)
+    except Exception as e:
+        _no(f"add_tokens(None) raised {type(e).__name__} - some gateways omit "
+            "usage entirely, and that must not break the turn")
+    _ok("a provider that reports no usage does not crash the turn")
+
+    # the loop actually uses it
+    def always_tool(messages):
+        blk = NS(type="tool_use", name="calculator",
+                 input={"expression": "1+1"}, id="t")
+        return NS(content=[blk], stop_reason="tool_use")
+
+    try:
+        run_turn("go", model_fn=always_tool)
+        _no("a model that always asks for a tool looped forever - the loop is "
+            "not using the Budget")
+    except g.GuardrailError:
+        pass
+    _ok("the agent loop stops a runaway turn")
+
+    calls = {"n": 0}
+
+    def steady(messages):
+        calls["n"] += 1
+        blk = NS(type="tool_use", name="calculator",
+                 input={"expression": "1+1"}, id=f"t{calls['n']}")
+        return NS(content=[blk], stop_reason="tool_use",
+                  usage=NS(input_tokens=8000, output_tokens=0))
+
+    try:
+        run_turn("go", model_fn=steady)
+        _no("tokens were never counted from the model's usage")
+    except g.GuardrailError as e:
+        if "token" not in str(e):
+            _no(f"the turn stopped on steps, not tokens: {e}. Tokens must "
+                "accumulate ACROSS the turn, not reset each step.")
+    _ok("tokens accumulate across the turn, so many medium calls also stop")
+
+    # --- context is a budget too -------------------------------------------
+    if not hasattr(memory, "trim"):
+        _no("app/memory.py must define trim() - every turn re-sends the whole "
+            "history, so a long session grows the prompt until the model "
+            "refuses it")
+    _ok("app/memory.py defines trim()")
+
+    memory.reset()
+    memory.save("chk-trim", [{"role": "user", "content": f"m{i}"}
+                             for i in range(200)])
+    kept = memory.load("chk-trim")
+    if len(kept) > memory.MAX_HISTORY_MESSAGES:
+        _no(f"a 200-message session was stored as {len(kept)} messages - "
+            "save() should trim it")
+    if kept[-1]["content"] != "m199":
+        _no("trimming kept the OLDEST messages - keep the newest")
+    _ok(f"a long session is trimmed to {memory.MAX_HISTORY_MESSAGES}, newest kept")
+
+    turn = [
+        {"role": "user", "content": "q"},
+        {"role": "assistant", "content": "asking for a tool"},
+        {"role": "user", "content": [{"type": "tool_result",
+                                      "tool_use_id": "t", "content": "r"}]},
+    ]
+    kept = memory.trim(turn * 40)
+    if memory._is_tool_result(kept[0]):
+        _no("trimming left a tool_result with no matching tool_use. Providers "
+            "reject that as malformed, so a long session starts failing every "
+            "request. Step past a tool result rather than cutting on one.")
+    _ok("trimming never orphans a tool result")
+    memory.reset()
+
+
 def check_setup():
     print("Setup check: the tests pass")
     import subprocess
@@ -407,7 +509,7 @@ def check_setup():
 
 
 CHECKS = {"00": check_00, "01": check_01, "02": check_02,
-          "03": check_03, "setup": check_setup}
+          "03": check_03, "04": check_04, "setup": check_setup}
 
 
 if __name__ == "__main__":

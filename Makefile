@@ -19,6 +19,8 @@ check-week-02:
 	python -m checks.check 02
 check-week-03:
 	python -m checks.check 03
+check-week-04:
+	python -m checks.check 04
 
 # ---- the container ----
 docker-build:

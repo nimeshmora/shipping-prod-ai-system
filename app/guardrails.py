@@ -102,3 +102,48 @@ def check_rate_limit(caller):
 def reset_rate_limits():
     """Used by the tests, so one test cannot leak into the next."""
     _hits.clear()
+
+
+# ---- Week 04: what one turn is allowed to cost ----------------------------
+MAX_STEPS = int(os.environ.get("MAX_STEPS", "6"))
+MAX_TOKENS_PER_TURN = int(os.environ.get("MAX_TOKENS_PER_TURN", "20000"))
+
+
+class Budget:
+    """A per-turn allowance for steps and tokens.
+
+    Weeks 01-03 protected you from other people. This protects you from your
+    own agent, which is a different problem and a more expensive one.
+
+    Nothing here crashes on its own. A model that keeps asking for tools, a
+    tool that keeps returning something the model wants to follow up on, a
+    context that grows every trip - none of that raises an exception. It just
+    runs, and charges you, and eventually answers. The failure mode of an
+    unbounded agent is not an outage; it is an invoice.
+
+    Two limits, because they catch different runaways:
+
+      steps   how many times round the loop. Catches a model that is looping,
+              confused, or being led on by tool output.
+      tokens  how much was actually sent and received. Catches ONE step that
+              is enormous - a huge context, or a tool returning a whole file.
+
+    A step limit alone lets six colossal calls through. A token limit alone
+    lets a hundred tiny ones through. You want both.
+    """
+
+    def __init__(self, max_steps=MAX_STEPS, max_tokens=MAX_TOKENS_PER_TURN):
+        self.max_steps = max_steps
+        self.max_tokens = max_tokens
+        self.steps = 0
+        self.tokens = 0
+
+    def add_step(self):
+        self.steps += 1
+        if self.steps > self.max_steps:
+            raise GuardrailError(f"step limit reached ({self.max_steps})")
+
+    def add_tokens(self, n):
+        self.tokens += int(n or 0)
+        if self.tokens > self.max_tokens:
+            raise GuardrailError(f"token budget reached ({self.max_tokens})")
