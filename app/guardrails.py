@@ -5,14 +5,14 @@ GuardrailError when broken. The web layer turns that into a clean 4xx.
 
   Week 03  api key + rate limit
   Week 04  step + token budget
-  Week 07  input size, blocked input, url allowlist
+  Week 07  input size, blocked input, url allowlist, shared counters
 """
 import ipaddress
 import os
 import re
-import time
-from collections import defaultdict, deque
 from urllib.parse import urlparse
+
+from app import store
 
 
 class GuardrailError(Exception):
@@ -34,23 +34,24 @@ def check_api_key(key):
         raise GuardrailError("missing or invalid API key", status=401)
 
 
-# ---- Week 03: rate limit ---------------------------------------------------
+# ---- Week 03: rate limit (made correct in Week 07) ------------------------
+# The counter lives in app/store.py, not in a dict here. That is the whole
+# difference between a rate limit and a rate suggestion: a module-level dict
+# counts per container, so the platform scaling you out to 5 instances turns
+# your 20/min limit into 100/min without anyone touching a config file.
+#
+# A rate limit is a security control. A security control that is quietly 5x
+# looser than its own setting says is worse than none, because you trust it.
 RATE_LIMIT = int(os.environ.get("RATE_LIMIT_PER_MIN", "20"))
-_hits = defaultdict(deque)
 
 
 def check_rate_limit(caller):
-    now = time.monotonic()
-    window = _hits[caller]
-    while window and now - window[0] > 60:
-        window.popleft()
-    if len(window) >= RATE_LIMIT:
+    if store.hit_count(caller) > RATE_LIMIT:
         raise GuardrailError(f"rate limit reached ({RATE_LIMIT}/min)", status=429)
-    window.append(now)
 
 
 def reset_rate_limits():
-    _hits.clear()
+    store.reset_rate_limits()
 
 
 # ---- Week 07: input checks -------------------------------------------------
@@ -71,18 +72,55 @@ def check_blocked_input(text):
 
 
 def check_url(url):
+    """Decide whether a tool may fetch this URL. Week 07.
+
+    This is the guard that stops SSRF - Server-Side Request Forgery. The shape
+    of the attack: your agent runs inside your cloud account, so it can reach
+    things the internet cannot. Ask it to "summarise this page" and point it at
+
+        http://169.254.169.254/computeMetadata/v1/instance/service-accounts/
+
+    and a fetch tool without this check will happily read your instance's
+    service-account token and put it in the chat reply. The model did nothing
+    wrong. Your tool did.
+
+    Order matters below. The allowlist is checked FIRST and is what actually
+    protects you: an allowlist of hosts you meant to talk to cannot be talked
+    around. The private-IP checks are defence in depth for the day someone
+    widens that list.
+    """
     parsed = urlparse(url)
     if parsed.scheme not in ("http", "https"):
+        # file://, gopher://, and friends. A fetch tool that accepts file://
+        # is a "read any file on the server" tool.
         raise GuardrailError("only http and https urls are allowed")
-    host = parsed.hostname or ""
-    if host not in ALLOWED_HOSTS:
-        raise GuardrailError(f"host '{host}' is not on the allowlist")
+
+    host = (parsed.hostname or "").lower()
+    if not host:
+        raise GuardrailError("that url has no host")
+
+    # Literal IPs, including the cloud metadata address and anything on the
+    # internal network. Checked before the allowlist so the error message is
+    # the useful one.
     try:
         ip = ipaddress.ip_address(host)
-        if ip.is_private or ip.is_loopback or ip.is_link_local:
+        if (ip.is_private or ip.is_loopback or ip.is_link_local
+                or ip.is_reserved or ip.is_multicast):
             raise GuardrailError("internal addresses are blocked")
     except ValueError:
-        pass
+        pass                      # not a literal IP; it is a hostname
+
+    if host not in ALLOWED_HOSTS:
+        raise GuardrailError(f"host '{host}' is not on the allowlist")
+
+    # NOTE the hole this leaves, because it is worth knowing rather than
+    # papering over: a hostname on the allowlist whose DNS record points at
+    # 169.254.169.254 passes every check above. Closing it properly means
+    # resolving the name yourself, validating the resolved address, and
+    # connecting to that address - because between your check and the
+    # library's own lookup, DNS can change its answer (a TOCTOU / "DNS
+    # rebinding" attack). In production you put egress behind a proxy that
+    # enforces this once, instead of in every tool.
 
 
 # ---- Week 07: what a TOOL hands back --------------------------------------

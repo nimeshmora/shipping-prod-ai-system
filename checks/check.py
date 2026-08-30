@@ -61,6 +61,13 @@ def check_01():
     r = c.post("/chat", json={"message": "hi"})
     (_ok if r.status_code == 200 and "reply" in r.json() else _no)("/chat returns a reply")
     (_ok if "session_id" in r.json() else _no)("a session id is returned")
+    # streaming: the same turn, sent as it happens
+    with c.stream("POST", "/chat/stream", json={"message": "hi"}) as sr:
+        (_ok if sr.status_code == 200 else _no)("/chat/stream accepts the turn")
+        events = [l[7:] for l in sr.iter_lines() if l.startswith("event: ")]
+    (_ok if events and events[0] == "start" else _no)("it opens with a start frame")
+    (_ok if "token" in events else _no)("the answer arrives as token frames")
+    (_ok if events[-1] == "done" else _no)("and closes with a done frame")
 
 
 def check_02():
@@ -185,6 +192,33 @@ def check_06():
     providers = [c.get("provider") for c in tr["model_calls"]]
     (_ok if "fallback" in providers else _no)("the trace shows the fallback answered")
 
+    # And the half that costs money if you get it wrong: a single blip must be
+    # retried on the PRIMARY, not silently answered by a weaker model.
+    seen = []
+    class Flaky:
+        def __init__(self): self.chat = self; self.completions = self
+        def create(self, model, **kw):
+            seen.append(model)
+            if len(seen) == 1:
+                err = RuntimeError("429 too many requests")
+                err.status_code = 429
+                raise err
+            msg = NS(content="ok", tool_calls=None)
+            return NS(choices=[NS(message=msg, finish_reason="stop")],
+                      usage=NS(prompt_tokens=1, completion_tokens=1))
+    agent._client = lambda: Flaky()
+    _real_sleep, agent.time.sleep = agent.time.sleep, lambda s: None
+    try:
+        tr2 = {"model_calls": [], "retries": 0}
+        agent.call_model([{"role": "user", "content": "hi"}], tr2)
+    finally:
+        agent.time.sleep = _real_sleep
+    (_ok if seen == [agent.MODEL, agent.MODEL] else _no)(
+        "one 429 is retried on the primary, not failed over")
+    (_ok if agent.FALLBACK_MODEL not in seen else _no)(
+        "the fallback was never touched for a blip")
+    (_ok if tr2["retries"] == 1 else _no)("and the retry is recorded in the trace")
+
 
 def check_07():
     print("Week 07: input and url fences hold")
@@ -211,12 +245,54 @@ def check_07():
     (_ok if g.check_tool_output("492") == "492" else _no)(
         "an ordinary tool result passes through untouched")
 
+    # SSRF: fetch_url is the tool that can reach what the internet cannot.
+    for label, url, expect in [
+        ("the cloud metadata address", "http://169.254.169.254/computeMetadata/v1/",
+         "internal addresses are blocked"),
+        ("a file:// url", "file:///etc/passwd", "http and https"),
+        ("a private address", "http://10.0.0.5/", "internal addresses are blocked"),
+        ("an unlisted host", "https://evil.example.org/", "not on the allowlist"),
+    ]:
+        out = run_tool("fetch_url", {"url": url})
+        (_ok if expect in out else _no)(f"fetch_url refuses {label}")
+
+    # shared state: a rate limit that counts per container is a suggestion
+    from app import store
+    store.reset_rate_limits()
+    counts = [store.hit_count("checkpoint-user") for _ in range(3)]
+    (_ok if counts == [1, 2, 3] else _no)("the rate counter is a real sliding count")
+    (_ok if hasattr(store, "available") else _no)(
+        "and /metrics can say whether it covers the whole service")
+
 
 def check_08():
     print("Week 08: the eval gate runs and passes on good code")
     from evals.run_evals import run
     code = run(real=False)
     (_ok if code == 0 else _no)("the gate passes with the current (good) code")
+
+    # tier 2 exists, and cannot break the build by breaking itself
+    from evals import judge
+    passed, _ = judge.grade("q", "a", "check")
+    (_ok if passed else _no)("a judge with no key never fails the build")
+    verdict, why = judge._parse(
+        'Sure.\n```json\n{"pass": false, "reason": "promised a refund"}\n```')
+    (_ok if verdict is False and "refund" in why else _no)(
+        "the judge reads a verdict out of fenced json")
+    import json as _json
+    import os as _os
+    cases = _json.load(open(_os.path.join(
+        _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+        "evals", "cases.json")))
+    (_ok if any(c.get("judge") for c in cases) else _no)(
+        "quality cases exist that substring matching cannot grade")
+
+    # the portability close-out: nothing in the app knows where it runs
+    import subprocess
+    hits = subprocess.run(
+        ["grep", "-rl", "gcloud", "app/", "evals/", "loadtest/"],
+        capture_output=True, text=True).stdout.strip()
+    (_ok if not hits else _no)("no application file mentions the platform")
 
 
 def check_setup():

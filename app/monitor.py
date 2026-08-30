@@ -29,7 +29,8 @@ change, only where the arithmetic happens.
 import os
 import statistics
 import time
-from collections import deque
+
+from app import store
 
 WINDOW = int(os.environ.get("MONITOR_WINDOW", "200"))
 
@@ -40,14 +41,18 @@ ALERT_FALLBACK_RATE = float(os.environ.get("ALERT_FALLBACK_RATE", "0.20"))
 ALERT_AVG_STEPS = float(os.environ.get("ALERT_AVG_STEPS", "4.0"))
 ALERT_TOOL_ERROR_RATE = float(os.environ.get("ALERT_TOOL_ERROR_RATE", "0.05"))
 
-_turns = deque(maxlen=WINDOW)
+def _recent():
+    return store.recent_turns(WINDOW)
 
 
 def record(trace):
     """Called once per finished turn, straight after the trace is emitted."""
-    used_fallback = any(c.get("provider") == "fallback"
+    # A turn only counts as "fell back" if the fallback ANSWERED. With retries
+    # in place, model_calls also holds failed attempts, and counting those
+    # would report a fallback that never happened.
+    used_fallback = any(c.get("provider") == "fallback" and not c.get("error")
                         for c in trace.get("model_calls", []))
-    _turns.append({
+    store.push_turn({
         "at": time.time(),
         "error": trace.get("error") is not None,
         "tool_error": bool(trace.get("tool_errors")),
@@ -56,8 +61,9 @@ def record(trace):
         "steps": trace.get("steps", 0),
         "cost_usd": trace.get("cost_usd", 0.0),
         "fallback": used_fallback,
+        "retries": trace.get("retries", 0),
         "filtered": bool(trace.get("tool_output_filtered")),
-    })
+    }, WINDOW)
 
 
 def _p95(values):
@@ -70,22 +76,30 @@ def _p95(values):
 
 def stats():
     """The current health of the agent, as numbers."""
-    n = len(_turns)
+    turns = _recent()
+    n = len(turns)
     if n == 0:
-        return {"turns": 0}
-    durations = [t["duration_ms"] for t in _turns]
+        return {"turns": 0, "shared_state": store.available()}
+    durations = [t["duration_ms"] for t in turns]
     return {
         "turns": n,
-        "error_rate": round(sum(t["error"] for t in _turns) / n, 3),
-        "fallback_rate": round(sum(t["fallback"] for t in _turns) / n, 3),
-        "avg_steps": round(sum(t["steps"] for t in _turns) / n, 2),
+        # Says whether these numbers describe the whole service or just the
+        # one container that answered you. Week 07.
+        "shared_state": store.available(),
+        "error_rate": round(sum(t["error"] for t in turns) / n, 3),
+        "fallback_rate": round(sum(t["fallback"] for t in turns) / n, 3),
+        "avg_steps": round(sum(t["steps"] for t in turns) / n, 2),
         "p95_duration_ms": _p95(durations),
         "avg_duration_ms": round(sum(durations) / n),
-        "avg_cost_usd": round(sum(t["cost_usd"] for t in _turns) / n, 6),
-        "total_cost_usd": round(sum(t["cost_usd"] for t in _turns), 4),
-        "tool_outputs_filtered": sum(t["filtered"] for t in _turns),
-        "tool_error_rate": round(sum(t["tool_error"] for t in _turns) / n, 3),
-        "p95_slowest_step_ms": _p95([t["slowest_step_ms"] for t in _turns]),
+        "avg_cost_usd": round(sum(t["cost_usd"] for t in turns) / n, 6),
+        "total_cost_usd": round(sum(t["cost_usd"] for t in turns), 4),
+        "tool_outputs_filtered": sum(t["filtered"] for t in turns),
+        "tool_error_rate": round(sum(t["tool_error"] for t in turns) / n, 3),
+        "p95_slowest_step_ms": _p95([t["slowest_step_ms"] for t in turns]),
+        # Week 06: retries that SAVED a turn. A number climbing here means the
+        # provider is flaky and you are absorbing it - useful early warning,
+        # and it stops a rising fallback_rate from being your first clue.
+        "retry_rate": round(sum(bool(t.get("retries")) for t in turns) / n, 3),
     }
 
 
@@ -114,4 +128,4 @@ def alerts():
 
 
 def reset():
-    _turns.clear()
+    store.reset_turns()

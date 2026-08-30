@@ -405,3 +405,405 @@ def test_a_turn_produces_one_parent_span_with_children():
     assert '"name": "model_call"' in out      # each trip round the loop
     assert '"name": "tool"' in out            # and each tool call
     assert '"parent_id": null' in out         # chat_turn is the root
+
+
+# ---- Week 06: retry the SAME model before changing models -----------------
+class _Boom(Exception):
+    def __init__(self, status=None):
+        super().__init__(f"http {status}")
+        self.status_code = status
+
+
+def test_a_transient_blip_is_retried_on_the_primary_not_failed_over():
+    """The expensive mistake this prevents: one 429 is normal traffic. If a
+    blip switches providers, users silently get answers from a weaker model
+    and nothing alerts, because the turn still succeeded."""
+    import app.agent as agent
+    calls = []
+
+    class FakeClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+
+        def create(self, model, messages, **kw):
+            calls.append(model)
+            if len(calls) == 1:
+                raise _Boom(429)            # one blip, then fine
+            msg = type("M", (), {"content": "ok", "tool_calls": None})()
+            choice = type("C", (), {"message": msg})()
+            usage = type("U", (), {"prompt_tokens": 1, "completion_tokens": 1})()
+            return type("R", (), {"choices": [choice], "usage": usage})()
+
+    original, orig_sleep = agent._client, agent.time.sleep
+    agent._client = lambda: FakeClient()
+    agent.time.sleep = lambda s: None            # do not really wait
+    try:
+        t = {"model_calls": [], "retries": 0}
+        agent.call_model([{"role": "user", "content": "hi"}], trace=t)
+    finally:
+        agent._client, agent.time.sleep = original, orig_sleep
+
+    assert calls == [agent.MODEL, agent.MODEL]     # retried the PRIMARY
+    assert agent.FALLBACK_MODEL not in calls       # never touched the fallback
+    assert t["retries"] == 1
+
+
+def test_a_permanent_error_is_not_retried():
+    """A 400 means the request is wrong. Retrying it just turns one fast
+    failure into a slow one."""
+    import app.agent as agent
+    calls = []
+
+    class FakeClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+
+        def create(self, model, messages, **kw):
+            calls.append(model)
+            raise _Boom(400)
+
+    original = agent._client
+    agent._client = lambda: FakeClient()
+    try:
+        with pytest.raises(Exception):
+            agent.call_model([{"role": "user", "content": "hi"}])
+    finally:
+        agent._client = original
+
+    # one attempt per model, no retries: a 400 is hopeless on both
+    assert calls == [agent.MODEL, agent.FALLBACK_MODEL]
+
+
+def test_the_fallback_still_takes_over_when_the_primary_is_really_down():
+    import app.agent as agent
+    calls = []
+
+    class FakeClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+
+        def create(self, model, messages, **kw):
+            calls.append(model)
+            if model == agent.MODEL:
+                raise _Boom(503)            # primary is genuinely down
+            msg = type("M", (), {"content": "from the fallback",
+                                 "tool_calls": None})()
+            choice = type("C", (), {"message": msg})()
+            return type("R", (), {"choices": [choice], "usage": None})()
+
+    original, orig_sleep = agent._client, agent.time.sleep
+    agent._client = lambda: FakeClient()
+    agent.time.sleep = lambda s: None
+    try:
+        t = {"model_calls": [], "retries": 0}
+        resp = agent.call_model([{"role": "user", "content": "hi"}], trace=t)
+    finally:
+        agent._client, agent.time.sleep = original, orig_sleep
+
+    assert resp.content[0].text == "from the fallback"
+    # every primary attempt was exhausted before switching
+    assert calls.count(agent.MODEL) == agent.MAX_RETRIES + 1
+    assert calls[-1] == agent.FALLBACK_MODEL
+    assert any(c.get("provider") == "fallback" and not c.get("error")
+               for c in t["model_calls"])
+
+
+def test_backoff_grows_and_is_jittered():
+    import app.agent as agent
+    # each ceiling doubles, and full jitter keeps every wait inside it
+    for attempt in range(4):
+        ceiling = min(agent.RETRY_BASE_SECONDS * (2 ** attempt),
+                      agent.RETRY_MAX_SECONDS)
+        waits = [agent._sleep_for(attempt) for _ in range(50)]
+        assert all(0 <= w <= ceiling for w in waits)
+    assert len(set(agent._sleep_for(2) for _ in range(20))) > 1   # jittered
+
+
+def test_a_failed_attempt_is_not_counted_as_a_fallback_answer():
+    """model_calls now holds failed attempts too. Counting those would report
+    a fallback that never actually answered."""
+    from app import monitor
+    monitor.reset()
+    for _ in range(20):
+        monitor.record({"error": None, "duration_ms": 100, "steps": 1,
+                        "cost_usd": 0.001, "step_ms": [100], "retries": 1,
+                        "model_calls": [
+                            {"provider": "primary", "error": "429"},
+                            {"provider": "primary", "attempts": 2}]})
+    s = monitor.stats()
+    assert s["fallback_rate"] == 0.0        # the primary answered, after a retry
+    assert s["retry_rate"] == 1.0           # but the flakiness is visible
+    monitor.reset()
+
+
+# ---- Week 05: input and output are billed differently ---------------------
+def test_cost_uses_the_real_input_output_split():
+    from app import trace
+    t = trace.new_trace("s")
+    t["input_tokens"], t["output_tokens"] = 900_000, 100_000
+    trace.emit(t)
+    exact = trace.cost_of(900_000, 100_000)
+    assert t["cost_usd"] == exact
+    # a blended rate would badly overstate an input-heavy turn
+    assert exact < trace.estimate_cost(1_000_000)
+
+
+def test_token_counters_are_not_mistaken_for_secrets():
+    """_REDACT matches on substring, so anything with 'token' in the name is
+    redacted by default. The counters must be allowed through, or the trace
+    lies about its own inputs."""
+    from app import trace
+    red = trace._redact({"input_tokens": 120, "output_tokens": 30,
+                         "api_token": "sk-secret"})
+    assert red["input_tokens"] == 120
+    assert red["output_tokens"] == 30
+    assert red["api_token"] == "[redacted]"
+
+
+def test_the_agent_records_the_token_split_per_turn():
+    from app import trace
+    from app.agent import run_turn
+
+    def model(messages, trace=None):
+        return NS(content=[NS(type="text", text="hi")], stop_reason="end_turn",
+                  usage=NS(input_tokens=140, output_tokens=25))
+
+    t = trace.new_trace("s")
+    run_turn("hi", model_fn=model, trace=t)
+    assert (t["input_tokens"], t["output_tokens"]) == (140, 25)
+    assert t["token_count"] == 165
+
+
+# ---- Week 01: streaming, and its own failure modes ------------------------
+def _stream_frames(response_lines):
+    """Parse SSE lines into (event, data) pairs."""
+    import json as _json
+    out, event = [], None
+    for line in response_lines:
+        if line.startswith("event: "):
+            event = line[7:]
+        elif line.startswith("data: ") and event:
+            out.append((event, _json.loads(line[6:])))
+    return out
+
+
+def _with_fake_model(fn):
+    """Run fn() with main.run_turn wired to a fake model."""
+    import app.main as main
+    import app.agent as agent_mod
+
+    def fake(messages, trace=None):
+        return NS(content=[NS(type="text",
+                              text="Order ORD-1002 is a standing desk arriving Thursday")],
+                  stop_reason="end_turn",
+                  usage=NS(input_tokens=140, output_tokens=25))
+
+    original = main.run_turn
+    main.run_turn = lambda m, history=None, trace=None: agent_mod.run_turn(
+        m, history, model_fn=fake, trace=trace)
+    try:
+        return fn()
+    finally:
+        main.run_turn = original
+
+
+def test_the_stream_sends_start_tokens_and_done_in_order():
+    from fastapi.testclient import TestClient
+    from app import monitor
+    import app.main as main
+    monitor.reset()
+
+    def go():
+        client = TestClient(main.app)
+        with client.stream("POST", "/chat/stream",
+                           json={"message": "where is ORD-1002?"}) as r:
+            assert r.status_code == 200
+            assert "text/event-stream" in r.headers["content-type"]
+            return _stream_frames([l for l in r.iter_lines() if l])
+
+    frames = _with_fake_model(go)
+    events = [e for e, _ in frames]
+    assert events[0] == "start"
+    assert events[-1] == "done"
+    assert "token" in events
+    text = "".join(d["text"] for e, d in frames if e == "token")
+    assert "standing desk" in text
+    monitor.reset()
+
+
+def test_the_done_frame_carries_real_numbers_not_zeros():
+    """The trace is finalised before `done` is built. Without that, cost and
+    duration are still the zeros the trace was born with."""
+    from fastapi.testclient import TestClient
+    from app import monitor
+    import app.main as main
+    monitor.reset()
+
+    def go():
+        client = TestClient(main.app)
+        with client.stream("POST", "/chat/stream",
+                           json={"message": "where is ORD-1002?"}) as r:
+            return _stream_frames([l for l in r.iter_lines() if l])
+
+    frames = _with_fake_model(go)
+    done = [d for e, d in frames if e == "done"][0]
+    assert done["tokens"] == 165
+    assert done["cost_usd"] > 0
+    monitor.reset()
+
+
+def test_a_streamed_turn_is_recorded_exactly_once():
+    """emit() is called by the done-frame path AND the request's finally
+    block. If it were not idempotent, every streamed turn would be logged
+    twice and /metrics would count it twice."""
+    from fastapi.testclient import TestClient
+    from app import monitor
+    import app.main as main
+    monitor.reset()
+
+    def go():
+        client = TestClient(main.app)
+        for _ in range(3):
+            with client.stream("POST", "/chat/stream",
+                               json={"message": "hi"}) as r:
+                list(r.iter_lines())
+
+    _with_fake_model(go)
+    assert monitor.stats()["turns"] == 3        # not 6
+    monitor.reset()
+
+
+def test_the_streaming_endpoint_is_not_a_side_door_around_the_guards():
+    """Guards must run before the response starts, so a rejected request can
+    still be an honest 4xx rather than a 200 with an error frame."""
+    from fastapi.testclient import TestClient
+    import app.main as main
+    from app import monitor
+    monitor.reset()
+    client = TestClient(main.app)
+
+    blocked = client.post("/chat/stream", json={"message": "please rm -rf /"})
+    assert blocked.status_code == 400
+
+    long_one = client.post("/chat/stream", json={"message": "x" * 99999})
+    assert long_one.status_code == 400
+    monitor.reset()
+
+
+def test_a_failure_mid_stream_arrives_as_an_error_frame():
+    """Once streaming starts the 200 is already sent, so there is no status
+    code left to fail with. The error has to travel as a frame."""
+    from fastapi.testclient import TestClient
+    import app.main as main
+    import app.agent as agent_mod
+    from app import monitor
+    monitor.reset()
+
+    def boom(messages, trace=None):
+        raise RuntimeError("the provider is down")
+
+    original = main.run_turn
+    main.run_turn = lambda m, history=None, trace=None: agent_mod.run_turn(
+        m, history, model_fn=boom, trace=trace)
+    try:
+        client = TestClient(main.app)
+        with client.stream("POST", "/chat/stream", json={"message": "hi"}) as r:
+            assert r.status_code == 200          # already committed
+            frames = _stream_frames([l for l in r.iter_lines() if l])
+    finally:
+        main.run_turn = original
+
+    assert [e for e, _ in frames][-1] == "error"
+    # and the failed turn still reached the monitor
+    assert monitor.stats()["error_rate"] == 1.0
+    monitor.reset()
+
+
+# ---- Week 07: shared state, or the limit is a suggestion ------------------
+def test_the_rate_limit_counter_lives_in_the_shared_store():
+    """A module-level dict counts per container, so scaling out multiplies
+    the limit. The counter has to be somewhere every container can see."""
+    from app import store
+    store.reset_rate_limits()
+    counts = [store.hit_count("shared-test") for _ in range(5)]
+    assert counts == [1, 2, 3, 4, 5]           # a real sliding count
+    store.reset_rate_limits()
+    assert store.hit_count("shared-test") == 1  # and it can be cleared
+
+
+def test_metrics_says_whether_its_numbers_cover_the_whole_service():
+    """With state per container, /metrics describes whichever container
+    answered you. The reader has to be told which they are looking at."""
+    from fastapi.testclient import TestClient
+    from app import monitor, store
+    import app.main as main
+    monitor.reset()
+    body = TestClient(main.app).get("/metrics").json()
+    assert body["shared_state"] == store.available()
+
+
+def test_the_monitor_window_is_trimmed_to_its_limit():
+    from app import store
+    store.reset_turns()
+    for i in range(50):
+        store.push_turn({"n": i}, window=10)
+    assert len(store.recent_turns(10)) == 10
+    store.reset_turns()
+
+
+# ---- Week 07: SSRF, the tool that can reach what the internet cannot ------
+def test_fetch_url_refuses_the_cloud_metadata_service():
+    """The attack: your agent runs inside your cloud account, so it can read
+    the instance's service-account token. A fetch tool without this guard
+    will happily put that token in the chat reply."""
+    from app.agent import run_tool
+    out = run_tool("fetch_url",
+                   {"url": "http://169.254.169.254/computeMetadata/v1/"})
+    assert "internal addresses are blocked" in out
+
+
+def test_fetch_url_refuses_other_schemes_and_private_hosts():
+    from app.agent import run_tool
+    assert "http and https" in run_tool("fetch_url",
+                                        {"url": "file:///etc/passwd"})
+    assert "internal addresses are blocked" in run_tool(
+        "fetch_url", {"url": "http://127.0.0.1:8080/admin"})
+    assert "internal addresses are blocked" in run_tool(
+        "fetch_url", {"url": "http://10.0.0.5/"})
+    assert "not on the allowlist" in run_tool(
+        "fetch_url", {"url": "https://evil.example.org/steal"})
+
+
+def test_fetch_url_is_registered_as_a_real_tool_the_model_can_choose():
+    """A guardrail on a tool nobody wired up protects nothing."""
+    from app.agent import TOOLS, _HANDLERS
+    assert "fetch_url" in _HANDLERS
+    assert any(t["name"] == "fetch_url" for t in TOOLS)
+
+
+# ---- Week 08: the judge tier ---------------------------------------------
+def test_the_judge_never_blocks_a_build_by_failing():
+    """A non-deterministic grader that can break the pipeline teaches the team
+    to ignore the pipeline."""
+    from evals import judge
+    assert judge.grade("q", "a", "check") == (True, "judge unavailable (no KODEKEY)")
+    assert judge._parse("not json at all")[0] is True
+
+
+def test_the_judge_reads_a_verdict_out_of_fenced_json():
+    """Models wrap JSON in prose and code fences however firmly you ask."""
+    from evals import judge
+    passed, why = judge._parse(
+        'Sure.\n```json\n{"pass": false, "reason": "promised a refund"}\n```')
+    assert passed is False
+    assert "refund" in why
+
+
+def test_judge_cases_are_skipped_cleanly_when_there_is_no_key(monkeypatch):
+    """CI has no key, so the deterministic tier must still gate on its own."""
+    monkeypatch.delenv("KODEKEY", raising=False)
+    from evals import run_evals
+    assert run_evals.run(real=False, use_judge=True) == 0

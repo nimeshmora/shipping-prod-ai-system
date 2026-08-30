@@ -38,6 +38,25 @@ jobs:
       - name: run eval gate
         run: python -m evals.run_evals
 
+      - name: smoke test the rate limit under concurrency
+        run: |
+          # Week 07: a rate limit you have not tested under load is a guess.
+          # Boots the real app with a fake model, floods it, and asserts the
+          # limit actually held. No API key needed.
+          PYTHONPATH=. python -m loadtest.fake_server --port 8099 &
+          SERVER_PID=$!
+          for i in $(seq 1 20); do
+            curl -sf --max-time 2 http://127.0.0.1:8099/health >/dev/null && break
+            sleep 1
+          done
+          python -m loadtest.run_load --url http://127.0.0.1:8099 \
+            --n 50 --concurrency 10 | tee load.txt
+          kill $SERVER_PID
+          grep -q "429" load.txt \
+            || { echo "the rate limit did not hold under load"; exit 1; }
+        env:
+          RATE_LIMIT_PER_MIN: "30"
+
   # --------------------------------------------------------------- the deploy
   deploy:
     needs: gate                # <-- the arrow. No gate, no deploy.

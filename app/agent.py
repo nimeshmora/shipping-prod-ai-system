@@ -3,8 +3,8 @@
   Week 01  the loop + tools (order lookup, calculator, word count) + model call
   Week 04  a Budget caps steps and tokens per turn
   Week 05  each turn fills a trace
-  Week 06  a fallback model if the primary one fails
-  Week 07  tool output is sanitised before it re-enters the context
+  Week 06  retry with backoff, then a fallback model
+  Week 07  tool output is sanitised; fetch_url is allowlisted (SSRF)
 
 A SYSTEM_PROMPT gives the agent its standing instructions, and a timeout
 bounds how long any single model call may take.
@@ -15,6 +15,7 @@ Tests pass a fake model_fn so none of this needs an API key.
 import ast
 import operator
 import os
+import random
 import time
 from types import SimpleNamespace as NS
 
@@ -30,6 +31,17 @@ FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "gpt-oss-120b")
 # timeout - which is an hour. You cannot promise a fast p95 (Week 05) if
 # nothing bounds the slowest call.
 MODEL_TIMEOUT_SECONDS = float(os.environ.get("MODEL_TIMEOUT_SECONDS", "30"))
+
+# Week 06: retry the SAME model before changing models.
+# A 429 or a 503 is a blip, not an outage. Retrying costs a few hundred
+# milliseconds; switching providers changes the quality of every answer your
+# users get, and nothing alerts you because the turn still succeeds.
+FETCH_TIMEOUT_SECONDS = float(os.environ.get("FETCH_TIMEOUT_SECONDS", "5"))
+FETCH_MAX_CHARS = int(os.environ.get("FETCH_MAX_CHARS", "20000"))
+
+MAX_RETRIES = int(os.environ.get("MAX_RETRIES", "2"))
+RETRY_BASE_SECONDS = float(os.environ.get("RETRY_BASE_SECONDS", "0.5"))
+RETRY_MAX_SECONDS = float(os.environ.get("RETRY_MAX_SECONDS", "8"))
 
 # The system prompt: the agent's standing instructions, sent with every turn.
 #
@@ -75,6 +87,38 @@ def word_count(text):
     return len(text.split())
 
 
+def fetch_url(url):
+    """Fetch a page and return its text. Week 07's real attack surface.
+
+    Every guard in this function exists because of a specific way a fetch tool
+    gets abused. This is the most dangerous tool in the file, and it is here
+    precisely because "let the agent read a web page" is the single most
+    commonly requested agent feature.
+
+      check_url        - where it may connect at all (SSRF)
+      timeout          - a slow host must not hold a worker open
+      size cap         - a 2GB response must not become a 2GB string
+      check_tool_output- what comes back is untrusted text, always
+    """
+    import httpx
+    from app.guardrails import check_url
+
+    check_url(url)                            # raises if not allowed
+    try:
+        with httpx.Client(timeout=FETCH_TIMEOUT_SECONDS,
+                          # Do not chase redirects. A permitted host that
+                          # replies "302 -> http://169.254.169.254" walks
+                          # straight past the allowlist you just checked.
+                          follow_redirects=False) as client:
+            r = client.get(url)
+            r.raise_for_status()
+            # Read a bounded prefix. Trusting Content-Length is not enough;
+            # a hostile server can lie about it.
+            return r.text[:FETCH_MAX_CHARS]
+    except httpx.HTTPError as e:
+        return f"could not fetch that page: {type(e).__name__}"
+
+
 TOOLS = [
     {
         "name": "lookup_order",
@@ -110,11 +154,24 @@ TOOLS = [
             "required": ["text"],
         },
     },
+    {
+        "name": "fetch_url",
+        "description": (
+            "Fetch the text of a public web page by its https url. Only a "
+            "small allowlist of hosts can be reached."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {"url": {"type": "string"}},
+            "required": ["url"],
+        },
+    },
 ]
 
 _HANDLERS = {"lookup_order": lookup_order,
              "calculator": calculator,
-             "word_count": word_count}
+             "word_count": word_count,
+             "fetch_url": fetch_url}
 
 
 def run_tool(name, args):
@@ -210,29 +267,92 @@ def _to_openai_messages(messages):
     return out
 
 
+def _is_retryable(exc):
+    """Is this worth trying the SAME model again, or is it hopeless?
+
+    A 429 or a 503 means "not right now" - the request was fine, the provider
+    is busy. A 400 or a 401 means the request itself is wrong, and sending it
+    again a thousand times will not fix it. Retrying a permanent error just
+    turns one fast failure into a slow one.
+    """
+    status = getattr(exc, "status_code", None) or getattr(exc, "status", None)
+    if status is None:
+        # No status: a socket timeout, a DNS blip, a dropped connection.
+        # Those are exactly the transient faults retrying is for.
+        return True
+    return status == 429 or status >= 500
+
+
+def _sleep_for(attempt):
+    """Exponential backoff with full jitter.
+
+    Doubling the wait gives an overloaded provider room to recover. The jitter
+    matters just as much: without it, every container that failed at the same
+    moment retries at the same moment, and your own fleet keeps hammering the
+    thing it is waiting for. Jitter spreads the herd out.
+    """
+    ceiling = min(RETRY_BASE_SECONDS * (2 ** attempt), RETRY_MAX_SECONDS)
+    return random.uniform(0, ceiling)
+
+
+def _attempt(client, model, payload):
+    completion = client.chat.completions.create(
+        model=model, max_tokens=1024, tools=_tools_openai(),
+        messages=payload, timeout=MODEL_TIMEOUT_SECONDS)
+    return _to_anthropic_shape(completion)
+
+
 def call_model(messages, trace=None):
-    """Try the primary model; if it errors, try the fallback once.
-    Records which provider answered into the trace."""
+    """Ask the model, and do not give up at the first flicker.
+
+    The order here is the whole lesson:
+
+        1. try the primary model
+        2. if that failed transiently, RETRY THE PRIMARY with backoff
+        3. only when the primary is genuinely unavailable, fall back
+
+    Getting 2 and 3 the wrong way round is the common mistake, and it is
+    expensive in a way that is hard to see. A single 429 is normal traffic.
+    If one blip switches providers, your users silently start getting answers
+    from a different, usually weaker model - and because the turn succeeded,
+    nothing alerts. You would only find it in fallback_rate weeks later.
+
+    Retry the same model first. Change models only when you have to.
+    """
     client = _client()
     # The system prompt goes first, on every single turn. The model has no
     # memory, so its standing instructions have to be re-sent every time.
     payload = ([{"role": "system", "content": SYSTEM_PROMPT}]
                + _to_openai_messages(messages))
+
+    last_error = None
     for provider, model in (("primary", MODEL), ("fallback", FALLBACK_MODEL)):
-        try:
-            completion = client.chat.completions.create(
-                model=model, max_tokens=1024, tools=_tools_openai(),
-                messages=payload, timeout=MODEL_TIMEOUT_SECONDS)
-            resp = _to_anthropic_shape(completion)
-            if trace is not None:
-                trace["model_calls"].append({"provider": provider, "model": model})
-            return resp
-        except Exception as e:  # network, overload, etc.
-            if provider == "fallback":
-                raise
-            if trace is not None:
-                trace["model_calls"].append({"provider": "primary", "error": str(e)})
-    raise RuntimeError("no model answered")
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                resp = _attempt(client, model, payload)
+                if trace is not None:
+                    trace["model_calls"].append(
+                        {"provider": provider, "model": model,
+                         "attempts": attempt + 1})
+                    if attempt:
+                        trace["retries"] += attempt
+                return resp
+            except Exception as e:
+                last_error = e
+                retryable = _is_retryable(e)
+                if trace is not None:
+                    trace["model_calls"].append(
+                        {"provider": provider, "model": model,
+                         "attempt": attempt + 1, "error": str(e),
+                         "retryable": retryable})
+                # Out of attempts, or an error no retry can fix: stop trying
+                # THIS model and let the loop move on to the fallback.
+                if attempt == MAX_RETRIES or not retryable:
+                    break
+                time.sleep(_sleep_for(attempt))
+
+    # Both models, every attempt, exhausted.
+    raise last_error if last_error else RuntimeError("no model answered")
 
 
 # ---- the loop --------------------------------------------------------------
@@ -250,8 +370,13 @@ def run_turn(message, history=None, model_fn=call_model, trace=None):
 
         usage = getattr(resp, "usage", None)
         if usage is not None:
-            budget.add_tokens(getattr(usage, "input_tokens", 0)
-                              + getattr(usage, "output_tokens", 0))
+            _in = getattr(usage, "input_tokens", 0) or 0
+            _out = getattr(usage, "output_tokens", 0) or 0
+            budget.add_tokens(_in + _out)
+            if trace is not None:
+                # Kept apart because they are billed apart (Week 05).
+                trace["input_tokens"] += _in
+                trace["output_tokens"] += _out
 
         messages.append({"role": "assistant", "content": resp.content})
 

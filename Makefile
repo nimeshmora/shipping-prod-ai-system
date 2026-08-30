@@ -10,6 +10,17 @@ test:
 eval:
 	python -m evals.run_evals
 
+# Week 08: also grade answer QUALITY, not just keywords. Needs KODEKEY.
+eval-judge:
+	python -m evals.run_evals --real --judge
+
+# Week 07: concurrency is where the honest bugs come due.
+load:
+	python -m loadtest.run_load --n 60 --concurrency 12
+
+load-stream:
+	python -m loadtest.run_load --n 30 --concurrency 8 --stream
+
 docker-build:
 	docker build -t ship-agent .
 

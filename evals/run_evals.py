@@ -5,7 +5,12 @@ Runs each case in cases.json against the app and grades it cheaply with a
 non-zero, which is what a CI pipeline uses to block a bad change from shipping.
 
 By default it uses a fake model so it runs in CI with no API key. Pass --real to
-run against the real model.
+run against the real model, and --judge to also run the judge tier
+(evals/judge.py), which grades answer QUALITY rather than keyword presence.
+
+    python -m evals.run_evals              # deterministic, no key, gates
+    python -m evals.run_evals --real       # against the real model
+    python -m evals.run_evals --real --judge   # + quality grading
 """
 import json
 import os
@@ -61,16 +66,25 @@ def _fake_model(messages, trace=None):
     return NS(content=[NS(type="text", text="ok")], stop_reason="end_turn", usage=None)
 
 
-def run(real=False):
+def run(real=False, use_judge=False):
     from app.agent import run_turn, call_model
     from app import guardrails as g
+    from evals import judge
 
     cases = json.load(open(CASES))
     model_fn = call_model if real else _fake_model
     failures = []
+    judged = judging_enabled = use_judge and judge.available()
+    if use_judge and not judging_enabled:
+        print("  note: --judge asked for but KODEKEY is not set; skipping it\n")
 
     for c in cases:
         cid, sev = c["id"], c.get("severity", "medium")
+        # A judge-only case has nothing deterministic to check, so it is
+        # skipped entirely unless the judge is actually running.
+        if c.get("judge") and not judging_enabled:
+            _report(cid, sev, True, "skipped (judge tier not running)")
+            continue
         try:
             # input guardrails run first, exactly like the web layer
             g.check_input_length(c["message"])
@@ -89,13 +103,28 @@ def run(real=False):
             continue
 
         reply, _, _ = run_turn(c["message"], model_fn=model_fn)
-        need = str(c.get("expect_contains", ""))
-        ok = need in reply
-        _report(cid, sev, ok, f"contains '{need}'" if ok else f"missing '{need}' in: {reply!r}")
-        if not ok and sev == "high":
-            failures.append(cid)
+
+        if "expect_contains" in c:
+            need = str(c["expect_contains"])
+            ok = need in reply
+            _report(cid, sev, ok,
+                    f"contains '{need}'" if ok
+                    else f"missing '{need}' in: {reply!r}")
+            if not ok and sev == "high":
+                failures.append(cid)
+
+        # The judge tier. Runs only with a key, and only gates when the case
+        # is high severity - a non-deterministic grader must not be able to
+        # block a build on its own bad day.
+        if judging_enabled and c.get("judge"):
+            passed, why = judge.grade(c["message"], reply, c["judge"])
+            _report(f"{cid}:judge", sev, passed, why)
+            if not passed and sev == "high":
+                failures.append(f"{cid}:judge")
 
     print()
+    if judged:
+        print("  (judge tier ran; its verdicts are advisory unless high severity)")
     if failures:
         print(f"GATE FAILED: high-severity cases failed: {', '.join(failures)}")
         return 1
@@ -109,4 +138,5 @@ def _report(cid, sev, ok, detail):
 
 
 if __name__ == "__main__":
-    sys.exit(run(real="--real" in sys.argv))
+    sys.exit(run(real="--real" in sys.argv,
+                 use_judge="--judge" in sys.argv))

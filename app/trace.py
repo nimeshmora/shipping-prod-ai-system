@@ -25,6 +25,9 @@ def new_trace(session_id):
         "started_at": time.time(),
         "steps": 0,
         "token_count": 0,
+        "input_tokens": 0,        # billed at a different rate to output
+        "output_tokens": 0,
+        "retries": 0,             # same model tried again after a blip
         "tools_used": [],
         "tool_errors": [],        # tools that blew up - the model still sees the text
         "step_ms": [],            # how long each trip round the loop took
@@ -36,18 +39,36 @@ def new_trace(session_id):
     }
 
 
-def estimate_cost(tokens):
-    """A blended estimate from the turn's total token count.
+def cost_of(input_tokens, output_tokens):
+    """The turn's cost, priced the way the provider actually bills it.
+
+    Input and output are not the same price - output is usually 3-5x dearer.
+    A blended average is fine until someone asks why the bill does not match,
+    and then it is a bug: an agent with long contexts and short answers is
+    mostly input tokens, so a blended rate overstates it several times over.
 
     Group these by session_id and you have cost per user - the question every
     business asks about an agent, answerable because Week 05 wrote it down.
+    """
+    return round((input_tokens / 1_000_000) * COST_PER_1M_INPUT
+                 + (output_tokens / 1_000_000) * COST_PER_1M_OUTPUT, 6)
+
+
+def estimate_cost(tokens):
+    """Blended fallback, for a turn where the provider sent no usage split.
+
+    Kept because some gateways return only a total. Prefer cost_of().
     """
     blended = (COST_PER_1M_INPUT + COST_PER_1M_OUTPUT) / 2
     return round((tokens / 1_000_000) * blended, 6)
 
 
-# keys that are counters, not secrets, even though they contain a redact word
-_ALLOW = {"token_count", "tokens", "cost_usd"}
+# keys that are counters, not secrets, even though they contain a redact word.
+# Easy to get wrong: _REDACT matches on substring, so every new field with
+# "token" in its name is redacted by default. That is the right default - it
+# fails safe - but it means adding a counter means adding it here too.
+_ALLOW = {"token_count", "tokens", "cost_usd",
+          "input_tokens", "output_tokens"}
 
 
 def _redact(value):
@@ -75,11 +96,22 @@ def emit(trace):
     Without it every line lands as INFO, so a failed turn looks exactly like
     a successful one in the console and nothing ever pages anybody.
     """
+    # Idempotent on purpose. The streaming path finalises the trace early so
+    # its `done` frame can report real numbers, and the request's finally
+    # block still calls emit() to guarantee it happens at all. Whichever runs
+    # first wins; the second is a no-op. Without this, every streamed turn is
+    # logged twice and /metrics counts it twice.
+    if trace.get("_emitted"):
+        return trace
+    trace["_emitted"] = True
     trace["duration_ms"] = round((time.time() - trace["started_at"]) * 1000)
-    trace["cost_usd"] = estimate_cost(trace.get("token_count", 0))
+    _in, _out = trace.get("input_tokens", 0), trace.get("output_tokens", 0)
+    trace["cost_usd"] = (cost_of(_in, _out) if (_in or _out)
+                         else estimate_cost(trace.get("token_count", 0)))
     trace["severity"] = "ERROR" if trace.get("error") else "INFO"
     trace["message"] = (f"turn {trace['turn_id'][:8]} "
                         f"{'failed' if trace.get('error') else 'ok'} "
                         f"in {trace['duration_ms']}ms")
-    print(json.dumps(_redact(trace)))
+    print(json.dumps(_redact({k: v for k, v in trace.items()
+                              if not k.startswith("_")})))
     return trace

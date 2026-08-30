@@ -7,11 +7,13 @@ finished files already in this repo.
 ## Week 01, Package
 
 Build the agent loop and run it locally, then wrap it in the service and a
-container.
+container. Add streaming, because 8 seconds of nothing feels broken.
 
-- Files: `app/agent.py`, `app/orders.py`, `app/main.py`, `app/memory.py`, `Dockerfile`
+- Files: `app/agent.py`, `app/orders.py`, `app/main.py`, `app/memory.py`,
+  `app/stream.py` (SSE), `Dockerfile`
 - Run: `make run`, then `curl` the `/chat` endpoint
-- Done when: `POST /chat` answers locally and in a container
+- Done when: `POST /chat` answers locally and in a container, and
+  `POST /chat/stream` sends `start` / `token` / `done` frames
 
 ## Week 02, Deploy
 
@@ -37,7 +39,8 @@ The loop could run forever or run up a bill. Add step and token budgets.
 
 - Files: `app/guardrails.py` (`Budget`), used in `app/agent.py`;
   `app/memory.py` (`trim`) bounds the context
-- Settings: `MAX_STEPS`, `MAX_TOKENS_PER_TURN`, `MAX_HISTORY_MESSAGES`
+- Settings: `MAX_STEPS`, `MAX_TOKENS_PER_TURN`, `MAX_HISTORY_MESSAGES`,
+  `MODEL_TIMEOUT_SECONDS`
 - Done when: a runaway turn stops itself, and a long session stops growing
 
 ## Week 05, See
@@ -49,38 +52,65 @@ a broken agent still returns 200 OK.
   `app/main.py`; `app/main.py` catches *every* exception so a failed turn is
   recorded - without that, a total outage reports a 0% error rate
 - Settings: `COST_PER_1M_INPUT`, `COST_PER_1M_OUTPUT`, `MONITOR_WINDOW`,
-  `ALERT_ERROR_RATE`, `ALERT_P95_MS`, `ALERT_FALLBACK_RATE`, `ALERT_AVG_STEPS`
+  `ALERT_ERROR_RATE`, `ALERT_P95_MS`, `ALERT_FALLBACK_RATE`, `ALERT_AVG_STEPS`,
+  `OTEL_ENABLED`, `OTEL_TARGET`
+- Cost is priced from the input/output split, not a blended average: output
+  tokens cost 3-5x input, so a blended rate overstates a long-context agent
 - Done when: every request prints one JSON line with steps, tools, tokens and
   `cost_usd`; and `/metrics` turns "degraded" with a plain-English alert when
   turns start failing, slowing, looping, or falling back
 
-## Week 06, Debug
+## Week 06, Debug and survive
 
-Find a planted bug from traces, then survive a model outage with a fallback.
+Find a planted bug from traces, then survive a model outage - retrying the same
+model before changing models.
 
-- Files: `app/agent.py` (`call_model` tries primary then fallback, with a
-  timeout on every call)
-- Settings: `FALLBACK_MODEL`, `MODEL_TIMEOUT_SECONDS`
+- Files: `app/agent.py` (`call_model`: retry with jittered backoff on the
+  primary, then fall back; a timeout on every call)
+- Settings: `FALLBACK_MODEL`, `MAX_RETRIES`, `RETRY_BASE_SECONDS`,
+  `RETRY_MAX_SECONDS`
 - Instructor: `make plant-bug` before the session, `make fix-bug` after
-- Done when: the primary failing still yields an answer; the trace shows
-  `provider: fallback`
+- Done when: a single 429 is absorbed by a retry and never reaches the
+  fallback; a real outage still yields an answer with `provider: fallback` in
+  the trace; `retry_rate` on `/metrics` shows the flakiness either way
 
 ## Week 07, Attack
 
-Harden the tools and inputs so a hostile message cannot do damage.
+Red-team your own deployed agent: injection, cost, SSRF, and load.
 
 - Files: `app/guardrails.py` (`check_input_length`, `check_blocked_input`,
   `check_url`), wired in `app/main.py`; `check_tool_output` wired in
   `app/agent.py` so a tool result cannot smuggle instructions back to the model
-  (try `ORD-1043` - its note carries an instruction, like real customer data)
-- Settings: `MAX_INPUT_CHARS`, `MAX_TOOL_OUTPUT_CHARS`
-- Done when: oversized input, dangerous input, and non-allowlisted URLs are
-  refused, and an instruction hidden in a tool result is neutralised
+  (try `ORD-1043` - its note carries an instruction, like real customer data);
+  `fetch_url` in `app/agent.py` is the real SSRF surface; `app/store.py` moves
+  the rate limit and monitor window into shared state; `loadtest/run_load.py`
+- Settings: `MAX_INPUT_CHARS`, `MAX_TOOL_OUTPUT_CHARS`, `FETCH_TIMEOUT_SECONDS`,
+  `FETCH_MAX_CHARS`, `REDIS_URL`
+- Run: `make load`, `make load-stream`
+- Done when: oversized and dangerous input are refused; an instruction hidden
+  in a tool result is neutralised; `fetch_url` refuses the cloud metadata
+  address, `file://`, private IPs and non-allowlisted hosts; and the rate limit
+  holds under `make load` with `shared_state: true` on `/metrics`
+- The deferred fix, now due: the Week 03 rate limiter counted per container, so
+  5 instances meant 5x the limit. Load makes that visible; `app/store.py` fixes
+  it.
 
-## Week 08, Gate
+## Week 08, Gate, roll back and port
 
-An eval gate blocks a bad change before it ships. Practise rolling back.
+An eval gate blocks a bad change before it ships. Practise rolling back. Then
+see what was portable all along.
 
-- Files: `evals/cases.json`, `evals/run_evals.py`, `.github/workflows/eval.yml`
-- Run: `make eval`
-- Done when: a high-severity failure makes the gate exit non-zero and blocks the PR
+- Files: `evals/cases.json`, `evals/run_evals.py`, `evals/judge.py`,
+  `.github/workflows/eval.yml`, `deploy/PORTABILITY.md`, `deploy/KUBERNETES.md`
+- Run: `make eval` (deterministic, no key), `make eval-judge` (quality, needs
+  a key)
+- Two tiers, on purpose: `expect_contains` catches an answer going *missing*;
+  the judge catches an answer going *bad*. The judge never gates alone - a
+  non-deterministic grader wired to a blocking gate teaches the team to ignore
+  the gate.
+- Done when: a high-severity failure makes the gate exit non-zero and blocks
+  the PR; you have rolled back to a tagged revision; and the same image runs on
+  a second platform
+- Read, do not build: `deploy/KUBERNETES.md` maps everything you built onto
+  k8s vocabulary, so you can hold the conversation without spending three weeks
+  on YAML
