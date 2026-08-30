@@ -45,13 +45,13 @@ def _tool_then_answer(name, args):
 def check_00():
     print("Week 00: the loop runs a tool then answers")
     from app.agent import run_turn
-    reply, hist = run_turn(
+    reply, hist, _ = run_turn(
         "where is order ORD-1002?",
         model_fn=_tool_then_answer("lookup_order", {"order_id": "ORD-1002"}))
     (_ok if "standing desk" in reply else _no)(
         "the agent looked up a real order it could not have known")
     (_ok if len(hist) == 4 else _no)("history has all four moves")
-    reply, _ = run_turn(
+    reply, _, _ = run_turn(
         "what is 12*41?",
         model_fn=_tool_then_answer("calculator", {"expression": "12 * 41"}))
     (_ok if "492" in reply else _no)("and the calculator still works")
@@ -79,8 +79,9 @@ def check_01():
 
     # Swap in a fake model so this needs no API key.
     original = main.run_turn
-    main.run_turn = lambda m, history=None: agent.run_turn(
-        m, history, model_fn=_plain_model("Your order is on its way"))
+    main.run_turn = lambda m, history=None, trace=None: agent.run_turn(
+        m, history, model_fn=_plain_model("Your order is on its way"),
+        trace=trace)
     try:
         memory.reset()
         c = TestClient(main.app)
@@ -311,10 +312,18 @@ def check_03():
     g.check_rate_limit("chk-quiet")
     _ok("and one noisy caller does not lock out everybody else")
 
-    # a sliding window, not a fixed one
-    real_monotonic = g.time.monotonic
+    # A sliding window, not a fixed one. The clock lives wherever the counter
+    # does - inside guardrails until Week 07 moves it into app/store.py - so
+    # find it rather than assuming.
     clock = {"t": 10_000.0}
-    g.time.monotonic = lambda: clock["t"]
+    try:
+        from app import store as _counter_home
+        _attr = "time"
+    except ImportError:
+        _counter_home, _attr = g, "monotonic"
+    _mod = getattr(_counter_home, "time")
+    _real = getattr(_mod, _attr)
+    setattr(_mod, _attr, lambda: clock["t"])
     try:
         g.reset_rate_limits()
         for _ in range(g.RATE_LIMIT):
@@ -327,7 +336,7 @@ def check_03():
                 "drop timestamps older than 60s rather than counting per minute")
         _ok("the window slides, so it cannot be beaten across a minute boundary")
     finally:
-        g.time.monotonic = real_monotonic
+        setattr(_mod, _attr, _real)
         g.reset_rate_limits()
 
     # --- both endpoints are guarded ----------------------------------------
