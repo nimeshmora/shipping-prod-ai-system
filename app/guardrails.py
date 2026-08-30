@@ -102,3 +102,65 @@ def check_rate_limit(caller):
 def reset_rate_limits():
     """Used by the tests, so one test cannot leak into the next."""
     _hits.clear()
+
+
+# ---- Week 04: what one turn is allowed to cost ---------------------------
+# BUILD THIS.
+#
+# Weeks 01-03 protected you from other people. This protects you from your own
+# agent, which is a harder problem because nothing looks wrong. A model that
+# keeps asking for tools, a tool whose output invites another call, a context
+# that grows every trip - none of that raises an exception. It runs, and
+# charges you, and eventually answers.
+#
+# The failure mode of an unbounded agent is not an outage. It is an invoice.
+#
+# What to build:
+#
+#   MAX_STEPS            from env, default 6
+#   MAX_TOKENS_PER_TURN  from env, default 20000
+#
+#   class Budget:
+#       __init__(self, max_steps=MAX_STEPS, max_tokens=MAX_TOKENS_PER_TURN)
+#       add_step()    -> raise GuardrailError past max_steps
+#       add_tokens(n) -> accumulate, raise GuardrailError past max_tokens
+#
+# Two limits, because they catch different runaways:
+#
+#   steps   how many times round the loop. Catches a model that is looping,
+#           confused, or being led on by its own tool output.
+#   tokens  how much was actually sent and received. Catches ONE step that is
+#           enormous - a huge context, or a tool returning a whole file.
+#
+# You need both. A step limit alone lets 6 colossal calls through. A token
+# limit alone lets 100 tiny ones through. They are not redundant.
+#
+# Two details that are bugs if you miss them:
+#
+#   - Tokens ACCUMULATE across the turn. Reset the counter per step and a
+#     hundred medium calls sail past the limit.
+#   - add_tokens(None) must not crash. Some gateways omit usage entirely, and
+#     a missing cost report is not a reason to fail a turn.
+#
+# Use the default status (400), not 500. It is the REQUEST that was too
+# expensive, not the server that broke. Get that backwards and your error rate
+# blames you for what callers did - which matters in Week 05, when you start
+# alerting on that number.
+#
+# Then wire it into app/agent.py's run_turn:
+#
+#   budget = Budget()               before the loop
+#   budget.add_step()               at the top of every iteration
+#   budget.add_tokens(...)          after each model call, from resp.usage
+#
+# You will also need _to_anthropic_shape to return usage, since the gateway
+# reports prompt_tokens/completion_tokens and the loop reads
+# input_tokens/output_tokens:
+#
+#   u = getattr(completion, "usage", None)
+#   usage = None if u is None else NS(
+#       input_tokens=getattr(u, "prompt_tokens", 0) or 0,
+#       output_tokens=getattr(u, "completion_tokens", 0) or 0)
+#
+# Done when:  make check-week-04
+# Stuck? git diff week-04-cap..week-04-solution -- app/guardrails.py

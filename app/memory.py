@@ -129,3 +129,47 @@ def reset():
     if r is not None:
         for key in r.scan_iter("session:*"):
             r.delete(key)
+
+
+# ---- Week 04: context is a budget, not a container -----------------------
+# BUILD trim(), and call it from save().
+#
+# This is the bound people miss, and it is the most interesting of the three.
+#
+# Every turn sends the WHOLE history back to the model. So a session that has
+# been going an hour sends an hour of conversation on every single request -
+# until the model refuses it outright.
+#
+# And the per-turn token cap NEVER SEES THIS COMING, because it resets at the
+# start of each turn. A 40-message session that costs a fortune per turn is
+# comfortably under budget on every individual turn. The two limits look like
+# they overlap. They do not.
+#
+# What to build:
+#
+#   MAX_HISTORY_MESSAGES = int(os.environ.get("MAX_HISTORY_MESSAGES", "40"))
+#
+#   trim(history)  -> keep the last MAX_HISTORY_MESSAGES messages
+#   _is_tool_result(msg) -> True if msg["content"] is a list containing a
+#                           block with type == "tool_result"
+#
+# Then call trim() at the top of save(), so nothing can store an unbounded
+# history.
+#
+# THE SUBTLETY, and it is a real bug if you get it wrong:
+#
+#   A tool_use block and the tool_result that answers it are ONE exchange.
+#   Cut between them and you have a tool result replying to nothing - which
+#   providers reject as malformed. A session that grew too long would then
+#   start failing EVERY request with a 400 nobody can explain.
+#
+#   So if the cut point lands on a tool result, step forward past it.
+#
+# Keep the NEWEST messages, not the oldest.
+#
+# This is deliberately the cheapest possible strategy. Summarising the dropped
+# turns - so the agent still knows what was agreed an hour ago - is the
+# real-world upgrade, and a good stretch goal.
+#
+# Done when:  make check-week-04
+# Stuck? git diff week-04-cap..week-04-solution -- app/memory.py
