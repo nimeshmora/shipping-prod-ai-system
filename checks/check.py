@@ -813,8 +813,23 @@ def check_06():
 
 def check_07():
     print("Week 07: hostile input, hostile data, and honest counters")
-    from app import guardrails as g, store, trace
+    from app import guardrails as g, trace
     from app.agent import run_tool, run_turn, TOOLS, _HANDLERS
+
+    # Check everything exists first, so a missing function is a readable
+    # instruction rather than an AttributeError traceback.
+    for name in ("check_input_length", "check_blocked_input",
+                 "check_tool_output", "check_url", "MAX_INPUT_CHARS",
+                 "MAX_TOOL_OUTPUT_CHARS"):
+        if not hasattr(g, name):
+            _no(f"app/guardrails.py must define {name}")
+    _ok("app/guardrails.py defines the Week 07 rules")
+
+    try:
+        from app import store
+    except ImportError:
+        _no("app/store.py does not exist yet - the rate-limit counter has to "
+            "move somewhere every container can see")
 
     # --- what the user sends ------------------------------------------------
     for label, fn, arg in [
