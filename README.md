@@ -1,8 +1,16 @@
-# Ship Production AI Systems — Week 5 · See
+# Ship Production AI Systems — Week 6 · Debug and survive
 
-> **This branch is Week 5 complete.** It is the answer key. If you are doing the
-> week, start from `week-05-see` instead and check your work against this one
-> with `git diff week-05-see..week-05-solution`.
+> **You are on `week-06-survive`: the starting line for Week 6.**
+>
+> Weeks 1-5 are complete and passing. Two halves this week: hunt a planted bug
+> using Week 5's traces (no code needed), then build retry-with-backoff and a
+> fallback model in `app/agent.py`, surfaced as `retry_rate` and
+> `fallback_rate` on `/metrics`.
+>
+> Read **[`guide/week-06.md`](guide/week-06.md)**, then run
+> `make check-week-06` until it is green.
+>
+> Stuck? `git diff week-06-survive..week-06-solution -- app/agent.py`
 
 One small AI agent. Over eight weeks you turn it into something a company could
 actually run: online, automatic, locked down, budgeted, watched, and safe.
@@ -16,11 +24,11 @@ Phase 1 built the agent. **Phase 2 ships it.**
 ```
   ┌─ SHIP IT ────────────┐  ┌─ OPERATE IT ─────────┐  ┌─ TRUST IT ──────┐
   01 package  ✓           04 cap  ✓                 07 attack
-  02 deploy   ✓           05 see  ← you are here    08 gate
-  03 automate ✓           06 survive
+  02 deploy   ✓           05 see  ✓                 08 gate
+  03 automate ✓           06 survive ← you are here
 ```
 
-**Week 5 makes the agent visible: a broken agent still returns 200 OK.**
+**Week 6 absorbs a blip, survives an outage, and teaches debugging from traces.**
 
 ---
 
@@ -90,10 +98,14 @@ make check-week-01    # a deployable web service
 make check-week-02    # memory that survives a redeploy
 make check-week-03    # automatic deploys, keys, rate limits
 make check-week-04    # step, token and context budgets
-make check-week-05    # this week's capability
+make check-week-05    # traces, monitoring and /metrics
+make check-week-06    # this week's capability
 make check-setup      # just runs the tests
 
 make trace-ui         # Grafana + Tempo, to look at traces locally
+
+make plant-bug        # instructor: hide a bug for the Week 06 hunt
+make fix-bug          # instructor: put it back
 make docker-build     # build the container
 make docker-run       # run the container
 ```
@@ -104,7 +116,7 @@ make docker-run       # run the container
 
 ```
 app/
-  agent.py       the loop, three tools, the system prompt, a step cap
+  agent.py       BUILD  add retry-then-fallback to the working loop
   orders.py      a stand-in order system — the data the agent goes and fetches
   main.py        the web service: /chat, /chat/stream, /health
   stream.py      server-sent events: the same turn, as it happens
@@ -112,7 +124,7 @@ app/
   guardrails.py  the rules: api key, rate limit, and the per-turn Budget
 tests/           unit tests, all with a fake model
 checks/          the weekly checkpoints
-guide/           read guide/week-05.md
+guide/           read guide/week-06.md
 Dockerfile       package it so it runs the same everywhere
 .github/workflows/
   test.yml       tests + checkpoints on every pull request

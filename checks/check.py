@@ -1,7 +1,7 @@
 """Guided checkpoints. Run one per week to confirm that week's capability works.
 
     python -m checks.check 00      # the loop you start from
-    python -m checks.check 05      # this week
+    python -m checks.check 06      # this week
     python -m checks.check setup   # tests all pass
 
 Each check uses a fake model, so it runs with no API key and no cloud, and
@@ -674,6 +674,142 @@ def check_05():
     _ok("OpenTelemetry is off by default and no-ops cleanly when disabled")
 
 
+def check_06():
+    print("Week 06: a blip is absorbed, an outage is survived")
+    import app.agent as agent
+    from app import monitor
+
+    for name in ("MAX_RETRIES", "FALLBACK_MODEL", "_is_retryable", "_sleep_for"):
+        if not hasattr(agent, name):
+            _no(f"app/agent.py must define {name}")
+    _ok("app/agent.py has retry settings, a fallback model and a backoff")
+
+    def client_for(behaviour):
+        calls = []
+
+        class C:
+            def __init__(self): self.chat = self; self.completions = self
+            def create(self, model, **kw):
+                calls.append(model)
+                text = behaviour(model, len(calls))
+                msg = NS(content=text, tool_calls=None)
+                return NS(choices=[NS(message=msg)],
+                          usage=NS(prompt_tokens=1, completion_tokens=1))
+        return C, calls
+
+    saved_client, saved_sleep = agent._client, agent.time.sleep
+    agent.time.sleep = lambda s: None
+    try:
+        # --- a blip must NOT change models ---------------------------------
+        class Blip(Exception):
+            status_code = 429
+
+        def one_blip(model, n):
+            if n == 1:
+                raise Blip("too many requests")
+            return "ok"
+
+        C, calls = client_for(one_blip)
+        agent._client = lambda: C()
+        tr = {"model_calls": [], "retries": 0}
+        agent.call_model([{"role": "user", "content": "hi"}], tr)
+
+        if agent.FALLBACK_MODEL in calls:
+            _no("a single 429 sent the request to the FALLBACK model. Retry the "
+                "same model first - one blip is normal traffic, and switching "
+                "providers silently changes the quality of every answer while "
+                "nothing alerts, because the turn still succeeds.")
+        if calls != [agent.MODEL, agent.MODEL]:
+            _no(f"expected two attempts on the primary, got {calls}")
+        _ok("one 429 is retried on the primary, not failed over")
+        if tr.get("retries") != 1:
+            _no(f"the trace should record 1 retry, got {tr.get('retries')}")
+        _ok("and the retry is recorded, so flakiness is visible before it hurts")
+
+        # --- a permanent error must not be retried -------------------------
+        class Permanent(Exception):
+            status_code = 400
+
+        def always_400(model, n):
+            raise Permanent("bad request")
+
+        C, calls = client_for(always_400)
+        agent._client = lambda: C()
+        try:
+            agent.call_model([{"role": "user", "content": "hi"}])
+        except Exception:
+            pass
+        if len(calls) > 2:
+            _no(f"a 400 was retried {len(calls)} times. It means the REQUEST is "
+                "wrong - retrying only turns one fast failure into a slow one.")
+        _ok("a 400 is not retried; only 429s, 5xx and timeouts are")
+
+        # --- a real outage must still answer -------------------------------
+        class Down(Exception):
+            status_code = 503
+
+        def primary_down(model, n):
+            if model == agent.MODEL:
+                raise Down("service unavailable")
+            return "from the fallback"
+
+        C, calls = client_for(primary_down)
+        agent._client = lambda: C()
+        tr = {"model_calls": [], "retries": 0}
+        resp = agent.call_model([{"role": "user", "content": "hi"}], tr)
+        if resp.stop_reason != "end_turn":
+            _no("no answer came back despite a working fallback")
+        if calls.count(agent.MODEL) != agent.MAX_RETRIES + 1:
+            _no(f"the primary was tried {calls.count(agent.MODEL)} times before "
+                f"falling back; expected {agent.MAX_RETRIES + 1}")
+        _ok("a real outage exhausts the primary's retries, then falls back")
+        if not any(c.get("provider") == "fallback" and not c.get("error")
+                   for c in tr["model_calls"]):
+            _no("the trace does not show the fallback ANSWERING")
+        _ok("and the trace shows which provider actually answered")
+    finally:
+        agent._client, agent.time.sleep = saved_client, saved_sleep
+
+    # --- backoff shape ------------------------------------------------------
+    waits = [agent._sleep_for(2) for _ in range(20)]
+    if len(set(waits)) == 1:
+        _no("the backoff is not jittered. Without jitter every container that "
+            "failed at the same moment retries at the same moment, and your "
+            "own fleet keeps hammering the thing it is waiting for.")
+    if agent._sleep_for(50) > agent.RETRY_MAX_SECONDS:
+        _no("the backoff is not capped - a long outage would sleep for hours")
+    _ok("backoff grows, is jittered, and is capped")
+
+    # --- the monitor sees it ------------------------------------------------
+    monitor.reset()
+    for _ in range(20):
+        monitor.record({"error": None, "duration_ms": 100, "steps": 1,
+                        "cost_usd": 0.001, "step_ms": [100], "retries": 1,
+                        "tool_errors": [],
+                        "model_calls": [{"provider": "primary", "error": "429"},
+                                        {"provider": "primary", "attempts": 2}]})
+    s = monitor.stats()
+    if "retry_rate" not in s:
+        _no("/metrics should report retry_rate - a rising number there is the "
+            "early warning that stops fallback_rate being your first clue")
+    if s.get("fallback_rate") != 0.0:
+        _no("those turns were answered by the PRIMARY after a retry, but "
+            "fallback_rate says otherwise. model_calls now holds failed "
+            "attempts too - only count a fallback that actually answered.")
+    _ok("a failed attempt is not miscounted as a fallback answer")
+
+    monitor.reset()
+    for _ in range(20):
+        monitor.record({"error": None, "duration_ms": 100, "steps": 1,
+                        "cost_usd": 0.001, "step_ms": [100], "retries": 0,
+                        "tool_errors": [],
+                        "model_calls": [{"provider": "fallback", "model": "b"}]})
+    if not any("fallback" in a for a in monitor.alerts()):
+        _no("the fallback answered every turn and nothing alerted")
+    _ok("a struggling primary raises an alert")
+    monitor.reset()
+
+
 def check_setup():
     print("Setup check: the tests pass")
     import subprocess
@@ -684,7 +820,7 @@ def check_setup():
 
 CHECKS = {"00": check_00, "01": check_01, "02": check_02,
           "03": check_03, "04": check_04, "05": check_05,
-          "setup": check_setup}
+          "06": check_06, "setup": check_setup}
 
 
 if __name__ == "__main__":

@@ -329,3 +329,83 @@ def _accepts_trace(fn):
         return len(inspect.signature(fn).parameters) >= 2
     except (TypeError, ValueError):
         return False
+
+
+# ---- Week 06: surviving a wobbly provider --------------------------------
+# BUILD THIS.
+#
+# call_model above makes exactly one attempt. When your provider has a bad
+# afternoon, you have a bad afternoon.
+#
+# The fix has two parts, and THE ORDER OF THEM IS THE WHOLE LESSON:
+#
+#     1. try the primary model
+#     2. if that failed TRANSIENTLY, retry the PRIMARY with backoff
+#     3. only when the primary is genuinely unavailable, fall back
+#
+# Getting 2 and 3 the wrong way round is the common mistake, and it is
+# expensive in a way that is hard to see. A single 429 is normal traffic -
+# providers rate-limit, connections drop. If one blip switches you to another
+# model, your users silently start getting answers from a weaker one, and
+# NOTHING ALERTS, because the turn succeeded. You would find it in
+# fallback_rate weeks later, if you looked.
+#
+# What to build:
+#
+#   FALLBACK_MODEL      from env, default "gpt-oss-120b"
+#   MAX_RETRIES         from env, default 2
+#   RETRY_BASE_SECONDS  from env, default 0.5
+#   RETRY_MAX_SECONDS   from env, default 8
+#
+#   _is_retryable(exc) -> bool
+#
+#       Read a status off the exception (.status_code or .status).
+#
+#         429, or >= 500  -> retry. "Not right now": the request was fine.
+#         400, 401, 403   -> do NOT. The REQUEST is wrong, and sending it a
+#                            thousand more times only turns one fast failure
+#                            into a slow one.
+#         no status       -> retry. A socket timeout, a DNS blip, a dropped
+#                            connection: exactly what retrying is for.
+#
+#   _sleep_for(attempt) -> seconds, exponential with FULL JITTER
+#
+#       ceiling = min(RETRY_BASE_SECONDS * 2**attempt, RETRY_MAX_SECONDS)
+#       return random.uniform(0, ceiling)
+#
+#       Doubling gives an overloaded provider room to recover. The jitter
+#       matters just as much: without it every container that failed at the
+#       same moment retries at the same moment, and your own fleet keeps
+#       hammering the thing it is waiting for. That is how a brief wobble
+#       becomes an outage you caused. Cap it, or a long outage sleeps for
+#       hours.
+#
+#   call_model(messages, trace=None)
+#
+#       Loop over (("primary", MODEL), ("fallback", FALLBACK_MODEL)), and for
+#       each, attempt up to MAX_RETRIES + 1 times. On success, record
+#       {"provider": ..., "model": ..., "attempts": n} in trace["model_calls"]
+#       and add any retries to trace["retries"]. On failure, record the attempt
+#       WITH its error, then break out to the next model if you are out of
+#       attempts or the error is not retryable. If everything is exhausted,
+#       re-raise the last error.
+#
+# Then make it visible, in app/trace.py and app/monitor.py:
+#
+#   trace: add a "retries" counter to new_trace()
+#   monitor: add fallback_rate and retry_rate to stats(), plus an alert on
+#            ALERT_FALLBACK_RATE (default 0.20)
+#
+#   retry_rate is the early warning. It moves BEFORE fallback_rate does, so a
+#   struggling primary is not something you find out about from a quality
+#   complaint.
+#
+#   THE SUBTLETY: model_calls now holds FAILED attempts as well as the answer.
+#   A turn only counts as "fell back" if the fallback ANSWERED - check that the
+#   entry has no "error" key, or you will report fallbacks that never happened.
+#
+# Part 1 of this week is the planted-bug hunt - see guide/week-06.md. It needs
+# no code from you, only Week 05's traces.
+#
+# Done when:  make check-week-06
+# Stuck? git diff week-06-survive..week-06-solution -- app/agent.py
