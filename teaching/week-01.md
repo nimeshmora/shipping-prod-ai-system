@@ -83,6 +83,21 @@ Show them the Phase 1 agent working. Then:
 3. Ask: *"How would my colleague in another city use this?"* — They cannot.
 4. Ask: *"How would a website use it?"* — It has no address to call.
 
+Then one more, and make them answer it properly:
+
+5. Ask: *"Suppose I give you the file right now. Can you run it?"*
+
+Let them work through what they would actually need. Python, the right version,
+the libraries, the folder layout, an API key — **yours**. And when you fix a bug
+tomorrow, they are still running yesterday's copy.
+
+> **INSTRUCTOR** · Do not solve this. **Leave it as an open question and move
+> straight into Beat 3**, which answers it in its first five minutes.
+>
+> The discomfort is the setup. A room that has just failed to think of a good
+> way to share a Python function is a room that finds web services obvious
+> rather than arbitrary.
+
 Write the four gaps on the board:
 
 ```
@@ -97,42 +112,55 @@ agents die in notebooks.
 
 ---
 
-## Beat 3 · Concept (15 min)
+## Beat 3 · Concept (20 min)
 
-> **INSTRUCTOR** · Four ideas, and they are deliberately arranged as **one
-> story rather than four topics**. Each answers a question the previous one
+> **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
+> story rather than five topics**. Each answers a question the previous one
 > raises:
 >
 > ```
-> "put it on another computer"   →  which computer? how do I find it?
+> "put it on another computer"    →  fine — but how does anyone TALK to it?
+> "you wrap it in a web service"  →  which computer? how do I find it?
 > "every computer has an address" →  what do I say when I get there?
 > "you send a request"            →  what comes back?
 > "a reply, with a number on it"  →  ...and then it forgets you.
 > ```
 >
 > Teach them in order and the last one lands as an obvious consequence rather
-> than a new fact to memorise. Skip around and you are back to four topics.
+> than a new fact to memorise. Skip around and you are back to five topics.
+>
+> **Idea 2 is the one most courses skip**, and it is the one that makes the rest
+> feel inevitable rather than arbitrary. Do not cut it: a student who does not
+> know *why* an agent gets wrapped in a web service will treat FastAPI as a
+> magic ritual for the next eight weeks.
 
 ### One picture for the whole session
 
 Draw this once, before anything else, and leave it up:
 
 ```
-        YOUR LAPTOP                    A COMPUTER THAT IS ALWAYS ON
-    ┌─────────────────┐                  ┌─────────────────┐
-    │                 │   "where is      │                 │
-    │   you, typing   │ ── ORD-1002?" ──▶│   your agent    │
-    │                 │◀── "Thursday" ───│                 │
-    └─────────────────┘                  └─────────────────┘
-                          ▲                        ▲
-                   this arrow is           this box is
-                   Parts 1 and 2           Part 3
-                   (an address, and        (a container)
-                    a fast-feeling reply)
+    ANYONE, ANYWHERE                   A COMPUTER THAT IS ALWAYS ON
+   ┌─────────────────┐                  ┌──────────────────────────┐
+   │  a website      │                  │  ┌────────────────────┐  │
+   │  a phone app    │   "where is      │  │   web service      │  │
+   │  another        │ ── ORD-1002?" ──▶│  │   (the front door) │  │
+   │  company        │                  │  │         ↓          │  │
+   │  a script       │◀── "Thursday" ───│  │   your agent       │  │
+   └─────────────────┘                  │  └────────────────────┘  │
+                                        └──────────────────────────┘
+            ▲                                        ▲
+     none of these run                      this whole box is
+     your code, or have                     Part 3 (a container)
+     your key
+            └──── the arrow is Parts 1 and 2 ────┘
+              (a front door, and a fast-feeling reply)
 ```
 
 **Everything today is one of those two things.** Every concept below is either
 about the arrow or about the box.
+
+And note the shape on the left: **the callers are not one person with a laptop.**
+They are anything at all. That is the point of the next fifteen minutes.
 
 > **INSTRUCTOR** · This costs sixty seconds and it is the single highest-value
 > minute of the session. Beginners struggle far less with *"what is a URL"* than
@@ -179,7 +207,145 @@ about what goes wrong once that is true.
 
 ---
 
-### 2 · How one computer finds another
+### 2 · Why the agent has to become a web service
+
+> **INSTRUCTOR** · **This is the most important fifteen minutes of Week 1**, and
+> it is the part every course skips. Everything after it is mechanics. If the
+> room only takes one thing home today, make it this.
+>
+> Do not rush to FastAPI. Let them feel the problem first.
+
+Their agent is a **Python function**. Ask the room to picture it, because that is
+literally all it is:
+
+```python
+reply = run_turn("where is my order ORD-1002?")
+```
+
+That function is excellent. It reasons, calls tools, comes back with an answer.
+**And exactly one thing can call it: Python code running on that same computer,
+in that same folder, in that same running program.**
+
+#### So how does anybody else use it?
+
+Put the question to the room and take their answers seriously, because every
+wrong answer here teaches something. You will get some of these:
+
+**"Send them the file."**
+
+Then they need Python installed. And the right version. And the libraries, at
+the right versions. And your API key — *which you have now given away*. And when
+you fix a bug, all of them are still running the old one, forever.
+
+**"Give them my laptop."**
+
+They laugh, but make the point anyway: that is what "it works on my machine"
+actually offers.
+
+**"Put it in a mobile app / a website."**
+
+Closer, and worth taking seriously. But a phone cannot run your Python, and it
+certainly cannot hold your API key. Something else has to do the thinking, and
+the app has to *ask* that something. **Which is the answer — they just described
+a web service without naming it.**
+
+#### The one-sentence version
+
+> **A web service is how you let something that is not your program, on a
+> computer that is not yours, use your code — without ever giving them the
+> code.**
+
+Say it, then break it into the three things it buys, each of which they can
+check against the wrong answers above:
+
+| What it gives you | Why that matters here |
+|---|---|
+| **one copy, one place** | you fix a bug once, and everyone has the fix immediately |
+| **your secrets stay yours** | the key lives on *your* server; the caller never sees it |
+| **anything can call it** | a website, a phone app, another company's system, a shell script — none of them need Python |
+
+That third row is the one to dwell on.
+
+#### Why a *web* service, specifically
+
+Someone sharp will ask: *"Why HTTP? Why not something faster or cleverer?"*
+It is a good question and it deserves a real answer rather than "that's how it's
+done".
+
+**Because it is the one language every system already speaks.**
+
+```
+   your agent, as a web service
+             ▲   ▲   ▲   ▲
+             │   │   │   │
+   a website ┘   │   │   └─ someone's Python script
+   a phone app ──┘   └───── another company's backend
+```
+
+Not one of those four had to agree with you about anything in advance. They did
+not need your language, your libraries, or your operating system. **They needed
+a URL.**
+
+> **INSTRUCTOR** · The line that lands: *"HTTP is boring, and boring is the
+> feature. It is the metric thread of software — everything already fits it."*
+>
+> If someone raises gRPC or queues or websockets, agree with them: those are
+> real and sometimes better. Then: *"Every one of them needs both sides to agree
+> in advance. HTTP is what you use when you do not get to choose who calls
+> you."*
+
+#### The turn it makes: from a program to a service
+
+Worth naming explicitly, because it is the actual shift happening today:
+
+```
+   A PROGRAM                        A SERVICE
+   ─────────                        ─────────
+   you run it                       it is already running, waiting
+   it does its job                  it does its job when asked
+   it exits                         it never exits
+   one user: you                    many users, at once, strangers
+   crashes are your problem         crashes are everyone's problem
+```
+
+**Everything difficult in the next eight weeks comes from that right-hand
+column.** Memory that must outlive a restart (Week 2). Strangers (Week 3).
+Costs that scale with users you did not meet (Week 4). Knowing it is healthy
+when nobody is watching (Week 5).
+
+> **INSTRUCTOR** · Point at the right-hand column and say: *"That is the whole
+> syllabus. Not one line of it is about AI."*
+>
+> This is the best moment in the course to explain why Phase 2 exists at all.
+> Several students arrive expecting more prompt engineering; this table is the
+> honest answer to *"why am I here?"*
+
+#### What FastAPI actually does
+
+So they do not think it is magic. It is a **translator**, and it is small:
+
+```
+   a request arrives over the network        FastAPI turns it into...
+   POST /chat                                → a Python function call
+   {"message": "where is ORD-1002?"}         → an argument
+
+   your function returns a Python dict       FastAPI turns it into...
+   {"reply": "Thursday"}                     → JSON, sent back over the network
+```
+
+**That is it.** Their agent logic does not change today — not one line of
+`run_turn`. They are wrapping it, not rewriting it.
+
+> **INSTRUCTOR** · Say that last part twice, because it defuses real anxiety:
+> *"You are not rewriting your agent. Phase 1's code still does the thinking.
+> You are giving it a front door."*
+>
+> And the honest scale check: *"The part you write today is about forty lines.
+> The reason it matters is not that it is hard."*
+
+---
+
+### 3 · How one computer finds another
 
 They just heard "a computer with an address". So: **what is an address, for a
 computer?**
@@ -266,7 +432,7 @@ it can receive calls from anyone."*
 
 ---
 
-### 3 · What a URL is
+### 4 · What a URL is
 
 They now have a name that finds a computer. But a computer does many things, so
 the address needs one more part.
@@ -309,7 +475,7 @@ Ours will have four rooms by the end of the course:
 
 ---
 
-### 4 · What an HTTP request is
+### 5 · What an HTTP request is
 
 They can now find the room. **What do they say when they get there?**
 
@@ -735,8 +901,41 @@ exactly what is missing, and you make it green.
 
 ### Part 1 · Give it an address (15 min)
 
+**This is the front door from Beat 3, built.** Point back at the diagram before
+anyone types: the agent already works, and they are wrapping it so that anything
+— a website, a phone, another company — can reach it.
+
 Open `app/main.py`. It is a long comment telling you what to build — read it
 together on the projector.
+
+Before they start, show them the whole shape of what an endpoint is. It is
+smaller than they expect:
+
+```python
+@app.post("/chat")                       # ← when a POST arrives at /chat...
+def chat(req: ChatRequest):              # ← ...run this function
+    reply, history, _ = run_turn(...)    # ← the Phase 1 agent, untouched
+    return {"reply": reply, ...}         # ← FastAPI turns this into JSON
+```
+
+**Four lines, and only one of them is about AI — and that one they already
+wrote in Phase 1.**
+
+> **INSTRUCTOR** · The real `chat()` in `app/main.py` has one extra argument on
+> that second line, for reading a header. Ignore it today — it is there because
+> the same file grows an API key check in Week 3, and the starting code is the
+> finished shape. Say so if anyone notices, rather than letting them think they
+> are reading it wrong.
+
+> **INSTRUCTOR** · Say what each part is doing in plain words, because
+> `@app.post` is the first decorator many of them have met:
+>
+> *"The line with the `@` is a label. It tells FastAPI: when a POST request
+> turns up at `/chat`, this is the function to run. That is the entire
+> connection between the network and your code."*
+>
+> Then the reassurance: *"Everything else in this file is the same idea, three
+> more times."*
 
 They build three doors:
 

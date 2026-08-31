@@ -192,7 +192,7 @@ git diff week-01-package..week-01-solution -- app/main.py
 
 ## Printable version
 
-`teaching/phase-2-teaching-guide.pdf` is all nine files as one 137-page A4
+`teaching/phase-2-teaching-guide.pdf` is all nine files as one 141-page A4
 document in the Buildr Labs house style, with the instructor notes keeping
 their boxes on paper.
 
