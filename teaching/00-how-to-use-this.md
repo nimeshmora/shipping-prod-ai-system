@@ -118,3 +118,33 @@ git diff week-01-package..week-01-solution -- app/main.py
 | 6 | Debug and survive | They found a bug from traces; it survives an outage |
 | 7 | Attack | They red-teamed their own service |
 | 8 | Gate | A bad change cannot reach users |
+
+---
+
+## Printable version
+
+`teaching/phase-2-teaching-guide.pdf` is all nine files as one 58-page A4
+document, with the instructor notes keeping their boxes on paper.
+
+To rebuild it after editing any week:
+
+```bash
+python teaching/build-pdf.py
+```
+
+That writes `teaching/phase-2-teaching-guide.html`. Open it and press
+**Cmd + P** (or **Ctrl + P**) → *Save as PDF*, with **Background graphics**
+ticked so the instructor boxes keep their shading.
+
+If you have Chrome installed, one command does the whole thing:
+
+```bash
+python teaching/build-pdf.py
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless --no-pdf-header-footer \
+  --print-to-pdf=teaching/phase-2-teaching-guide.pdf \
+  teaching/phase-2-teaching-guide.html
+```
+
+The HTML is also perfectly readable on screen, and easier to search than the
+PDF — some instructors prefer to teach from it in a browser tab.
