@@ -56,7 +56,7 @@ Every week also closes with **If you finish early** and **Homework**. The
 early-finish items are genuine extensions, not filler: several of them are the
 cheapest way to make the week's point land twice.
 
-## Three rules that make this work
+## Four rules that make this work
 
 **1. Teach a concept the moment it is needed, never before.**
 
@@ -71,7 +71,29 @@ Slower, and worth it. Typing `mkdir` twenty times is how it stops being
 magic. Paste the long ones (a `gcloud` deploy line is not a typing exercise),
 type the short ones.
 
-**3. Learn the tool on a toy. Then use the tool on our thing.**
+**3. Every hard idea gets an everyday picture first.**
+
+Before the technical explanation, something from ordinary life that has the
+same shape. Not decoration — the picture is what they keep.
+
+| Concept | The picture that comes first |
+|---|---|
+| deploying | a shop that is only open when the owner is inside |
+| DNS | your phone's contacts list |
+| a URL | a building, and a room inside it |
+| an HTTP request | a counter clerk who helps you, then forgets you |
+| a session ID | the ticket the clerk gives you to bring back |
+| state in a process | the only record of your order is in one assistant's head |
+| context growth | a colleague with no memory, re-read the whole chat each time |
+| telemetry vs monitoring | till receipts vs "how were sales this week?" |
+| SSRF | asking someone with a badge to fetch a file you cannot reach |
+| the eval judge | a checklist, versus a supervisor reading the letter |
+
+> **INSTRUCTOR** · Give the picture, then the mechanism, then say the picture
+> again in one line. The third step is the one people skip and it is what makes
+> it stick.
+
+**4. Learn the tool on a toy. Then use the tool on our thing.**
 
 This one shapes the whole guide, and it is the rule to protect when you are
 running late.
@@ -170,7 +192,7 @@ git diff week-01-package..week-01-solution -- app/main.py
 
 ## Printable version
 
-`teaching/phase-2-teaching-guide.pdf` is all nine files as one 107-page A4
+`teaching/phase-2-teaching-guide.pdf` is all nine files as one 137-page A4
 document in the Buildr Labs house style, with the instructor notes keeping
 their boxes on paper.
 

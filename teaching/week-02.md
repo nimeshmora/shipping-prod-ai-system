@@ -282,6 +282,34 @@ hardest things to diagnose, and they have just created one.
 
 ## Beat 3 · Concept (10 min)
 
+### The everyday version
+
+Before the rule, the picture. This one lands in about fifteen seconds.
+
+**A shop where the only record of your order is in one assistant's head.**
+
+```
+   works fine        you come back, the same assistant is there,
+                     they remember you
+
+   breaks            that assistant goes home        → nobody knows your order
+                     the shop hires a second one     → they each remember
+                                                       different customers
+```
+
+Nothing has "gone wrong" in either case. Someone finished their shift; the shop
+got busier and hired help. **Both are completely normal events, and both lose
+your order.**
+
+The fix is not a better assistant. It is **writing orders in a book that stays
+in the shop.**
+
+> **INSTRUCTOR** · Ask which of the two failures is worse. Most say the first;
+> the second is worse, because it is *intermittent* — you get your order half
+> the time, depending on who serves you. That is exactly the second bullet you
+> wrote on the board a minute ago, and it is the one that takes a week to
+> diagnose in real life.
+
 ### The rule
 
 **Anything a request needs to remember has to live outside the process that

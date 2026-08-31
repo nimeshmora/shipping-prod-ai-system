@@ -99,96 +99,301 @@ agents die in notebooks.
 
 ## Beat 3 · Concept (15 min)
 
-Four ideas. Explain each one only as far as they need it today.
+> **INSTRUCTOR** · Four ideas, and they are deliberately arranged as **one
+> story rather than four topics**. Each answers a question the previous one
+> raises:
+>
+> ```
+> "put it on another computer"   →  which computer? how do I find it?
+> "every computer has an address" →  what do I say when I get there?
+> "you send a request"            →  what comes back?
+> "a reply, with a number on it"  →  ...and then it forgets you.
+> ```
+>
+> Teach them in order and the last one lands as an obvious consequence rather
+> than a new fact to memorise. Skip around and you are back to four topics.
 
-### What "deploying" means
+### One picture for the whole session
 
-Right now the agent runs **on your computer, only while you are watching it.**
+Draw this once, before anything else, and leave it up:
 
-Deploying means putting it on a computer that:
+```
+        YOUR LAPTOP                    A COMPUTER THAT IS ALWAYS ON
+    ┌─────────────────┐                  ┌─────────────────┐
+    │                 │   "where is      │                 │
+    │   you, typing   │ ── ORD-1002?" ──▶│   your agent    │
+    │                 │◀── "Thursday" ───│                 │
+    └─────────────────┘                  └─────────────────┘
+                          ▲                        ▲
+                   this arrow is           this box is
+                   Parts 1 and 2           Part 3
+                   (an address, and        (a container)
+                    a fast-feeling reply)
+```
 
-- is always on
-- is not yours
-- has an address anyone can reach
+**Everything today is one of those two things.** Every concept below is either
+about the arrow or about the box.
 
-That is it. There is no other magic in the word. The rest of this course is
+> **INSTRUCTOR** · This costs sixty seconds and it is the single highest-value
+> minute of the session. Beginners struggle far less with *"what is a URL"* than
+> with *"why are we doing any of this"* — and a student who can see where the
+> current five minutes fits into the picture asks better questions and panics
+> less.
+>
+> Point at the diagram every time you change topic. *"Still the arrow. Now the
+> box."*
+
+---
+
+### 1 · What "deploying" means
+
+Start with the ordinary version of the word, because they already know it.
+
+**Deploying just means putting something where other people can use it.**
+
+A shop that only opens when the owner is standing in it is not really a shop.
+A phone that is only on when you are looking at it cannot receive calls.
+
+Right now their agent runs **on their computer, only while they are watching
+it.** That is the shop that is only open when the owner is inside.
+
+Deploying means moving it to a computer that:
+
+| | Their laptop | A deployed computer |
+|---|---|---|
+| Always on? | no — it sleeps, it moves, it closes | **yes** |
+| Belongs to them? | yes | **no, and that is the point** |
+| Has an address others can reach? | no | **yes** |
+
+That is it. **There is no other magic in the word.** The rest of this course is
 about what goes wrong once that is true.
 
-### What the public internet means
+> **INSTRUCTOR** · Beginners assume "deploy" is a technical ritual they have not
+> learned yet. Saying plainly that it means *"put it on an always-on computer
+> that has an address"* removes a surprising amount of anxiety, and it is
+> completely accurate.
+>
+> If someone asks *"whose computer?"* — a good question — the honest answer is
+> *"a company that rents them out by the minute. We use Google's next week.
+> Nothing about today changes if you pick a different one."*
 
-Every computer on the internet has a number, called an **IP address**. Like a
+---
+
+### 2 · How one computer finds another
+
+They just heard "a computer with an address". So: **what is an address, for a
+computer?**
+
+Use the phone system, all the way through. It maps almost perfectly, and
+everyone in the room already understands phones.
+
+**Every computer on the internet has a number** — an **IP address**. Like a
 phone number for a machine.
 
-Numbers are hard to remember, so we use names. `google.com` is a name that
-points at a number. Something called DNS does the lookup, the way a phone book
-turns a person's name into their number.
+```
+   a phone number    +94 71 234 5678
+   an IP address     172.217.24.206
+```
+
+**But nobody remembers numbers.** So we use names, and something looks the name
+up for us:
+
+```
+   you want to call        you actually need     what does the lookup
+   ──────────────────      ─────────────────     ───────────────────────
+   "Mum"                   +94 71 234 5678       your phone's contacts
+   "google.com"            172.217.24.206        DNS
+```
+
+**DNS is the internet's contacts list.** That is genuinely all they need today.
+
+**Let them watch the lookup happen.** This is the toy for this concept:
+
+```bash
+ping -c 1 google.com
+```
+
+The first line of the output shows the name turning into a number:
+
+```
+PING google.com (172.217.24.206): 56 data bytes
+```
+
+**They just watched a name become a number.**
+
+Two more worth trying:
+
+```bash
+ping -c 1 example.com
+ping -c 1 this-name-does-not-exist-xyz.com
+```
+
+The first gives a different number — a different building. The second fails, and
+says exactly why:
+
+```
+ping: cannot resolve this-name-does-not-exist-xyz.com: Unknown host
+```
+
+**"Cannot resolve" means the contacts list had no entry.** Not "the computer is
+down" — nobody even found out where to knock.
+
+> **INSTRUCTOR** · Everyone's number will be different from the one printed
+> above, and different from their neighbour's. That is worth thirty seconds
+> rather than confusion: big sites answer from many machines around the world,
+> and DNS hands you a nearby one. *"You and the person next to you are talking
+> to different computers, and both of you are right."*
+
+> **INSTRUCTOR** · `ping` also tells you how long the round trip took, in
+> milliseconds. Worth pointing at, because it makes distance physical: a server
+> in the same city answers in single-digit milliseconds, one on another
+> continent takes 200+. *"Nothing is instant. It is just fast."*
+>
+> That number is the seed of Week 5's p95, and mentioning it now costs nothing.
+
+**Now the sentence that matters, and it follows from everything above:**
 
 **When your agent is on the public internet, anyone who knows its address can
 send it a request.** Anyone. Not just your users.
 
+The phone analogy carries this too, and it is worth saying out loud: *"A phone
+number that only your friends can dial does not exist. If it can receive calls,
+it can receive calls from anyone."*
+
 > **INSTRUCTOR** · Say that sentence twice. It is the seed of Week 3 (a stranger
 > spending your model budget) and Week 7 (a stranger attacking you). Let it feel
-> slightly uncomfortable now.
+> slightly uncomfortable now — you are going to spend two entire weeks on it.
 
-### What a URL is
+---
 
-A URL is an address. It has three parts that matter today:
+### 3 · What a URL is
+
+They now have a name that finds a computer. But a computer does many things, so
+the address needs one more part.
+
+**Think of a big office building.**
 
 ```
    https://shop.example.com/chat
    ─────   ────────────────  ────
      │            │            │
-   how to      which        which
-    talk      computer      door
+   how you     which        which
+   get in     building      room
 ```
 
-- **`https`** — how to talk. The `s` means encrypted, so nobody in between can
-  read it.
-- **`shop.example.com`** — which computer.
-- **`/chat`** — which door on that computer. One computer can have many doors.
-  Ours will have four: `/chat`, `/chat/stream`, `/health`, and later `/metrics`.
+- **`shop.example.com`** — **which building.** The name DNS just looked up.
+- **`/chat`** — **which room inside it.** One building has many rooms. One
+  computer has many of these, and they do different jobs.
+- **`https`** — **how you get in.** The `s` means the conversation is
+  scrambled on the way, so nobody in the corridor can listen.
 
-### What an HTTP request is
+Ours will have four rooms by the end of the course:
 
-**A question and an answer.** That is all.
-
-Your browser asks a computer for something. The computer answers. Then the
-conversation is over — the computer forgets you entirely.
-
-Every request has:
-
-| Part | What it means | Ours |
+| Room | What happens in it | Built in |
 |---|---|---|
-| a **method** | what kind of thing you want | `GET` = read something, `POST` = send something |
-| a **path** | which door | `/chat` |
-| a **body** | the thing you are sending | `{"message": "where is my order?"}` |
+| `/chat` | ask the agent a question | today |
+| `/chat/stream` | the same, but the answer arrives as it is written | today |
+| `/health` | "are you alive?" | today |
+| `/metrics` | "how are you doing, in detail?" | Week 5 |
 
-Every answer has:
+> **INSTRUCTOR** · Two things beginners quietly wonder and rarely ask:
+>
+> **"Is a URL the same as a website?"** No — a website is one kind of thing you
+> can find at a URL. They already proved this in Part 0c, where `example.com`
+> gave them a page and GitHub's API gave them a sentence. Same kind of address,
+> different kind of thing at the end of it.
+>
+> **"Why does it start with https and not www?"** `www` is just a name someone
+> chose, the way a building might be called "North Wing". `https` is the part
+> that matters, and it is not part of the name at all.
+
+---
+
+### 4 · What an HTTP request is
+
+They can now find the room. **What do they say when they get there?**
+
+**A question and an answer. That is all.**
+
+It is a counter at an office, not a conversation:
+
+```
+   you        "I would like to collect order ORD-1002."        ← the request
+   clerk      "Here it is. Arriving Thursday."                 ← the reply
+              ...and the clerk immediately forgets you exist.
+```
+
+Every **request** has three parts worth knowing:
+
+| Part | What it means | In plain words | Ours |
+|---|---|---|---|
+| a **method** | what kind of thing you want | am I *collecting* or *handing in*? | `GET` = read, `POST` = send |
+| a **path** | which room | which counter am I at? | `/chat` |
+| a **body** | what you are handing over | the form you filled in | `{"message": "where is my order?"}` |
+
+Every **reply** has two:
 
 | Part | What it means |
 |---|---|
 | a **status code** | a number saying how it went |
 | a **body** | the actual answer |
 
-The status codes worth knowing, and we will use every one of these:
+**They have already seen every one of these.** In Part 0c: `-X POST` was the
+method, `/post` was the path, `-d '{...}'` was the body, and `200` came back as
+the status code. Say so — this table is a name for something they have done, not
+a new thing to learn.
+
+#### The status codes, as a receptionist would say them
 
 ```
-200   fine
-400   YOU sent something wrong
-401   who are you? (Week 3)
-429   you are asking too often (Week 3)
-500   WE broke (and it is our fault)
+200   "here you go"                        fine
+400   "you filled the form in wrong"       YOUR mistake
+401   "who are you?"                       (Week 3)
+429   "you have asked me eleven times,     (Week 3)
+       please wait"
+500   "something broke on our side,        OUR mistake
+       sorry"
 ```
 
-> **INSTRUCTOR** · The 400-vs-500 distinction matters more than it looks. Week 5
-> alerts on error rate. If you return 500 when the caller sent nonsense, your
-> dashboard blames you for their mistake. Mention it now, land it in Week 5.
+> **INSTRUCTOR** · The 400-vs-500 distinction matters far more than it looks,
+> and the receptionist framing is what makes it stick: **400 is "your form is
+> wrong", 500 is "our filing cabinet fell over".**
+>
+> Week 5 alerts on the error rate. If you return 500 when the caller sent
+> nonsense, your dashboard blames you for their mistake, and you will spend a
+> morning investigating an outage that never happened. Mention it now; land it
+> in Week 5.
 
-**The important consequence:** the computer forgets you after every request. So
-how does a conversation work? We send an ID back and forth. More on that in the
-build.
+#### The consequence that shapes everything else
 
----
+Go back to the clerk who forgets you.
+
+**The computer forgets you completely after every request.** It keeps nothing.
+The next request from the same person looks, to it, exactly like a request from
+a stranger.
+
+So ask the room: *"Then how does a conversation work at all?"*
+
+Let them think. Someone usually gets it, and the answer is the same one a real
+office uses:
+
+```
+   you    "where is my order?"
+   them   "Here's your answer — and here's ticket #47."
+   you    "Ticket #47. When does it arrive?"
+   them   (looks up #47, sees the whole conversation so far)
+```
+
+**You get given a ticket, and you bring it back.** That ticket is called a
+**session ID**, and building it is Part 1 of the build.
+
+> **INSTRUCTOR** · This is the moment to *not* explain further. They now have a
+> question — *"so where does the ticket's information get stored?"* — and the
+> answer is the thing they are about to build, then the thing that breaks in
+> Week 2.
+>
+> If someone asks it out loud: *"Brilliant question. Hold it for twenty minutes,
+> then hold it for a week."*
 
 ## Beat 4 · Build (45 min)
 

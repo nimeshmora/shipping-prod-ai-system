@@ -137,7 +137,25 @@ Then ask them to check their model usage.
 
 ## Beat 3 · Concept (18 min)
 
-Four ideas.
+Four ideas, and they answer the two problems from Beat 2 in order:
+
+```
+   "I shipped something broken"      →  1. what a pipeline is
+   "...and nothing stopped me"       →  2. the one detail people get wrong
+
+   "I spent your money"              →  3. how you turn a stranger away
+   "...as often as I liked"          →  4. how you slow down someone invited
+```
+
+> **INSTRUCTOR** · Say that out loud before starting. Two problems, two ideas
+> each. Students who can see the shape stop wondering why a session about robots
+> suddenly became a session about locks — and the honest answer is that both are
+> *"the thing that worked once, by hand, does not survive other people."*
+
+**A note on the order:** the pipeline comes first because it is the one they
+watched fail. The lock comes second because it is the one that costs money. If
+you are running short, teach both halves shallowly rather than one deeply — a
+student with a gate and no lock is as exposed as one with a lock and no gate.
 
 ### What a pipeline is
 

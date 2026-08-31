@@ -157,6 +157,27 @@ and the fix is in Beat 4.
 
 ## Beat 3 · Concept (20 min)
 
+**Four attacks, in the same order you ran them.** Each one is a different answer
+to the same question — *what did we trust that we should not have?*
+
+```
+   attack            what was trusted                    what fixes it
+   ──────────────    ────────────────────────────        ────────────────
+   1  injection      what a TOOL handed back             remove the danger
+   2  cost           how BIG a message could be          a limit
+   3  SSRF           where a tool could CONNECT          an allowlist
+   4  load           that a counter in one box           shared state
+                     spoke for all of them
+```
+
+> **INSTRUCTOR** · Draw that middle column first, blank, and fill it in as you
+> go. The pattern is the lesson: **every one of today's holes is a place where
+> something arrived from outside and nobody checked it.**
+>
+> Then the sentence that ties the week together, which is worth saying before
+> the detail rather than after: *"Security is not a feature you add. It is a
+> list of things you decided to stop trusting."*
+
 ### Attack 1 · Injection, and what actually defends against it
 
 > **INSTRUCTOR** · Be honest here in a way most security training is not. Rank
@@ -275,6 +296,27 @@ MAX_INPUT_CHARS = int(os.environ.get("MAX_INPUT_CHARS", "4000"))
 **What SSRF means:** Server-Side Request Forgery. You trick a server into
 fetching something **on your behalf**, using *its* network position rather than
 yours.
+
+**The everyday version.** You want a document from inside a secure office. You
+cannot walk in — the door needs a badge you do not have.
+
+So you find someone who works there, and ask them nicely:
+
+```
+   you  (outside, no badge)  ──▶  "could you grab me the file in room 169?"
+                                              │
+                                  employee, badge, inside
+                                              │
+                                              ▼
+                                   walks in, takes it, hands it to you
+```
+
+**The employee did nothing wrong.** They were helpful, which is their job. The
+building's mistake was having no rule about *which* rooms an employee may fetch
+from on a stranger's say-so.
+
+**Their agent is that employee.** It is inside the building, it is helpful, and
+right now it has no such rule.
 
 **Why it is devastating here.** Their agent runs **inside their cloud account**.
 So it can reach things the internet cannot:

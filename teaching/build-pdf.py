@@ -69,7 +69,7 @@ CSS = """
 * { box-sizing: border-box; }
 
 body {
-  font: 10.6pt/1.6 var(--sans);
+  font: 12pt/1.68 var(--sans);
   color: var(--ink);
   max-width: 175mm;
   margin: 0 auto;
@@ -82,7 +82,7 @@ body {
 /* Each week opens a new page with a rule in the brand orange. */
 h1 {
   font-family: var(--sans);
-  font-size: 21pt;
+  font-size: 23pt;
   font-weight: 700;
   letter-spacing: -0.015em;
   margin: 0 0 5mm;
@@ -95,7 +95,7 @@ h1.first { page-break-before: avoid; }
 
 h2 {
   font-family: var(--sans);
-  font-size: 13.5pt;
+  font-size: 15pt;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 8mm 0 2.5mm;
@@ -108,7 +108,7 @@ h2 {
    the same way, as a marker rather than as a fill. */
 h3 {
   font-family: var(--sans);
-  font-size: 11.5pt;
+  font-size: 12.8pt;
   font-weight: 700;
   margin: 6mm 0 1.5mm;
   padding-left: 3.5mm;
@@ -135,7 +135,7 @@ blockquote {
   background: #fdf3ec;
   border-left: 3.5px solid var(--brand);
   border-radius: 0 var(--radius) var(--radius) 0;
-  font-size: 9.6pt;
+  font-size: 11pt;
   line-height: 1.55;
   page-break-inside: avoid;
 }
@@ -153,7 +153,7 @@ blockquote blockquote {
 /* ---- code -------------------------------------------------------------- */
 code {
   font-family: var(--mono);
-  font-size: 8.6pt;
+  font-size: 10pt;
   background: var(--soft);
   padding: 0.4mm 1.1mm;
   border-radius: 3px;
@@ -171,7 +171,7 @@ pre {
 pre code {
   background: none;
   padding: 0;
-  font-size: 8.4pt;
+  font-size: 9.6pt;
   line-height: 1.5;
   white-space: pre;
 }
@@ -181,7 +181,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin: 3.5mm 0;
-  font-size: 9.3pt;
+  font-size: 10.6pt;
   page-break-inside: avoid;
 }
 th, td {
@@ -233,7 +233,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 6mm 0; }
   margin: 12mm 0;
 }
 .cover .meta {
-  font-size: 9.8pt;
+  font-size: 11pt;
   color: var(--muted);
   line-height: 1.95;
 }
@@ -261,12 +261,12 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 6mm 0; }
   left: 0;
   top: 0.2mm;
   font-family: var(--mono);
-  font-size: 9pt;
+  font-size: 10pt;
   font-weight: 700;
   color: var(--brand);
 }
-.contents .wk { font-weight: 700; font-size: 11pt; }
-.contents .what { color: var(--muted); font-size: 9.8pt; }
+.contents .wk { font-weight: 700; font-size: 12.5pt; }
+.contents .what { color: var(--muted); font-size: 11pt; }
 
 /* ---- screen-only helper ------------------------------------------------ */
 .screen-note {
@@ -275,7 +275,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 6mm 0; }
   border-radius: var(--radius);
   padding: 3mm 4mm;
   margin-bottom: 6mm;
-  font-size: 9.5pt;
+  font-size: 10.5pt;
 }
 @media print { .screen-note { display: none; } }
 """

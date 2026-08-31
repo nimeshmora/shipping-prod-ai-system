@@ -80,7 +80,7 @@
 * { box-sizing: border-box; }
 
 body {
-  font: 10.6pt/1.6 var(--sans);
+  font: 12pt/1.68 var(--sans);
   color: var(--ink);
   max-width: 175mm;
   margin: 0 auto;
@@ -93,7 +93,7 @@ body {
 /* Each week opens a new page with a rule in the brand orange. */
 h1 {
   font-family: var(--sans);
-  font-size: 21pt;
+  font-size: 23pt;
   font-weight: 700;
   letter-spacing: -0.015em;
   margin: 0 0 5mm;
@@ -106,7 +106,7 @@ h1.first { page-break-before: avoid; }
 
 h2 {
   font-family: var(--sans);
-  font-size: 13.5pt;
+  font-size: 15pt;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 8mm 0 2.5mm;
@@ -119,7 +119,7 @@ h2 {
    the same way, as a marker rather than as a fill. */
 h3 {
   font-family: var(--sans);
-  font-size: 11.5pt;
+  font-size: 12.8pt;
   font-weight: 700;
   margin: 6mm 0 1.5mm;
   padding-left: 3.5mm;
@@ -146,7 +146,7 @@ blockquote {
   background: #fdf3ec;
   border-left: 3.5px solid var(--brand);
   border-radius: 0 var(--radius) var(--radius) 0;
-  font-size: 9.6pt;
+  font-size: 11pt;
   line-height: 1.55;
   page-break-inside: avoid;
 }
@@ -164,7 +164,7 @@ blockquote blockquote {
 /* ---- code -------------------------------------------------------------- */
 code {
   font-family: var(--mono);
-  font-size: 8.6pt;
+  font-size: 10pt;
   background: var(--soft);
   padding: 0.4mm 1.1mm;
   border-radius: 3px;
@@ -182,7 +182,7 @@ pre {
 pre code {
   background: none;
   padding: 0;
-  font-size: 8.4pt;
+  font-size: 9.6pt;
   line-height: 1.5;
   white-space: pre;
 }
@@ -192,7 +192,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin: 3.5mm 0;
-  font-size: 9.3pt;
+  font-size: 10.6pt;
   page-break-inside: avoid;
 }
 th, td {
@@ -244,7 +244,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 6mm 0; }
   margin: 12mm 0;
 }
 .cover .meta {
-  font-size: 9.8pt;
+  font-size: 11pt;
   color: var(--muted);
   line-height: 1.95;
 }
@@ -272,12 +272,12 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 6mm 0; }
   left: 0;
   top: 0.2mm;
   font-family: var(--mono);
-  font-size: 9pt;
+  font-size: 10pt;
   font-weight: 700;
   color: var(--brand);
 }
-.contents .wk { font-weight: 700; font-size: 11pt; }
-.contents .what { color: var(--muted); font-size: 9.8pt; }
+.contents .wk { font-weight: 700; font-size: 12.5pt; }
+.contents .what { color: var(--muted); font-size: 11pt; }
 
 /* ---- screen-only helper ------------------------------------------------ */
 .screen-note {
@@ -286,7 +286,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 6mm 0; }
   border-radius: var(--radius);
   padding: 3mm 4mm;
   margin-bottom: 6mm;
-  font-size: 9.5pt;
+  font-size: 10.5pt;
 }
 @media print { .screen-note { display: none; } }
 </style>
@@ -404,7 +404,7 @@ Thursday.</p>
 <p>Every week also closes with <strong>If you finish early</strong> and <strong>Homework</strong>. The
 early-finish items are genuine extensions, not filler: several of them are the
 cheapest way to make the week's point land twice.</p>
-<h2>Three rules that make this work</h2>
+<h2>Four rules that make this work</h2>
 <p><strong>1. Teach a concept the moment it is needed, never before.</strong></p>
 <p>We do not have a "networking week". We explain what a URL is in Week 1, at the
 minute a student needs to type one. We explain what a container is when they
@@ -414,7 +414,65 @@ advance.</p>
 <p>Slower, and worth it. Typing <code>mkdir</code> twenty times is how it stops being
 magic. Paste the long ones (a <code>gcloud</code> deploy line is not a typing exercise),
 type the short ones.</p>
-<p><strong>3. Learn the tool on a toy. Then use the tool on our thing.</strong></p>
+<p><strong>3. Every hard idea gets an everyday picture first.</strong></p>
+<p>Before the technical explanation, something from ordinary life that has the
+same shape. Not decoration — the picture is what they keep.</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>The picture that comes first</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploying</td>
+<td>a shop that is only open when the owner is inside</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>your phone's contacts list</td>
+</tr>
+<tr>
+<td>a URL</td>
+<td>a building, and a room inside it</td>
+</tr>
+<tr>
+<td>an HTTP request</td>
+<td>a counter clerk who helps you, then forgets you</td>
+</tr>
+<tr>
+<td>a session ID</td>
+<td>the ticket the clerk gives you to bring back</td>
+</tr>
+<tr>
+<td>state in a process</td>
+<td>the only record of your order is in one assistant's head</td>
+</tr>
+<tr>
+<td>context growth</td>
+<td>a colleague with no memory, re-read the whole chat each time</td>
+</tr>
+<tr>
+<td>telemetry vs monitoring</td>
+<td>till receipts vs "how were sales this week?"</td>
+</tr>
+<tr>
+<td>SSRF</td>
+<td>asking someone with a badge to fetch a file you cannot reach</td>
+</tr>
+<tr>
+<td>the eval judge</td>
+<td>a checklist, versus a supervisor reading the letter</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Give the picture, then the mechanism, then say the picture
+again in one line. The third step is the one people skip and it is what makes
+it stick.</p>
+</blockquote>
+<p><strong>4. Learn the tool on a toy. Then use the tool on our thing.</strong></p>
 <p>This one shapes the whole guide, and it is the rule to protect when you are
 running late.</p>
 <p>A student's first <code>curl</code> is not a three-flag POST at our <code>/chat</code> endpoint. It
@@ -578,7 +636,7 @@ minutes of session one for the three people who ignored the email.</p>
 </table>
 <hr />
 <h2>Printable version</h2>
-<p><code>teaching/phase-2-teaching-guide.pdf</code> is all nine files as one 107-page A4
+<p><code>teaching/phase-2-teaching-guide.pdf</code> is all nine files as one 137-page A4
 document in the Buildr Labs house style, with the instructor notes keeping
 their boxes on paper.</p>
 <p>The theme is taken from the tokens the live site publishes — the orange
@@ -681,55 +739,223 @@ runs in one place   only where Python is already set up just right
 agents die in notebooks.</p>
 <hr />
 <h2>Beat 3 · Concept (15 min)</h2>
-<p>Four ideas. Explain each one only as far as they need it today.</p>
-<h3>What "deploying" means</h3>
-<p>Right now the agent runs <strong>on your computer, only while you are watching it.</strong></p>
-<p>Deploying means putting it on a computer that:</p>
-<ul>
-<li>is always on</li>
-<li>is not yours</li>
-<li>has an address anyone can reach</li>
-</ul>
-<p>That is it. There is no other magic in the word. The rest of this course is
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Four ideas, and they are deliberately arranged as <strong>one
+story rather than four topics</strong>. Each answers a question the previous one
+raises:</p>
+<p><code>"put it on another computer"   →  which computer? how do I find it?
+"every computer has an address" →  what do I say when I get there?
+"you send a request"            →  what comes back?
+"a reply, with a number on it"  →  ...and then it forgets you.</code></p>
+<p>Teach them in order and the last one lands as an obvious consequence rather
+than a new fact to memorise. Skip around and you are back to four topics.</p>
+</blockquote>
+<h3>One picture for the whole session</h3>
+<p>Draw this once, before anything else, and leave it up:</p>
+<pre><code>        YOUR LAPTOP                    A COMPUTER THAT IS ALWAYS ON
+    ┌─────────────────┐                  ┌─────────────────┐
+    │                 │   &quot;where is      │                 │
+    │   you, typing   │ ── ORD-1002?&quot; ──▶│   your agent    │
+    │                 │◀── &quot;Thursday&quot; ───│                 │
+    └─────────────────┘                  └─────────────────┘
+                          ▲                        ▲
+                   this arrow is           this box is
+                   Parts 1 and 2           Part 3
+                   (an address, and        (a container)
+                    a fast-feeling reply)
+</code></pre>
+<p><strong>Everything today is one of those two things.</strong> Every concept below is either
+about the arrow or about the box.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This costs sixty seconds and it is the single highest-value
+minute of the session. Beginners struggle far less with <em>"what is a URL"</em> than
+with <em>"why are we doing any of this"</em> — and a student who can see where the
+current five minutes fits into the picture asks better questions and panics
+less.</p>
+<p>Point at the diagram every time you change topic. <em>"Still the arrow. Now the
+box."</em></p>
+</blockquote>
+<hr />
+<h3>1 · What "deploying" means</h3>
+<p>Start with the ordinary version of the word, because they already know it.</p>
+<p><strong>Deploying just means putting something where other people can use it.</strong></p>
+<p>A shop that only opens when the owner is standing in it is not really a shop.
+A phone that is only on when you are looking at it cannot receive calls.</p>
+<p>Right now their agent runs <strong>on their computer, only while they are watching
+it.</strong> That is the shop that is only open when the owner is inside.</p>
+<p>Deploying means moving it to a computer that:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Their laptop</th>
+<th>A deployed computer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Always on?</td>
+<td>no — it sleeps, it moves, it closes</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td>Belongs to them?</td>
+<td>yes</td>
+<td><strong>no, and that is the point</strong></td>
+</tr>
+<tr>
+<td>Has an address others can reach?</td>
+<td>no</td>
+<td><strong>yes</strong></td>
+</tr>
+</tbody>
+</table>
+<p>That is it. <strong>There is no other magic in the word.</strong> The rest of this course is
 about what goes wrong once that is true.</p>
-<h3>What the public internet means</h3>
-<p>Every computer on the internet has a number, called an <strong>IP address</strong>. Like a
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Beginners assume "deploy" is a technical ritual they have not
+learned yet. Saying plainly that it means <em>"put it on an always-on computer
+that has an address"</em> removes a surprising amount of anxiety, and it is
+completely accurate.</p>
+<p>If someone asks <em>"whose computer?"</em> — a good question — the honest answer is
+<em>"a company that rents them out by the minute. We use Google's next week.
+Nothing about today changes if you pick a different one."</em></p>
+</blockquote>
+<hr />
+<h3>2 · How one computer finds another</h3>
+<p>They just heard "a computer with an address". So: <strong>what is an address, for a
+computer?</strong></p>
+<p>Use the phone system, all the way through. It maps almost perfectly, and
+everyone in the room already understands phones.</p>
+<p><strong>Every computer on the internet has a number</strong> — an <strong>IP address</strong>. Like a
 phone number for a machine.</p>
-<p>Numbers are hard to remember, so we use names. <code>google.com</code> is a name that
-points at a number. Something called DNS does the lookup, the way a phone book
-turns a person's name into their number.</p>
+<pre><code>   a phone number    +94 71 234 5678
+   an IP address     172.217.24.206
+</code></pre>
+<p><strong>But nobody remembers numbers.</strong> So we use names, and something looks the name
+up for us:</p>
+<pre><code>   you want to call        you actually need     what does the lookup
+   ──────────────────      ─────────────────     ───────────────────────
+   &quot;Mum&quot;                   +94 71 234 5678       your phone's contacts
+   &quot;google.com&quot;            172.217.24.206        DNS
+</code></pre>
+<p><strong>DNS is the internet's contacts list.</strong> That is genuinely all they need today.</p>
+<p><strong>Let them watch the lookup happen.</strong> This is the toy for this concept:</p>
+<pre><code class="language-bash">ping -c 1 google.com
+</code></pre>
+<p>The first line of the output shows the name turning into a number:</p>
+<pre><code>PING google.com (172.217.24.206): 56 data bytes
+</code></pre>
+<p><strong>They just watched a name become a number.</strong></p>
+<p>Two more worth trying:</p>
+<pre><code class="language-bash">ping -c 1 example.com
+ping -c 1 this-name-does-not-exist-xyz.com
+</code></pre>
+<p>The first gives a different number — a different building. The second fails, and
+says exactly why:</p>
+<pre><code>ping: cannot resolve this-name-does-not-exist-xyz.com: Unknown host
+</code></pre>
+<p><strong>"Cannot resolve" means the contacts list had no entry.</strong> Not "the computer is
+down" — nobody even found out where to knock.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Everyone's number will be different from the one printed
+above, and different from their neighbour's. That is worth thirty seconds
+rather than confusion: big sites answer from many machines around the world,
+and DNS hands you a nearby one. <em>"You and the person next to you are talking
+to different computers, and both of you are right."</em></p>
+<p><strong>INSTRUCTOR</strong> · <code>ping</code> also tells you how long the round trip took, in
+milliseconds. Worth pointing at, because it makes distance physical: a server
+in the same city answers in single-digit milliseconds, one on another
+continent takes 200+. <em>"Nothing is instant. It is just fast."</em></p>
+<p>That number is the seed of Week 5's p95, and mentioning it now costs nothing.</p>
+</blockquote>
+<p><strong>Now the sentence that matters, and it follows from everything above:</strong></p>
 <p><strong>When your agent is on the public internet, anyone who knows its address can
 send it a request.</strong> Anyone. Not just your users.</p>
+<p>The phone analogy carries this too, and it is worth saying out loud: <em>"A phone
+number that only your friends can dial does not exist. If it can receive calls,
+it can receive calls from anyone."</em></p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Say that sentence twice. It is the seed of Week 3 (a stranger
 spending your model budget) and Week 7 (a stranger attacking you). Let it feel
-slightly uncomfortable now.</p>
+slightly uncomfortable now — you are going to spend two entire weeks on it.</p>
 </blockquote>
-<h3>What a URL is</h3>
-<p>A URL is an address. It has three parts that matter today:</p>
+<hr />
+<h3>3 · What a URL is</h3>
+<p>They now have a name that finds a computer. But a computer does many things, so
+the address needs one more part.</p>
+<p><strong>Think of a big office building.</strong></p>
 <pre><code>   https://shop.example.com/chat
    ─────   ────────────────  ────
      │            │            │
-   how to      which        which
-    talk      computer      door
+   how you     which        which
+   get in     building      room
 </code></pre>
 <ul>
-<li><strong><code>https</code></strong> — how to talk. The <code>s</code> means encrypted, so nobody in between can
-  read it.</li>
-<li><strong><code>shop.example.com</code></strong> — which computer.</li>
-<li><strong><code>/chat</code></strong> — which door on that computer. One computer can have many doors.
-  Ours will have four: <code>/chat</code>, <code>/chat/stream</code>, <code>/health</code>, and later <code>/metrics</code>.</li>
+<li><strong><code>shop.example.com</code></strong> — <strong>which building.</strong> The name DNS just looked up.</li>
+<li><strong><code>/chat</code></strong> — <strong>which room inside it.</strong> One building has many rooms. One
+  computer has many of these, and they do different jobs.</li>
+<li><strong><code>https</code></strong> — <strong>how you get in.</strong> The <code>s</code> means the conversation is
+  scrambled on the way, so nobody in the corridor can listen.</li>
 </ul>
-<h3>What an HTTP request is</h3>
-<p><strong>A question and an answer.</strong> That is all.</p>
-<p>Your browser asks a computer for something. The computer answers. Then the
-conversation is over — the computer forgets you entirely.</p>
-<p>Every request has:</p>
+<p>Ours will have four rooms by the end of the course:</p>
+<table>
+<thead>
+<tr>
+<th>Room</th>
+<th>What happens in it</th>
+<th>Built in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/chat</code></td>
+<td>ask the agent a question</td>
+<td>today</td>
+</tr>
+<tr>
+<td><code>/chat/stream</code></td>
+<td>the same, but the answer arrives as it is written</td>
+<td>today</td>
+</tr>
+<tr>
+<td><code>/health</code></td>
+<td>"are you alive?"</td>
+<td>today</td>
+</tr>
+<tr>
+<td><code>/metrics</code></td>
+<td>"how are you doing, in detail?"</td>
+<td>Week 5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Two things beginners quietly wonder and rarely ask:</p>
+<p><strong>"Is a URL the same as a website?"</strong> No — a website is one kind of thing you
+can find at a URL. They already proved this in Part 0c, where <code>example.com</code>
+gave them a page and GitHub's API gave them a sentence. Same kind of address,
+different kind of thing at the end of it.</p>
+<p><strong>"Why does it start with https and not www?"</strong> <code>www</code> is just a name someone
+chose, the way a building might be called "North Wing". <code>https</code> is the part
+that matters, and it is not part of the name at all.</p>
+</blockquote>
+<hr />
+<h3>4 · What an HTTP request is</h3>
+<p>They can now find the room. <strong>What do they say when they get there?</strong></p>
+<p><strong>A question and an answer. That is all.</strong></p>
+<p>It is a counter at an office, not a conversation:</p>
+<pre><code>   you        &quot;I would like to collect order ORD-1002.&quot;        ← the request
+   clerk      &quot;Here it is. Arriving Thursday.&quot;                 ← the reply
+              ...and the clerk immediately forgets you exist.
+</code></pre>
+<p>Every <strong>request</strong> has three parts worth knowing:</p>
 <table>
 <thead>
 <tr>
 <th>Part</th>
 <th>What it means</th>
+<th>In plain words</th>
 <th>Ours</th>
 </tr>
 </thead>
@@ -737,21 +963,24 @@ conversation is over — the computer forgets you entirely.</p>
 <tr>
 <td>a <strong>method</strong></td>
 <td>what kind of thing you want</td>
-<td><code>GET</code> = read something, <code>POST</code> = send something</td>
+<td>am I <em>collecting</em> or <em>handing in</em>?</td>
+<td><code>GET</code> = read, <code>POST</code> = send</td>
 </tr>
 <tr>
 <td>a <strong>path</strong></td>
-<td>which door</td>
+<td>which room</td>
+<td>which counter am I at?</td>
 <td><code>/chat</code></td>
 </tr>
 <tr>
 <td>a <strong>body</strong></td>
-<td>the thing you are sending</td>
+<td>what you are handing over</td>
+<td>the form you filled in</td>
 <td><code>{"message": "where is my order?"}</code></td>
 </tr>
 </tbody>
 </table>
-<p>Every answer has:</p>
+<p>Every <strong>reply</strong> has two:</p>
 <table>
 <thead>
 <tr>
@@ -770,22 +999,51 @@ conversation is over — the computer forgets you entirely.</p>
 </tr>
 </tbody>
 </table>
-<p>The status codes worth knowing, and we will use every one of these:</p>
-<pre><code>200   fine
-400   YOU sent something wrong
-401   who are you? (Week 3)
-429   you are asking too often (Week 3)
-500   WE broke (and it is our fault)
+<p><strong>They have already seen every one of these.</strong> In Part 0c: <code>-X POST</code> was the
+method, <code>/post</code> was the path, <code>-d '{...}'</code> was the body, and <code>200</code> came back as
+the status code. Say so — this table is a name for something they have done, not
+a new thing to learn.</p>
+<h4>The status codes, as a receptionist would say them</h4>
+<pre><code>200   &quot;here you go&quot;                        fine
+400   &quot;you filled the form in wrong&quot;       YOUR mistake
+401   &quot;who are you?&quot;                       (Week 3)
+429   &quot;you have asked me eleven times,     (Week 3)
+       please wait&quot;
+500   &quot;something broke on our side,        OUR mistake
+       sorry&quot;
 </code></pre>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · The 400-vs-500 distinction matters more than it looks. Week 5
-alerts on error rate. If you return 500 when the caller sent nonsense, your
-dashboard blames you for their mistake. Mention it now, land it in Week 5.</p>
+<p><strong>INSTRUCTOR</strong> · The 400-vs-500 distinction matters far more than it looks,
+and the receptionist framing is what makes it stick: <strong>400 is "your form is
+wrong", 500 is "our filing cabinet fell over".</strong></p>
+<p>Week 5 alerts on the error rate. If you return 500 when the caller sent
+nonsense, your dashboard blames you for their mistake, and you will spend a
+morning investigating an outage that never happened. Mention it now; land it
+in Week 5.</p>
 </blockquote>
-<p><strong>The important consequence:</strong> the computer forgets you after every request. So
-how does a conversation work? We send an ID back and forth. More on that in the
-build.</p>
-<hr />
+<h4>The consequence that shapes everything else</h4>
+<p>Go back to the clerk who forgets you.</p>
+<p><strong>The computer forgets you completely after every request.</strong> It keeps nothing.
+The next request from the same person looks, to it, exactly like a request from
+a stranger.</p>
+<p>So ask the room: <em>"Then how does a conversation work at all?"</em></p>
+<p>Let them think. Someone usually gets it, and the answer is the same one a real
+office uses:</p>
+<pre><code>   you    &quot;where is my order?&quot;
+   them   &quot;Here's your answer — and here's ticket #47.&quot;
+   you    &quot;Ticket #47. When does it arrive?&quot;
+   them   (looks up #47, sees the whole conversation so far)
+</code></pre>
+<p><strong>You get given a ticket, and you bring it back.</strong> That ticket is called a
+<strong>session ID</strong>, and building it is Part 1 of the build.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This is the moment to <em>not</em> explain further. They now have a
+question — <em>"so where does the ticket's information get stored?"</em> — and the
+answer is the thing they are about to build, then the thing that breaks in
+Week 2.</p>
+<p>If someone asks it out loud: <em>"Brilliant question. Hold it for twenty minutes,
+then hold it for a week."</em></p>
+</blockquote>
 <h2>Beat 4 · Build (45 min)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
@@ -1570,6 +1828,28 @@ routing. Intermittent bugs that depend on which machine answered are among the
 hardest things to diagnose, and they have just created one.</p>
 <hr />
 <h2>Beat 3 · Concept (10 min)</h2>
+<h3>The everyday version</h3>
+<p>Before the rule, the picture. This one lands in about fifteen seconds.</p>
+<p><strong>A shop where the only record of your order is in one assistant's head.</strong></p>
+<pre><code>   works fine        you come back, the same assistant is there,
+                     they remember you
+
+   breaks            that assistant goes home        → nobody knows your order
+                     the shop hires a second one     → they each remember
+                                                       different customers
+</code></pre>
+<p>Nothing has "gone wrong" in either case. Someone finished their shift; the shop
+got busier and hired help. <strong>Both are completely normal events, and both lose
+your order.</strong></p>
+<p>The fix is not a better assistant. It is <strong>writing orders in a book that stays
+in the shop.</strong></p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Ask which of the two failures is worse. Most say the first;
+the second is worse, because it is <em>intermittent</em> — you get your order half
+the time, depending on who serves you. That is exactly the second bullet you
+wrote on the board a minute ago, and it is the one that takes a week to
+diagnose in real life.</p>
+</blockquote>
 <h3>The rule</h3>
 <p><strong>Anything a request needs to remember has to live outside the process that
 serves it.</strong></p>
@@ -1959,7 +2239,23 @@ am in the room. The person who actually does this is not, and does not stop."</e
 </blockquote>
 <hr />
 <h2>Beat 3 · Concept (18 min)</h2>
-<p>Four ideas.</p>
+<p>Four ideas, and they answer the two problems from Beat 2 in order:</p>
+<pre><code>   &quot;I shipped something broken&quot;      →  1. what a pipeline is
+   &quot;...and nothing stopped me&quot;       →  2. the one detail people get wrong
+
+   &quot;I spent your money&quot;              →  3. how you turn a stranger away
+   &quot;...as often as I liked&quot;          →  4. how you slow down someone invited
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Say that out loud before starting. Two problems, two ideas
+each. Students who can see the shape stop wondering why a session about robots
+suddenly became a session about locks — and the honest answer is that both are
+<em>"the thing that worked once, by hand, does not survive other people."</em></p>
+</blockquote>
+<p><strong>A note on the order:</strong> the pipeline comes first because it is the one they
+watched fail. The lock comes second because it is the one that costs money. If
+you are running short, teach both halves shallowly rather than one deeply — a
+student with a gate and no lock is as exposed as one with a lock and no gate.</p>
 <h3>What a pipeline is</h3>
 <p>A pipeline is <strong>a robot that does what you did by hand, every time you push
 code, in the same order, without forgetting.</strong></p>
@@ -2521,6 +2817,35 @@ stickier than being told.</p>
 <h3>Bound 3 · Context — the one people miss</h3>
 <p>Here is the thing that surprises everybody, including people who have shipped
 agents.</p>
+<h4>First, the everyday version</h4>
+<p>Before the technical version, give them a picture they already understand.</p>
+<p><strong>Imagine a colleague with no memory at all.</strong> Genuinely none — every time you
+speak to them, they have forgotten the entire conversation.</p>
+<p>You can still work with them. You just have to start every single sentence by
+re-reading the whole conversation aloud:</p>
+<pre><code>   you   &quot;Hi, where is order ORD-1002?&quot;
+   them  &quot;Thursday.&quot;
+
+   you   &quot;Hi. Earlier I asked where ORD-1002 was, and you said Thursday.
+          Now: can I change the address?&quot;
+   them  &quot;Yes.&quot;
+
+   you   &quot;Hi. Earlier I asked where ORD-1002 was, you said Thursday, then
+          I asked about the address and you said yes. Now: what is the
+          cutoff time?&quot;
+   them  ...
+</code></pre>
+<p><strong>Every exchange gets longer.</strong> The tenth question means reading nine questions
+and nine answers aloud first.</p>
+<p>Now the punchline: <strong>you are paying by the word, for all of it, every time.</strong></p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Act this out with a volunteer if the room is willing. Thirty
+seconds of you visibly re-reading a growing list is funnier and stickier than
+any diagram, and <em>nobody</em> forgets it afterwards.</p>
+<p>Then say: <em>"That is not a metaphor. That is literally what your code does on
+every single turn."</em></p>
+</blockquote>
+<h4>Now the technical version</h4>
 <p><strong>Every turn sends the whole conversation back to the model.</strong> The model
 remembers nothing between requests — that is not a limitation of your code, it
 is how the models work. So the entire history is re-sent, every single time.</p>
@@ -2861,6 +3186,28 @@ to this same broken agent at the end of Beat 4, and the contrast is the payoff.<
 conflate them, build only the first, and wonder why they still cannot answer any
 questions.</p>
 <p>Write the two words on the board with a line between them.</p>
+<p><strong>The everyday version first</strong>, because the two words sound like synonyms and
+are not:</p>
+<pre><code>   TELEMETRY                          MONITORING
+   ─────────                          ──────────
+   the till receipt for every         &quot;how were sales this week,
+   sale in a shop                      and is anything wrong?&quot;
+
+   one per event                      one answer, over many events
+   written as it happens              read when you want to know
+   useless to read all of             useless without the receipts
+</code></pre>
+<p><strong>A shop with no receipts cannot answer any question about its week.</strong> A shop
+with a shoebox full of receipts and nobody adding them up also cannot — it just
+<em>feels</em> more organised.</p>
+<p>You need both, and they are different jobs: <strong>writing it down</strong> and <strong>reading it
+back</strong>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The reason this distinction earns board space: almost every
+team builds the first half, calls it observability, and is genuinely surprised
+when an incident is still guesswork. <em>"You have the receipts. Nobody is adding
+them up."</em></p>
+</blockquote>
 <h3>Half 1 · Telemetry — writing it down</h3>
 <p><strong>Telemetry means writing down what happened.</strong></p>
 <p>One line of structured text per turn, printed to the screen.</p>
@@ -3445,6 +3792,22 @@ is the entire concept section — it is much more effective if they proposed it
 themselves.</p>
 <hr />
 <h2>Beat 4 · Concept (15 min)</h2>
+<p>Four ideas, and they are one decision broken into its parts. Every time a model
+call fails, your code has to answer four questions in this order:</p>
+<pre><code>   1. is this worth trying again at all?      →  retry only what is retryable
+   2. if so, how long do I wait?              →  backoff, and why jitter
+   3. and if it keeps failing?                →  only THEN change models
+   4. how would anyone ever know this         →  make it visible
+      happened?
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Put those four on the board as questions, not as answers.
+Then reveal each answer as you reach it.</p>
+<p>The reason: the room already <em>guessed</em> an answer to question 3 five minutes
+ago ("use a backup model"), and they guessed it in the wrong position. Showing
+the four slots makes the ordering error visible before you correct it — which
+is much kinder than telling them they were wrong.</p>
+</blockquote>
 <h3>The order is the entire lesson</h3>
 <p>Write these three lines on the board, numbered:</p>
 <pre><code>1. try the primary model
@@ -3793,6 +4156,24 @@ they configured in Week 3.</p>
 and the fix is in Beat 4.</p>
 <hr />
 <h2>Beat 3 · Concept (20 min)</h2>
+<p><strong>Four attacks, in the same order you ran them.</strong> Each one is a different answer
+to the same question — <em>what did we trust that we should not have?</em></p>
+<pre><code>   attack            what was trusted                    what fixes it
+   ──────────────    ────────────────────────────        ────────────────
+   1  injection      what a TOOL handed back             remove the danger
+   2  cost           how BIG a message could be          a limit
+   3  SSRF           where a tool could CONNECT          an allowlist
+   4  load           that a counter in one box           shared state
+                     spoke for all of them
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Draw that middle column first, blank, and fill it in as you
+go. The pattern is the lesson: <strong>every one of today's holes is a place where
+something arrived from outside and nobody checked it.</strong></p>
+<p>Then the sentence that ties the week together, which is worth saying before
+the detail rather than after: <em>"Security is not a feature you add. It is a
+list of things you decided to stop trusting."</em></p>
+</blockquote>
 <h3>Attack 1 · Injection, and what actually defends against it</h3>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Be honest here in a way most security training is not. Rank
@@ -3887,6 +4268,21 @@ runs first. That is not redundancy, it is design."</em></p>
 <p><strong>What SSRF means:</strong> Server-Side Request Forgery. You trick a server into
 fetching something <strong>on your behalf</strong>, using <em>its</em> network position rather than
 yours.</p>
+<p><strong>The everyday version.</strong> You want a document from inside a secure office. You
+cannot walk in — the door needs a badge you do not have.</p>
+<p>So you find someone who works there, and ask them nicely:</p>
+<pre><code>   you  (outside, no badge)  ──▶  &quot;could you grab me the file in room 169?&quot;
+                                              │
+                                  employee, badge, inside
+                                              │
+                                              ▼
+                                   walks in, takes it, hands it to you
+</code></pre>
+<p><strong>The employee did nothing wrong.</strong> They were helpful, which is their job. The
+building's mistake was having no rule about <em>which</em> rooms an employee may fetch
+from on a stranger's say-so.</p>
+<p><strong>Their agent is that employee.</strong> It is inside the building, it is helpful, and
+right now it has no such rule.</p>
 <p><strong>Why it is devastating here.</strong> Their agent runs <strong>inside their cloud account</strong>.
 So it can reach things the internet cannot:</p>
 <pre><code>        the internet                    inside your cloud account
@@ -4265,6 +4661,20 @@ mock is a claim that something does not need testing. Get that claim wrong and
 your test suite is a very confident measurement of nothing."</em></p>
 </blockquote>
 <h3>Tier 2 · The judge</h3>
+<p><strong>The everyday version:</strong> Tier 1 is a checklist. Tier 2 is a supervisor reading
+the letter before it goes out.</p>
+<pre><code>   checklist   &quot;does the reply mention the delivery date?&quot;    ✓ / ✗
+               fast, free, never wrong, and completely blind
+               to anything you did not think to put on it
+
+   supervisor  &quot;is there anything in here we should not
+                have said?&quot;
+               slower, costs something, occasionally wrong —
+               and it is the only one that can catch a
+               sentence nobody anticipated
+</code></pre>
+<p>You want both, and you want them wired up differently: <strong>a checklist can block
+the post. A supervisor having an off day should not.</strong></p>
 <p><code>expect_contains</code> catches an answer going <strong>missing</strong>. It cannot catch an answer
 going <strong>bad</strong>:</p>
 <pre><code>&quot;Your order ORD-1043 is delayed.&quot;                      ← good

@@ -211,6 +211,25 @@ themselves.
 
 ## Beat 4 · Concept (15 min)
 
+Four ideas, and they are one decision broken into its parts. Every time a model
+call fails, your code has to answer four questions in this order:
+
+```
+   1. is this worth trying again at all?      →  retry only what is retryable
+   2. if so, how long do I wait?              →  backoff, and why jitter
+   3. and if it keeps failing?                →  only THEN change models
+   4. how would anyone ever know this         →  make it visible
+      happened?
+```
+
+> **INSTRUCTOR** · Put those four on the board as questions, not as answers.
+> Then reveal each answer as you reach it.
+>
+> The reason: the room already *guessed* an answer to question 3 five minutes
+> ago ("use a backup model"), and they guessed it in the wrong position. Showing
+> the four slots makes the ordering error visible before you correct it — which
+> is much kinder than telling them they were wrong.
+
 ### The order is the entire lesson
 
 Write these three lines on the board, numbered:

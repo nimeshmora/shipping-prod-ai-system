@@ -121,6 +121,32 @@ questions.
 
 Write the two words on the board with a line between them.
 
+**The everyday version first**, because the two words sound like synonyms and
+are not:
+
+```
+   TELEMETRY                          MONITORING
+   ─────────                          ──────────
+   the till receipt for every         "how were sales this week,
+   sale in a shop                      and is anything wrong?"
+
+   one per event                      one answer, over many events
+   written as it happens              read when you want to know
+   useless to read all of             useless without the receipts
+```
+
+**A shop with no receipts cannot answer any question about its week.** A shop
+with a shoebox full of receipts and nobody adding them up also cannot — it just
+*feels* more organised.
+
+You need both, and they are different jobs: **writing it down** and **reading it
+back**.
+
+> **INSTRUCTOR** · The reason this distinction earns board space: almost every
+> team builds the first half, calls it observability, and is genuinely surprised
+> when an incident is still guesswork. *"You have the receipts. Nobody is adding
+> them up."*
+
 ### Half 1 · Telemetry — writing it down
 
 **Telemetry means writing down what happened.**

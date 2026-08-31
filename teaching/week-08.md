@@ -201,6 +201,24 @@ fake returns the answer                         ▶  breaking the tool stays GRE
 
 ### Tier 2 · The judge
 
+**The everyday version:** Tier 1 is a checklist. Tier 2 is a supervisor reading
+the letter before it goes out.
+
+```
+   checklist   "does the reply mention the delivery date?"    ✓ / ✗
+               fast, free, never wrong, and completely blind
+               to anything you did not think to put on it
+
+   supervisor  "is there anything in here we should not
+                have said?"
+               slower, costs something, occasionally wrong —
+               and it is the only one that can catch a
+               sentence nobody anticipated
+```
+
+You want both, and you want them wired up differently: **a checklist can block
+the post. A supervisor having an off day should not.**
+
 `expect_contains` catches an answer going **missing**. It cannot catch an answer
 going **bad**:
 

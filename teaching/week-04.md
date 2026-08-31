@@ -245,6 +245,44 @@ times*; a token limit bounds *how much*. Neither implies the other.
 Here is the thing that surprises everybody, including people who have shipped
 agents.
 
+#### First, the everyday version
+
+Before the technical version, give them a picture they already understand.
+
+**Imagine a colleague with no memory at all.** Genuinely none — every time you
+speak to them, they have forgotten the entire conversation.
+
+You can still work with them. You just have to start every single sentence by
+re-reading the whole conversation aloud:
+
+```
+   you   "Hi, where is order ORD-1002?"
+   them  "Thursday."
+
+   you   "Hi. Earlier I asked where ORD-1002 was, and you said Thursday.
+          Now: can I change the address?"
+   them  "Yes."
+
+   you   "Hi. Earlier I asked where ORD-1002 was, you said Thursday, then
+          I asked about the address and you said yes. Now: what is the
+          cutoff time?"
+   them  ...
+```
+
+**Every exchange gets longer.** The tenth question means reading nine questions
+and nine answers aloud first.
+
+Now the punchline: **you are paying by the word, for all of it, every time.**
+
+> **INSTRUCTOR** · Act this out with a volunteer if the room is willing. Thirty
+> seconds of you visibly re-reading a growing list is funnier and stickier than
+> any diagram, and *nobody* forgets it afterwards.
+>
+> Then say: *"That is not a metaphor. That is literally what your code does on
+> every single turn."*
+
+#### Now the technical version
+
 **Every turn sends the whole conversation back to the model.** The model
 remembers nothing between requests — that is not a limitation of your code, it
 is how the models work. So the entire history is re-sent, every single time.
