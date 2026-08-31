@@ -26,3 +26,4 @@ htmlcov/
 *.swp
 .DS_Store
 Thumbs.db
+teaching/.fonts.css

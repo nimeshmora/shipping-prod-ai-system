@@ -142,7 +142,7 @@ git diff week-01-package..week-01-solution -- app/main.py
 ## What you need before session one
 
 - Each student has the repo cloned and `make install` working
-- Each student has a KodeKloud API key in `.env`
+- Each student has a Buildr Labs API key in `.env`
 - Docker Desktop installed (Week 1) — check this *before* the session, it is
   the single most common blocker
 - A Google Cloud account with billing enabled (Week 2)
@@ -170,8 +170,16 @@ git diff week-01-package..week-01-solution -- app/main.py
 
 ## Printable version
 
-`teaching/phase-2-teaching-guide.pdf` is all nine files as one 101-page A4
-document, with the instructor notes keeping their boxes on paper.
+`teaching/phase-2-teaching-guide.pdf` is all nine files as one 107-page A4
+document in the Buildr Labs house style, with the instructor notes keeping
+their boxes on paper.
+
+The theme is taken from the tokens the live site publishes — the orange
+`#f46622`, warm off-white `#f6f4ee`, near-black ink `#121212`, with **DM Sans**
+for text and **Space Mono** for code. The two typefaces are downloaded once and
+embedded in the HTML, so the file prints identically on a machine with no
+network. (They cache in `teaching/.fonts.css`; delete it to re-fetch. With no
+network on the first run, it falls back to system fonts and says so.)
 
 To rebuild it after editing any week:
 
