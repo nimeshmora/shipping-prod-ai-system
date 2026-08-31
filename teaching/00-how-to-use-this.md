@@ -44,6 +44,18 @@ three and stop needing to be told what is happening.
 > remembers it for years. A student who was *told* it happens forgets by
 > Thursday.
 
+Three weeks bend the shape deliberately, and each says so at the top:
+
+- **Week 2** gives Break 25 minutes, because deploying happens inside it.
+- **Week 6** leads with a 35-minute bug hunt and puts Break in the middle, where
+  the session changes subject.
+- **Week 8** ends with a fourth part — porting and Kubernetes — which is
+  discussion, not build.
+
+Every week also closes with **If you finish early** and **Homework**. The
+early-finish items are genuine extensions, not filler: several of them are the
+cheapest way to make the week's point land twice.
+
 ## Two rules that make this work
 
 **1. Teach a concept the moment it is needed, never before.**
@@ -123,7 +135,7 @@ git diff week-01-package..week-01-solution -- app/main.py
 
 ## Printable version
 
-`teaching/phase-2-teaching-guide.pdf` is all nine files as one 58-page A4
+`teaching/phase-2-teaching-guide.pdf` is all nine files as one 86-page A4
 document, with the instructor notes keeping their boxes on paper.
 
 To rebuild it after editing any week:
