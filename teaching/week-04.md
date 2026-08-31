@@ -183,6 +183,33 @@ First, the thing several of them are quietly unsure about:
 three-quarters of a word — `unhappiness` might be three tokens, `the` is one.
 You do not need to predict them; every response tells you how many were used.
 
+Make it concrete with something they can run:
+
+```bash
+python -c "
+t = 'Where is my order ORD-1002?'
+print('characters:', len(t))
+print('words     :', len(t.split()))
+print('~tokens   :', round(len(t)/4))
+"
+```
+
+```
+characters: 27
+words     : 5
+~tokens   : 7
+```
+
+**Five words, about seven tokens.** More than one per word, because `ORD-1002`
+gets chopped into several pieces — punctuation and odd strings cost more than
+plain English.
+
+> **INSTRUCTOR** · Stress that `len(text)/4` is a **rough estimate**, not the
+> real count. The real number comes back from the provider in `usage`, and that
+> is the one the budget uses. The estimate is for building intuition — *"is a
+> customer message tens of tokens or thousands?"* — which is exactly the
+> intuition they need to pick a limit.
+
 ```python
 usage.input_tokens      # what you sent  (the whole conversation, every time)
 usage.output_tokens     # what came back

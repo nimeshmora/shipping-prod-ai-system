@@ -56,7 +56,7 @@ Every week also closes with **If you finish early** and **Homework**. The
 early-finish items are genuine extensions, not filler: several of them are the
 cheapest way to make the week's point land twice.
 
-## Two rules that make this work
+## Three rules that make this work
 
 **1. Teach a concept the moment it is needed, never before.**
 
@@ -70,6 +70,41 @@ advance.
 Slower, and worth it. Typing `mkdir` twenty times is how it stops being
 magic. Paste the long ones (a `gcloud` deploy line is not a typing exercise),
 type the short ones.
+
+**3. Learn the tool on a toy. Then use the tool on our thing.**
+
+This one shapes the whole guide, and it is the rule to protect when you are
+running late.
+
+A student's first `curl` is not a three-flag POST at our `/chat` endpoint. It
+is `curl -s https://example.com`, which prints some HTML and cannot fail in an
+interesting way. Their first Dockerfile is four lines that print `hello from
+inside the box`. Their first Redis is `SET greeting "hello"` typed by hand.
+
+The reason is diagnostic, not pedagogical comfort: **when the real thing breaks,
+they can tell which part broke.** A student who has only ever run curl against
+our agent cannot distinguish *"my JSON is malformed"* from *"my flags are
+wrong"* from *"the service is down"*. A student who ran the five curl toys can.
+
+Every tool the course introduces gets this treatment:
+
+| Tool | The toy, before our agent |
+|---|---|
+| the terminal | `pwd`, `ls`, `mkdir`, `cd` in a scratch folder |
+| a process | `sleep 30`, then Ctrl+C |
+| JSON | `echo '{"name":"Ada"}' \| python -m json.tool`, then break it |
+| curl | example.com → GitHub's API → status codes → POST to an echo service |
+| streaming | `curl -N https://httpbin.org/stream/3`, with and without `-N` |
+| Docker | a four-line Dockerfile that prints one sentence |
+| env vars | `export GREETING=hello`, then read it back |
+| Redis | `SET`/`GET`/`SETEX`/`TTL` by hand in `redis-cli` |
+| YAML | read a real workflow file and find three things in it |
+| shell loops | `for i in $(seq 1 3); do echo "request $i"; done` |
+| regex | four strings, three matches, one bypass |
+| fakes/mocks | a six-line function with a swappable argument |
+
+Every one of those has verified output printed in the guide, so you know what
+they should see before you run it in front of twenty people.
 
 ## The repo layout
 
@@ -135,7 +170,7 @@ git diff week-01-package..week-01-solution -- app/main.py
 
 ## Printable version
 
-`teaching/phase-2-teaching-guide.pdf` is all nine files as one 86-page A4
+`teaching/phase-2-teaching-guide.pdf` is all nine files as one 101-page A4
 document, with the instructor notes keeping their boxes on paper.
 
 To rebuild it after editing any week:

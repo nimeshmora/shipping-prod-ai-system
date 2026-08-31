@@ -122,6 +122,42 @@ That "no API key, in seconds" is not a convenience — it is what makes the gate
 survive. A gate that needs a secret, costs money and takes four minutes is a
 gate someone disables during a busy week.
 
+#### First — what a "fake" is (2 min)
+
+The word appears twenty times in this session, so define it once.
+
+**A fake (or "mock") is a stand-in you swap in during a test**, so the thing you
+are testing does not have to talk to the real world.
+
+The smallest possible version, which they can run:
+
+```bash
+python -c "
+def real_model(q):  return 'an answer that costs money and needs a key'
+def fake_model(q):  return 'a fixed answer, free and instant'
+
+def ask(question, model=real_model):    # <- the seam
+    return model(question)
+
+print(ask('hello'))
+print(ask('hello', model=fake_model))
+"
+```
+
+```
+an answer that costs money and needs a key
+a fixed answer, free and instant
+```
+
+**That `model=` parameter is the entire trick.** Their `run_turn` has exactly
+the same seam — `model_fn=call_model` — which is why the eval gate can run with
+no API key at all.
+
+> **INSTRUCTOR** · Point out that this is the **fourth** appearance of the same
+> idea: `load`/`save` in Week 2, the OTel destination in Week 5, `app/store.py`
+> in Week 7, and now this. *"A seam is a place you can swap one thing for
+> another without editing anything around it. You have now built four."*
+
 That property rests on one decision worth explaining carefully, because it is
 the most subtle idea in the session:
 

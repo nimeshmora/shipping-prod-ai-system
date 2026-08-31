@@ -9,6 +9,11 @@
 > and come back to it: *things that worked once, by hand, do not survive contact
 > with a team or the open internet.*
 >
+> Same method as Weeks 1 and 2: **new tool, toy first.** This week the new
+> things are YAML (a file format they have never read) and GitHub Actions (a
+> robot they have never watched run). Both get a small deliberate example before
+> the real one.
+>
 > Before the session: this week needs a `GCP_SA_KEY` in repo settings and
 > `api-keys` in Secret Manager. Neither is hard, both are fiddly, and doing them
 > live for twenty people is slow. Consider sending the steps out beforehand.
@@ -102,6 +107,19 @@ for i in $(seq 1 20); do
 done
 ```
 
+> **INSTRUCTOR** · A beginner has probably never written a loop in a terminal,
+> so decode it in one line as you type: *"`for i in $(seq 1 20)` means do the
+> thing between `do` and `done`, twenty times."* If you want it to land, run
+> this first:
+>
+> ```bash
+> for i in $(seq 1 3); do echo "request $i"; done
+> ```
+>
+> Three lines print. Now the same structure with `curl` in the middle is
+> obvious rather than intimidating, and they will use this loop again in twenty
+> minutes to trigger their own rate limit.
+
 Then ask them to check their model usage.
 
 > **INSTRUCTOR** · **Ask permission first**, and pick someone who will find it
@@ -129,6 +147,11 @@ code, in the same order, without forgetting.**
 That is the whole idea. It is not a technology so much as a promise about
 consistency.
 
+**Where the robot lives:** GitHub. When they push, GitHub reads a file in their
+repo that says what to do, then rents a fresh computer, runs those steps on it,
+and throws it away. **A fresh computer every time** is the point — no leftover
+state, no "works on my machine", no forgotten step.
+
 Ours will:
 
 ```
@@ -149,6 +172,60 @@ you push code
 Walk the diagram twice: once for the happy path, once for each failure branch.
 The branches are the product.
 
+### What YAML is (4 min)
+
+They are about to read two files in a format they have probably never seen. Four
+minutes now, or twenty minutes of indentation bugs later.
+
+**YAML is a way to write settings as text.** Same job as JSON — data written
+down so a program can read it — but shaped for humans to type.
+
+```yaml
+name: deploy
+on:
+  push:
+    branches: [main]
+```
+
+Three rules cover almost everything:
+
+- **`key: value`** — a fact. Same as JSON's `"key": "value"`, without the quotes
+  and commas.
+- **Indentation means "belongs to".** `push` is indented under `on`, so it is
+  part of `on`. **Spaces only — never tabs.**
+- **A `-` starts a list item.**
+
+```yaml
+steps:
+  - run: make test
+  - run: make deploy
+```
+
+That is a list of two steps, each with a `run` in it.
+
+> **INSTRUCTOR** · Compare it side by side with the JSON they already know from
+> Week 1 — the same data, two spellings:
+>
+> ```json
+> {"steps": [{"run": "make test"}, {"run": "make deploy"}]}
+> ```
+>
+> *"Same facts. YAML uses position on the page where JSON uses brackets."*
+>
+> Then the warning that saves an afternoon: **indentation is not decoration in
+> YAML, it is the syntax.** A line indented one space too far belongs to a
+> different thing, and the error message will point somewhere unhelpful.
+
+Have them open a real one and read it before writing any:
+
+```bash
+cat .github/workflows/deploy.yml
+```
+
+Do not explain every line. Ask them to find three things: **what triggers it**
+(`on: push`), **what jobs it has** (`gate` and `deploy`), and **the one line
+that connects them**. That third one is the next section.
+
 ### The one detail people get wrong
 
 You would think two separate robots — "the test robot" and "the deploy robot" —
@@ -161,7 +238,7 @@ Both start when you push. They **race**.
           │
    ┌──────┴──────┐
    ▼             ▼
- tests        deploy          <- starts immediately, does not wait
+  gate        deploy          <- starts immediately, does not wait
    │             │
    │  (4 min)    │  (2 min)
    ▼             ▼
@@ -172,20 +249,20 @@ The deploy robot does not wait for the test robot, so you get a **green tick on
 a broken deploy**, and a pipeline that looks like a safety net while catching
 nothing.
 
-The fix is one word:
+The fix is one word, and it is in the file they just read:
 
 ```yaml
 jobs:
-  test:
+  gate:
     # ... run the tests ...
 
   deploy:
-    needs: test          # <-- this. No tests, no deploy.
+    needs: gate          # <-- the arrow. No gate, no deploy.
 ```
 
 **`needs:` only works between jobs inside one file.** That is why the tests live
-in the deploy file rather than in their own — a constraint that looks arbitrary
-until you know what it prevents.
+in the deploy workflow rather than in their own — a constraint that looks
+arbitrary until you know what it prevents.
 
 > **INSTRUCTOR** · This is genuinely one of the most common CI mistakes in the
 > industry, and what makes it dangerous is that **it is invisible**. Everything
@@ -195,7 +272,21 @@ until you know what it prevents.
 > not, until the day a failing test does not stop a bad deploy — which is
 > precisely the day you were counting on it.
 
-### Why 401 and not 403
+### What an API key is, and why 401 not 403
+
+**An API key is a password for a program.** A long random string the caller
+sends with every request, that says "I am allowed to be here". No username, no
+login screen — one secret, attached to each call.
+
+Where it goes: in a **header**, which they met in Week 1 with
+`Content-Type`. Ours is `x-api-key`.
+
+```bash
+curl -s -i https://api.github.com/zen        # headers, from Week 1
+```
+
+*"Same mechanism. We are just adding one of our own, and refusing anyone who
+does not send it."*
 
 Two ways to refuse someone, and the difference is not pedantry:
 
@@ -215,7 +306,10 @@ malformed" — all useful to someone guessing. **One answer for all of them.**
 
 ### Why the rate limit must slide
 
-The obvious way to build "20 per minute" is a counter that resets each minute.
+**A rate limit is a cap on how often one caller may ask.** "Twenty per minute,
+then I start refusing you."
+
+The obvious way to build it is a counter that resets each minute.
 
 Watch what that allows:
 
@@ -322,19 +416,31 @@ export API_KEYS=local-dev-key
 make run
 ```
 
+That `export` is the environment variable from Week 1 — they are configuring
+their own service from outside its code.
+
+In the second terminal, three tests. **Same `-w "%{http_code}"` flag they
+learned in Week 1 against httpbin**, now pointed at their own service:
+
 ```bash
 # no key
 curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:8080/chat \
   -H 'Content-Type: application/json' -d '{"message":"hi"}'
 # 401
+```
 
+```bash
 # with the key
 curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:8080/chat \
   -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
   -d '{"message":"hi"}'
 # 200
+```
 
-# hammer it
+One extra `-H`. That is the whole authentication mechanism.
+
+```bash
+# hammer it — the same loop from Beat 2, now aimed at yourself
 for i in $(seq 1 25); do
   curl -s -o /dev/null -w "%{http_code} " -X POST localhost:8080/chat \
     -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
@@ -343,26 +449,37 @@ done; echo
 # 200 200 200 ... 429 429 429
 ```
 
-> **INSTRUCTOR** · `-w "%{http_code}"` tells curl to print just the status code.
-> Worth explaining once, properly — they will use it every week from here, and
-> it turns "did that work?" into a number they can see.
+> **INSTRUCTOR** · Watching the row of 200s turn into 429s is the satisfying
+> moment of this half. Make sure everyone gets there rather than skipping to the
+> checkpoint.
 >
-> Watching the row of 200s turn into 429s is the satisfying moment of this half.
-> Make sure everyone gets there rather than skipping to the checkpoint.
+> Point out that they have now *been* both parties: you attacked them in Beat 2
+> with that exact loop, and now the same loop bounces off. **That is the entire
+> lesson of the first half, demonstrated rather than asserted.**
 
 ### Part 2 · The pipeline (25 min)
 
 Two files in `.github/workflows/`.
 
-`test.yml` — runs on every pull request.
-`deploy.yml` — on every push to main: test, then deploy, then verify.
+`deploy.yml` — on every push to main: **gate**, then deploy, then verify.
+`eval.yml` — the quality gate on pull requests (Week 8 fills this in).
 
 Three things in `deploy.yml` to read aloud:
 
 **`--revision-suffix "${GITHUB_SHA::7}"`** tags every deployment with the code
-version that produced it. Without it you get `ship-agent-00042-xyz` and no way
-to know what is inside.
+version that produced it.
 
+> **INSTRUCTOR** · Beginners will not know what a SHA is, so: *"Every git commit
+> has a unique fingerprint — a long string of letters and numbers. `::7` takes
+> the first seven characters, which is enough to identify it."*
+>
+> ```bash
+> git log --oneline -3
+> ```
+>
+> Those short codes on the left are exactly it. Now the flag makes sense.
+
+Without it you get `ship-agent-00042-xyz` and no way to know what is inside.
 *"Roll back to the last good one"* becomes guesswork, at the worst possible
 moment.
 
@@ -383,19 +500,34 @@ nothing whatsoever about whether the program inside it can answer a request.
 > **INSTRUCTOR** · *"A deploy that exits 0 is not the same as a service that
 > answers."* Write it down. It is a sentence that saves careers, and it applies
 > to every deployment tool anyone has ever built.
+>
+> **What "exits 0" means**, since it will not be obvious: *"Every command
+> finishes with a number. Zero means it worked; anything else means it failed.
+> That is how one step in a pipeline knows whether the last one succeeded."*
+>
+> ```bash
+> ls; echo $?          # 0
+> ls /nope; echo $?    # not 0
+> ```
 
 They will need two things in the repo settings: a `GCP_SA_KEY` secret (a service
-account credential file), and `api-keys` in Secret Manager alongside `kodekey`.
+account credential file — **a login for a robot rather than a person**), and
+`api-keys` in Secret Manager alongside `kodekey`.
 
 ### Then break it on purpose
 
 **This is the part that matters most in the whole session.**
 
-Have them push a commit with a deliberately failing test, then watch the deploy
-never start.
+Have them push a commit with a deliberately failing test, then **watch the
+robot** on GitHub — Actions tab, click the run, watch `gate` go red and `deploy`
+never start at all.
 
-> **INSTRUCTOR** · **Make everyone do this, and do not let anyone skip it** —
-> not the fast students, not the ones who "already understand it".
+> **INSTRUCTOR** · Make them actually watch it in the browser, live. The greyed
+> out `deploy` job that never ran is the whole point made visual — it is not
+> that the deploy failed, it is that **it never happened**.
+>
+> **Make everyone do this, and do not let anyone skip it** — not the fast
+> students, not the ones who "already understand it".
 >
 > **A gate you have never seen block anything is a gate you are trusting on
 > faith.**
@@ -406,7 +538,7 @@ never start.
 > finishing it for you.
 
 Then mention **branch protection**, which lives in repo settings rather than in
-any file: make the test job a *required status check*, and require pull requests
+any file: make the gate job a *required status check*, and require pull requests
 into main.
 
 That is the layer that actually stops bad code arriving. **A pipeline that only
@@ -472,9 +604,11 @@ They have locked the door. They have not bounded what an invited guest can do.
 - Have them revoke a key: change `API_KEYS` on the service, restart, and watch
   the old key stop working — without a deploy. That is the "read fresh" decision
   paying off in real time.
-- Have them push a commit that fails `test.yml` on a **pull request** rather
-  than main, and see the difference between a blocked merge and a blocked
-  deploy.
+- Have them deliberately break the YAML — indent one line by a single extra
+  space — push, and read GitHub's error. Learning to recognise that error costs
+  two minutes now and saves an hour later.
+- Have them push a commit that fails on a **pull request** rather than main, and
+  see the difference between a blocked merge and a blocked deploy.
 - Ask: *"What could still reach production without passing the gate?"* Good
   answers: a direct `gcloud run deploy` from a laptop, and anyone with console
   access. Both are real, and both are why branch protection is necessary but not
@@ -483,7 +617,7 @@ They have locked the door. They have not bounded what an invited guest can do.
 ## Homework
 
 - `make check-week-03` green, committed and pushed
-- A screenshot of the deploy being **blocked** by a failing test
+- A screenshot of the deploy being **blocked** by a failing gate
 - Branch protection turned on
 
 > **INSTRUCTOR** · Insist on the blocked-deploy screenshot specifically, not a

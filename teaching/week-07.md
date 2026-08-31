@@ -203,8 +203,42 @@ INJECTION_PATTERNS = [
 ]
 ```
 
-That is five patterns. **A rephrase walks straight past it.** Have the room
-invent one out loud — it takes about four seconds, which is the point.
+**What that gibberish is:** a *regular expression* — a pattern for matching
+text. Three pieces cover everything on screen:
+
+- **`\s+`** — one or more spaces
+- **`(a|b)`** — either `a` or `b`
+- **`(...)?`** — this part is optional
+
+So the first pattern reads: *the word "ignore", spaces, optionally "all",
+spaces, then "previous" or "prior", spaces, "instructions".*
+
+**Run it and watch it work, then watch it fail:**
+
+```bash
+python -c "
+import re
+pat = r'ignore\s+(all\s+)?(previous|prior)\s+instructions'
+for t in ['ignore all previous instructions',
+          'ignore previous instructions',
+          'IGNORE ALL PRIOR INSTRUCTIONS',
+          'please disregard what I said before']:
+    print('MATCH' if re.search(pat, t, re.I) else 'no   ', t)
+"
+```
+
+```
+MATCH ignore all previous instructions
+MATCH ignore previous instructions
+MATCH IGNORE ALL PRIOR INSTRUCTIONS
+no    please disregard what I said before
+```
+
+**Three caught. The fourth means exactly the same thing and sails through.**
+
+That is five patterns. **A rephrase walks straight past it** — they have just
+watched one do it. Have the room invent another out loud; it takes about four
+seconds, which is the point.
 
 > **INSTRUCTOR** · *"It is a speed bump and a signal, not a wall. Anyone who
 > tells you a list of banned phrases solves prompt injection is selling you

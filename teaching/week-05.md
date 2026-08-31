@@ -127,6 +127,40 @@ Write the two words on the board with a line between them.
 
 One line of structured text per turn, printed to the screen.
 
+#### First — what "structured" means (3 min)
+
+They have all seen logs. Almost none of them have seen the distinction that
+makes logs useful, and it takes two minutes to show.
+
+**An ordinary log line** is a sentence for a human:
+
+```
+turn finished in 8400ms with 3 steps, cost about 2 cents
+```
+
+Fine to read. **Impossible to compute with.** To answer *"what was the average
+cost yesterday?"* you would have to pull that number back out of English.
+
+**A structured log line** is the same facts as JSON — the format from Week 1:
+
+```json
+{"turn_id": "a3f", "duration_ms": 8400, "steps": 3, "cost_usd": 0.021}
+```
+
+Now it is data. Have them prove it, using the pipe and `json.tool` they already
+know:
+
+```bash
+echo '{"duration_ms": 8400, "steps": 3}' | python -m json.tool
+```
+
+> **INSTRUCTOR** · The one-sentence version, worth saying exactly: **"Write logs
+> for a program to read, and a human can always read them too. Write logs for a
+> human, and no program ever can."**
+>
+> That is the entire justification for the trace dict, and once they have it the
+> field-by-field table below stops feeling like bureaucracy.
+
 And here is the part that genuinely surprises people, so pause on it:
 
 **Printing IS shipping telemetry.**
@@ -255,6 +289,45 @@ Sort every request by how long it took. The 95th percentile is the point where
 **Averages hide disasters.** Nineteen fast requests and one catastrophic one
 still average out fine. The average is the number that tells you everything is
 OK while a fifth of your users are furious.
+
+**Do not assert that — show it.** Have them run this:
+
+```bash
+python -c "
+import statistics
+d = [100]*19 + [9000]          # 19 fast requests, 1 disaster
+print('average:', round(sum(d)/len(d)))
+print('p95    :', round(statistics.quantiles(d, n=20)[-1]))
+"
+```
+
+```
+average: 545
+p95    : 8555
+```
+
+**Same twenty requests. One number says half a second, the other says eight and
+a half.** One of those two numbers would have you sleeping soundly while a
+customer waits nine seconds.
+
+> **INSTRUCTOR** · Ask which number a dashboard usually shows by default. It is
+> the average, essentially everywhere, and that is worth being annoyed about.
+>
+> Then have them change `[100]*19` to `[100]*99` — one bad request in a hundred
+> instead of one in twenty:
+>
+> ```
+> average: 189
+> p95    : 100
+> ```
+>
+> **The p95 now hides it too.** The nine-second request is still there, still
+> happening to a real person, and both numbers say everything is fine.
+>
+> **No single number catches everything** — which is the honest lesson, and the
+> reason `/metrics` returns six of them rather than one. It is also why the trace
+> of every individual turn still matters: aggregates are for noticing, and
+> individual traces are for finding.
 
 > **INSTRUCTOR** · If the room is quantitative, the one-liner is: *"The average
 > is a number about your service. The p95 is a number about your customers."*

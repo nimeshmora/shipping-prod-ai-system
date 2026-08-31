@@ -5,6 +5,19 @@ answer, and runs inside a container.
 
 **Branch:** `week-01-package` → answer key `week-01-solution`
 
+> **INSTRUCTOR** · This week assumes **nothing**. Not the terminal, not JSON,
+> not HTTP, not containers. Every new tool gets a **toy example on something
+> that is not our agent** before it gets pointed at our agent.
+>
+> That ordering is the whole method, and it is worth understanding before you
+> teach it: a student who runs `curl https://example.com` and sees HTML has
+> learned *what curl is* in isolation, with nothing else to be confused about.
+> A student whose first curl is a POST with three flags at our `/chat` endpoint
+> is learning curl, JSON, HTTP methods, our API and our agent simultaneously,
+> and when it fails they cannot tell you which part broke.
+>
+> **Learn the tool on a toy. Then use the tool on our thing.** Every time.
+
 ---
 
 ## Beat 1 · Ask (10 min, no slides)
@@ -249,7 +262,222 @@ Deletes the practice folder. `rm` = remove, `-r` = including everything inside.
 > twice before you press Enter."* Then move on — do not turn it into a horror
 > story.
 
-### Part 0b · Getting the project (5 min)
+### Part 0a · Two words you will hear all course (3 min)
+
+Two ideas that everything else sits on. Thirty seconds each, with something to
+run.
+
+**A process is a running program.**
+
+A program is a file sitting on disk, doing nothing. A **process** is that file
+actually running, right now, in memory. Same program started twice = two
+processes.
+
+```bash
+sleep 30
+```
+
+That is a process. It is running. Your terminal is stuck because it is waiting
+for it. Press **Ctrl + C** to kill it.
+
+**You just killed a process.** That is what happens to their agent when they
+close the terminal, and it is why the memory disappears in Week 2.
+
+**A port is a numbered door on a computer.**
+
+One computer, many doors. A web server sits behind door `80`, or `443`, or in
+our case `8080`. A URL's `:8080` says which door to knock on.
+
+```
+   localhost:8080
+   ─────────  ────
+       │        │
+    which     which
+   computer    door
+```
+
+`localhost` is a special name meaning **this computer, the one I am typing on**.
+
+> **INSTRUCTOR** · That is enough. Do not explain port ranges, TCP, or why 443.
+> They need "numbered door" and "localhost means here", and they need it in
+> thirty seconds. The rest is Week 2's problem and mostly never.
+
+### Part 0b · JSON, before we send any (5 min)
+
+They are about to send and receive JSON all course. Five minutes now saves
+confusion in all eight weeks.
+
+**JSON is a way to write data as text**, so it can travel over a network. That
+is its entire purpose: a network can only carry text, so we agree on a way to
+write data down.
+
+```json
+{"name": "Ada", "age": 36}
+```
+
+- `{ }` wraps a set of facts about one thing
+- `"name"` is a **label**, always in double quotes
+- `:` separates the label from its value
+- `,` separates one fact from the next
+
+Values can be text (in quotes), numbers (no quotes), true/false, or another
+`{ }` nested inside.
+
+**Run it.** This command reads JSON and prints it back tidily:
+
+```bash
+echo '{"name":"Ada","age":36}' | python -m json.tool
+```
+
+```json
+{
+    "name": "Ada",
+    "age": 36
+}
+```
+
+> **INSTRUCTOR** · Explain the `|` once, because it appears all course: *"The
+> pipe takes what the left side printed and feeds it to the right side as
+> input."* That is enough. Do not explain stdin.
+
+**Now break it on purpose.** Use single quotes around the label — which is legal
+in Python and illegal in JSON:
+
+```bash
+echo "{'name':'Ada'}" | python -m json.tool
+```
+
+```
+Expecting property name enclosed in double quotes: line 1 column 2
+```
+
+**The error tells you the rule.** JSON labels need double quotes, always.
+
+> **INSTRUCTOR** · This tiny failure is worth the thirty seconds. It is the
+> single most common JSON mistake, they have now made it deliberately, and the
+> error message that will confuse them in week four is one they have already
+> seen and understood.
+>
+> If anyone knows Python: *"It looks exactly like a dict. The differences that
+> bite are double quotes only, and no trailing comma."*
+
+### Part 0c · curl, on things that are not ours (7 min)
+
+**`curl` sends an HTTP request from the terminal.** It is a browser with no
+window — it fetches, and prints what came back.
+
+They will use it in every session from here. So learn it on something simple
+first, where nothing else can be the problem.
+
+**One — fetch a web page.**
+
+```bash
+curl -s https://example.com
+```
+
+A pile of HTML comes back. That is what a web page *is* underneath: text your
+browser draws. `-s` means "silent" — without it curl prints a progress bar that
+gets in the way.
+
+**They have just done what a browser does.**
+
+**Two — call an API.**
+
+```bash
+curl -s https://api.github.com/zen
+```
+
+One sentence comes back. No HTML, no page — just an answer.
+
+> **INSTRUCTOR** · Name the difference, because it is the difference between a
+> website and an API and most people have never had it stated: *"The first one
+> sent something for a human to look at. This one sent something for a program
+> to use. Same protocol, same tool, different audience. That is all an API is."*
+
+**Three — see the reply's status code and headers.**
+
+```bash
+curl -s -i https://api.github.com/zen
+```
+
+`-i` includes the reply's **headers** — everything before the blank line.
+
+```
+HTTP/2 200
+date: Mon, 31 Aug 2026 05:04:25 GMT
+content-type: text/plain;charset=utf-8
+
+Keep it logically awesome.
+```
+
+There is the **200** from the concept section, in real life. And `content-type`,
+which is how the receiver knows what kind of thing it just got.
+
+**Headers are extra facts about the request or reply, that are not the body
+itself.** That is the whole idea.
+
+**Four — see other status codes.**
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" https://httpbin.org/status/404
+```
+
+```
+404
+```
+
+Two new flags, both worth knowing because they recur all course:
+
+- `-o /dev/null` — throw the body away, we do not care about it
+- `-w "%{http_code}\n"` — print *just* the status code
+
+Try `200` and `500` in place of `404`. Same command, different numbers.
+
+> **INSTRUCTOR** · Have them run all three. Seeing 200, 404 and 500 come back
+> from the same command is what turns status codes from a table on a slide into
+> something real. They use `-w "%{http_code}"` heavily in Week 3.
+
+**Five — send something (POST).**
+
+Everything so far was `GET` — *"give me something"*. Now `POST` — *"here, take
+this"*.
+
+```bash
+curl -s -X POST https://httpbin.org/post \
+  -H 'Content-Type: application/json' \
+  -d '{"message":"hello"}'
+```
+
+Read the command aloud, flag by flag:
+
+- `-X POST` — the **method**. We are *sending*, not just reading.
+- `-H 'Content-Type: application/json'` — a **header**, telling the server "the
+  body I am sending is JSON".
+- `-d '{...}'` — the **body**. The actual thing being sent.
+
+That URL is a free echo service: it replies with a description of whatever you
+sent it. In the reply, find this part:
+
+```json
+  "json": {
+    "message": "hello"
+  },
+```
+
+**The server received your JSON, understood it, and read the `message` field
+out.** That is exactly what our `/chat` endpoint will do in twenty minutes — the
+same method, the same header, the same body shape.
+
+> **INSTRUCTOR** · This is the highest-value five minutes in the session. When
+> they later type a three-flag POST at our agent and it fails, they can tell
+> the difference between *"my JSON is malformed"*, *"my flags are wrong"* and
+> *"our service is broken"* — because they have seen all three flags work
+> against something that definitely was not broken.
+>
+> If the room has no internet, `python -m http.server 9000` in one terminal and
+> `curl -s localhost:9000` in another covers points one to four.
+
+### Part 0d · Getting the project (5 min)
 
 ```bash
 git clone https://github.com/nimeshmora/shipping-prod-ai-system.git
@@ -257,13 +485,28 @@ cd shipping-prod-ai-system
 git checkout week-01-package
 ```
 
-**`git clone`** downloads a copy of the project. **`git checkout`** switches to a
-particular version of it — in our case, this week's starting point.
+**Git is a time machine for a folder of code.** It remembers every version, and
+lets you move between them.
+
+- **`git clone`** downloads a copy of the project, with all of its history.
+- **`git checkout`** switches to a particular version — in our case, this week's
+  starting point.
 
 ```bash
 make install
 make test
 ```
+
+**`make` runs a shortcut that somebody already wrote down.** The shortcuts live
+in a file called `Makefile` in the project. `make install` is a nickname for a
+longer command; so is `make test`.
+
+```bash
+cat Makefile
+```
+
+Have them look. **There is no magic in `make`** — it is a list of nicknames, and
+they can read every one.
 
 `make install` fetches the libraries the project needs. `make test` runs the
 tests. You should see **12 passed**.
@@ -326,17 +569,27 @@ Run it:
 make run
 ```
 
-In a **second** terminal window:
+This one **does not finish**. It sits there — because it is a server, and a
+server's job is to stay running and wait. Same as the `sleep 30` from Part 0a.
+
+**So they need a second terminal.** Open a new window (`Cmd + N` on Mac,
+`Ctrl + Shift + N` on Windows/Linux) and `cd` back into the project.
+
+> **INSTRUCTOR** · Say explicitly: *"One terminal runs the server. The other one
+> talks to it. That is the arrangement for the rest of the course."* Several
+> people will otherwise Ctrl-C the server to get their prompt back and then
+> wonder why nothing answers.
+
+In the **second** terminal:
 
 ```bash
 curl -s http://localhost:8080/health
 ```
 
-**`curl`** sends an HTTP request from the terminal. It is a browser with no
-window. You should get `{"status":"ok"}`.
+You should get `{"status":"ok"}`.
 
-> **INSTRUCTOR** · `localhost` = "this computer". `8080` is the port — a
-> numbered door on that computer. Say it once, in passing.
+**Exactly the same command shape as `curl -s https://example.com`** — just
+pointed at their own machine, on door 8080, instead of out at the internet.
 
 Now the real thing:
 
@@ -346,12 +599,8 @@ curl -s -X POST http://localhost:8080/chat \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
 
-Reading that command aloud:
-
-- `-X POST` — the method. We are *sending* something, not just reading.
-- `-H 'Content-Type: application/json'` — a header, telling the server the body
-  is JSON.
-- `-d '{...}'` — the body. The actual question.
+**That is the same five-flag command they ran against httpbin**, with our
+address and our message. Point that out — it is why Part 0c existed.
 
 Copy the `session_id` from the reply and continue the conversation:
 
@@ -364,14 +613,30 @@ curl -s -X POST http://localhost:8080/chat \
 **It remembers.** That is the session ID doing its job.
 
 > **INSTRUCTOR** · The error you will see most this week — every week, in fact —
-> is `KODEKEY is not set`. It means they edited `.env` but did not load it. The
-> fix, in the *same* terminal as `make run`:
+> is `KODEKEY is not set`.
+>
+> **What an environment variable is**, since this is the moment they need it: a
+> setting that lives *outside* your code, attached to the terminal session, that
+> a program can read when it starts. It is how you give a program a secret
+> without typing the secret into a file that gets shared.
+>
+> ```bash
+> export GREETING=hello
+> python -c "import os; print(os.environ.get('GREETING'))"     # hello
+> python -c "import os; print(os.environ.get('NOPE'))"         # None
+> ```
+>
+> Thirty seconds, and `KODEKEY is not set` stops being mysterious — it means
+> exactly what that second line printed.
+>
+> The fix, in the *same* terminal as `make run`:
 >
 > ```bash
 > set -a && source .env && set +a
 > ```
 >
-> Write it on the board. Leave it there for eight weeks.
+> That reads their `.env` file and exports every line in it. Write it on the
+> board. Leave it there for eight weeks.
 
 ### Part 2 · Make it feel fast (10 min)
 
@@ -382,6 +647,30 @@ Several seconds. And for all of it, they stared at nothing.
 **Eight seconds of nothing feels broken. Eight seconds with words appearing
 after 400 milliseconds feels fast.** Same duration. Completely different
 product. This is why every AI assistant they have used streams.
+
+**See streaming before building it.** Run this — it sends three lines, one per
+second:
+
+```bash
+curl -N -s https://httpbin.org/stream/3
+```
+
+The lines **appear one at a time**, over three seconds. Nothing waited for the
+whole thing to be ready.
+
+Now compare, without `-N`:
+
+```bash
+curl -s https://httpbin.org/stream/3
+```
+
+Same three lines, same three seconds — but they all appear **at the end, in one
+lump**. Identical data, and it feels twice as slow.
+
+> **INSTRUCTOR** · Run both on the projector, in that order. The second one is
+> the more important demo, because it is exactly the bug they will report to you
+> in twenty minutes: *"streaming isn't working"*, when in fact curl was
+> buffering. **`-N` means "do not buffer, show me pieces as they arrive."**
 
 They build `app/stream.py`, which sends the answer in pieces:
 
@@ -406,8 +695,9 @@ success.
 
 **Proxies buffer.** Something between you and the user will happily collect your
 whole streamed answer and deliver it in one lump — which destroys the entire
-point, silently, because the answer is still correct. The header
-`X-Accel-Buffering: no` is how you say "do not do that".
+point, silently, because the answer is still correct. **They just watched
+exactly this happen** with curl and no `-N`. The header `X-Accel-Buffering: no`
+is how you tell a proxy not to do it.
 
 Watch it work:
 
@@ -416,9 +706,6 @@ curl -N -X POST http://localhost:8080/chat/stream \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
-
-**`-N` matters.** Without it, `curl` does its own buffering and they will think
-streaming is broken when it is fine.
 
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
@@ -439,7 +726,74 @@ Hand the box to any computer and it behaves identically.
 > ingredients. A food truck brings the whole kitchen with it and works in any
 > car park.
 
-They write a `Dockerfile` — the instructions for building that box:
+#### First, build a box with nothing in it (5 min)
+
+Before containerising our agent — with its libraries, its port, its key — build
+the smallest possible box. Two files, in a fresh folder.
+
+```bash
+mkdir ~/box && cd ~/box
+```
+
+One file of "code":
+
+```bash
+echo 'print("hello from inside the box")' > hello.py
+```
+
+And the instructions for building the box. Create `Dockerfile` (no extension —
+that exact name):
+
+```dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+COPY hello.py .
+CMD ["python", "hello.py"]
+```
+
+Four lines, read one at a time:
+
+- **`FROM python:3.12-slim`** — start from a box that already has Python 3.12
+  in it. Somebody else built that; we build on top.
+- **`WORKDIR /app`** — work in a folder called `/app` *inside the box*.
+- **`COPY hello.py .`** — copy our file from *our computer* into *the box*.
+- **`CMD [...]`** — what to run when the box starts.
+
+Build it and run it:
+
+```bash
+docker build -t hello-box .
+docker run --rm hello-box
+```
+
+```
+hello from inside the box
+```
+
+> **INSTRUCTOR** · Unpack that output, because the significance is easy to miss:
+> *"That `print` ran on a Linux machine with a Python you did not install, in a
+> folder that does not exist on your laptop. And it will print exactly that on
+> anyone else's computer too."*
+>
+> Explain the two commands once:
+> - **`build`** = make the box. `-t hello-box` names it. The `.` means "the
+>   Dockerfile is in this folder".
+> - **`run`** = start the box. `--rm` = throw it away when it exits.
+>
+> **Now prove the box is sealed.** Delete the file and run it again:
+>
+> ```bash
+> rm hello.py
+> docker run --rm hello-box
+> ```
+>
+> It still prints. **The code was copied *into* the box at build time.** That
+> single moment explains containers better than any diagram — the box is not
+> pointing at their folder, it *contains* a copy.
+
+#### Now the real one
+
+Their `Dockerfile` is the same four ideas plus three lines:
 
 ```dockerfile
 FROM python:3.12-slim
@@ -451,6 +805,11 @@ ENV PORT=8080
 EXPOSE 8080
 CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
 ```
+
+New words: **`RUN`** does something while *building* the box (installing
+libraries), where `CMD` runs when the box *starts*. **`ENV`** sets an environment
+variable — the same thing they met with `KODEKEY`. **`EXPOSE`** documents which
+door the thing inside listens on.
 
 Read it line by line. **Two lines carry the whole lesson:**
 
@@ -480,6 +839,9 @@ They also write `.dockerignore`:
 __pycache__/
 .env
 ```
+
+**A list of things NOT to copy into the box.** Without it, `COPY . .` copies
+everything in the folder.
 
 **That last line matters most.** Without it, your API key gets baked into the
 box. Boxes get copied, cached, and uploaded to servers other people can read.
@@ -526,7 +888,8 @@ Still `ok`. The process is fine. It just cannot do its job.
 
 ### "Where does the conversation history live?"
 
-In a variable, inside the running program.
+In a variable, inside the running program — **inside the process** they met in
+Part 0a.
 
 *"So what happens to it when we deploy a new version?"* Let them work it out.
 
@@ -547,6 +910,10 @@ Real money, at the model provider, on your card.
   Week 7."*
 - Have them break their own service: return the wrong status code from
   `/health`, then watch `make check-week-01` catch it.
+- Point `curl` at a URL that does not exist — `curl -s -i http://localhost:8080/nope`
+  — and read the 404 together. They built that without writing it.
+- Have them add a second file to the `~/box` toy, rebuild, and watch only the
+  changed step re-run. That is the caching lesson, felt rather than described.
 
 ## Homework
 

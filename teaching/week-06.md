@@ -317,6 +317,26 @@ ceiling = min(RETRY_BASE_SECONDS * (2 ** attempt), RETRY_MAX_SECONDS)
 return random.uniform(0, ceiling)          # <- full jitter
 ```
 
+**Show it rather than describing it.** Have them run this:
+
+```bash
+python -c "
+import random
+base = 0.5
+print('no jitter, 3 boxes wait:', [base*2**1]*3)
+print('full jitter, 3 boxes   :', [round(random.uniform(0, base*2**1), 2) for _ in range(3)])
+"
+```
+
+```
+no jitter, 3 boxes wait: [1.0, 1.0, 1.0]
+full jitter, 3 boxes   : [0.09, 0.32, 0.46]
+```
+
+**The first line is three machines hitting a struggling provider at the exact
+same instant.** The second is the same three machines, spread out. One line of
+code is the difference.
+
 > **INSTRUCTOR** · *"Without jitter, your own fleet keeps hammering the thing it
 > is waiting for. That is how a brief wobble becomes an outage you caused
 > yourself."*

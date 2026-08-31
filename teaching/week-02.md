@@ -10,6 +10,10 @@ survives a restart.
 > it. An instructor who explains the problem before demonstrating it has traded
 > the most memorable ten minutes of the phase for ten minutes of nodding.
 >
+> Same method as Week 1: **every new tool gets a toy first.** This week that
+> means Redis — they will run `SET` and `GET` by hand, in a database with
+> nothing else in it, before any of it touches the agent.
+>
 > Before the session: check that everyone has a Google Cloud account with
 > **billing enabled**. Not billing *charged* — billing *enabled*. It is the
 > single most common blocker and it cannot be fixed in the room.
@@ -56,6 +60,10 @@ Ask: *"How long does a Python variable live?"*
 
 > As long as the program does.
 
+Connect it back to Week 1's `sleep 30`: **a variable lives inside a process, and
+they have already killed a process with Ctrl+C and watched it vanish.** This is
+the same fact, about their agent's memory.
+
 *"Hold that thought."*
 
 > **INSTRUCTOR** · Do not let anyone jump ahead. Someone in a technical room
@@ -78,18 +86,41 @@ Three concepts, explained **as you go** rather than in advance. This is the
 teach-at-the-moment-of-need rule from the introduction, and this beat is the
 clearest example of it in the course.
 
-**What Cloud Run is.** A service that takes your container and runs it on
-Google's computers. You hand over the box; they give you back a URL. You do not
-manage a server, patch an operating system, or think about hardware at all.
+**What "the cloud" actually is.** Somebody else's computer, in a building
+somewhere, that you rent by the minute. That is genuinely the whole idea. The
+value is not the computer — it is that it is always on, someone else replaces
+the broken disks, and you can have another one in thirty seconds.
+
+**What Cloud Run is.** A service that takes your container — the box from Week 1
+— and runs it on Google's computers. You hand over the box; they give you back a
+URL. You do not manage a server, patch an operating system, or think about
+hardware at all.
 
 > **INSTRUCTOR** · If someone asks how it differs from a VM, the one-liner is:
 > *"A VM is a computer you rent and look after. This is a box you hand over."*
 > Do not go further — the comparison is a rabbit hole and nothing today depends
 > on it.
 
+**What the `gcloud` command is.** Same idea as `git` or `curl`: a program you
+run in the terminal that talks to Google's systems on your behalf. Everything
+they will do in a web console has a `gcloud` equivalent, and the command is the
+one you can put in a pipeline later.
+
+First, prove it can see their account:
+
+```bash
+gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+gcloud config list
+```
+
+That last one prints what it is currently pointed at. **Have everyone run it and
+read their own output** — half of all Week 2 problems are "deployed to the wrong
+project", and this is the thirty seconds that prevents them.
+
 **What a secret manager is.** Their API key must not be in their code, and must
-not be in a plain setting either — settings are visible to anyone who can look
-at the project. A secret manager is a locked drawer the platform opens for your
+not be in a plain setting either — settings are visible to anyone who can look at
+the project. A secret manager is a locked drawer the platform opens for your
 service and nobody else.
 
 ```bash
@@ -99,6 +130,13 @@ echo -n "$KODEKEY" | gcloud secrets create kodekey --data-file=-
 Read that command out. The `-n` matters: without it you store a trailing
 newline, and a key with an invisible newline on the end produces a 401 that
 takes an hour to diagnose.
+
+Show them, so it is not folklore:
+
+```bash
+echo "abc"  | wc -c      # 4  <- the newline is really there
+echo -n "abc" | wc -c    # 3
+```
 
 > **INSTRUCTOR** · Worth connecting to last week: *"You already made this
 > decision once. `.env` in `.dockerignore` was the same rule — never put a secret
@@ -146,7 +184,22 @@ echo $URL
 curl -s $URL/health
 ```
 
+> **INSTRUCTOR** · That first line will look like magic to a beginner, so spend
+> twenty seconds: **`$( ... )` runs the command inside the brackets and puts its
+> output into the variable.** Nothing more.
+>
+> ```bash
+> NOW=$(date)
+> echo $NOW
+> ```
+>
+> Two lines, and the syntax stops being mysterious for the rest of the course.
+
 **That URL is on the public internet.**
+
+And note what `curl -s $URL/health` is: **the exact same command from Week 1**,
+with a real address instead of `localhost`. Same tool, same flags — the only
+thing that changed is which computer answers.
 
 Have them message it to the person next to them and watch someone else's laptop
 talk to their agent.
@@ -248,8 +301,16 @@ A variable lives inside one program, on one machine. Restart the program: gone.
 Run two copies: they each have their own, and disagree.
 
 So the history moves to a **separate program whose entire job is remembering
-things** — a database. Ours is Redis, which is a database optimised for exactly
-this: small pieces of data, fetched by a key, very fast.
+things** — a database.
+
+**What a database is**, in one sentence, because not everyone has used one: a
+program that holds data for other programs, and keeps holding it after they stop
+running.
+
+Ours is **Redis**, which is a database optimised for exactly our shape: small
+pieces of data, fetched by a key, very fast. It is essentially a dictionary —
+the same `{key: value}` idea from `app/memory.py` — that lives in its own
+process, so other programs can share it and it outlives all of them.
 
 ```
 BEFORE                          AFTER
@@ -297,12 +358,125 @@ else. The entire storage layer is replaced and exactly one file changes.
 
 ## Beat 4 · Build (35 min)
 
-They provision Redis, then edit **one file**.
+### Part 0 · Redis by hand, on nothing (7 min)
+
+> **INSTRUCTOR** · Do not skip this to save time. Students who have typed `SET`
+> and `GET` themselves understand `app/memory.py` in one read. Students who have
+> not are learning Redis, the Python client, and our serialisation problem all
+> at once — and when it fails they cannot tell which one broke.
+
+Start a Redis with nothing in it. They have Docker from Week 1:
+
+```bash
+docker run -d --name toy-redis -p 6379:6379 redis
+```
+
+- `-d` — run in the background (so they get their prompt back)
+- `--name toy-redis` — a name, so they can stop it later
+- `-p 6379:6379` — connect door 6379 on their computer to door 6379 in the box.
+  **Ports, from Week 1.**
+
+Now talk to it:
+
+```bash
+docker exec -it toy-redis redis-cli
+```
+
+`docker exec` runs a command *inside* a box that is already running. `redis-cli`
+is Redis's own terminal. The prompt changes to `127.0.0.1:6379>`.
+
+Type these one at a time:
+
+```
+SET greeting "hello"
+GET greeting
+```
+
+```
+OK
+"hello"
+```
+
+**They just stored something in a database and read it back.** Two commands.
+
+```
+SET greeting "hello again"
+GET greeting
+```
+
+Same key, new value — it replaced it. **A key holds one value.**
+
+```
+GET nothing-here
+```
+
+```
+(nil)
+```
+
+**`nil` means "no such key".** That is what `load()` gets for a brand new
+session, and it is why the code says `return json.loads(raw) if raw else []`.
+
+Now the expiry, which is the one Redis feature the code depends on:
+
+```
+SETEX temporary 10 "I will not last"
+GET temporary
+```
+
+Wait ten seconds. Ask again:
+
+```
+GET temporary
+```
+
+```
+(nil)
+```
+
+**It deleted itself.** `SETEX` = SET with an EXpiry, in seconds. That is exactly
+how old conversations get cleaned up without anyone writing a cleanup job.
+
+Two more worth seeing:
+
+```
+KEYS *
+```
+
+Everything in the database. **This is why namespacing matters** — right now it
+is their two toy keys; in production it is every session plus whatever else
+anyone put in there.
+
+```
+TTL temporary
+```
+
+How many seconds a key has left. `-1` means "no expiry set" — which is the bug
+they are about to be warned about.
+
+Type `exit` to leave, and leave the container running:
+
+```bash
+docker stop toy-redis && docker rm toy-redis    # later, when done
+```
+
+> **INSTRUCTOR** · Land the connection explicitly before moving on:
+>
+> *"That is the entire database. A key, a value, and an expiry. `app/memory.py`
+> does exactly what you just did by hand — `SETEX` to save, `GET` to load. The
+> only thing the Python adds is turning a conversation into text first."*
+
+### Part 1 · Point the agent at a real Redis
 
 ```bash
 gcloud run services update ship-agent --region us-central1 \
   --set-env-vars "REDIS_URL=redis://YOUR_HOST:6379"
 ```
+
+**That setting is an environment variable** — the same idea as `KODEKEY` in
+Week 1. Note it is `--set-env-vars`, not `--set-secrets`: a Redis address is not
+a secret in the way an API key is. *"Which of your settings are secrets?"* is a
+question worth asking the room.
 
 > **INSTRUCTOR** · Memorystore on Google Cloud, or Upstash's free tier — either
 > is fine, and **Upstash is much faster to set up** if the room is impatient or
@@ -311,23 +485,27 @@ gcloud run services update ship-agent --region us-central1 \
 > **Have a working `REDIS_URL` ready as a fallback** for anyone who gets stuck
 > in a console. Provisioning is not the lesson; do not let it eat the build.
 
-Then `app/memory.py`. The header comment tells them what to build. Four details
-to say out loud while you walk the room:
+### Part 2 · Edit one file (20 min)
 
-**`SETEX`, not `SET`.** Writes the value *and* its expiry in one instruction. Do
-them separately and a crash between the two leaves a conversation that lives
-forever. Redis will happily store your data until the end of time and bill you
-for it.
+Then `app/memory.py`. The header comment tells them what to build. Four details
+to say out loud while you walk the room — **each maps to something they just
+typed in `redis-cli`**:
+
+**`SETEX`, not `SET`.** They used both, five minutes ago. Writes the value *and*
+its expiry in one instruction. Do them separately and a crash between the two
+leaves a conversation with `TTL -1` — the "no expiry" they saw — living forever.
+Redis will happily store your data until the end of time and bill you for it.
 
 > **INSTRUCTOR** · The general shape is worth a sentence: *"Any time you write
 > two things that must both happen, ask what happens if the process dies between
 > them."* It comes back in Week 7's rate limiter, which sets its expiry in the
 > same pipeline for the same reason.
 
-**Namespace the keys** — `session:abc123`, not `abc123`. Redis is one big shared
-space. Someone will eventually store something else in there, and future-you
-needs to be able to tell what is what. It is also what makes `reset()` possible:
-`scan_iter("session:*")` can only exist because the prefix does.
+**Namespace the keys** — `session:abc123`, not `abc123`. They ran `KEYS *` and
+saw one flat list. Redis is one big shared space, someone will eventually store
+something else in there, and future-you needs to tell what is what. It is also
+what makes `reset()` possible: `scan_iter("session:*")` can only exist because
+the prefix does.
 
 **Connect once, lazily.**
 
@@ -359,9 +537,19 @@ TypeError: Object of type SimpleNamespace is not JSON serializable
 
 **Let them hit it.** Do not warn them first.
 
-Then explain: the conversation contains *objects*, not plain data, and
-`json.dumps` does not know what to do with an object. They have to convert them
-first.
+Then explain, and connect it to Week 1's JSON toy: **JSON is text.** Redis
+stores text. A conversation in Python is a list of *objects* — living things in
+memory with methods attached. Text and objects are different, and something has
+to convert one to the other.
+
+```bash
+# from Week 1 — this worked, because it was already plain data
+echo '{"name":"Ada"}' | python -m json.tool
+```
+
+`json.dumps` knows what to do with dictionaries, lists, strings and numbers. It
+does not know what to do with an object it has never seen. So they have to
+convert first:
 
 ```python
 def _block_to_dict(block):
@@ -396,6 +584,14 @@ Redeploy. Start a conversation. **Redeploy again.** Continue it.
 
 Have them do the full four steps from Beat 2 again, in the same order. The
 symmetry is the point — same actions, different outcome.
+
+And if they still have a local Redis running, they can watch it happen:
+
+```
+KEYS session:*
+```
+
+**Their conversation, sitting in a database, with their own session id on it.**
 
 ```bash
 make check-week-02
@@ -443,10 +639,13 @@ product does not work.
 
 ## If you finish early
 
+- Back in `redis-cli`: `SET a 1`, then `DEL a`, then `GET a`. Deleting is a
+  thing too, and it is what a "log out" button does.
 - Have them run `gcloud run revisions list` and look at what a deploy actually
   created. It is the first sight of the thing they will roll back to in Week 8.
 - Set `SESSION_TTL=60`, hold a conversation, wait a minute, and continue it.
-  Watch the expiry work. Ask what TTL a real support product should use.
+  Watch the expiry work — the same `SETEX` behaviour they saw by hand, now on
+  their own conversation.
 - Have them deploy **without** `--min-instances=1`, wait for it to go cold, and
   time the first request. Then redeploy with it. The number is usually
   persuasive.

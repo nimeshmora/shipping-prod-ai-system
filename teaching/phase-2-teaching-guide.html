@@ -283,7 +283,7 @@ Thursday.</p>
 <p>Every week also closes with <strong>If you finish early</strong> and <strong>Homework</strong>. The
 early-finish items are genuine extensions, not filler: several of them are the
 cheapest way to make the week's point land twice.</p>
-<h2>Two rules that make this work</h2>
+<h2>Three rules that make this work</h2>
 <p><strong>1. Teach a concept the moment it is needed, never before.</strong></p>
 <p>We do not have a "networking week". We explain what a URL is in Week 1, at the
 minute a student needs to type one. We explain what a container is when they
@@ -293,6 +293,78 @@ advance.</p>
 <p>Slower, and worth it. Typing <code>mkdir</code> twenty times is how it stops being
 magic. Paste the long ones (a <code>gcloud</code> deploy line is not a typing exercise),
 type the short ones.</p>
+<p><strong>3. Learn the tool on a toy. Then use the tool on our thing.</strong></p>
+<p>This one shapes the whole guide, and it is the rule to protect when you are
+running late.</p>
+<p>A student's first <code>curl</code> is not a three-flag POST at our <code>/chat</code> endpoint. It
+is <code>curl -s https://example.com</code>, which prints some HTML and cannot fail in an
+interesting way. Their first Dockerfile is four lines that print <code>hello from
+inside the box</code>. Their first Redis is <code>SET greeting "hello"</code> typed by hand.</p>
+<p>The reason is diagnostic, not pedagogical comfort: <strong>when the real thing breaks,
+they can tell which part broke.</strong> A student who has only ever run curl against
+our agent cannot distinguish <em>"my JSON is malformed"</em> from <em>"my flags are
+wrong"</em> from <em>"the service is down"</em>. A student who ran the five curl toys can.</p>
+<p>Every tool the course introduces gets this treatment:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>The toy, before our agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the terminal</td>
+<td><code>pwd</code>, <code>ls</code>, <code>mkdir</code>, <code>cd</code> in a scratch folder</td>
+</tr>
+<tr>
+<td>a process</td>
+<td><code>sleep 30</code>, then Ctrl+C</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td><code>echo '{"name":"Ada"}' \| python -m json.tool</code>, then break it</td>
+</tr>
+<tr>
+<td>curl</td>
+<td>example.com → GitHub's API → status codes → POST to an echo service</td>
+</tr>
+<tr>
+<td>streaming</td>
+<td><code>curl -N https://httpbin.org/stream/3</code>, with and without <code>-N</code></td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>a four-line Dockerfile that prints one sentence</td>
+</tr>
+<tr>
+<td>env vars</td>
+<td><code>export GREETING=hello</code>, then read it back</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td><code>SET</code>/<code>GET</code>/<code>SETEX</code>/<code>TTL</code> by hand in <code>redis-cli</code></td>
+</tr>
+<tr>
+<td>YAML</td>
+<td>read a real workflow file and find three things in it</td>
+</tr>
+<tr>
+<td>shell loops</td>
+<td><code>for i in $(seq 1 3); do echo "request $i"; done</code></td>
+</tr>
+<tr>
+<td>regex</td>
+<td>four strings, three matches, one bypass</td>
+</tr>
+<tr>
+<td>fakes/mocks</td>
+<td>a six-line function with a swappable argument</td>
+</tr>
+</tbody>
+</table>
+<p>Every one of those has verified output printed in the guide, so you know what
+they should see before you run it in front of twenty people.</p>
 <h2>The repo layout</h2>
 <p>The project is built <strong>layer by layer, one git branch per week</strong>:</p>
 <pre><code>week-01-package    &lt;- students start here. Working code + this week's gaps.
@@ -385,7 +457,7 @@ minutes of session one for the three people who ignored the email.</p>
 </table>
 <hr />
 <h2>Printable version</h2>
-<p><code>teaching/phase-2-teaching-guide.pdf</code> is all nine files as one 86-page A4
+<p><code>teaching/phase-2-teaching-guide.pdf</code> is all nine files as one 101-page A4
 document, with the instructor notes keeping their boxes on paper.</p>
 <p>To rebuild it after editing any week:</p>
 <pre><code class="language-bash">python teaching/build-pdf.py
@@ -407,6 +479,18 @@ PDF — some instructors prefer to teach from it in a browser tab.</p>
 <p><strong>Session goal:</strong> they leave with an agent that has an address, streams its
 answer, and runs inside a container.</p>
 <p><strong>Branch:</strong> <code>week-01-package</code> → answer key <code>week-01-solution</code></p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This week assumes <strong>nothing</strong>. Not the terminal, not JSON,
+not HTTP, not containers. Every new tool gets a <strong>toy example on something
+that is not our agent</strong> before it gets pointed at our agent.</p>
+<p>That ordering is the whole method, and it is worth understanding before you
+teach it: a student who runs <code>curl https://example.com</code> and sees HTML has
+learned <em>what curl is</em> in isolation, with nothing else to be confused about.
+A student whose first curl is a POST with three flags at our <code>/chat</code> endpoint
+is learning curl, JSON, HTTP methods, our API and our agent simultaneously,
+and when it fails they cannot tell you which part broke.</p>
+<p><strong>Learn the tool on a toy. Then use the tool on our thing.</strong> Every time.</p>
+</blockquote>
 <hr />
 <h2>Beat 1 · Ask (10 min, no slides)</h2>
 <blockquote>
@@ -628,16 +712,184 @@ pwd
 twice before you press Enter."</em> Then move on — do not turn it into a horror
 story.</p>
 </blockquote>
-<h3>Part 0b · Getting the project (5 min)</h3>
+<h3>Part 0a · Two words you will hear all course (3 min)</h3>
+<p>Two ideas that everything else sits on. Thirty seconds each, with something to
+run.</p>
+<p><strong>A process is a running program.</strong></p>
+<p>A program is a file sitting on disk, doing nothing. A <strong>process</strong> is that file
+actually running, right now, in memory. Same program started twice = two
+processes.</p>
+<pre><code class="language-bash">sleep 30
+</code></pre>
+<p>That is a process. It is running. Your terminal is stuck because it is waiting
+for it. Press <strong>Ctrl + C</strong> to kill it.</p>
+<p><strong>You just killed a process.</strong> That is what happens to their agent when they
+close the terminal, and it is why the memory disappears in Week 2.</p>
+<p><strong>A port is a numbered door on a computer.</strong></p>
+<p>One computer, many doors. A web server sits behind door <code>80</code>, or <code>443</code>, or in
+our case <code>8080</code>. A URL's <code>:8080</code> says which door to knock on.</p>
+<pre><code>   localhost:8080
+   ─────────  ────
+       │        │
+    which     which
+   computer    door
+</code></pre>
+<p><code>localhost</code> is a special name meaning <strong>this computer, the one I am typing on</strong>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · That is enough. Do not explain port ranges, TCP, or why 443.
+They need "numbered door" and "localhost means here", and they need it in
+thirty seconds. The rest is Week 2's problem and mostly never.</p>
+</blockquote>
+<h3>Part 0b · JSON, before we send any (5 min)</h3>
+<p>They are about to send and receive JSON all course. Five minutes now saves
+confusion in all eight weeks.</p>
+<p><strong>JSON is a way to write data as text</strong>, so it can travel over a network. That
+is its entire purpose: a network can only carry text, so we agree on a way to
+write data down.</p>
+<pre><code class="language-json">{&quot;name&quot;: &quot;Ada&quot;, &quot;age&quot;: 36}
+</code></pre>
+<ul>
+<li><code>{ }</code> wraps a set of facts about one thing</li>
+<li><code>"name"</code> is a <strong>label</strong>, always in double quotes</li>
+<li><code>:</code> separates the label from its value</li>
+<li><code>,</code> separates one fact from the next</li>
+</ul>
+<p>Values can be text (in quotes), numbers (no quotes), true/false, or another
+<code>{ }</code> nested inside.</p>
+<p><strong>Run it.</strong> This command reads JSON and prints it back tidily:</p>
+<pre><code class="language-bash">echo '{&quot;name&quot;:&quot;Ada&quot;,&quot;age&quot;:36}' | python -m json.tool
+</code></pre>
+<pre><code class="language-json">{
+    &quot;name&quot;: &quot;Ada&quot;,
+    &quot;age&quot;: 36
+}
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Explain the <code>|</code> once, because it appears all course: <em>"The
+pipe takes what the left side printed and feeds it to the right side as
+input."</em> That is enough. Do not explain stdin.</p>
+</blockquote>
+<p><strong>Now break it on purpose.</strong> Use single quotes around the label — which is legal
+in Python and illegal in JSON:</p>
+<pre><code class="language-bash">echo &quot;{'name':'Ada'}&quot; | python -m json.tool
+</code></pre>
+<pre><code>Expecting property name enclosed in double quotes: line 1 column 2
+</code></pre>
+<p><strong>The error tells you the rule.</strong> JSON labels need double quotes, always.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This tiny failure is worth the thirty seconds. It is the
+single most common JSON mistake, they have now made it deliberately, and the
+error message that will confuse them in week four is one they have already
+seen and understood.</p>
+<p>If anyone knows Python: <em>"It looks exactly like a dict. The differences that
+bite are double quotes only, and no trailing comma."</em></p>
+</blockquote>
+<h3>Part 0c · curl, on things that are not ours (7 min)</h3>
+<p><strong><code>curl</code> sends an HTTP request from the terminal.</strong> It is a browser with no
+window — it fetches, and prints what came back.</p>
+<p>They will use it in every session from here. So learn it on something simple
+first, where nothing else can be the problem.</p>
+<p><strong>One — fetch a web page.</strong></p>
+<pre><code class="language-bash">curl -s https://example.com
+</code></pre>
+<p>A pile of HTML comes back. That is what a web page <em>is</em> underneath: text your
+browser draws. <code>-s</code> means "silent" — without it curl prints a progress bar that
+gets in the way.</p>
+<p><strong>They have just done what a browser does.</strong></p>
+<p><strong>Two — call an API.</strong></p>
+<pre><code class="language-bash">curl -s https://api.github.com/zen
+</code></pre>
+<p>One sentence comes back. No HTML, no page — just an answer.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Name the difference, because it is the difference between a
+website and an API and most people have never had it stated: <em>"The first one
+sent something for a human to look at. This one sent something for a program
+to use. Same protocol, same tool, different audience. That is all an API is."</em></p>
+</blockquote>
+<p><strong>Three — see the reply's status code and headers.</strong></p>
+<pre><code class="language-bash">curl -s -i https://api.github.com/zen
+</code></pre>
+<p><code>-i</code> includes the reply's <strong>headers</strong> — everything before the blank line.</p>
+<pre><code>HTTP/2 200
+date: Mon, 31 Aug 2026 05:04:25 GMT
+content-type: text/plain;charset=utf-8
+
+Keep it logically awesome.
+</code></pre>
+<p>There is the <strong>200</strong> from the concept section, in real life. And <code>content-type</code>,
+which is how the receiver knows what kind of thing it just got.</p>
+<p><strong>Headers are extra facts about the request or reply, that are not the body
+itself.</strong> That is the whole idea.</p>
+<p><strong>Four — see other status codes.</strong></p>
+<pre><code class="language-bash">curl -s -o /dev/null -w &quot;%{http_code}\n&quot; https://httpbin.org/status/404
+</code></pre>
+<pre><code>404
+</code></pre>
+<p>Two new flags, both worth knowing because they recur all course:</p>
+<ul>
+<li><code>-o /dev/null</code> — throw the body away, we do not care about it</li>
+<li><code>-w "%{http_code}\n"</code> — print <em>just</em> the status code</li>
+</ul>
+<p>Try <code>200</code> and <code>500</code> in place of <code>404</code>. Same command, different numbers.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Have them run all three. Seeing 200, 404 and 500 come back
+from the same command is what turns status codes from a table on a slide into
+something real. They use <code>-w "%{http_code}"</code> heavily in Week 3.</p>
+</blockquote>
+<p><strong>Five — send something (POST).</strong></p>
+<p>Everything so far was <code>GET</code> — <em>"give me something"</em>. Now <code>POST</code> — <em>"here, take
+this"</em>.</p>
+<pre><code class="language-bash">curl -s -X POST https://httpbin.org/post \
+  -H 'Content-Type: application/json' \
+  -d '{&quot;message&quot;:&quot;hello&quot;}'
+</code></pre>
+<p>Read the command aloud, flag by flag:</p>
+<ul>
+<li><code>-X POST</code> — the <strong>method</strong>. We are <em>sending</em>, not just reading.</li>
+<li><code>-H 'Content-Type: application/json'</code> — a <strong>header</strong>, telling the server "the
+  body I am sending is JSON".</li>
+<li><code>-d '{...}'</code> — the <strong>body</strong>. The actual thing being sent.</li>
+</ul>
+<p>That URL is a free echo service: it replies with a description of whatever you
+sent it. In the reply, find this part:</p>
+<pre><code class="language-json">  &quot;json&quot;: {
+    &quot;message&quot;: &quot;hello&quot;
+  },
+</code></pre>
+<p><strong>The server received your JSON, understood it, and read the <code>message</code> field
+out.</strong> That is exactly what our <code>/chat</code> endpoint will do in twenty minutes — the
+same method, the same header, the same body shape.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This is the highest-value five minutes in the session. When
+they later type a three-flag POST at our agent and it fails, they can tell
+the difference between <em>"my JSON is malformed"</em>, <em>"my flags are wrong"</em> and
+<em>"our service is broken"</em> — because they have seen all three flags work
+against something that definitely was not broken.</p>
+<p>If the room has no internet, <code>python -m http.server 9000</code> in one terminal and
+<code>curl -s localhost:9000</code> in another covers points one to four.</p>
+</blockquote>
+<h3>Part 0d · Getting the project (5 min)</h3>
 <pre><code class="language-bash">git clone https://github.com/nimeshmora/shipping-prod-ai-system.git
 cd shipping-prod-ai-system
 git checkout week-01-package
 </code></pre>
-<p><strong><code>git clone</code></strong> downloads a copy of the project. <strong><code>git checkout</code></strong> switches to a
-particular version of it — in our case, this week's starting point.</p>
+<p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
+lets you move between them.</p>
+<ul>
+<li><strong><code>git clone</code></strong> downloads a copy of the project, with all of its history.</li>
+<li><strong><code>git checkout</code></strong> switches to a particular version — in our case, this week's
+  starting point.</li>
+</ul>
 <pre><code class="language-bash">make install
 make test
 </code></pre>
+<p><strong><code>make</code> runs a shortcut that somebody already wrote down.</strong> The shortcuts live
+in a file called <code>Makefile</code> in the project. <code>make install</code> is a nickname for a
+longer command; so is <code>make test</code>.</p>
+<pre><code class="language-bash">cat Makefile
+</code></pre>
+<p>Have them look. <strong>There is no magic in <code>make</code></strong> — it is a list of nicknames, and
+they can read every one.</p>
 <p><code>make install</code> fetches the libraries the project needs. <code>make test</code> runs the
 tests. You should see <strong>12 passed</strong>.</p>
 <blockquote>
@@ -704,27 +956,29 @@ bug, not a debugging aid.</p>
 <p>Run it:</p>
 <pre><code class="language-bash">make run
 </code></pre>
-<p>In a <strong>second</strong> terminal window:</p>
+<p>This one <strong>does not finish</strong>. It sits there — because it is a server, and a
+server's job is to stay running and wait. Same as the <code>sleep 30</code> from Part 0a.</p>
+<p><strong>So they need a second terminal.</strong> Open a new window (<code>Cmd + N</code> on Mac,
+<code>Ctrl + Shift + N</code> on Windows/Linux) and <code>cd</code> back into the project.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Say explicitly: <em>"One terminal runs the server. The other one
+talks to it. That is the arrangement for the rest of the course."</em> Several
+people will otherwise Ctrl-C the server to get their prompt back and then
+wonder why nothing answers.</p>
+</blockquote>
+<p>In the <strong>second</strong> terminal:</p>
 <pre><code class="language-bash">curl -s http://localhost:8080/health
 </code></pre>
-<p><strong><code>curl</code></strong> sends an HTTP request from the terminal. It is a browser with no
-window. You should get <code>{"status":"ok"}</code>.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · <code>localhost</code> = "this computer". <code>8080</code> is the port — a
-numbered door on that computer. Say it once, in passing.</p>
-</blockquote>
+<p>You should get <code>{"status":"ok"}</code>.</p>
+<p><strong>Exactly the same command shape as <code>curl -s https://example.com</code></strong> — just
+pointed at their own machine, on door 8080, instead of out at the internet.</p>
 <p>Now the real thing:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:8080/chat \
   -H 'Content-Type: application/json' \
   -d '{&quot;message&quot;:&quot;where is my order ORD-1002?&quot;}'
 </code></pre>
-<p>Reading that command aloud:</p>
-<ul>
-<li><code>-X POST</code> — the method. We are <em>sending</em> something, not just reading.</li>
-<li><code>-H 'Content-Type: application/json'</code> — a header, telling the server the body
-  is JSON.</li>
-<li><code>-d '{...}'</code> — the body. The actual question.</li>
-</ul>
+<p><strong>That is the same five-flag command they ran against httpbin</strong>, with our
+address and our message. Point that out — it is why Part 0c existed.</p>
 <p>Copy the <code>session_id</code> from the reply and continue the conversation:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:8080/chat \
   -H 'Content-Type: application/json' \
@@ -733,11 +987,22 @@ numbered door on that computer. Say it once, in passing.</p>
 <p><strong>It remembers.</strong> That is the session ID doing its job.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · The error you will see most this week — every week, in fact —
-is <code>KODEKEY is not set</code>. It means they edited <code>.env</code> but did not load it. The
-fix, in the <em>same</em> terminal as <code>make run</code>:</p>
+is <code>KODEKEY is not set</code>.</p>
+<p><strong>What an environment variable is</strong>, since this is the moment they need it: a
+setting that lives <em>outside</em> your code, attached to the terminal session, that
+a program can read when it starts. It is how you give a program a secret
+without typing the secret into a file that gets shared.</p>
+<p><code>bash
+export GREETING=hello
+python -c "import os; print(os.environ.get('GREETING'))"     # hello
+python -c "import os; print(os.environ.get('NOPE'))"         # None</code></p>
+<p>Thirty seconds, and <code>KODEKEY is not set</code> stops being mysterious — it means
+exactly what that second line printed.</p>
+<p>The fix, in the <em>same</em> terminal as <code>make run</code>:</p>
 <p><code>bash
 set -a &amp;&amp; source .env &amp;&amp; set +a</code></p>
-<p>Write it on the board. Leave it there for eight weeks.</p>
+<p>That reads their <code>.env</code> file and exports every line in it. Write it on the
+board. Leave it there for eight weeks.</p>
 </blockquote>
 <h3>Part 2 · Make it feel fast (10 min)</h3>
 <p>Ask: <em>"How long did that take?"</em></p>
@@ -745,6 +1010,23 @@ set -a &amp;&amp; source .env &amp;&amp; set +a</code></p>
 <p><strong>Eight seconds of nothing feels broken. Eight seconds with words appearing
 after 400 milliseconds feels fast.</strong> Same duration. Completely different
 product. This is why every AI assistant they have used streams.</p>
+<p><strong>See streaming before building it.</strong> Run this — it sends three lines, one per
+second:</p>
+<pre><code class="language-bash">curl -N -s https://httpbin.org/stream/3
+</code></pre>
+<p>The lines <strong>appear one at a time</strong>, over three seconds. Nothing waited for the
+whole thing to be ready.</p>
+<p>Now compare, without <code>-N</code>:</p>
+<pre><code class="language-bash">curl -s https://httpbin.org/stream/3
+</code></pre>
+<p>Same three lines, same three seconds — but they all appear <strong>at the end, in one
+lump</strong>. Identical data, and it feels twice as slow.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Run both on the projector, in that order. The second one is
+the more important demo, because it is exactly the bug they will report to you
+in twenty minutes: <em>"streaming isn't working"</em>, when in fact curl was
+buffering. <strong><code>-N</code> means "do not buffer, show me pieces as they arrive."</strong></p>
+</blockquote>
 <p>They build <code>app/stream.py</code>, which sends the answer in pieces:</p>
 <pre><code>event: start          the turn was accepted
 event: token          a piece of the answer (many of these)
@@ -762,15 +1044,14 @@ read it. Miss this and a broken agent shows the user half an answer and calls it
 success.</p>
 <p><strong>Proxies buffer.</strong> Something between you and the user will happily collect your
 whole streamed answer and deliver it in one lump — which destroys the entire
-point, silently, because the answer is still correct. The header
-<code>X-Accel-Buffering: no</code> is how you say "do not do that".</p>
+point, silently, because the answer is still correct. <strong>They just watched
+exactly this happen</strong> with curl and no <code>-N</code>. The header <code>X-Accel-Buffering: no</code>
+is how you tell a proxy not to do it.</p>
 <p>Watch it work:</p>
 <pre><code class="language-bash">curl -N -X POST http://localhost:8080/chat/stream \
   -H 'Content-Type: application/json' \
   -d '{&quot;message&quot;:&quot;where is my order ORD-1002?&quot;}'
 </code></pre>
-<p><strong><code>-N</code> matters.</strong> Without it, <code>curl</code> does its own buffering and they will think
-streaming is broken when it is fine.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Have someone shout when they see text appear in pieces. It is
 the most satisfying moment of the session — use it.</p>
@@ -788,7 +1069,54 @@ recipe needs the other kitchen to already have the right oven, pans and
 ingredients. A food truck brings the whole kitchen with it and works in any
 car park.</p>
 </blockquote>
-<p>They write a <code>Dockerfile</code> — the instructions for building that box:</p>
+<h4>First, build a box with nothing in it (5 min)</h4>
+<p>Before containerising our agent — with its libraries, its port, its key — build
+the smallest possible box. Two files, in a fresh folder.</p>
+<pre><code class="language-bash">mkdir ~/box &amp;&amp; cd ~/box
+</code></pre>
+<p>One file of "code":</p>
+<pre><code class="language-bash">echo 'print(&quot;hello from inside the box&quot;)' &gt; hello.py
+</code></pre>
+<p>And the instructions for building the box. Create <code>Dockerfile</code> (no extension —
+that exact name):</p>
+<pre><code class="language-dockerfile">FROM python:3.12-slim
+WORKDIR /app
+COPY hello.py .
+CMD [&quot;python&quot;, &quot;hello.py&quot;]
+</code></pre>
+<p>Four lines, read one at a time:</p>
+<ul>
+<li><strong><code>FROM python:3.12-slim</code></strong> — start from a box that already has Python 3.12
+  in it. Somebody else built that; we build on top.</li>
+<li><strong><code>WORKDIR /app</code></strong> — work in a folder called <code>/app</code> <em>inside the box</em>.</li>
+<li><strong><code>COPY hello.py .</code></strong> — copy our file from <em>our computer</em> into <em>the box</em>.</li>
+<li><strong><code>CMD [...]</code></strong> — what to run when the box starts.</li>
+</ul>
+<p>Build it and run it:</p>
+<pre><code class="language-bash">docker build -t hello-box .
+docker run --rm hello-box
+</code></pre>
+<pre><code>hello from inside the box
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Unpack that output, because the significance is easy to miss:
+<em>"That <code>print</code> ran on a Linux machine with a Python you did not install, in a
+folder that does not exist on your laptop. And it will print exactly that on
+anyone else's computer too."</em></p>
+<p>Explain the two commands once:
+- <strong><code>build</code></strong> = make the box. <code>-t hello-box</code> names it. The <code>.</code> means "the
+  Dockerfile is in this folder".
+- <strong><code>run</code></strong> = start the box. <code>--rm</code> = throw it away when it exits.</p>
+<p><strong>Now prove the box is sealed.</strong> Delete the file and run it again:</p>
+<p><code>bash
+rm hello.py
+docker run --rm hello-box</code></p>
+<p>It still prints. <strong>The code was copied <em>into</em> the box at build time.</strong> That
+single moment explains containers better than any diagram — the box is not
+pointing at their folder, it <em>contains</em> a copy.</p>
+</blockquote>
+<h4>Now the real one</h4>
+<p>Their <code>Dockerfile</code> is the same four ideas plus three lines:</p>
 <pre><code class="language-dockerfile">FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
@@ -798,6 +1126,10 @@ ENV PORT=8080
 EXPOSE 8080
 CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
 </code></pre>
+<p>New words: <strong><code>RUN</code></strong> does something while <em>building</em> the box (installing
+libraries), where <code>CMD</code> runs when the box <em>starts</em>. <strong><code>ENV</code></strong> sets an environment
+variable — the same thing they met with <code>KODEKEY</code>. <strong><code>EXPOSE</code></strong> documents which
+door the thing inside listens on.</p>
 <p>Read it line by line. <strong>Two lines carry the whole lesson:</strong></p>
 <p><strong><code>COPY requirements.txt</code> comes before <code>COPY . .</code></strong> — Docker remembers each step,
 and redoes every step after the first thing that changed. Copy your code first
@@ -821,6 +1153,8 @@ service that works on your laptop and fails the moment you deploy it.</p>
 __pycache__/
 .env
 </code></pre>
+<p><strong>A list of things NOT to copy into the box.</strong> Without it, <code>COPY . .</code> copies
+everything in the folder.</p>
 <p><strong>That last line matters most.</strong> Without it, your API key gets baked into the
 box. Boxes get copied, cached, and uploaded to servers other people can read.
 <strong>Never put a secret in a container.</strong></p>
@@ -855,7 +1189,8 @@ next week's hooks, and the honest answer to each is "we don't know".</strong></p
 <p>That gap is Week 5, and it is much bigger than it looks.</p>
 </blockquote>
 <h3>"Where does the conversation history live?"</h3>
-<p>In a variable, inside the running program.</p>
+<p>In a variable, inside the running program — <strong>inside the process</strong> they met in
+Part 0a.</p>
 <p><em>"So what happens to it when we deploy a new version?"</em> Let them work it out.</p>
 <blockquote>
 <p>That is Week 2, and we are going to watch it happen.</p>
@@ -873,6 +1208,10 @@ next week's hooks, and the honest answer to each is "we don't know".</strong></p
   Week 7."</em></li>
 <li>Have them break their own service: return the wrong status code from
   <code>/health</code>, then watch <code>make check-week-01</code> catch it.</li>
+<li>Point <code>curl</code> at a URL that does not exist — <code>curl -s -i http://localhost:8080/nope</code>
+  — and read the 404 together. They built that without writing it.</li>
+<li>Have them add a second file to the <code>~/box</code> toy, rebuild, and watch only the
+  changed step re-run. That is the caching lesson, felt rather than described.</li>
 </ul>
 <h2>Homework</h2>
 <ul>
@@ -895,6 +1234,9 @@ survives a restart.</p>
 <strong>Do not rush to the fix.</strong> Deploy, break it, sit in the silence, <em>then</em> fix
 it. An instructor who explains the problem before demonstrating it has traded
 the most memorable ten minutes of the phase for ten minutes of nodding.</p>
+<p>Same method as Week 1: <strong>every new tool gets a toy first.</strong> This week that
+means Redis — they will run <code>SET</code> and <code>GET</code> by hand, in a database with
+nothing else in it, before any of it touches the agent.</p>
 <p>Before the session: check that everyone has a Google Cloud account with
 <strong>billing enabled</strong>. Not billing <em>charged</em> — billing <em>enabled</em>. It is the
 single most common blocker and it cannot be fixed in the room.</p>
@@ -930,6 +1272,9 @@ def save(session_id, history):
 <blockquote>
 <p>As long as the program does.</p>
 </blockquote>
+<p>Connect it back to Week 1's <code>sleep 30</code>: <strong>a variable lives inside a process, and
+they have already killed a process with Ctrl+C and watched it vanish.</strong> This is
+the same fact, about their agent's memory.</p>
 <p><em>"Hold that thought."</em></p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do not let anyone jump ahead. Someone in a technical room
@@ -949,24 +1294,45 @@ has the budget it does.</p>
 <p>Three concepts, explained <strong>as you go</strong> rather than in advance. This is the
 teach-at-the-moment-of-need rule from the introduction, and this beat is the
 clearest example of it in the course.</p>
-<p><strong>What Cloud Run is.</strong> A service that takes your container and runs it on
-Google's computers. You hand over the box; they give you back a URL. You do not
-manage a server, patch an operating system, or think about hardware at all.</p>
+<p><strong>What "the cloud" actually is.</strong> Somebody else's computer, in a building
+somewhere, that you rent by the minute. That is genuinely the whole idea. The
+value is not the computer — it is that it is always on, someone else replaces
+the broken disks, and you can have another one in thirty seconds.</p>
+<p><strong>What Cloud Run is.</strong> A service that takes your container — the box from Week 1
+— and runs it on Google's computers. You hand over the box; they give you back a
+URL. You do not manage a server, patch an operating system, or think about
+hardware at all.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · If someone asks how it differs from a VM, the one-liner is:
 <em>"A VM is a computer you rent and look after. This is a box you hand over."</em>
 Do not go further — the comparison is a rabbit hole and nothing today depends
 on it.</p>
 </blockquote>
+<p><strong>What the <code>gcloud</code> command is.</strong> Same idea as <code>git</code> or <code>curl</code>: a program you
+run in the terminal that talks to Google's systems on your behalf. Everything
+they will do in a web console has a <code>gcloud</code> equivalent, and the command is the
+one you can put in a pipeline later.</p>
+<p>First, prove it can see their account:</p>
+<pre><code class="language-bash">gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+gcloud config list
+</code></pre>
+<p>That last one prints what it is currently pointed at. <strong>Have everyone run it and
+read their own output</strong> — half of all Week 2 problems are "deployed to the wrong
+project", and this is the thirty seconds that prevents them.</p>
 <p><strong>What a secret manager is.</strong> Their API key must not be in their code, and must
-not be in a plain setting either — settings are visible to anyone who can look
-at the project. A secret manager is a locked drawer the platform opens for your
+not be in a plain setting either — settings are visible to anyone who can look at
+the project. A secret manager is a locked drawer the platform opens for your
 service and nobody else.</p>
 <pre><code class="language-bash">echo -n &quot;$KODEKEY&quot; | gcloud secrets create kodekey --data-file=-
 </code></pre>
 <p>Read that command out. The <code>-n</code> matters: without it you store a trailing
 newline, and a key with an invisible newline on the end produces a 401 that
 takes an hour to diagnose.</p>
+<p>Show them, so it is not folklore:</p>
+<pre><code class="language-bash">echo &quot;abc&quot;  | wc -c      # 4  &lt;- the newline is really there
+echo -n &quot;abc&quot; | wc -c    # 3
+</code></pre>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Worth connecting to last week: <em>"You already made this
 decision once. <code>.env</code> in <code>.dockerignore</code> was the same rule — never put a secret
@@ -1008,7 +1374,19 @@ before it starts, or you will field the same question fifteen times.</p>
 echo $URL
 curl -s $URL/health
 </code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · That first line will look like magic to a beginner, so spend
+twenty seconds: <strong><code>$( ... )</code> runs the command inside the brackets and puts its
+output into the variable.</strong> Nothing more.</p>
+<p><code>bash
+NOW=$(date)
+echo $NOW</code></p>
+<p>Two lines, and the syntax stops being mysterious for the rest of the course.</p>
+</blockquote>
 <p><strong>That URL is on the public internet.</strong></p>
+<p>And note what <code>curl -s $URL/health</code> is: <strong>the exact same command from Week 1</strong>,
+with a real address instead of <code>localhost</code>. Same tool, same flags — the only
+thing that changed is which computer answers.</p>
 <p>Have them message it to the person next to them and watch someone else's laptop
 talk to their agent.</p>
 <blockquote>
@@ -1079,8 +1457,14 @@ Students who hear "stateless" as "no memory" get confused for years.</p>
 <p>A variable lives inside one program, on one machine. Restart the program: gone.
 Run two copies: they each have their own, and disagree.</p>
 <p>So the history moves to a <strong>separate program whose entire job is remembering
-things</strong> — a database. Ours is Redis, which is a database optimised for exactly
-this: small pieces of data, fetched by a key, very fast.</p>
+things</strong> — a database.</p>
+<p><strong>What a database is</strong>, in one sentence, because not everyone has used one: a
+program that holds data for other programs, and keeps holding it after they stop
+running.</p>
+<p>Ours is <strong>Redis</strong>, which is a database optimised for exactly our shape: small
+pieces of data, fetched by a key, very fast. It is essentially a dictionary —
+the same <code>{key: value}</code> idea from <code>app/memory.py</code> — that lives in its own
+process, so other programs can share it and it outlives all of them.</p>
 <pre><code>BEFORE                          AFTER
 ┌──────────────┐                ┌──────────────┐   ┌───────┐
 │ your agent   │                │ your agent   │──▶│ Redis │
@@ -1114,10 +1498,83 @@ shape as this file). By Week 8 they should recognise it on sight.</p>
 </blockquote>
 <hr />
 <h2>Beat 4 · Build (35 min)</h2>
-<p>They provision Redis, then edit <strong>one file</strong>.</p>
+<h3>Part 0 · Redis by hand, on nothing (7 min)</h3>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Do not skip this to save time. Students who have typed <code>SET</code>
+and <code>GET</code> themselves understand <code>app/memory.py</code> in one read. Students who have
+not are learning Redis, the Python client, and our serialisation problem all
+at once — and when it fails they cannot tell which one broke.</p>
+</blockquote>
+<p>Start a Redis with nothing in it. They have Docker from Week 1:</p>
+<pre><code class="language-bash">docker run -d --name toy-redis -p 6379:6379 redis
+</code></pre>
+<ul>
+<li><code>-d</code> — run in the background (so they get their prompt back)</li>
+<li><code>--name toy-redis</code> — a name, so they can stop it later</li>
+<li><code>-p 6379:6379</code> — connect door 6379 on their computer to door 6379 in the box.
+  <strong>Ports, from Week 1.</strong></li>
+</ul>
+<p>Now talk to it:</p>
+<pre><code class="language-bash">docker exec -it toy-redis redis-cli
+</code></pre>
+<p><code>docker exec</code> runs a command <em>inside</em> a box that is already running. <code>redis-cli</code>
+is Redis's own terminal. The prompt changes to <code>127.0.0.1:6379&gt;</code>.</p>
+<p>Type these one at a time:</p>
+<pre><code>SET greeting &quot;hello&quot;
+GET greeting
+</code></pre>
+<pre><code>OK
+&quot;hello&quot;
+</code></pre>
+<p><strong>They just stored something in a database and read it back.</strong> Two commands.</p>
+<pre><code>SET greeting &quot;hello again&quot;
+GET greeting
+</code></pre>
+<p>Same key, new value — it replaced it. <strong>A key holds one value.</strong></p>
+<pre><code>GET nothing-here
+</code></pre>
+<pre><code>(nil)
+</code></pre>
+<p><strong><code>nil</code> means "no such key".</strong> That is what <code>load()</code> gets for a brand new
+session, and it is why the code says <code>return json.loads(raw) if raw else []</code>.</p>
+<p>Now the expiry, which is the one Redis feature the code depends on:</p>
+<pre><code>SETEX temporary 10 &quot;I will not last&quot;
+GET temporary
+</code></pre>
+<p>Wait ten seconds. Ask again:</p>
+<pre><code>GET temporary
+</code></pre>
+<pre><code>(nil)
+</code></pre>
+<p><strong>It deleted itself.</strong> <code>SETEX</code> = SET with an EXpiry, in seconds. That is exactly
+how old conversations get cleaned up without anyone writing a cleanup job.</p>
+<p>Two more worth seeing:</p>
+<pre><code>KEYS *
+</code></pre>
+<p>Everything in the database. <strong>This is why namespacing matters</strong> — right now it
+is their two toy keys; in production it is every session plus whatever else
+anyone put in there.</p>
+<pre><code>TTL temporary
+</code></pre>
+<p>How many seconds a key has left. <code>-1</code> means "no expiry set" — which is the bug
+they are about to be warned about.</p>
+<p>Type <code>exit</code> to leave, and leave the container running:</p>
+<pre><code class="language-bash">docker stop toy-redis &amp;&amp; docker rm toy-redis    # later, when done
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Land the connection explicitly before moving on:</p>
+<p><em>"That is the entire database. A key, a value, and an expiry. <code>app/memory.py</code>
+does exactly what you just did by hand — <code>SETEX</code> to save, <code>GET</code> to load. The
+only thing the Python adds is turning a conversation into text first."</em></p>
+</blockquote>
+<h3>Part 1 · Point the agent at a real Redis</h3>
 <pre><code class="language-bash">gcloud run services update ship-agent --region us-central1 \
   --set-env-vars &quot;REDIS_URL=redis://YOUR_HOST:6379&quot;
 </code></pre>
+<p><strong>That setting is an environment variable</strong> — the same idea as <code>KODEKEY</code> in
+Week 1. Note it is <code>--set-env-vars</code>, not <code>--set-secrets</code>: a Redis address is not
+a secret in the way an API key is. <em>"Which of your settings are secrets?"</em> is a
+question worth asking the room.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Memorystore on Google Cloud, or Upstash's free tier — either
 is fine, and <strong>Upstash is much faster to set up</strong> if the room is impatient or
@@ -1125,22 +1582,25 @@ the clock is tight.</p>
 <p><strong>Have a working <code>REDIS_URL</code> ready as a fallback</strong> for anyone who gets stuck
 in a console. Provisioning is not the lesson; do not let it eat the build.</p>
 </blockquote>
+<h3>Part 2 · Edit one file (20 min)</h3>
 <p>Then <code>app/memory.py</code>. The header comment tells them what to build. Four details
-to say out loud while you walk the room:</p>
-<p><strong><code>SETEX</code>, not <code>SET</code>.</strong> Writes the value <em>and</em> its expiry in one instruction. Do
-them separately and a crash between the two leaves a conversation that lives
-forever. Redis will happily store your data until the end of time and bill you
-for it.</p>
+to say out loud while you walk the room — <strong>each maps to something they just
+typed in <code>redis-cli</code></strong>:</p>
+<p><strong><code>SETEX</code>, not <code>SET</code>.</strong> They used both, five minutes ago. Writes the value <em>and</em>
+its expiry in one instruction. Do them separately and a crash between the two
+leaves a conversation with <code>TTL -1</code> — the "no expiry" they saw — living forever.
+Redis will happily store your data until the end of time and bill you for it.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · The general shape is worth a sentence: <em>"Any time you write
 two things that must both happen, ask what happens if the process dies between
 them."</em> It comes back in Week 7's rate limiter, which sets its expiry in the
 same pipeline for the same reason.</p>
 </blockquote>
-<p><strong>Namespace the keys</strong> — <code>session:abc123</code>, not <code>abc123</code>. Redis is one big shared
-space. Someone will eventually store something else in there, and future-you
-needs to be able to tell what is what. It is also what makes <code>reset()</code> possible:
-<code>scan_iter("session:*")</code> can only exist because the prefix does.</p>
+<p><strong>Namespace the keys</strong> — <code>session:abc123</code>, not <code>abc123</code>. They ran <code>KEYS *</code> and
+saw one flat list. Redis is one big shared space, someone will eventually store
+something else in there, and future-you needs to tell what is what. It is also
+what makes <code>reset()</code> possible: <code>scan_iter("session:*")</code> can only exist because
+the prefix does.</p>
 <p><strong>Connect once, lazily.</strong></p>
 <pre><code class="language-python">def _redis():
     global _client
@@ -1161,9 +1621,16 @@ pattern: one interface, two implementations, chosen by a setting.</p>
 <pre><code>TypeError: Object of type SimpleNamespace is not JSON serializable
 </code></pre>
 <p><strong>Let them hit it.</strong> Do not warn them first.</p>
-<p>Then explain: the conversation contains <em>objects</em>, not plain data, and
-<code>json.dumps</code> does not know what to do with an object. They have to convert them
-first.</p>
+<p>Then explain, and connect it to Week 1's JSON toy: <strong>JSON is text.</strong> Redis
+stores text. A conversation in Python is a list of <em>objects</em> — living things in
+memory with methods attached. Text and objects are different, and something has
+to convert one to the other.</p>
+<pre><code class="language-bash"># from Week 1 — this worked, because it was already plain data
+echo '{&quot;name&quot;:&quot;Ada&quot;}' | python -m json.tool
+</code></pre>
+<p><code>json.dumps</code> knows what to do with dictionaries, lists, strings and numbers. It
+does not know what to do with an object it has never seen. So they have to
+convert first:</p>
 <pre><code class="language-python">def _block_to_dict(block):
     if isinstance(block, dict):          # a tool_result we built ourselves
         return block
@@ -1190,6 +1657,10 @@ your own code"</em>. Every mock is a claim about what does not need testing.</p>
 <p><strong>It remembers.</strong></p>
 <p>Have them do the full four steps from Beat 2 again, in the same order. The
 symmetry is the point — same actions, different outcome.</p>
+<p>And if they still have a local Redis running, they can watch it happen:</p>
+<pre><code>KEYS session:*
+</code></pre>
+<p><strong>Their conversation, sitting in a database, with their own session id on it.</strong></p>
 <pre><code class="language-bash">make check-week-02
 </code></pre>
 <hr />
@@ -1224,10 +1695,13 @@ have a question you cannot answer. Keep it."</em></p>
 <hr />
 <h2>If you finish early</h2>
 <ul>
+<li>Back in <code>redis-cli</code>: <code>SET a 1</code>, then <code>DEL a</code>, then <code>GET a</code>. Deleting is a
+  thing too, and it is what a "log out" button does.</li>
 <li>Have them run <code>gcloud run revisions list</code> and look at what a deploy actually
   created. It is the first sight of the thing they will roll back to in Week 8.</li>
 <li>Set <code>SESSION_TTL=60</code>, hold a conversation, wait a minute, and continue it.
-  Watch the expiry work. Ask what TTL a real support product should use.</li>
+  Watch the expiry work — the same <code>SETEX</code> behaviour they saw by hand, now on
+  their own conversation.</li>
 <li>Have them deploy <strong>without</strong> <code>--min-instances=1</code>, wait for it to go cold, and
   time the first request. Then redeploy with it. The number is usually
   persuasive.</li>
@@ -1256,6 +1730,10 @@ checkpoint covered it. It also gives you something to open Week 3 with.</p>
 "robots that deploy" and "locks on the door". Say the connecting theme early
 and come back to it: <em>things that worked once, by hand, do not survive contact
 with a team or the open internet.</em></p>
+<p>Same method as Weeks 1 and 2: <strong>new tool, toy first.</strong> This week the new
+things are YAML (a file format they have never read) and GitHub Actions (a
+robot they have never watched run). Both get a small deliberate example before
+the real one.</p>
 <p>Before the session: this week needs a <code>GCP_SA_KEY</code> in repo settings and
 <code>api-keys</code> in Secret Manager. Neither is hard, both are fiddly, and doing them
 live for twenty people is slow. Consider sending the steps out beforehand.</p>
@@ -1329,6 +1807,17 @@ path to a broken production are the same path.</p>
     -H 'Content-Type: application/json' -d '{&quot;message&quot;:&quot;hello&quot;}'
 done
 </code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · A beginner has probably never written a loop in a terminal,
+so decode it in one line as you type: <em>"<code>for i in $(seq 1 20)</code> means do the
+thing between <code>do</code> and <code>done</code>, twenty times."</em> If you want it to land, run
+this first:</p>
+<p><code>bash
+for i in $(seq 1 3); do echo "request $i"; done</code></p>
+<p>Three lines print. Now the same structure with <code>curl</code> in the middle is
+obvious rather than intimidating, and they will use this loop again in twenty
+minutes to trigger their own rate limit.</p>
+</blockquote>
 <p>Then ask them to check their model usage.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <strong>Ask permission first</strong>, and pick someone who will find it
@@ -1348,6 +1837,10 @@ am in the room. The person who actually does this is not, and does not stop."</e
 code, in the same order, without forgetting.</strong></p>
 <p>That is the whole idea. It is not a technology so much as a promise about
 consistency.</p>
+<p><strong>Where the robot lives:</strong> GitHub. When they push, GitHub reads a file in their
+repo that says what to do, then rents a fresh computer, runs those steps on it,
+and throws it away. <strong>A fresh computer every time</strong> is the point — no leftover
+state, no "works on my machine", no forgotten step.</p>
 <p>Ours will:</p>
 <pre><code>you push code
      │
@@ -1364,6 +1857,45 @@ consistency.</p>
 </code></pre>
 <p>Walk the diagram twice: once for the happy path, once for each failure branch.
 The branches are the product.</p>
+<h3>What YAML is (4 min)</h3>
+<p>They are about to read two files in a format they have probably never seen. Four
+minutes now, or twenty minutes of indentation bugs later.</p>
+<p><strong>YAML is a way to write settings as text.</strong> Same job as JSON — data written
+down so a program can read it — but shaped for humans to type.</p>
+<pre><code class="language-yaml">name: deploy
+on:
+  push:
+    branches: [main]
+</code></pre>
+<p>Three rules cover almost everything:</p>
+<ul>
+<li><strong><code>key: value</code></strong> — a fact. Same as JSON's <code>"key": "value"</code>, without the quotes
+  and commas.</li>
+<li><strong>Indentation means "belongs to".</strong> <code>push</code> is indented under <code>on</code>, so it is
+  part of <code>on</code>. <strong>Spaces only — never tabs.</strong></li>
+<li><strong>A <code>-</code> starts a list item.</strong></li>
+</ul>
+<pre><code class="language-yaml">steps:
+  - run: make test
+  - run: make deploy
+</code></pre>
+<p>That is a list of two steps, each with a <code>run</code> in it.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Compare it side by side with the JSON they already know from
+Week 1 — the same data, two spellings:</p>
+<p><code>json
+{"steps": [{"run": "make test"}, {"run": "make deploy"}]}</code></p>
+<p><em>"Same facts. YAML uses position on the page where JSON uses brackets."</em></p>
+<p>Then the warning that saves an afternoon: <strong>indentation is not decoration in
+YAML, it is the syntax.</strong> A line indented one space too far belongs to a
+different thing, and the error message will point somewhere unhelpful.</p>
+</blockquote>
+<p>Have them open a real one and read it before writing any:</p>
+<pre><code class="language-bash">cat .github/workflows/deploy.yml
+</code></pre>
+<p>Do not explain every line. Ask them to find three things: <strong>what triggers it</strong>
+(<code>on: push</code>), <strong>what jobs it has</strong> (<code>gate</code> and <code>deploy</code>), and <strong>the one line
+that connects them</strong>. That third one is the next section.</p>
 <h3>The one detail people get wrong</h3>
 <p>You would think two separate robots — "the test robot" and "the deploy robot" —
 would work. <strong>They do not.</strong></p>
@@ -1372,7 +1904,7 @@ would work. <strong>They do not.</strong></p>
           │
    ┌──────┴──────┐
    ▼             ▼
- tests        deploy          &lt;- starts immediately, does not wait
+  gate        deploy          &lt;- starts immediately, does not wait
    │             │
    │  (4 min)    │  (2 min)
    ▼             ▼
@@ -1381,17 +1913,17 @@ would work. <strong>They do not.</strong></p>
 <p>The deploy robot does not wait for the test robot, so you get a <strong>green tick on
 a broken deploy</strong>, and a pipeline that looks like a safety net while catching
 nothing.</p>
-<p>The fix is one word:</p>
+<p>The fix is one word, and it is in the file they just read:</p>
 <pre><code class="language-yaml">jobs:
-  test:
+  gate:
     # ... run the tests ...
 
   deploy:
-    needs: test          # &lt;-- this. No tests, no deploy.
+    needs: gate          # &lt;-- the arrow. No gate, no deploy.
 </code></pre>
 <p><strong><code>needs:</code> only works between jobs inside one file.</strong> That is why the tests live
-in the deploy file rather than in their own — a constraint that looks arbitrary
-until you know what it prevents.</p>
+in the deploy workflow rather than in their own — a constraint that looks
+arbitrary until you know what it prevents.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · This is genuinely one of the most common CI mistakes in the
 industry, and what makes it dangerous is that <strong>it is invisible</strong>. Everything
@@ -1400,7 +1932,16 @@ is green. Every badge says passing. Nothing is protected.</p>
 not, until the day a failing test does not stop a bad deploy — which is
 precisely the day you were counting on it.</p>
 </blockquote>
-<h3>Why 401 and not 403</h3>
+<h3>What an API key is, and why 401 not 403</h3>
+<p><strong>An API key is a password for a program.</strong> A long random string the caller
+sends with every request, that says "I am allowed to be here". No username, no
+login screen — one secret, attached to each call.</p>
+<p>Where it goes: in a <strong>header</strong>, which they met in Week 1 with
+<code>Content-Type</code>. Ours is <code>x-api-key</code>.</p>
+<pre><code class="language-bash">curl -s -i https://api.github.com/zen        # headers, from Week 1
+</code></pre>
+<p><em>"Same mechanism. We are just adding one of our own, and refusing anyone who
+does not send it."</em></p>
 <p>Two ways to refuse someone, and the difference is not pedantry:</p>
 <ul>
 <li><strong>401</strong> — <em>"I do not know who you are."</em></li>
@@ -1417,7 +1958,9 @@ to Week 1's rule about never returning raw errors — same instinct, different
 application.</p>
 </blockquote>
 <h3>Why the rate limit must slide</h3>
-<p>The obvious way to build "20 per minute" is a counter that resets each minute.</p>
+<p><strong>A rate limit is a cap on how often one caller may ask.</strong> "Twenty per minute,
+then I start refusing you."</p>
+<p>The obvious way to build it is a counter that resets each minute.</p>
 <p>Watch what that allows:</p>
 <pre><code>11:59:59   ████████████████████   20 requests. Fine.
 12:00:00   ████████████████████   20 requests. Also &quot;fine&quot;.
@@ -1496,18 +2039,23 @@ Same protocol fact, second consequence.</p>
 <pre><code class="language-bash">export API_KEYS=local-dev-key
 make run
 </code></pre>
+<p>That <code>export</code> is the environment variable from Week 1 — they are configuring
+their own service from outside its code.</p>
+<p>In the second terminal, three tests. <strong>Same <code>-w "%{http_code}"</code> flag they
+learned in Week 1 against httpbin</strong>, now pointed at their own service:</p>
 <pre><code class="language-bash"># no key
 curl -s -o /dev/null -w &quot;%{http_code}\n&quot; -X POST localhost:8080/chat \
   -H 'Content-Type: application/json' -d '{&quot;message&quot;:&quot;hi&quot;}'
 # 401
-
-# with the key
+</code></pre>
+<pre><code class="language-bash"># with the key
 curl -s -o /dev/null -w &quot;%{http_code}\n&quot; -X POST localhost:8080/chat \
   -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
   -d '{&quot;message&quot;:&quot;hi&quot;}'
 # 200
-
-# hammer it
+</code></pre>
+<p>One extra <code>-H</code>. That is the whole authentication mechanism.</p>
+<pre><code class="language-bash"># hammer it — the same loop from Beat 2, now aimed at yourself
 for i in $(seq 1 25); do
   curl -s -o /dev/null -w &quot;%{http_code} &quot; -X POST localhost:8080/chat \
     -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
@@ -1516,21 +2064,30 @@ done; echo
 # 200 200 200 ... 429 429 429
 </code></pre>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · <code>-w "%{http_code}"</code> tells curl to print just the status code.
-Worth explaining once, properly — they will use it every week from here, and
-it turns "did that work?" into a number they can see.</p>
-<p>Watching the row of 200s turn into 429s is the satisfying moment of this half.
-Make sure everyone gets there rather than skipping to the checkpoint.</p>
+<p><strong>INSTRUCTOR</strong> · Watching the row of 200s turn into 429s is the satisfying
+moment of this half. Make sure everyone gets there rather than skipping to the
+checkpoint.</p>
+<p>Point out that they have now <em>been</em> both parties: you attacked them in Beat 2
+with that exact loop, and now the same loop bounces off. <strong>That is the entire
+lesson of the first half, demonstrated rather than asserted.</strong></p>
 </blockquote>
 <h3>Part 2 · The pipeline (25 min)</h3>
 <p>Two files in <code>.github/workflows/</code>.</p>
-<p><code>test.yml</code> — runs on every pull request.
-<code>deploy.yml</code> — on every push to main: test, then deploy, then verify.</p>
+<p><code>deploy.yml</code> — on every push to main: <strong>gate</strong>, then deploy, then verify.
+<code>eval.yml</code> — the quality gate on pull requests (Week 8 fills this in).</p>
 <p>Three things in <code>deploy.yml</code> to read aloud:</p>
 <p><strong><code>--revision-suffix "${GITHUB_SHA::7}"</code></strong> tags every deployment with the code
-version that produced it. Without it you get <code>ship-agent-00042-xyz</code> and no way
-to know what is inside.</p>
-<p><em>"Roll back to the last good one"</em> becomes guesswork, at the worst possible
+version that produced it.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Beginners will not know what a SHA is, so: <em>"Every git commit
+has a unique fingerprint — a long string of letters and numbers. <code>::7</code> takes
+the first seven characters, which is enough to identify it."</em></p>
+<p><code>bash
+git log --oneline -3</code></p>
+<p>Those short codes on the left are exactly it. Now the flag makes sense.</p>
+</blockquote>
+<p>Without it you get <code>ship-agent-00042-xyz</code> and no way to know what is inside.
+<em>"Roll back to the last good one"</em> becomes guesswork, at the worst possible
 moment.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Flag it forward hard, because this is the clearest example in
@@ -1548,16 +2105,27 @@ nothing whatsoever about whether the program inside it can answer a request.</p>
 <p><strong>INSTRUCTOR</strong> · <em>"A deploy that exits 0 is not the same as a service that
 answers."</em> Write it down. It is a sentence that saves careers, and it applies
 to every deployment tool anyone has ever built.</p>
+<p><strong>What "exits 0" means</strong>, since it will not be obvious: <em>"Every command
+finishes with a number. Zero means it worked; anything else means it failed.
+That is how one step in a pipeline knows whether the last one succeeded."</em></p>
+<p><code>bash
+ls; echo $?          # 0
+ls /nope; echo $?    # not 0</code></p>
 </blockquote>
 <p>They will need two things in the repo settings: a <code>GCP_SA_KEY</code> secret (a service
-account credential file), and <code>api-keys</code> in Secret Manager alongside <code>kodekey</code>.</p>
+account credential file — <strong>a login for a robot rather than a person</strong>), and
+<code>api-keys</code> in Secret Manager alongside <code>kodekey</code>.</p>
 <h3>Then break it on purpose</h3>
 <p><strong>This is the part that matters most in the whole session.</strong></p>
-<p>Have them push a commit with a deliberately failing test, then watch the deploy
-never start.</p>
+<p>Have them push a commit with a deliberately failing test, then <strong>watch the
+robot</strong> on GitHub — Actions tab, click the run, watch <code>gate</code> go red and <code>deploy</code>
+never start at all.</p>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · <strong>Make everyone do this, and do not let anyone skip it</strong> —
-not the fast students, not the ones who "already understand it".</p>
+<p><strong>INSTRUCTOR</strong> · Make them actually watch it in the browser, live. The greyed
+out <code>deploy</code> job that never ran is the whole point made visual — it is not
+that the deploy failed, it is that <strong>it never happened</strong>.</p>
+<p><strong>Make everyone do this, and do not let anyone skip it</strong> — not the fast
+students, not the ones who "already understand it".</p>
 <p><strong>A gate you have never seen block anything is a gate you are trusting on
 faith.</strong></p>
 <p>That sentence is the whole philosophy of the back half of this course. It
@@ -1566,7 +2134,7 @@ comes back in Week 7 (a load test that exposes a broken rate limit) and Week 8
 finishing it for you.</p>
 </blockquote>
 <p>Then mention <strong>branch protection</strong>, which lives in repo settings rather than in
-any file: make the test job a <em>required status check</em>, and require pull requests
+any file: make the gate job a <em>required status check</em>, and require pull requests
 into main.</p>
 <p>That is the layer that actually stops bad code arriving. <strong>A pipeline that only
 reports is a pipeline people learn to ignore.</strong></p>
@@ -1618,9 +2186,11 @@ learns to look for the same flaw everywhere.</p>
 <li>Have them revoke a key: change <code>API_KEYS</code> on the service, restart, and watch
   the old key stop working — without a deploy. That is the "read fresh" decision
   paying off in real time.</li>
-<li>Have them push a commit that fails <code>test.yml</code> on a <strong>pull request</strong> rather
-  than main, and see the difference between a blocked merge and a blocked
-  deploy.</li>
+<li>Have them deliberately break the YAML — indent one line by a single extra
+  space — push, and read GitHub's error. Learning to recognise that error costs
+  two minutes now and saves an hour later.</li>
+<li>Have them push a commit that fails on a <strong>pull request</strong> rather than main, and
+  see the difference between a blocked merge and a blocked deploy.</li>
 <li>Ask: <em>"What could still reach production without passing the gate?"</em> Good
   answers: a direct <code>gcloud run deploy</code> from a laptop, and anyone with console
   access. Both are real, and both are why branch protection is necessary but not
@@ -1629,7 +2199,7 @@ learns to look for the same flaw everywhere.</p>
 <h2>Homework</h2>
 <ul>
 <li><code>make check-week-03</code> green, committed and pushed</li>
-<li>A screenshot of the deploy being <strong>blocked</strong> by a failing test</li>
+<li>A screenshot of the deploy being <strong>blocked</strong> by a failing gate</li>
 <li>Branch protection turned on</li>
 </ul>
 <blockquote>
@@ -1774,6 +2344,28 @@ have measured something."</em></p>
 <p><strong>What a token is.</strong> Models charge by the piece of text. A token is roughly
 three-quarters of a word — <code>unhappiness</code> might be three tokens, <code>the</code> is one.
 You do not need to predict them; every response tells you how many were used.</p>
+<p>Make it concrete with something they can run:</p>
+<pre><code class="language-bash">python -c &quot;
+t = 'Where is my order ORD-1002?'
+print('characters:', len(t))
+print('words     :', len(t.split()))
+print('~tokens   :', round(len(t)/4))
+&quot;
+</code></pre>
+<pre><code>characters: 27
+words     : 5
+~tokens   : 7
+</code></pre>
+<p><strong>Five words, about seven tokens.</strong> More than one per word, because <code>ORD-1002</code>
+gets chopped into several pieces — punctuation and odd strings cost more than
+plain English.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Stress that <code>len(text)/4</code> is a <strong>rough estimate</strong>, not the
+real count. The real number comes back from the provider in <code>usage</code>, and that
+is the one the budget uses. The estimate is for building intuition — <em>"is a
+customer message tens of tokens or thousands?"</em> — which is exactly the
+intuition they need to pick a limit.</p>
+</blockquote>
 <pre><code class="language-python">usage.input_tokens      # what you sent  (the whole conversation, every time)
 usage.output_tokens     # what came back
 </code></pre>
@@ -2144,6 +2736,28 @@ questions.</p>
 <h3>Half 1 · Telemetry — writing it down</h3>
 <p><strong>Telemetry means writing down what happened.</strong></p>
 <p>One line of structured text per turn, printed to the screen.</p>
+<h4>First — what "structured" means (3 min)</h4>
+<p>They have all seen logs. Almost none of them have seen the distinction that
+makes logs useful, and it takes two minutes to show.</p>
+<p><strong>An ordinary log line</strong> is a sentence for a human:</p>
+<pre><code>turn finished in 8400ms with 3 steps, cost about 2 cents
+</code></pre>
+<p>Fine to read. <strong>Impossible to compute with.</strong> To answer <em>"what was the average
+cost yesterday?"</em> you would have to pull that number back out of English.</p>
+<p><strong>A structured log line</strong> is the same facts as JSON — the format from Week 1:</p>
+<pre><code class="language-json">{&quot;turn_id&quot;: &quot;a3f&quot;, &quot;duration_ms&quot;: 8400, &quot;steps&quot;: 3, &quot;cost_usd&quot;: 0.021}
+</code></pre>
+<p>Now it is data. Have them prove it, using the pipe and <code>json.tool</code> they already
+know:</p>
+<pre><code class="language-bash">echo '{&quot;duration_ms&quot;: 8400, &quot;steps&quot;: 3}' | python -m json.tool
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The one-sentence version, worth saying exactly: <strong>"Write logs
+for a program to read, and a human can always read them too. Write logs for a
+human, and no program ever can."</strong></p>
+<p>That is the entire justification for the trace dict, and once they have it the
+field-by-field table below stops feeling like bureaucracy.</p>
+</blockquote>
 <p>And here is the part that genuinely surprises people, so pause on it:</p>
 <p><strong>Printing IS shipping telemetry.</strong></p>
 <p>Cloud Run — and every log platform in existence — reads whatever your program
@@ -2274,7 +2888,33 @@ turns             how much data these numbers rest on
 <p><strong>Averages hide disasters.</strong> Nineteen fast requests and one catastrophic one
 still average out fine. The average is the number that tells you everything is
 OK while a fifth of your users are furious.</p>
+<p><strong>Do not assert that — show it.</strong> Have them run this:</p>
+<pre><code class="language-bash">python -c &quot;
+import statistics
+d = [100]*19 + [9000]          # 19 fast requests, 1 disaster
+print('average:', round(sum(d)/len(d)))
+print('p95    :', round(statistics.quantiles(d, n=20)[-1]))
+&quot;
+</code></pre>
+<pre><code>average: 545
+p95    : 8555
+</code></pre>
+<p><strong>Same twenty requests. One number says half a second, the other says eight and
+a half.</strong> One of those two numbers would have you sleeping soundly while a
+customer waits nine seconds.</p>
 <blockquote>
+<p><strong>INSTRUCTOR</strong> · Ask which number a dashboard usually shows by default. It is
+the average, essentially everywhere, and that is worth being annoyed about.</p>
+<p>Then have them change <code>[100]*19</code> to <code>[100]*99</code> — one bad request in a hundred
+instead of one in twenty:</p>
+<p><code>average: 189
+p95    : 100</code></p>
+<p><strong>The p95 now hides it too.</strong> The nine-second request is still there, still
+happening to a real person, and both numbers say everything is fine.</p>
+<p><strong>No single number catches everything</strong> — which is the honest lesson, and the
+reason <code>/metrics</code> returns six of them rather than one. It is also why the trace
+of every individual turn still matters: aggregates are for noticing, and
+individual traces are for finding.</p>
 <p><strong>INSTRUCTOR</strong> · If the room is quantitative, the one-liner is: <em>"The average
 is a number about your service. The p95 is a number about your customers."</em></p>
 </blockquote>
@@ -2754,6 +3394,20 @@ ceiling — matters just as much, and it is the half people leave out.</p>
 <pre><code class="language-python">ceiling = min(RETRY_BASE_SECONDS * (2 ** attempt), RETRY_MAX_SECONDS)
 return random.uniform(0, ceiling)          # &lt;- full jitter
 </code></pre>
+<p><strong>Show it rather than describing it.</strong> Have them run this:</p>
+<pre><code class="language-bash">python -c &quot;
+import random
+base = 0.5
+print('no jitter, 3 boxes wait:', [base*2**1]*3)
+print('full jitter, 3 boxes   :', [round(random.uniform(0, base*2**1), 2) for _ in range(3)])
+&quot;
+</code></pre>
+<pre><code>no jitter, 3 boxes wait: [1.0, 1.0, 1.0]
+full jitter, 3 boxes   : [0.09, 0.32, 0.46]
+</code></pre>
+<p><strong>The first line is three machines hitting a struggling provider at the exact
+same instant.</strong> The second is the same three machines, spread out. One line of
+code is the difference.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Without jitter, your own fleet keeps hammering the thing it
 is waiting for. That is how a brief wobble becomes an outage you caused
@@ -3047,8 +3701,35 @@ separate service that enforces policy independent of the model.</p>
     r&quot;system\s+prompt\s*:&quot;,
 ]
 </code></pre>
-<p>That is five patterns. <strong>A rephrase walks straight past it.</strong> Have the room
-invent one out loud — it takes about four seconds, which is the point.</p>
+<p><strong>What that gibberish is:</strong> a <em>regular expression</em> — a pattern for matching
+text. Three pieces cover everything on screen:</p>
+<ul>
+<li><strong><code>\s+</code></strong> — one or more spaces</li>
+<li><strong><code>(a|b)</code></strong> — either <code>a</code> or <code>b</code></li>
+<li><strong><code>(...)?</code></strong> — this part is optional</li>
+</ul>
+<p>So the first pattern reads: <em>the word "ignore", spaces, optionally "all",
+spaces, then "previous" or "prior", spaces, "instructions".</em></p>
+<p><strong>Run it and watch it work, then watch it fail:</strong></p>
+<pre><code class="language-bash">python -c &quot;
+import re
+pat = r'ignore\s+(all\s+)?(previous|prior)\s+instructions'
+for t in ['ignore all previous instructions',
+          'ignore previous instructions',
+          'IGNORE ALL PRIOR INSTRUCTIONS',
+          'please disregard what I said before']:
+    print('MATCH' if re.search(pat, t, re.I) else 'no   ', t)
+&quot;
+</code></pre>
+<pre><code>MATCH ignore all previous instructions
+MATCH ignore previous instructions
+MATCH IGNORE ALL PRIOR INSTRUCTIONS
+no    please disregard what I said before
+</code></pre>
+<p><strong>Three caught. The fourth means exactly the same thing and sails through.</strong></p>
+<p>That is five patterns. <strong>A rephrase walks straight past it</strong> — they have just
+watched one do it. Have the room invent another out loud; it takes about four
+seconds, which is the point.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"It is a speed bump and a signal, not a wall. Anyone who
 tells you a list of banned phrases solves prompt injection is selling you
@@ -3394,6 +4075,34 @@ pull request, <strong>with no API key</strong>, in seconds.</p>
 <p>That "no API key, in seconds" is not a convenience — it is what makes the gate
 survive. A gate that needs a secret, costs money and takes four minutes is a
 gate someone disables during a busy week.</p>
+<h4>First — what a "fake" is (2 min)</h4>
+<p>The word appears twenty times in this session, so define it once.</p>
+<p><strong>A fake (or "mock") is a stand-in you swap in during a test</strong>, so the thing you
+are testing does not have to talk to the real world.</p>
+<p>The smallest possible version, which they can run:</p>
+<pre><code class="language-bash">python -c &quot;
+def real_model(q):  return 'an answer that costs money and needs a key'
+def fake_model(q):  return 'a fixed answer, free and instant'
+
+def ask(question, model=real_model):    # &lt;- the seam
+    return model(question)
+
+print(ask('hello'))
+print(ask('hello', model=fake_model))
+&quot;
+</code></pre>
+<pre><code>an answer that costs money and needs a key
+a fixed answer, free and instant
+</code></pre>
+<p><strong>That <code>model=</code> parameter is the entire trick.</strong> Their <code>run_turn</code> has exactly
+the same seam — <code>model_fn=call_model</code> — which is why the eval gate can run with
+no API key at all.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Point out that this is the <strong>fourth</strong> appearance of the same
+idea: <code>load</code>/<code>save</code> in Week 2, the OTel destination in Week 5, <code>app/store.py</code>
+in Week 7, and now this. <em>"A seam is a place you can swap one thing for
+another without editing anything around it. You have now built four."</em></p>
+</blockquote>
 <p>That property rests on one decision worth explaining carefully, because it is
 the most subtle idea in the session:</p>
 <blockquote>
