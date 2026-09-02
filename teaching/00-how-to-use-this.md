@@ -44,8 +44,12 @@ three and stop needing to be told what is happening.
 > remembers it for years. A student who was *told* it happens forgets by
 > Thursday.
 
-Three weeks bend the shape deliberately, and each says so at the top:
+Four weeks bend the shape deliberately, and each says so at the top:
 
+- **Week 1** inserts a sixth beat, **Ground**, as the *second* beat — 25 minutes
+  of hands-on terminal, folders, JSON and curl, before any theory. Week 1 is the
+  only session that can assume nothing at all, so the tools have to be handed
+  over before the concepts that name them. See the note below.
 - **Week 2** gives Break 25 minutes, because deploying happens inside it.
 - **Week 6** leads with a 35-minute bug hunt and puts Break in the middle, where
   the session changes subject.
@@ -81,6 +85,9 @@ same shape. Not decoration — the picture is what they keep.
 | deploying | a shop that is only open when the owner is inside |
 | DNS | your phone's contacts list |
 | a URL | a building, and a room inside it |
+| a port | one building, many numbered doors |
+| FastAPI / uvicorn | a doorman, and a translator behind him |
+| a container | a food truck, versus a recipe |
 | an HTTP request | a counter clerk who helps you, then forgets you |
 | a session ID | the ticket the clerk gives you to bring back |
 | state in a process | the only record of your order is in one assistant's head |
@@ -113,6 +120,7 @@ Every tool the course introduces gets this treatment:
 | Tool | The toy, before our agent |
 |---|---|
 | the terminal | `pwd`, `ls`, `mkdir`, `cd` in a scratch folder |
+| folders and paths | build a drawn three-level tree by hand, then `ls -R` it |
 | a process | `sleep 30`, then Ctrl+C |
 | JSON | `echo '{"name":"Ada"}' \| python -m json.tool`, then break it |
 | curl | example.com → GitHub's API → status codes → POST to an echo service |
@@ -127,6 +135,37 @@ Every tool the course introduces gets this treatment:
 
 Every one of those has verified output printed in the guide, so you know what
 they should see before you run it in front of twenty people.
+
+**5. In Week 1 only, the tools come before the theory.**
+
+Rule 1 says teach a concept the moment it is needed. Week 1 has a problem the
+other seven do not: the room may never have opened a terminal, so there is no
+floor to teach *anything* from.
+
+So Week 1's second beat — **Ground** — hands over five tools on toys before a
+word of theory: the terminal, folders, a process and a port, JSON, and curl.
+Only then does the Concept beat explain deploying, web services, DNS, URLs and
+HTTP.
+
+The payoff is that **every concept becomes a name for something they already
+did**:
+
+| When you explain… | They have already… |
+|---|---|
+| what a URL is | fetched two of them with curl |
+| status codes | made a 200, a 404 and a 500 appear |
+| method / path / body | typed all three as curl flags |
+| a process | run `sleep 30` and killed it with Ctrl+C |
+| a port, `localhost` | seen the `:8080` shape |
+| why sharing a file fails | waited for `make install` to download everything |
+
+> **INSTRUCTOR** · The temptation when you are running late is to cut Ground and
+> lecture the concepts instead. Cut the concepts and keep Ground. A room with
+> five working tools and no theory can still build; a room with five concepts
+> and no terminal cannot type.
+>
+> Weeks 2–8 revert to the five-beat shape, because from Week 2 onward the floor
+> exists.
 
 ## The repo layout
 

@@ -393,8 +393,12 @@ Do not cut it. A student who has <em>watched</em> memory vanish on redeploy
 remembers it for years. A student who was <em>told</em> it happens forgets by
 Thursday.</p>
 </blockquote>
-<p>Three weeks bend the shape deliberately, and each says so at the top:</p>
+<p>Four weeks bend the shape deliberately, and each says so at the top:</p>
 <ul>
+<li><strong>Week 1</strong> inserts a sixth beat, <strong>Ground</strong>, as the <em>second</em> beat — 25 minutes
+  of hands-on terminal, folders, JSON and curl, before any theory. Week 1 is the
+  only session that can assume nothing at all, so the tools have to be handed
+  over before the concepts that name them. See the note below.</li>
 <li><strong>Week 2</strong> gives Break 25 minutes, because deploying happens inside it.</li>
 <li><strong>Week 6</strong> leads with a 35-minute bug hunt and puts Break in the middle, where
   the session changes subject.</li>
@@ -436,6 +440,18 @@ same shape. Not decoration — the picture is what they keep.</p>
 <tr>
 <td>a URL</td>
 <td>a building, and a room inside it</td>
+</tr>
+<tr>
+<td>a port</td>
+<td>one building, many numbered doors</td>
+</tr>
+<tr>
+<td>FastAPI / uvicorn</td>
+<td>a doorman, and a translator behind him</td>
+</tr>
+<tr>
+<td>a container</td>
+<td>a food truck, versus a recipe</td>
 </tr>
 <tr>
 <td>an HTTP request</td>
@@ -497,6 +513,10 @@ wrong"</em> from <em>"the service is down"</em>. A student who ran the five curl
 <td><code>pwd</code>, <code>ls</code>, <code>mkdir</code>, <code>cd</code> in a scratch folder</td>
 </tr>
 <tr>
+<td>folders and paths</td>
+<td>build a drawn three-level tree by hand, then <code>ls -R</code> it</td>
+</tr>
+<tr>
 <td>a process</td>
 <td><code>sleep 30</code>, then Ctrl+C</td>
 </tr>
@@ -544,6 +564,58 @@ wrong"</em> from <em>"the service is down"</em>. A student who ran the five curl
 </table>
 <p>Every one of those has verified output printed in the guide, so you know what
 they should see before you run it in front of twenty people.</p>
+<p><strong>5. In Week 1 only, the tools come before the theory.</strong></p>
+<p>Rule 1 says teach a concept the moment it is needed. Week 1 has a problem the
+other seven do not: the room may never have opened a terminal, so there is no
+floor to teach <em>anything</em> from.</p>
+<p>So Week 1's second beat — <strong>Ground</strong> — hands over five tools on toys before a
+word of theory: the terminal, folders, a process and a port, JSON, and curl.
+Only then does the Concept beat explain deploying, web services, DNS, URLs and
+HTTP.</p>
+<p>The payoff is that <strong>every concept becomes a name for something they already
+did</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>When you explain…</th>
+<th>They have already…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>what a URL is</td>
+<td>fetched two of them with curl</td>
+</tr>
+<tr>
+<td>status codes</td>
+<td>made a 200, a 404 and a 500 appear</td>
+</tr>
+<tr>
+<td>method / path / body</td>
+<td>typed all three as curl flags</td>
+</tr>
+<tr>
+<td>a process</td>
+<td>run <code>sleep 30</code> and killed it with Ctrl+C</td>
+</tr>
+<tr>
+<td>a port, <code>localhost</code></td>
+<td>seen the <code>:8080</code> shape</td>
+</tr>
+<tr>
+<td>why sharing a file fails</td>
+<td>waited for <code>make install</code> to download everything</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The temptation when you are running late is to cut Ground and
+lecture the concepts instead. Cut the concepts and keep Ground. A room with
+five working tools and no theory can still build; a room with five concepts
+and no terminal cannot type.</p>
+<p>Weeks 2–8 revert to the five-beat shape, because from Week 2 onward the floor
+exists.</p>
+</blockquote>
 <h2>The repo layout</h2>
 <p>The project is built <strong>layer by layer, one git branch per week</strong>:</p>
 <pre><code>week-01-package    &lt;- students start here. Working code + this week's gaps.
@@ -677,6 +749,29 @@ is learning curl, JSON, HTTP methods, our API and our agent simultaneously,
 and when it fails they cannot tell you which part broke.</p>
 <p><strong>Learn the tool on a toy. Then use the tool on our thing.</strong> Every time.</p>
 </blockquote>
+<h2>The shape of today</h2>
+<p>Six beats. <strong>Read this before you teach — the order is load-bearing.</strong></p>
+<pre><code>   1  ASK       10 min   talk only, laptops closed
+   2  GROUND    25 min   ── hands on keyboards ──
+                         terminal, folders, JSON, curl, get the project
+   3  BREAK     10 min   kill the agent; find the four gaps
+   4  CONCEPT   20 min   deploy, web service, DNS, URL, HTTP
+   5  BUILD     45 min   the front door, streaming, the container
+   6  PROVE     15 min   checkpoint green; three questions they cannot answer
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Beat 2 is the change that makes this session work, and it is
+worth knowing why it is where it is.</p>
+<p><strong>The tools come before the theory.</strong> By the time you explain what a URL is
+in Beat 4, they will have already fetched one. When you explain status codes,
+they will have already made a <code>404</code> and a <code>500</code> appear on their own screen.
+When you explain that a request has a method, a path and a body, you are
+naming three things they typed twenty minutes earlier.</p>
+<p>That is the difference between <em>"here are five new facts"</em> and <em>"here are
+names for five things you already did"</em>. The second one survives the week.</p>
+<p>The cost is that Beat 2 feels like it is not about AI. Say so cheerfully:
+<em>"Twenty-five minutes of plumbing, then it pays for the rest of the course."</em></p>
+</blockquote>
 <hr />
 <h2>Beat 1 · Ask (10 min, no slides)</h2>
 <blockquote>
@@ -714,18 +809,515 @@ four moves on the whiteboard if they are willing:</p>
 <p>Their Phase 1 agent works when <em>they</em> run it, on <em>their</em> laptop, in <em>their</em>
 terminal, with <em>their</em> Python installed. That is not a product. It is a demo.</p>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · Let that land. Then: <em>"Today we fix that, and it has nothing
-to do with AI."</em></p>
+<p><strong>INSTRUCTOR</strong> · Let that land. Then say what happens next, so the plumbing
+beat does not feel like a detour:</p>
+<p><em>"Today we fix that, and almost none of it is about AI. First I need to hand
+you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></p>
 </blockquote>
 <hr />
-<h2>Beat 2 · Break (10 min)</h2>
+<h2>Beat 2 · Ground (25 min)</h2>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
+window."</em> Then walk the room. Do not stay at the front for this beat; this is
+the one where you find out who has never used a terminal, and you want to
+find that out now rather than in Beat 5.</p>
+</blockquote>
+<p>Five tools, each on a toy. Nothing here touches our agent — that is deliberate.</p>
+<pre><code>   2a  the terminal    where am I, what is here, how do I move        5 min
+   2b  folders         build a small tree by hand                     4 min
+   2c  process, port   what &quot;running&quot; means, and numbered doors       3 min
+   2d  JSON            how data is written down to travel             3 min
+   2e  curl            how to send a request from the terminal        6 min
+   2f  the project     clone it, run the tests, read the map          4 min
+                                                                    ───────
+                                                                     25 min
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Keep this beat moving. It is nine short things, not five
+lessons. If somebody's terminal will not open, pair them with a neighbour and
+fix it at the break — do not hold twenty people for one laptop.</p>
+</blockquote>
+<h3>Part 2a · The terminal (5 min)</h3>
+<p>A terminal is a window where you <strong>type commands instead of clicking</strong>. Nothing
+more mysterious than that.</p>
+<p>Open one:</p>
+<ul>
+<li><strong>Mac</strong> — press <code>Cmd + Space</code>, type <code>terminal</code>, press Enter</li>
+<li><strong>Windows</strong> — press the Start key, type <code>powershell</code>, press Enter</li>
+<li><strong>Linux</strong> — <code>Ctrl + Alt + T</code></li>
+</ul>
+<p>Every command has the same shape, and naming it once saves a lot of confusion
+later:</p>
+<pre><code>   mkdir  -p   practice/notes
+   ─────  ──   ──────────────
+     │     │         │
+   the    an     what to
+  command  option  do it to
+           (a flag,
+            starts with -)
+</code></pre>
+<p>Now type each of these and press Enter. Type them — do not paste.</p>
+<pre><code class="language-bash">pwd
+</code></pre>
+<p><strong>Where am I?</strong> Prints the folder you are currently in. Every terminal is always
+"in" a folder — think of it as where you are standing.</p>
+<pre><code class="language-bash">ls
+</code></pre>
+<p><strong>What is in here?</strong> Lists the files and folders.</p>
+<pre><code class="language-bash">ls -la
+</code></pre>
+<p><strong>The same, with detail</strong> — sizes, dates, and the hidden files whose names start
+with a dot. <code>-l</code> is "long", <code>-a</code> is "all". <strong>Flags stack</strong>, which is why they
+can be written <code>-la</code> rather than <code>-l -a</code>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Point at one dotfile and say why it matters now: <em>"Files
+starting with a dot are hidden from <code>ls</code>, not secret. Your API key will live
+in one called <code>.env</code>. If you ever think a file has vanished, it is usually
+that."</em></p>
+</blockquote>
+<p>Two more that save everybody's afternoon:</p>
+<ul>
+<li><strong>Tab</strong> completes what you are typing. Type <code>pw</code> then press Tab.</li>
+<li><strong>Up arrow</strong> brings back the last command. You will use this constantly.</li>
+</ul>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Demonstrate Tab on the projector rather than describing it.
+Type <code>cd Doc</code>, press Tab, watch it become <code>cd Documents/</code>. Beginners type
+long paths character by character for weeks unless somebody shows them this
+in the first ten minutes.</p>
+</blockquote>
+<h3>Part 2b · Folders, built by hand (4 min)</h3>
+<p>They are about to work inside a project with about forty files in it. So build a
+tiny one first, by hand, where they can see the whole thing.</p>
+<p><strong>This is the shape we are going to make:</strong></p>
+<pre><code>   practice/
+   │
+   ├── notes.txt
+   │
+   ├── src/
+   │   ├── app.py
+   │   └── helper.py
+   │
+   └── data/
+       └── orders.txt
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Draw that tree on the whiteboard before anyone types, and
+leave it up. Then have them build it with commands, checking their drawing
+against the real thing as they go.</p>
+<p>The tree drawing is a skill in itself and it is worth thirty seconds: the
+lines are just indentation, <code>│</code> means "more below at this level", <code>└──</code> means
+"last one here". They will read trees for the rest of their career.</p>
+</blockquote>
+<p>Make the folder and go into it:</p>
+<pre><code class="language-bash">mkdir practice
+cd practice
+</code></pre>
+<p><strong><code>mkdir</code></strong> = make directory. <strong><code>cd</code></strong> = change directory. Nothing prints — and
+that is the rule to learn now:</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Say this out loud, twice: <strong>silence means it worked.</strong>
+Beginners assume no output means failure and run the command four more times.
+A terminal only speaks up when something is wrong or when you asked for
+output.</p>
+</blockquote>
+<p>Make an empty file, then the two sub-folders:</p>
+<pre><code class="language-bash">touch notes.txt
+mkdir src data
+</code></pre>
+<p><strong><code>touch</code></strong> creates an empty file. Notice <code>mkdir</code> took <strong>two</strong> names at once —
+most commands accept a list.</p>
+<p>Now files inside <code>src/</code>:</p>
+<pre><code class="language-bash">touch src/app.py src/helper.py
+</code></pre>
+<p><strong>They did not have to <code>cd</code> into <code>src</code> to do that.</strong> A path with a <code>/</code> in it
+says "go through this folder to get there". Worth pointing out explicitly —
+beginners tend to <code>cd</code> in and out of folders one step at a time forever.</p>
+<p>One more, using a different trick:</p>
+<pre><code class="language-bash">echo &quot;ORD-1002 standing desk&quot; &gt; data/orders.txt
+</code></pre>
+<p><strong><code>&gt;</code> sends what a command printed into a file instead of onto the screen.</strong>
+<code>echo</code> just prints its argument; the <code>&gt;</code> redirects it. They will use this
+whenever a file needs one line in it.</p>
+<p><strong>Now look at what they made:</strong></p>
+<pre><code class="language-bash">ls -R
+</code></pre>
+<p><code>-R</code> means recursive — go into every sub-folder too.</p>
+<pre><code>data        notes.txt   src
+
+./data:
+orders.txt
+
+./src:
+app.py      helper.py
+</code></pre>
+<p>Read it as <em>"here is this folder, then here is what is inside each sub-folder"</em>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Their exact spacing will differ from yours — <code>ls</code> lays out
+columns to fit the window width, so a narrow terminal prints one name per
+line. Say so if anyone asks; it is the same information.</p>
+</blockquote>
+<p><strong>That is the same tree as the drawing</strong>, written the way a terminal writes it.
+Have them compare the two on screen and board, out loud.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · If <code>tree</code> happens to be installed, <code>tree</code> prints it exactly
+like the whiteboard drawing, which is satisfying. Do not install it for them
+and do not rely on it — <code>ls -R</code> is everywhere, and reading its output is the
+more useful skill.</p>
+</blockquote>
+<p>Check what is in the file, then go back up:</p>
+<pre><code class="language-bash">cat data/orders.txt
+cd ..
+</code></pre>
+<p><strong><code>cat</code></strong> prints a whole file to the screen. <strong><code>..</code></strong> always means "the folder
+above this one".</p>
+<p>Finally, throw it away:</p>
+<pre><code class="language-bash">rm -r practice
+</code></pre>
+<p><code>rm</code> = remove, <code>-r</code> = including everything inside.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <em>"<code>rm</code> does not ask, and there is no recycle bin. Read it
+twice before you press Enter."</em> Then move on — do not turn it into a horror
+story.</p>
+</blockquote>
+<p><strong>Six commands, and that is the whole toolkit:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>In plain words</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pwd</code></td>
+<td>where am I standing?</td>
+</tr>
+<tr>
+<td><code>ls</code></td>
+<td>what is here?</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>go somewhere (<code>..</code> = up one)</td>
+</tr>
+<tr>
+<td><code>mkdir</code></td>
+<td>make a folder</td>
+</tr>
+<tr>
+<td><code>touch</code></td>
+<td>make an empty file</td>
+</tr>
+<tr>
+<td><code>cat</code></td>
+<td>show me what is in this file</td>
+</tr>
+</tbody>
+</table>
+<h3>Part 2c · Two words you will hear all course (3 min)</h3>
+<p>Two ideas that everything else sits on. Ninety seconds each, with something to
+run.</p>
+<p><strong>A process is a running program.</strong></p>
+<p>A program is a file sitting on disk, doing nothing. A <strong>process</strong> is that file
+actually running, right now, in memory. Same program started twice = two
+processes.</p>
+<pre><code>   on disk                    running
+   ───────                    ───────
+   app.py   ──  you start it  ──▶  a process
+   (a file,                        (alive, using memory,
+    doing nothing)                  holding things in variables)
+
+                                     ▲
+                              close the terminal
+                              and this is GONE
+</code></pre>
+<pre><code class="language-bash">sleep 30
+</code></pre>
+<p>That is a process. It is running. Your terminal is stuck because it is waiting
+for it. Press <strong>Ctrl + C</strong> to kill it.</p>
+<p><strong>They just killed a process.</strong> That is what happens to their agent when they
+close the terminal, and it is why the memory disappears in Week 2.</p>
+<p><strong>A port is a numbered door on a computer.</strong></p>
+<p>One computer, many doors. A web server sits behind door <code>80</code>, or <code>443</code>, or in
+our case <code>8080</code>.</p>
+<pre><code>        ONE COMPUTER
+   ┌───────────────────────┐
+   │                       │
+   │   :8080  our agent    │◀── a request knocks
+   │   :5432  a database   │    on ONE numbered door
+   │   :3000  a dashboard  │
+   │                       │
+   └───────────────────────┘
+</code></pre>
+<p><code>localhost</code> is a special name meaning <strong>this computer, the one I am typing on</strong>.</p>
+<pre><code>   localhost:8080
+   ─────────  ────
+       │        │
+    which     which
+   computer    door
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · That is enough. Do not explain port ranges, TCP, or why 443.
+They need "numbered door" and "localhost means here", and they need it in
+ninety seconds. The rest is Week 2's problem and mostly never.</p>
+</blockquote>
+<h3>Part 2d · JSON, before we send any (3 min)</h3>
+<p>They are about to send and receive JSON all course. Four minutes now saves
+confusion in all eight weeks.</p>
+<p><strong>JSON is a way to write data as text</strong>, so it can travel over a network. That
+is its entire purpose: a network can only carry text, so we agree on a way to
+write data down.</p>
+<pre><code class="language-json">{&quot;name&quot;: &quot;Ada&quot;, &quot;age&quot;: 36}
+</code></pre>
+<ul>
+<li><code>{ }</code> wraps a set of facts about one thing</li>
+<li><code>"name"</code> is a <strong>label</strong>, always in double quotes</li>
+<li><code>:</code> separates the label from its value</li>
+<li><code>,</code> separates one fact from the next</li>
+</ul>
+<p>Values can be text (in quotes), numbers (no quotes), true/false, or another
+<code>{ }</code> nested inside.</p>
+<p><strong>Run it.</strong> This command reads JSON and prints it back tidily:</p>
+<pre><code class="language-bash">echo '{&quot;name&quot;:&quot;Ada&quot;,&quot;age&quot;:36}' | python -m json.tool
+</code></pre>
+<pre><code class="language-json">{
+    &quot;name&quot;: &quot;Ada&quot;,
+    &quot;age&quot;: 36
+}
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Explain the <code>|</code> once, because it appears all course: <em>"The
+pipe takes what the left side printed and feeds it to the right side as
+input."</em> That is enough. Do not explain stdin.</p>
+<p>Note the pair with <code>&gt;</code> from Part 2b: <em>"<code>&gt;</code> sends output to a file. <code>|</code> sends
+output to another command."</em></p>
+</blockquote>
+<p><strong>Now break it on purpose.</strong> Use single quotes around the label — which is legal
+in Python and illegal in JSON:</p>
+<pre><code class="language-bash">echo &quot;{'name':'Ada'}&quot; | python -m json.tool
+</code></pre>
+<pre><code>Expecting property name enclosed in double quotes: line 1 column 2
+</code></pre>
+<p><strong>The error tells you the rule.</strong> JSON labels need double quotes, always.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This tiny failure is worth the thirty seconds. It is the
+single most common JSON mistake, they have now made it deliberately, and the
+error message that will confuse them in week four is one they have already
+seen and understood.</p>
+<p>If anyone knows Python: <em>"It looks exactly like a dict. The differences that
+bite are double quotes only, and no trailing comma."</em></p>
+</blockquote>
+<h3>Part 2e · curl, on things that are not ours (6 min)</h3>
+<p><strong><code>curl</code> sends a request over the network from the terminal, and prints what
+came back.</strong> It is a browser with no window.</p>
+<p>They will use it in every session from here. So learn it on something simple
+first, where nothing else can be the problem.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This is the highest-value seven minutes in the session, and
+the reason is diagnostic. When a three-flag POST at our agent fails in Beat 5,
+a student who ran these five toys can tell <em>"my JSON is malformed"</em> from <em>"my
+flags are wrong"</em> from <em>"our service is broken"</em>. A student who cannot make
+that distinction will raise their hand for every failure for eight weeks.</p>
+<p>If the room has no internet: <code>python -m http.server 9000</code> in one terminal and
+<code>curl -s localhost:9000</code> in another covers points one to four.</p>
+</blockquote>
+<p><strong>One — fetch a web page.</strong></p>
+<pre><code class="language-bash">curl -s https://example.com
+</code></pre>
+<p>A pile of HTML comes back. That is what a web page <em>is</em> underneath: text your
+browser draws. <code>-s</code> means "silent" — without it curl prints a progress bar that
+gets in the way.</p>
+<p><strong>They have just done what a browser does.</strong></p>
+<p><strong>Two — call an API.</strong></p>
+<pre><code class="language-bash">curl -s https://api.github.com/zen
+</code></pre>
+<p>One sentence comes back. No HTML, no page — just an answer.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Name the difference, because it is the difference between a
+website and an API and most people have never had it stated: <em>"The first one
+sent something for a human to look at. This one sent something for a program
+to use. Same protocol, same tool, different audience. That is all an API is."</em></p>
+<p>Then point forward once: <em>"By the end of today, your agent is the second
+kind."</em></p>
+</blockquote>
+<p><strong>Three — see the reply's status code and headers.</strong></p>
+<pre><code class="language-bash">curl -s -i https://api.github.com/zen
+</code></pre>
+<p><code>-i</code> includes the reply's <strong>headers</strong> — everything before the blank line.</p>
+<pre><code>HTTP/2 200
+date: Mon, 31 Aug 2026 05:04:25 GMT
+content-type: text/plain;charset=utf-8
+
+Keep it logically awesome.
+</code></pre>
+<p>Three things arrived, and it is worth separating them by eye:</p>
+<pre><code>   HTTP/2 200                    ◀── a STATUS: how it went
+   content-type: text/plain      ◀── HEADERS: facts about the reply
+                                     (blank line: headers end here)
+   Keep it logically awesome.    ◀── the BODY: the actual answer
+</code></pre>
+<p><strong>Headers are extra facts about the request or reply, that are not the body
+itself.</strong> That is the whole idea. <code>content-type</code> is how the receiver knows what
+kind of thing it just got.</p>
+<p><strong>Four — see other status codes.</strong></p>
+<pre><code class="language-bash">curl -s -o /dev/null -w &quot;%{http_code}\n&quot; https://httpbin.org/status/404
+</code></pre>
+<pre><code>404
+</code></pre>
+<p>Two new flags, both worth knowing because they recur all course:</p>
+<ul>
+<li><code>-o /dev/null</code> — throw the body away, we do not care about it</li>
+<li><code>-w "%{http_code}\n"</code> — print <em>just</em> the status code</li>
+</ul>
+<p>Try <code>200</code> and <code>500</code> in place of <code>404</code>. Same command, different numbers.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Have them run all three. Seeing 200, 404 and 500 come back
+from the same command is what turns status codes from a table on a slide into
+something real. They use <code>-w "%{http_code}"</code> heavily in Week 3.</p>
+<p>Do not explain what the numbers <em>mean</em> yet — that is Beat 4, twenty minutes
+from now, and it lands much better as <em>"remember the 404 you made?"</em> than as
+a table nobody has a memory attached to.</p>
+</blockquote>
+<p><strong>Five — send something (POST).</strong></p>
+<p>Everything so far was <code>GET</code> — <em>"give me something"</em>. Now <code>POST</code> — <em>"here, take
+this"</em>.</p>
+<pre><code class="language-bash">curl -s -X POST https://httpbin.org/post \
+  -H 'Content-Type: application/json' \
+  -d '{&quot;message&quot;:&quot;hello&quot;}'
+</code></pre>
+<p>Read the command aloud, flag by flag:</p>
+<ul>
+<li><code>-X POST</code> — we are <em>sending</em>, not just reading.</li>
+<li><code>-H 'Content-Type: application/json'</code> — a header, telling the server "the
+  body I am sending is JSON".</li>
+<li><code>-d '{...}'</code> — the body. The actual thing being sent.</li>
+</ul>
+<p>That URL is a free echo service: it replies with a description of whatever you
+sent it. In the reply, find this part:</p>
+<pre><code class="language-json">  &quot;json&quot;: {
+    &quot;message&quot;: &quot;hello&quot;
+  },
+</code></pre>
+<p><strong>The server received your JSON, understood it, and read the <code>message</code> field
+out.</strong> That is exactly what our <code>/chat</code> endpoint will do in forty minutes — the
+same method, the same header, the same body shape.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Make the promise explicit, and write it on the board:</p>
+<p><em>"Keep that command. In Beat 5 we change the URL to your own laptop, and the
+answer comes back from your agent instead of an echo service. Nothing else
+about the command changes."</em></p>
+<p>That single sentence is what stops FastAPI feeling like magic later.</p>
+</blockquote>
+<h3>Part 2f · Getting the project (4 min)</h3>
+<pre><code class="language-bash">git clone https://github.com/nimeshmora/shipping-prod-ai-system.git
+cd shipping-prod-ai-system
+git checkout week-01-package
+</code></pre>
+<p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
+lets you move between them.</p>
+<ul>
+<li><strong><code>git clone</code></strong> downloads a copy of the project, with all of its history.</li>
+<li><strong><code>git checkout</code></strong> switches to a particular version — in our case, this week's
+  starting point.</li>
+</ul>
+<h4>The map of the project</h4>
+<p>Before they touch anything, orient them. <strong>They have <code>ls</code> now, so have them use
+it:</strong></p>
+<pre><code class="language-bash">ls
+ls app
+</code></pre>
+<p>Then draw the map. <strong>This is the only picture of the repo they get, so leave it
+up on a second board or a printed handout if you can.</strong></p>
+<pre><code>   shipping-prod-ai-system/
+   │
+   ├── app/                    ◀── EVERYTHING YOU WRITE LIVES HERE
+   │   ├── main.py                  the web service      ← TODAY
+   │   ├── stream.py                streaming replies    ← TODAY
+   │   ├── agent.py                 the Phase 1 loop     (already works)
+   │   ├── orders.py                the tool it calls    (already works)
+   │   ├── memory.py                conversation history ← Week 2
+   │   ├── store.py                 where memory lives   ← Week 2
+   │   ├── guardrails.py            keys, limits, fences ← Weeks 3, 4, 7
+   │   ├── trace.py                 what happened        ← Week 5
+   │   ├── otel.py                  traces, standard     ← Week 5
+   │   └── monitor.py               is it healthy?       ← Week 5
+   │
+   ├── tests/test_app.py       ◀── proves the agent still thinks correctly
+   ├── checks/check.py         ◀── `make check-week-01` lives here
+   │
+   ├── Makefile                ◀── the shortcuts. READ THIS ONE.
+   ├── Dockerfile              ◀── how to build the box   ← TODAY
+   ├── .dockerignore           ◀── what to keep OUT of it ← TODAY
+   ├── .env                    ◀── your API key. Never committed.
+   │
+   ├── evals/                  ← Week 8    does it answer WELL?
+   ├── loadtest/               ← Week 7    what happens under load
+   ├── observability/          ← Week 5    the dashboard stack
+   ├── deploy/                 ← Week 8    Kubernetes, portability
+   └── guide/                  ◀── the written version of every session
+</code></pre>
+<p>Three things to say about that map, and no more:</p>
+<p><strong>You only ever write inside <code>app/</code>.</strong> Everything else is scaffolding somebody
+already built: tests that check your work, a Makefile of shortcuts, a guide to
+read afterwards.</p>
+<p><strong>Today is two files.</strong> <code>app/main.py</code> and <code>app/stream.py</code>. That is the whole
+assignment.</p>
+<p><strong>The file list is the syllabus.</strong> Every remaining file has a week next to it.
+They can see the shape of the next eight weeks in one picture.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Do not walk through all ten files in <code>app/</code>. Point at
+<code>main.py</code> and <code>stream.py</code>, say <em>"these two, today"</em>, then point at the arrows
+down the right-hand side and say <em>"and that is the rest of the course"</em>.</p>
+<p>The map's real job is to remove a specific anxiety. Beginners open a
+forty-file repo and assume they are expected to understand all of it. Saying
+<em>"you write in one folder, and today it is two files"</em> is worth more than any
+individual explanation on the page.</p>
+</blockquote>
+<h4>Make it run</h4>
+<pre><code class="language-bash">make install
+make test
+</code></pre>
+<p><strong><code>make</code> runs a shortcut that somebody already wrote down.</strong> The shortcuts live
+in a file called <code>Makefile</code> in the project.</p>
+<pre><code class="language-bash">cat Makefile
+</code></pre>
+<p>Have them look — they have <code>cat</code> now, so use it. <strong>There is no magic in <code>make</code></strong>
+— it is a list of nicknames, and they can read every one.</p>
+<pre><code>   make test    is a nickname for    python -m pytest -q
+   make run     is a nickname for    python -m app.main
+</code></pre>
+<p><code>make install</code> fetches the libraries the project needs. <code>make test</code> runs the
+tests. You should see <strong>12 passed</strong>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Twelve green tests before they have written a line is
+deliberate. <em>"The agent loop already works. Phase 1 did that. Nothing you do
+today changes how it thinks."</em></p>
+</blockquote>
+<pre><code class="language-bash">make check-week-01
+</code></pre>
+<p>This one <strong>fails</strong>, and says:</p>
+<pre><code>FAIL  app/main.py must define `app`, the FastAPI application
+</code></pre>
+<p><strong>That is the assignment.</strong> Every week works this way: one command tells you
+exactly what is missing, and you make it green.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · End the beat here and take a breath. They now have: a
+terminal they can move around in, a project on disk, twelve green tests, and
+one red checkpoint. Nothing has been explained about the web yet.</p>
+<p><em>"Laptops can stay open, but stop typing. I want to show you something
+break."</em></p>
+</blockquote>
+<hr />
+<h2>Beat 3 · Break (10 min)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do this on the projector, not on their machines.</p>
 </blockquote>
 <p>Show them the Phase 1 agent working. Then:</p>
 <ol>
 <li>Close your terminal.</li>
-<li>Ask: <em>"Where is the agent now?"</em> — Gone. It was a process, and you killed it.</li>
+<li>Ask: <em>"Where is the agent now?"</em> — Gone. It was a <strong>process</strong>, and you killed
+   it. They met that word twenty minutes ago and ran <code>Ctrl + C</code> themselves.</li>
 <li>Ask: <em>"How would my colleague in another city use this?"</em> — They cannot.</li>
 <li>Ask: <em>"How would a website use it?"</em> — It has no address to call.</li>
 </ol>
@@ -738,10 +1330,14 @@ the libraries, the folder layout, an API key — <strong>yours</strong>. And whe
 tomorrow, they are still running yesterday's copy.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do not solve this. <strong>Leave it as an open question and move
-straight into Beat 3</strong>, which answers it in its first five minutes.</p>
+straight into Beat 4</strong>, which answers it in its first five minutes.</p>
 <p>The discomfort is the setup. A room that has just failed to think of a good
 way to share a Python function is a room that finds web services obvious
 rather than arbitrary.</p>
+<p>One thing you can now do that you could not before Beat 2: point at their own
+screens. <em>"You ran <code>make install</code> ten minutes ago. It took two minutes and
+downloaded a pile of libraries. That is what you are asking your colleague to
+do — and they do not have the key."</em></p>
 </blockquote>
 <p>Write the four gaps on the board:</p>
 <pre><code>no address          nobody can reach it
@@ -752,7 +1348,7 @@ runs in one place   only where Python is already set up just right
 <p><strong>Those four gaps are today.</strong> None of them are AI problems. All of them are why
 agents die in notebooks.</p>
 <hr />
-<h2>Beat 3 · Concept (20 min)</h2>
+<h2>Beat 4 · Concept (20 min)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Five ideas, and they are deliberately arranged as <strong>one
 story rather than five topics</strong>. Each answers a question the previous one
@@ -768,6 +1364,10 @@ than a new fact to memorise. Skip around and you are back to five topics.</p>
 feel inevitable rather than arbitrary. Do not cut it: a student who does not
 know <em>why</em> an agent gets wrapped in a web service will treat FastAPI as a
 magic ritual for the next eight weeks.</p>
+<p>And use Beat 2 constantly here. <strong>Every single one of these five ideas is a
+name for something they have already run.</strong> Say <em>"you have already done
+this"</em> out loud each time — it is the difference between five new facts and
+five labels.</p>
 </blockquote>
 <h3>One picture for the whole session</h3>
 <p>Draw this once, before anything else, and leave it up:</p>
@@ -799,6 +1399,9 @@ current five minutes fits into the picture asks better questions and panics
 less.</p>
 <p>Point at the diagram every time you change topic. <em>"Still the arrow. Now the
 box."</em></p>
+<p>One thing to add out loud, pointing at the left-hand box: <em>"Twenty minutes
+ago, <code>curl</code> was one of those. You were the website. You already know how to
+be the left-hand side of this picture — today you build the right."</em></p>
 </blockquote>
 <hr />
 <h3>1 · What "deploying" means</h3>
@@ -849,9 +1452,9 @@ Nothing about today changes if you pick a different one."</em></p>
 <hr />
 <h3>2 · Why the agent has to become a web service</h3>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · <strong>This is the most important fifteen minutes of Week 1</strong>, and
-it is the part every course skips. Everything after it is mechanics. If the
-room only takes one thing home today, make it this.</p>
+<p><strong>INSTRUCTOR</strong> · <strong>This is the most important ten minutes of Week 1</strong>, and it
+is the part every course skips. Everything after it is mechanics. If the room
+only takes one thing home today, make it this.</p>
 <p>Do not rush to FastAPI. Let them feel the problem first.</p>
 </blockquote>
 <p>Their agent is a <strong>Python function</strong>. Ask the room to picture it, because that is
@@ -861,6 +1464,18 @@ literally all it is:</p>
 <p>That function is excellent. It reasons, calls tools, comes back with an answer.
 <strong>And exactly one thing can call it: Python code running on that same computer,
 in that same folder, in that same running program.</strong></p>
+<p>Draw the fence, because the fence is the whole problem:</p>
+<pre><code>   ┌─────────── ONE COMPUTER, ONE RUNNING PROGRAM ───────────┐
+   │                                                          │
+   │      your Python code  ──calls──▶  run_turn()            │
+   │                                                          │
+   └──────────────────────────────────────────────────────────┘
+
+           a website   ✗          another company   ✗
+           a phone app ✗          a shell script    ✗
+
+              nothing out here can get in
+</code></pre>
 <h4>So how does anybody else use it?</h4>
 <p>Put the question to the room and take their answers seriously, because every
 wrong answer here teaches something. You will get some of these:</p>
@@ -868,6 +1483,11 @@ wrong answer here teaches something. You will get some of these:</p>
 <p>Then they need Python installed. And the right version. And the libraries, at
 the right versions. And your API key — <em>which you have now given away</em>. And when
 you fix a bug, all of them are still running the old one, forever.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Call back to Beat 2 here, hard: <em>"You ran <code>make install</code>
+half an hour ago. Two minutes, a screenful of downloads, and you still needed
+a key I gave you separately. Multiply that by every customer."</em></p>
+</blockquote>
 <p><strong>"Give them my laptop."</strong></p>
 <p>They laugh, but make the point anyway: that is what "it works on my machine"
 actually offers.</p>
@@ -928,6 +1548,10 @@ feature. It is the metric thread of software — everything already fits it."</e
 real and sometimes better. Then: <em>"Every one of them needs both sides to agree
 in advance. HTTP is what you use when you do not get to choose who calls
 you."</em></p>
+<p>There is also a cheap proof available now that was not before: <em>"You called
+GitHub's API in Beat 2. You had never spoken to GitHub before, you agreed
+nothing with them in advance, and it worked first try. That is the whole
+argument."</em></p>
 </blockquote>
 <h4>The turn it makes: from a program to a service</h4>
 <p>Worth naming explicitly, because it is the actual shift happening today:</p>
@@ -949,6 +1573,9 @@ syllabus. Not one line of it is about AI."</em></p>
 <p>This is the best moment in the course to explain why Phase 2 exists at all.
 Several students arrive expecting more prompt engineering; this table is the
 honest answer to <em>"why am I here?"</em></p>
+<p>The <code>sleep 30</code> from Part 2c is the cheapest illustration of row three: <em>"You
+ran a program that refused to exit for thirty seconds and it annoyed you. A
+server does that forever, on purpose."</em></p>
 </blockquote>
 <h4>What FastAPI actually does</h4>
 <p>So they do not think it is magic. It is a <strong>translator</strong>, and it is small:</p>
@@ -1005,11 +1632,13 @@ says exactly why:</p>
 <p><strong>"Cannot resolve" means the contacts list had no entry.</strong> Not "the computer is
 down" — nobody even found out where to knock.</p>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · Everyone's number will be different from the one printed
-above, and different from their neighbour's. That is worth thirty seconds
-rather than confusion: big sites answer from many machines around the world,
-and DNS hands you a nearby one. <em>"You and the person next to you are talking
-to different computers, and both of you are right."</em></p>
+<p><strong>INSTRUCTOR</strong> · This is the one concept in Beat 4 with its own toy attached,
+because it is the one they did <em>not</em> do in Beat 2. Keep it to three commands.</p>
+<p>Everyone's number will be different from the one printed above, and different
+from their neighbour's. That is worth thirty seconds rather than confusion:
+big sites answer from many machines around the world, and DNS hands you a
+nearby one. <em>"You and the person next to you are talking to different
+computers, and both of you are right."</em></p>
 <p><strong>INSTRUCTOR</strong> · <code>ping</code> also tells you how long the round trip took, in
 milliseconds. Worth pointing at, because it makes distance physical: a server
 in the same city answers in single-digit milliseconds, one on another
@@ -1045,6 +1674,16 @@ the address needs one more part.</p>
 <li><strong><code>https</code></strong> — <strong>how you get in.</strong> The <code>s</code> means the conversation is
   scrambled on the way, so nobody in the corridor can listen.</li>
 </ul>
+<p>And when it is running on their own laptop, the same three parts look like this:</p>
+<pre><code>   http://localhost:8080/chat
+   ────   ─────────  ────  ────
+    │         │        │     │
+   how      which    which  which
+   you in  computer   door   room
+            (this one)
+</code></pre>
+<p><strong>That is the URL they will type in forty minutes.</strong> They already met
+<code>localhost</code> and <code>:8080</code> in Part 2c.</p>
 <p>Ours will have four rooms by the end of the course:</p>
 <table>
 <thead>
@@ -1080,7 +1719,7 @@ the address needs one more part.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Two things beginners quietly wonder and rarely ask:</p>
 <p><strong>"Is a URL the same as a website?"</strong> No — a website is one kind of thing you
-can find at a URL. They already proved this in Part 0c, where <code>example.com</code>
+can find at a URL. They already proved this in Part 2e, where <code>example.com</code>
 gave them a page and GitHub's API gave them a sentence. Same kind of address,
 different kind of thing at the end of it.</p>
 <p><strong>"Why does it start with https and not www?"</strong> <code>www</code> is just a name someone
@@ -1146,10 +1785,21 @@ that matters, and it is not part of the name at all.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>They have already seen every one of these.</strong> In Part 0c: <code>-X POST</code> was the
-method, <code>/post</code> was the path, <code>-d '{...}'</code> was the body, and <code>200</code> came back as
-the status code. Say so — this table is a name for something they have done, not
-a new thing to learn.</p>
+<p><strong>They have already typed every one of these.</strong> Put their own command from Part
+2e back on the projector and label it:</p>
+<pre><code>   curl -s -X POST https://httpbin.org/post \
+              ─────  ──────────────────────
+                │            │      │
+             METHOD       building  PATH
+     -H 'Content-Type: application/json' \
+        ──────────────────────────────
+                    A HEADER
+     -d '{&quot;message&quot;:&quot;hello&quot;}'
+        ────────────────────
+              the BODY
+</code></pre>
+<p><strong>This table is a name for something they did twenty-five minutes ago, not a
+new thing to learn.</strong> Say so.</p>
 <h4>The status codes, as a receptionist would say them</h4>
 <pre><code>200   &quot;here you go&quot;                        fine
 400   &quot;you filled the form in wrong&quot;       YOUR mistake
@@ -1160,9 +1810,14 @@ a new thing to learn.</p>
        sorry&quot;
 </code></pre>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · The 400-vs-500 distinction matters far more than it looks,
-and the receptionist framing is what makes it stick: <strong>400 is "your form is
-wrong", 500 is "our filing cabinet fell over".</strong></p>
+<p><strong>INSTRUCTOR</strong> · They made a <code>200</code>, a <code>404</code> and a <code>500</code> appear on their own
+screens in Part 2e, four flags at a time. Ask <em>"who remembers what number
+came back when you typed 404 in that URL?"</em> and let them tell you — this
+table is a story about their own output, and it costs you nothing to teach it
+that way.</p>
+<p>The 400-vs-500 distinction matters far more than it looks, and the
+receptionist framing is what makes it stick: <strong>400 is "your form is wrong",
+500 is "our filing cabinet fell over".</strong></p>
 <p>Week 5 alerts on the error rate. If you return 500 when the caller sent
 nonsense, your dashboard blames you for their mistake, and you will spend a
 morning investigating an outage that never happened. Mention it now; land it
@@ -1191,264 +1846,95 @@ Week 2.</p>
 <p>If someone asks it out loud: <em>"Brilliant question. Hold it for twenty minutes,
 then hold it for a week."</em></p>
 </blockquote>
-<h2>Beat 4 · Build (45 min)</h2>
+<hr />
+<h2>Beat 5 · Build (45 min)</h2>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
-window."</em> Then walk the room. Do not stay at the front.</p>
+<p><strong>INSTRUCTOR</strong> · <em>"Back on keyboards."</em> Now walk the room continuously. This
+is the beat where you find out whether Beat 2 did its job — and if it did,
+you will spend your time on their code rather than on their typos.</p>
 </blockquote>
-<h3>Part 0 · Terminal warm-up (8 min)</h3>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · Do not skip this even with a technical room. It costs eight
-minutes and it stops the next six weeks being about typos.</p>
-</blockquote>
-<p>A terminal is a window where you <strong>type commands instead of clicking</strong>. Nothing
-more mysterious than that.</p>
-<p>Open one:</p>
-<ul>
-<li><strong>Mac</strong> — press <code>Cmd + Space</code>, type <code>terminal</code>, press Enter</li>
-<li><strong>Windows</strong> — press the Start key, type <code>powershell</code>, press Enter</li>
-<li><strong>Linux</strong> — <code>Ctrl + Alt + T</code></li>
-</ul>
-<p>Now type each of these and press Enter. Type them — do not paste.</p>
-<pre><code class="language-bash">pwd
+<p>Three parts, and they map exactly onto the picture from Beat 4:</p>
+<pre><code>   Part 1   give it an address        the arrow   15 min
+   Part 2   make it feel fast         the arrow   10 min
+   Part 3   make it run anywhere      the box     12 min
 </code></pre>
-<p><strong>Where am I?</strong> Prints the folder you are currently in. Every terminal is always
-"in" a folder.</p>
-<pre><code class="language-bash">ls
-</code></pre>
-<p><strong>What is in here?</strong> Lists the files and folders.</p>
-<pre><code class="language-bash">mkdir practice
-</code></pre>
-<p><strong>Make a folder</strong> called <code>practice</code>. <code>mkdir</code> = make directory. Nothing prints —
-in a terminal, silence means it worked.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · Say that out loud: <strong>silence means it worked.</strong> Beginners
-assume no output means failure and run the command four more times.</p>
-</blockquote>
-<pre><code class="language-bash">cd practice
-pwd
-</code></pre>
-<p><strong>Go into it.</strong> <code>cd</code> = change directory. Now <code>pwd</code> shows you have moved.</p>
-<pre><code class="language-bash">cd ..
-</code></pre>
-<p><strong>Go back up.</strong> <code>..</code> always means "the folder above this one".</p>
-<p>Two more that save everybody's afternoon:</p>
-<ul>
-<li><strong>Tab</strong> completes what you are typing. Type <code>cd prac</code> then press Tab.</li>
-<li><strong>Up arrow</strong> brings back the last command. You will use this constantly.</li>
-</ul>
-<pre><code class="language-bash">rm -r practice
-</code></pre>
-<p>Deletes the practice folder. <code>rm</code> = remove, <code>-r</code> = including everything inside.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · <em>"<code>rm</code> does not ask, and there is no recycle bin. Read it
-twice before you press Enter."</em> Then move on — do not turn it into a horror
-story.</p>
-</blockquote>
-<h3>Part 0a · Two words you will hear all course (3 min)</h3>
-<p>Two ideas that everything else sits on. Thirty seconds each, with something to
-run.</p>
-<p><strong>A process is a running program.</strong></p>
-<p>A program is a file sitting on disk, doing nothing. A <strong>process</strong> is that file
-actually running, right now, in memory. Same program started twice = two
-processes.</p>
-<pre><code class="language-bash">sleep 30
-</code></pre>
-<p>That is a process. It is running. Your terminal is stuck because it is waiting
-for it. Press <strong>Ctrl + C</strong> to kill it.</p>
-<p><strong>You just killed a process.</strong> That is what happens to their agent when they
-close the terminal, and it is why the memory disappears in Week 2.</p>
-<p><strong>A port is a numbered door on a computer.</strong></p>
-<p>One computer, many doors. A web server sits behind door <code>80</code>, or <code>443</code>, or in
-our case <code>8080</code>. A URL's <code>:8080</code> says which door to knock on.</p>
-<pre><code>   localhost:8080
-   ─────────  ────
-       │        │
-    which     which
-   computer    door
-</code></pre>
-<p><code>localhost</code> is a special name meaning <strong>this computer, the one I am typing on</strong>.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · That is enough. Do not explain port ranges, TCP, or why 443.
-They need "numbered door" and "localhost means here", and they need it in
-thirty seconds. The rest is Week 2's problem and mostly never.</p>
-</blockquote>
-<h3>Part 0b · JSON, before we send any (5 min)</h3>
-<p>They are about to send and receive JSON all course. Five minutes now saves
-confusion in all eight weeks.</p>
-<p><strong>JSON is a way to write data as text</strong>, so it can travel over a network. That
-is its entire purpose: a network can only carry text, so we agree on a way to
-write data down.</p>
-<pre><code class="language-json">{&quot;name&quot;: &quot;Ada&quot;, &quot;age&quot;: 36}
-</code></pre>
-<ul>
-<li><code>{ }</code> wraps a set of facts about one thing</li>
-<li><code>"name"</code> is a <strong>label</strong>, always in double quotes</li>
-<li><code>:</code> separates the label from its value</li>
-<li><code>,</code> separates one fact from the next</li>
-</ul>
-<p>Values can be text (in quotes), numbers (no quotes), true/false, or another
-<code>{ }</code> nested inside.</p>
-<p><strong>Run it.</strong> This command reads JSON and prints it back tidily:</p>
-<pre><code class="language-bash">echo '{&quot;name&quot;:&quot;Ada&quot;,&quot;age&quot;:36}' | python -m json.tool
-</code></pre>
-<pre><code class="language-json">{
-    &quot;name&quot;: &quot;Ada&quot;,
-    &quot;age&quot;: 36
-}
-</code></pre>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · Explain the <code>|</code> once, because it appears all course: <em>"The
-pipe takes what the left side printed and feeds it to the right side as
-input."</em> That is enough. Do not explain stdin.</p>
-</blockquote>
-<p><strong>Now break it on purpose.</strong> Use single quotes around the label — which is legal
-in Python and illegal in JSON:</p>
-<pre><code class="language-bash">echo &quot;{'name':'Ada'}&quot; | python -m json.tool
-</code></pre>
-<pre><code>Expecting property name enclosed in double quotes: line 1 column 2
-</code></pre>
-<p><strong>The error tells you the rule.</strong> JSON labels need double quotes, always.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · This tiny failure is worth the thirty seconds. It is the
-single most common JSON mistake, they have now made it deliberately, and the
-error message that will confuse them in week four is one they have already
-seen and understood.</p>
-<p>If anyone knows Python: <em>"It looks exactly like a dict. The differences that
-bite are double quotes only, and no trailing comma."</em></p>
-</blockquote>
-<h3>Part 0c · curl, on things that are not ours (7 min)</h3>
-<p><strong><code>curl</code> sends an HTTP request from the terminal.</strong> It is a browser with no
-window — it fetches, and prints what came back.</p>
-<p>They will use it in every session from here. So learn it on something simple
-first, where nothing else can be the problem.</p>
-<p><strong>One — fetch a web page.</strong></p>
-<pre><code class="language-bash">curl -s https://example.com
-</code></pre>
-<p>A pile of HTML comes back. That is what a web page <em>is</em> underneath: text your
-browser draws. <code>-s</code> means "silent" — without it curl prints a progress bar that
-gets in the way.</p>
-<p><strong>They have just done what a browser does.</strong></p>
-<p><strong>Two — call an API.</strong></p>
-<pre><code class="language-bash">curl -s https://api.github.com/zen
-</code></pre>
-<p>One sentence comes back. No HTML, no page — just an answer.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · Name the difference, because it is the difference between a
-website and an API and most people have never had it stated: <em>"The first one
-sent something for a human to look at. This one sent something for a program
-to use. Same protocol, same tool, different audience. That is all an API is."</em></p>
-</blockquote>
-<p><strong>Three — see the reply's status code and headers.</strong></p>
-<pre><code class="language-bash">curl -s -i https://api.github.com/zen
-</code></pre>
-<p><code>-i</code> includes the reply's <strong>headers</strong> — everything before the blank line.</p>
-<pre><code>HTTP/2 200
-date: Mon, 31 Aug 2026 05:04:25 GMT
-content-type: text/plain;charset=utf-8
-
-Keep it logically awesome.
-</code></pre>
-<p>There is the <strong>200</strong> from the concept section, in real life. And <code>content-type</code>,
-which is how the receiver knows what kind of thing it just got.</p>
-<p><strong>Headers are extra facts about the request or reply, that are not the body
-itself.</strong> That is the whole idea.</p>
-<p><strong>Four — see other status codes.</strong></p>
-<pre><code class="language-bash">curl -s -o /dev/null -w &quot;%{http_code}\n&quot; https://httpbin.org/status/404
-</code></pre>
-<pre><code>404
-</code></pre>
-<p>Two new flags, both worth knowing because they recur all course:</p>
-<ul>
-<li><code>-o /dev/null</code> — throw the body away, we do not care about it</li>
-<li><code>-w "%{http_code}\n"</code> — print <em>just</em> the status code</li>
-</ul>
-<p>Try <code>200</code> and <code>500</code> in place of <code>404</code>. Same command, different numbers.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · Have them run all three. Seeing 200, 404 and 500 come back
-from the same command is what turns status codes from a table on a slide into
-something real. They use <code>-w "%{http_code}"</code> heavily in Week 3.</p>
-</blockquote>
-<p><strong>Five — send something (POST).</strong></p>
-<p>Everything so far was <code>GET</code> — <em>"give me something"</em>. Now <code>POST</code> — <em>"here, take
-this"</em>.</p>
-<pre><code class="language-bash">curl -s -X POST https://httpbin.org/post \
-  -H 'Content-Type: application/json' \
-  -d '{&quot;message&quot;:&quot;hello&quot;}'
-</code></pre>
-<p>Read the command aloud, flag by flag:</p>
-<ul>
-<li><code>-X POST</code> — the <strong>method</strong>. We are <em>sending</em>, not just reading.</li>
-<li><code>-H 'Content-Type: application/json'</code> — a <strong>header</strong>, telling the server "the
-  body I am sending is JSON".</li>
-<li><code>-d '{...}'</code> — the <strong>body</strong>. The actual thing being sent.</li>
-</ul>
-<p>That URL is a free echo service: it replies with a description of whatever you
-sent it. In the reply, find this part:</p>
-<pre><code class="language-json">  &quot;json&quot;: {
-    &quot;message&quot;: &quot;hello&quot;
-  },
-</code></pre>
-<p><strong>The server received your JSON, understood it, and read the <code>message</code> field
-out.</strong> That is exactly what our <code>/chat</code> endpoint will do in twenty minutes — the
-same method, the same header, the same body shape.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · This is the highest-value five minutes in the session. When
-they later type a three-flag POST at our agent and it fails, they can tell
-the difference between <em>"my JSON is malformed"</em>, <em>"my flags are wrong"</em> and
-<em>"our service is broken"</em> — because they have seen all three flags work
-against something that definitely was not broken.</p>
-<p>If the room has no internet, <code>python -m http.server 9000</code> in one terminal and
-<code>curl -s localhost:9000</code> in another covers points one to four.</p>
-</blockquote>
-<h3>Part 0d · Getting the project (5 min)</h3>
-<pre><code class="language-bash">git clone https://github.com/nimeshmora/shipping-prod-ai-system.git
-cd shipping-prod-ai-system
-git checkout week-01-package
-</code></pre>
-<p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
-lets you move between them.</p>
-<ul>
-<li><strong><code>git clone</code></strong> downloads a copy of the project, with all of its history.</li>
-<li><strong><code>git checkout</code></strong> switches to a particular version — in our case, this week's
-  starting point.</li>
-</ul>
-<pre><code class="language-bash">make install
-make test
-</code></pre>
-<p><strong><code>make</code> runs a shortcut that somebody already wrote down.</strong> The shortcuts live
-in a file called <code>Makefile</code> in the project. <code>make install</code> is a nickname for a
-longer command; so is <code>make test</code>.</p>
-<pre><code class="language-bash">cat Makefile
-</code></pre>
-<p>Have them look. <strong>There is no magic in <code>make</code></strong> — it is a list of nicknames, and
-they can read every one.</p>
-<p><code>make install</code> fetches the libraries the project needs. <code>make test</code> runs the
-tests. You should see <strong>12 passed</strong>.</p>
-<blockquote>
-<p><strong>INSTRUCTOR</strong> · Twelve green tests before they have written a line is
-deliberate. <em>"The agent loop already works. Phase 1 did that. Nothing you do
-today changes how it thinks."</em></p>
-</blockquote>
-<pre><code class="language-bash">make check-week-01
-</code></pre>
-<p>This one <strong>fails</strong>, and says:</p>
-<pre><code>FAIL  app/main.py must define `app`, the FastAPI application
-</code></pre>
-<p><strong>That is the assignment.</strong> Every week works this way: one command tells you
-exactly what is missing, and you make it green.</p>
 <h3>Part 1 · Give it an address (15 min)</h3>
-<p><strong>This is the front door from Beat 3, built.</strong> Point back at the diagram before
+<p><strong>This is the front door from Beat 4, built.</strong> Point back at the diagram before
 anyone types: the agent already works, and they are wrapping it so that anything
 — a website, a phone, another company — can reach it.</p>
+<h4>What actually happens when a request arrives</h4>
+<p>Draw this before they open a file. <strong>It is the single most useful picture of the
+build</strong>, because it shows how small their part is:</p>
+<pre><code>   YOUR TERMINAL                          THE SERVER PROCESS (make run)
+   ┌───────────┐                   ┌────────────────────────────────────────┐
+   │           │   POST /chat      │                                        │
+   │  curl ────┼──────────────────▶│  uvicorn   listens on door 8080        │
+   │           │  {&quot;message&quot;:...}  │     │      takes bytes off the network │
+   │           │                   │     ▼                                  │
+   │           │                   │  FastAPI   reads the JSON              │
+   │           │                   │     │      finds the route for /chat   │
+   │           │                   │     ▼                                  │
+   │           │                   │  ┌──────────────────────────────┐      │
+   │           │                   │  │  def chat(req):        ◀─────┼──── YOU
+   │           │                   │  │      ...                     │   WRITE
+   │           │                   │  │      run_turn(req.message)   │   THIS
+   │           │                   │  │      return {&quot;reply&quot;: ...}   │   BIT
+   │           │                   │  └──────────────┬───────────────┘      │
+   │           │                   │                 ▼                      │
+   │           │                   │  agent.py   the Phase 1 loop           │
+   │           │                   │             (untouched, already works) │
+   │           │                   │     │                                  │
+   │           │  {&quot;reply&quot;:...}    │     ▼                                  │
+   │  output ◀─┼───────────────────┼── FastAPI turns your dict into JSON    │
+   └───────────┘                   └────────────────────────────────────────┘
+</code></pre>
+<p>Four things to say while it is on the board:</p>
+<p><strong><code>uvicorn</code> is the part that owns the door.</strong> It is what <code>make run</code> starts. It
+speaks HTTP and knows nothing about your agent.</p>
+<p><strong>FastAPI is the translator</strong> — bytes and JSON on one side, Python arguments and
+dicts on the other. Exactly as promised in Beat 4.</p>
+<p><strong>Your handler is the only new code</strong>, and it is a few lines.</p>
+<p><strong><code>agent.py</code> is untouched.</strong> Not one line of Phase 1 changes today.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Name the two words explicitly, because students conflate them
+for months otherwise: <em>"uvicorn is the doorman. FastAPI is the translator. You
+write the person in the back office who actually does the work."</em></p>
+</blockquote>
+<h4>The anatomy of one endpoint</h4>
 <p>Open <code>app/main.py</code>. It is a long comment telling you what to build — read it
 together on the projector.</p>
-<p>Before they start, show them the whole shape of what an endpoint is. It is
-smaller than they expect:</p>
+<p>Before they start, show them the whole shape. It is smaller than they expect:</p>
 <pre><code class="language-python">@app.post(&quot;/chat&quot;)                       # ← when a POST arrives at /chat...
 def chat(req: ChatRequest):              # ← ...run this function
     reply, history, _ = run_turn(...)    # ← the Phase 1 agent, untouched
     return {&quot;reply&quot;: reply, ...}         # ← FastAPI turns this into JSON
+</code></pre>
+<p>Then take those four lines apart, because every part of them is a thing they
+have already met:</p>
+<pre><code>   @app.post(&quot;/chat&quot;)
+    ───  ────   ────
+     │    │      │
+     │    │      └── the PATH.  Beat 4, idea 4: which room.
+     │    └───────── the METHOD. Beat 4, idea 5: GET reads, POST sends.
+     └────────────── &quot;when that arrives, run the function below.&quot;
+
+
+   def chat(req: ChatRequest):
+            ─── ────────────
+             │        │
+             │        └── the SHAPE of the body you expect.
+             │            Declare it, and FastAPI rejects a request
+             │            with no &quot;message&quot; BEFORE your code runs.
+             └─────────── your parsed JSON, as a Python object.
+                          req.message is the text they sent.
+
+
+   return {&quot;reply&quot;: reply, &quot;session_id&quot;: session_id}
+          ──────────────────────────────────────────
+                            │
+             a plain Python dict. FastAPI turns it into
+             the JSON body of the reply. You never write
+             JSON by hand — you return a dict.
 </code></pre>
 <p><strong>Four lines, and only one of them is about AI — and that one they already
 wrote in Phase 1.</strong></p>
@@ -1458,74 +1944,120 @@ that second line, for reading a header. Ignore it today — it is there because
 the same file grows an API key check in Week 3, and the starting code is the
 finished shape. Say so if anyone notices, rather than letting them think they
 are reading it wrong.</p>
-<p><strong>INSTRUCTOR</strong> · Say what each part is doing in plain words, because
-<code>@app.post</code> is the first decorator many of them have met:</p>
+<p><strong>INSTRUCTOR</strong> · Say what the <code>@</code> line is doing in plain words, because it is
+the first decorator many of them have met:</p>
 <p><em>"The line with the <code>@</code> is a label. It tells FastAPI: when a POST request
 turns up at <code>/chat</code>, this is the function to run. That is the entire
 connection between the network and your code."</em></p>
 <p>Then the reassurance: <em>"Everything else in this file is the same idea, three
 more times."</em></p>
 </blockquote>
-<p>They build three doors:</p>
+<h4>Build them in this order</h4>
+<p>They build three doors. <strong>The order matters</strong> — say why:</p>
 <table>
 <thead>
 <tr>
+<th>#</th>
 <th>Door</th>
 <th>Method</th>
 <th>Answers with</th>
+<th>Why this order</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>1</td>
 <td><code>/health</code></td>
 <td>GET</td>
 <td><code>{"status": "ok"}</code></td>
+<td>two lines, cannot fail — proves the plumbing works</td>
 </tr>
 <tr>
+<td>2</td>
 <td><code>/chat</code></td>
 <td>POST</td>
 <td><code>{"reply": "...", "session_id": "..."}</code></td>
+<td>the real thing</td>
 </tr>
 <tr>
+<td>3</td>
 <td><code>/chat/stream</code></td>
 <td>POST</td>
 <td>the answer, as it arrives</td>
+<td>Part 2</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Insist on <code>/health</code> first, and have them curl it before
+writing <code>/chat</code>. A student whose first endpoint is <code>/chat</code> is debugging
+routing, JSON, sessions and the model at once. A student who already got
+<code>{"status":"ok"}</code> back knows the door works and everything after that is
+their handler.</p>
+<p>This is Beat 2's rule — toy first — applied inside the build.</p>
+</blockquote>
 <p>Three things to say while they work:</p>
 <p><strong><code>/health</code> must be boring.</strong> No model call, no database. It answers one
 question: <em>is this process running?</em> A health check that depends on other things
 fails when <em>those</em> things fail, and your container gets restarted for no reason.</p>
-<p><strong>The session ID is how a forgetful protocol holds a conversation.</strong> The
-computer forgets you after every request — so the first reply includes an ID, and
-the caller sends it back next time. Your code uses it to look up what was said
-before. The model itself remembers nothing; every turn re-sends the whole
-conversation.</p>
+<p><strong>The session ID is how a forgetful protocol holds a conversation.</strong> Draw the
+two requests, because this is the part most people get wrong:</p>
+<pre><code>   REQUEST 1                                THE SERVER
+   {&quot;message&quot;: &quot;where is ORD-1002?&quot;}   ──▶  no session_id? make one: &quot;a3f9&quot;
+                                            history = []  (nothing yet)
+                                            run the turn
+                                            SAVE history under &quot;a3f9&quot;
+   {&quot;reply&quot;: &quot;Thursday&quot;,              ◀──
+    &quot;session_id&quot;: &quot;a3f9&quot;}
+        │
+        │  the caller keeps this
+        ▼
+   REQUEST 2
+   {&quot;message&quot;: &quot;and how much was it?&quot;, ─▶  session_id &quot;a3f9&quot;? LOAD its history
+    &quot;session_id&quot;: &quot;a3f9&quot;}                   [&quot;where is ORD-1002?&quot;, &quot;Thursday&quot;]
+                                            + the new message
+                                            run the turn with ALL of it
+   {&quot;reply&quot;: &quot;$340&quot;,                  ◀──
+    &quot;session_id&quot;: &quot;a3f9&quot;}
+</code></pre>
+<p><strong>The model itself remembers nothing.</strong> Every turn re-sends the whole
+conversation. Their code is what does the remembering — and that is why Week 4
+has to put a limit on how long it can get.</p>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · Demo it with two volunteers. One is the browser, one is the
-server. <em>"Hi, I'm asking about an order."</em> — <em>"Here's your answer, and here's
-ticket #47."</em> — <em>"Hi, ticket #47, what about delivery?"</em> Thirty seconds, and
-nobody is confused about session IDs again.</p>
+<p><strong>INSTRUCTOR</strong> · Demo it with two volunteers before they write it. One is the
+browser, one is the server. <em>"Hi, I'm asking about an order."</em> — <em>"Here's your
+answer, and here's ticket #47."</em> — <em>"Hi, ticket #47, what about delivery?"</em>
+Thirty seconds, and nobody is confused about session IDs again.</p>
 </blockquote>
 <p><strong>Never let a raw error reach the caller.</strong> If something breaks, return
 <code>{"detail": "internal error"}</code> — not the actual error text. Error messages
 contain file paths, database addresses, sometimes passwords. That is a security
 bug, not a debugging aid.</p>
-<p>Run it:</p>
+<h4>Run it</h4>
 <pre><code class="language-bash">make run
 </code></pre>
 <p>This one <strong>does not finish</strong>. It sits there — because it is a server, and a
-server's job is to stay running and wait. Same as the <code>sleep 30</code> from Part 0a.</p>
+server's job is to stay running and wait. <strong>Same as the <code>sleep 30</code> from Part
+2c</strong>, and this time it is on purpose.</p>
 <p><strong>So they need a second terminal.</strong> Open a new window (<code>Cmd + N</code> on Mac,
 <code>Ctrl + Shift + N</code> on Windows/Linux) and <code>cd</code> back into the project.</p>
+<pre><code>   TERMINAL 1                      TERMINAL 2
+   ──────────                      ──────────
+   make run                        curl ...
+   (never returns —                (asks questions,
+    this IS the server)             gets answers)
+
+   leave it alone                  do all your work here
+</code></pre>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Say explicitly: <em>"One terminal runs the server. The other one
 talks to it. That is the arrangement for the rest of the course."</em> Several
 people will otherwise Ctrl-C the server to get their prompt back and then
 wonder why nothing answers.</p>
+<p>Write it on the board next to the <code>set -a</code> line below. Both stay up for eight
+weeks.</p>
 </blockquote>
-<p>In the <strong>second</strong> terminal:</p>
+<p>In the <strong>second</strong> terminal, the easy one first:</p>
 <pre><code class="language-bash">curl -s http://localhost:8080/health
 </code></pre>
 <p>You should get <code>{"status":"ok"}</code>.</p>
@@ -1536,14 +2068,24 @@ pointed at their own machine, on door 8080, instead of out at the internet.</p>
   -H 'Content-Type: application/json' \
   -d '{&quot;message&quot;:&quot;where is my order ORD-1002?&quot;}'
 </code></pre>
-<p><strong>That is the same five-flag command they ran against httpbin</strong>, with our
-address and our message. Point that out — it is why Part 0c existed.</p>
+<p><strong>That is the same command they ran against httpbin in Part 2e</strong>, with our
+address and our message. Put both on the screen together — this is the moment
+Beat 2 pays for itself:</p>
+<pre><code>   Part 2e   curl -s -X POST https://httpbin.org/post \
+                             ─────────────────────────
+   now       curl -s -X POST http://localhost:8080/chat \
+                             ──────────────────────────
+
+             ...and the -H and -d flags are identical.
+             ONLY THE ADDRESS CHANGED.
+</code></pre>
 <p>Copy the <code>session_id</code> from the reply and continue the conversation:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:8080/chat \
   -H 'Content-Type: application/json' \
   -d '{&quot;message&quot;:&quot;and when will it arrive?&quot;,&quot;session_id&quot;:&quot;PASTE_IT_HERE&quot;}'
 </code></pre>
-<p><strong>It remembers.</strong> That is the session ID doing its job.</p>
+<p><strong>It remembers.</strong> That is the session ID doing its job — and that is the diagram
+above, running.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · The error you will see most this week — every week, in fact —
 is <code>KODEKEY is not set</code>.</p>
@@ -1560,12 +2102,25 @@ exactly what that second line printed.</p>
 <p>The fix, in the <em>same</em> terminal as <code>make run</code>:</p>
 <p><code>bash
 set -a &amp;&amp; source .env &amp;&amp; set +a</code></p>
-<p>That reads their <code>.env</code> file and exports every line in it. Write it on the
-board. Leave it there for eight weeks.</p>
+<p>That reads their <code>.env</code> file — the hidden dotfile they met with <code>ls -la</code> in
+Part 2a — and exports every line in it. Write it on the board. Leave it there
+for eight weeks.</p>
 </blockquote>
 <h3>Part 2 · Make it feel fast (10 min)</h3>
 <p>Ask: <em>"How long did that take?"</em></p>
 <p>Several seconds. And for all of it, they stared at nothing.</p>
+<pre><code>   WITHOUT STREAMING
+   0s ──────────────────────────── 8s
+      [        nothing        ]  &quot;Your standing desk arrives Thursday&quot;
+       ▲
+       feels broken
+
+   WITH STREAMING
+   0s ──────────────────────────── 8s
+      [Your][ standing][ desk][ arrives][ Thursday]
+       ▲
+       0.4s: feels fast
+</code></pre>
 <p><strong>Eight seconds of nothing feels broken. Eight seconds with words appearing
 after 400 milliseconds feels fast.</strong> Same duration. Completely different
 product. This is why every AI assistant they have used streams.</p>
@@ -1586,19 +2141,35 @@ the more important demo, because it is exactly the bug they will report to you
 in twenty minutes: <em>"streaming isn't working"</em>, when in fact curl was
 buffering. <strong><code>-N</code> means "do not buffer, show me pieces as they arrive."</strong></p>
 </blockquote>
-<p>They build <code>app/stream.py</code>, which sends the answer in pieces:</p>
-<pre><code>event: start          the turn was accepted
-event: token          a piece of the answer (many of these)
-event: done           finished
-event: error          it failed
+<p>They build <code>app/stream.py</code>, which sends the answer in pieces. Instead of one
+reply, the connection stays open and <strong>events</strong> come down it:</p>
+<pre><code>   ONE OPEN CONNECTION, over 8 seconds
+   ───────────────────────────────────────────────────────────▶
+
+   event: start          the turn was accepted
+   event: token          &quot;Your&quot;          ┐
+   event: token          &quot; standing&quot;     │  many of these,
+   event: token          &quot; desk&quot;         │  as the model writes
+   event: token          &quot; arrives&quot;      ┘
+   event: done           finished
+
+   (or, if it goes wrong halfway)
+   event: error          it failed
 </code></pre>
 <p>Three traps, all of which the checkpoint catches:</p>
 <p><strong>The blank line after each piece is not optional.</strong> It is what tells the
 receiver "that piece is complete". Leave it out and the client waits forever for
 something you already sent.</p>
 <p><strong>An error mid-stream cannot be an error code.</strong> By the time the model fails,
-you already said "200, here it comes". There is no status code left to change.
-The error has to arrive as another piece of the stream — and the client has to
+you already said "200, here it comes". There is no status code left to change.</p>
+<pre><code>   NORMAL                      MID-STREAM FAILURE
+   ──────                      ──────────────────
+   status 500  ◀── possible    status 200  ◀── already sent! too late.
+   {&quot;detail&quot;: ...}             event: token ...
+                               event: token ...
+                               event: error  ◀── the ONLY way left to say it
+</code></pre>
+<p>The error has to arrive as another piece of the stream — and the client has to
 read it. Miss this and a broken agent shows the user half an answer and calls it
 success.</p>
 <p><strong>Proxies buffer.</strong> Something between you and the user will happily collect your
@@ -1622,6 +2193,16 @@ layout. The right environment variables. <strong>"Works on my machine" is not a
 deployment.</strong></p>
 <p>A <strong>container</strong> is a box holding your code <em>and</em> everything it needs to run.
 Hand the box to any computer and it behaves identically.</p>
+<pre><code>   WHAT YOU HAVE NOW            WHAT A CONTAINER IS
+   ─────────────────            ───────────────────
+   your code                    ┌──────────────────────┐
+      + hope that the           │  your code           │
+        other machine has:      │  the libraries       │
+        - the right Python      │  the right Python    │
+        - the right libraries   │  a whole Linux       │
+        - the right layout      └──────────────────────┘
+                                   one file. runs anywhere.
+</code></pre>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · The analogy that works: a food truck versus a recipe. A
 recipe needs the other kitchen to already have the right oven, pans and
@@ -1630,7 +2211,8 @@ car park.</p>
 </blockquote>
 <h4>First, build a box with nothing in it (5 min)</h4>
 <p>Before containerising our agent — with its libraries, its port, its key — build
-the smallest possible box. Two files, in a fresh folder.</p>
+the smallest possible box. Two files, in a fresh folder. <strong>They already know
+<code>mkdir</code> and <code>echo &gt;</code> from Part 2b:</strong></p>
 <pre><code class="language-bash">mkdir ~/box &amp;&amp; cd ~/box
 </code></pre>
 <p>One file of "code":</p>
@@ -1651,6 +2233,13 @@ CMD [&quot;python&quot;, &quot;hello.py&quot;]
 <li><strong><code>COPY hello.py .</code></strong> — copy our file from <em>our computer</em> into <em>the box</em>.</li>
 <li><strong><code>CMD [...]</code></strong> — what to run when the box starts.</li>
 </ul>
+<pre><code>   YOUR LAPTOP                 THE BOX BEING BUILT
+   ┌────────────┐              ┌─────────────────────┐
+   │ ~/box/     │              │ FROM python:3.12    │  ← a Linux with Python
+   │  hello.py  │──COPY──────▶ │ /app/hello.py       │  ← your copy, inside
+   │  Dockerfile│              │ CMD python hello.py │  ← what to run
+   └────────────┘              └─────────────────────┘
+</code></pre>
 <p>Build it and run it:</p>
 <pre><code class="language-bash">docker build -t hello-box .
 docker run --rm hello-box
@@ -1691,9 +2280,17 @@ variable — the same thing they met with <code>KODEKEY</code>. <strong><code>EX
 door the thing inside listens on.</p>
 <p>Read it line by line. <strong>Two lines carry the whole lesson:</strong></p>
 <p><strong><code>COPY requirements.txt</code> comes before <code>COPY . .</code></strong> — Docker remembers each step,
-and redoes every step after the first thing that changed. Copy your code first
-and every one-character edit reinstalls every library. Three seconds becomes
-three minutes.</p>
+and redoes every step after the first thing that changed:</p>
+<pre><code>   THE ORDER WE USE                   THE OBVIOUS-LOOKING ORDER
+   ────────────────                   ─────────────────────────
+   COPY requirements.txt              COPY . .          ← your code
+   RUN pip install      ← slow        RUN pip install   ← slow
+   COPY . .             ← your code
+
+   edit one line of code:             edit one line of code:
+   pip install is CACHED              pip install RUNS AGAIN
+   rebuild: 3 seconds                 rebuild: 3 minutes
+</code></pre>
 <p><strong><code>--port ${PORT}</code>, not <code>--port 8080</code></strong> — every hosting platform tells your
 service which door to use, through a setting. Hardcode the number and you have a
 service that works on your laptop and fails the moment you deploy it.</p>
@@ -1734,22 +2331,34 @@ inside a box that could run anywhere.</strong></p>
 </ol>
 </blockquote>
 <hr />
-<h2>Beat 5 · Prove (20 min)</h2>
+<h2>Beat 6 · Prove (15 min)</h2>
 <pre><code class="language-bash">make check-week-01
 </code></pre>
 <p>Green, line by line. Read the output together — each line is a promise about the
 service they just built.</p>
+<p><strong>Then put the day back together in one picture</strong>, because they have been
+head-down in files for forty-five minutes:</p>
+<pre><code>   WHAT THEY HAD                    WHAT THEY HAVE NOW
+   ─────────────                    ──────────────────
+   a Python function                a service with an address
+   callable from one folder         callable by anything, anywhere
+   answers after 8 silent seconds   answers in pieces, from 0.4s
+   runs where Python is set up      runs in a box, on any computer
+
+   run_turn()                       http://localhost:8080/chat
+                                    ...and only the address is
+                                    still missing. That is next week.
+</code></pre>
 <p>Then close the loop by asking three questions they cannot yet answer. <strong>These are
 next week's hooks, and the honest answer to each is "we don't know".</strong></p>
-<h3>"Your <code>/health</code> says ok. Suppose the model provider is down and every single</h3>
-<p><code>/chat</code> returns 500. What does <code>/health</code> say?"</p>
+<h3>"Your <code>/health</code> says ok. Suppose the model provider is down and every single <code>/chat</code> returns 500. What does <code>/health</code> say?"</h3>
 <p>Still <code>ok</code>. The process is fine. It just cannot do its job.</p>
 <blockquote>
 <p>That gap is Week 5, and it is much bigger than it looks.</p>
 </blockquote>
 <h3>"Where does the conversation history live?"</h3>
 <p>In a variable, inside the running program — <strong>inside the process</strong> they met in
-Part 0a.</p>
+Part 2c, and killed with <code>Ctrl + C</code>.</p>
 <p><em>"So what happens to it when we deploy a new version?"</em> Let them work it out.</p>
 <blockquote>
 <p>That is Week 2, and we are going to watch it happen.</p>
@@ -1769,6 +2378,10 @@ Part 0a.</p>
   <code>/health</code>, then watch <code>make check-week-01</code> catch it.</li>
 <li>Point <code>curl</code> at a URL that does not exist — <code>curl -s -i http://localhost:8080/nope</code>
   — and read the 404 together. They built that without writing it.</li>
+<li>Send a body with no <code>message</code> field at all:
+  <code>curl -s -X POST http://localhost:8080/chat -H 'Content-Type: application/json' -d '{}'</code>
+  — a <code>422</code> comes back, from the <code>ChatRequest</code> shape alone. <strong>A guardrail they
+  got for free by declaring the shape.</strong></li>
 <li>Have them add a second file to the <code>~/box</code> toy, rebuild, and watch only the
   changed step re-run. That is the caching lesson, felt rather than described.</li>
 </ul>
