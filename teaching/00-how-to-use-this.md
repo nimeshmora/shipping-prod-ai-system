@@ -46,13 +46,12 @@ three and stop needing to be told what is happening.
 
 Four weeks bend the shape deliberately, and each says so at the top:
 
-- **Week 1** runs **seven** beats. It opens with **Setup** (10 min) — the
-  install checklist, because nothing else works without it — and inserts
-  **Ground** (25 min) as the *third* beat: hands-on terminal, folders, JSON and
-  curl, before any theory. Week 1 is the only session that can assume nothing at
-  all, so the tools have to be handed over before the concepts that name them.
-  Its **Ask** beat also runs 15 minutes rather than 10, because it introduces
-  the agent code the whole course wraps around. See the note below.
+- **Week 1** is a **four-hour day**, not a two-hour session, and it does not
+  use the five-beat shape at all. It runs eleven named sections with two breaks:
+  the agent is introduced first, then the tools (terminal, JSON, curl) are
+  handed over on toys, and only then does the theory arrive — by which point
+  every concept is a name for something the room has already done. See
+  **Week 1 slides** at the end of this file for the hour-by-hour shape.
 - **Week 2** gives Break 25 minutes, because deploying happens inside it.
 - **Week 6** leads with a 35-minute bug hunt and puts Break in the middle, where
   the session changes subject.
@@ -272,12 +271,13 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 91-slide presenter deck for session one,
-in the same house style as the printable guide. Open it in a browser and press
-**F** for fullscreen.
+`teaching/week-01-slides.html` is a 79-slide presenter deck for **day one, run
+as a four-hour session**, in the same house style as this guide. Open it in a
+browser and press **F** for fullscreen.
 
-It follows the seven beats of `week-01.md` exactly, so the deck and the written
-guide never disagree about what comes next.
+The deck deliberately does **not** use the word "beat" or any internal
+numbering — students see sections named by what happens in them, and a running
+clock in the top-right corner of every slide.
 
 | Key | What it does |
 |---|---|
@@ -285,17 +285,69 @@ guide never disagree about what comes next.
 | `←` / `P` | previous slide |
 | **`S`** | **toggle the presenter-notes panel** |
 | `F` | fullscreen |
-| `0`–`6` | jump to that beat (`0` = Setup) |
+| `1`–`9` | jump to a section of the day |
+| `0` | the last two sections (press again to cycle) |
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Every slide carries the "say this" line from
-the guide — the callback to make, the question to ask, the thing not to explain
-yet — in a side panel the room never sees. The slide itself stays clean; you
-read the cue.
+**Press `S` before you start.** Sixty-eight of the slides carry a presenter
+cue — the callback to make, the question to ask, the thing *not* to explain
+yet — in a side panel the room never sees.
 
-> **INSTRUCTOR** · The deck is a teaching aid, not the lesson. Beats 2 and 5
-> are 70 of the session's 125 minutes and both are hands-on: put the slide up,
-> then leave it up and walk the room. The slides that matter most are the ones
-> you *stop* on — the four gaps, the one picture for the whole session, and the
-> request-lifecycle diagram in Part 1.
+### The four-hour shape
+
+```
+   0:00   15   What is an agent?          the settling question. No agenda yet.
+   0:15   22   Meet today's agent         our small teaching agent, read together
+   0:37   13   Get set up, and prove it   the checklist, and check-week-00
+   0:50   10   break
+   1:00   22   The terminal               practised on a throwaway folder
+   1:22   28   How machines talk          JSON and curl, on the open internet
+   1:50   10   break
+   2:00   22   Why it must become a web service
+   2:22   30   Finding it, and asking it  addresses, then messages
+   2:52   28   Build: the front door
+   3:20   12   Build: make it feel fast
+   3:32   18   Build: the box
+   3:50   10   Prove it, and what breaks next
+   ────────────
+   4:00        exactly four hours, including both breaks
+```
+
+> **INSTRUCTOR** · Three things about this order, all deliberate.
+>
+> **It opens with a question, not a plan.** You need two or three minutes of
+> easy conversation before anyone — including you — can absorb a four-hour
+> agenda. The agenda appears on slide 5, once they have something to hang it
+> on, and never again.
+>
+> **Today's agent is introduced before anything is installed.** You cannot
+> deploy what you cannot describe, and the trap question *"so who else could
+> use this?"* only bites if they have just seen real code doing real work.
+>
+> **Only the last hour is typing code.** Say that out loud when you show the
+> agenda. The three hours before it are the reason the last hour works.
+
+### Why today's agent is the small one
+
+The deck says this explicitly, on its own slide, because somebody in the room
+is always wondering why they are not using the agent they are proud of:
+
+> *"We are not replacing what you built. We are learning the plumbing on
+> something small enough that you can see all of it. Once the plumbing is
+> second nature, we point it at anything you like."*
+
+One new hard thing at a time. A simple agent plus a hard deployment today; a
+complex agent plus a known deployment later. Same skills, learned in an order
+where a student can always tell what went wrong.
+
+### Code for a non-technical room
+
+Six slides pair a code snippet with a **numbered plain-English reading** of
+each line beside it — so somebody who has never programmed can follow what the
+code *means* without knowing the syntax.
+
+> **INSTRUCTOR** · Read those numbered lines as English sentences, in order.
+> The syntax is noise; the sentences are the meaning. Do not explain
+> `stop_reason` or `append` as language features — say "did it answer or ask"
+> and "add it to the list".
