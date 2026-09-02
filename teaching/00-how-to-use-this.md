@@ -46,10 +46,13 @@ three and stop needing to be told what is happening.
 
 Four weeks bend the shape deliberately, and each says so at the top:
 
-- **Week 1** inserts a sixth beat, **Ground**, as the *second* beat — 25 minutes
-  of hands-on terminal, folders, JSON and curl, before any theory. Week 1 is the
-  only session that can assume nothing at all, so the tools have to be handed
-  over before the concepts that name them. See the note below.
+- **Week 1** runs **seven** beats. It opens with **Setup** (10 min) — the
+  install checklist, because nothing else works without it — and inserts
+  **Ground** (25 min) as the *third* beat: hands-on terminal, folders, JSON and
+  curl, before any theory. Week 1 is the only session that can assume nothing at
+  all, so the tools have to be handed over before the concepts that name them.
+  Its **Ask** beat also runs 15 minutes rather than 10, because it introduces
+  the agent code the whole course wraps around. See the note below.
 - **Week 2** gives Break 25 minutes, because deploying happens inside it.
 - **Week 6** leads with a 35-minute bug hunt and puts Break in the middle, where
   the session changes subject.
@@ -269,11 +272,11 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is an 80-slide presenter deck for session one,
+`teaching/week-01-slides.html` is a 91-slide presenter deck for session one,
 in the same house style as the printable guide. Open it in a browser and press
 **F** for fullscreen.
 
-It follows the six beats of `week-01.md` exactly, so the deck and the written
+It follows the seven beats of `week-01.md` exactly, so the deck and the written
 guide never disagree about what comes next.
 
 | Key | What it does |
@@ -282,7 +285,7 @@ guide never disagree about what comes next.
 | `←` / `P` | previous slide |
 | **`S`** | **toggle the presenter-notes panel** |
 | `F` | fullscreen |
-| `1`–`6` | jump to that beat |
+| `0`–`6` | jump to that beat (`0` = Setup) |
 | `G` | go to a slide number |
 | `?` | show all keys |
 
