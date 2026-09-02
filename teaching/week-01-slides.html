@@ -1,0 +1,2479 @@
+<title>Week 1 · Package</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* ===========================================================================
+   Ship Production AI Systems — Week 1 presenter deck
+   Buildr Labs house style, taken from the same tokens as build-pdf.py:
+       --primary  #f46622   --foreground #121212   --background #f6f4ee
+   A deck is projected in a dim room, so this one is dark-first: the stage is
+   near-black and the paper tokens become the ink. Same brand, inverted ground.
+   ======================================================================== */
+
+:root{
+  --brand:#f46622;
+  --brand-lo:#c74d15;
+  --brand-glow:rgba(244,102,34,.14);
+
+  --stage:#0d0d0f;        /* the room behind the slide */
+  --slide:#16161a;        /* the slide itself          */
+  --panel:#1e1e24;        /* raised blocks on a slide  */
+  --ink:#f6f4ee;          /* warm off-white, the house paper colour */
+  --ink-dim:#a8a5a0;
+  --ink-faint:#6f6d69;
+  --rule:#32323a;
+
+  --ok:#5fbf7f;
+  --warn:#e8b93f;
+  --bad:#e2604a;
+
+  --sans:"DM Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"Space Mono","SF Mono",Menlo,Consolas,monospace;
+
+  --slide-w:1280px;
+  --slide-h:720px;
+}
+
+*{box-sizing:border-box;}
+
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--stage);
+  color:var(--ink);
+  font-family:var(--sans);
+  overflow:hidden;
+}
+
+/* ---- the stage --------------------------------------------------------- */
+#stage{
+  position:fixed;
+  inset:0;
+  display:grid;
+  place-items:center;
+}
+#scaler{
+  width:var(--slide-w);
+  height:var(--slide-h);
+  transform-origin:center center;
+  position:relative;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  background:var(--slide);
+  display:none;
+  flex-direction:column;
+  padding:52px 64px 60px;
+  overflow:hidden;
+}
+.slide.on{display:flex;}
+
+/* a hairline of brand at the very top of every slide */
+.slide::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--brand);
+}
+
+/* ---- slide furniture --------------------------------------------------- */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--brand);
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+  flex:none;
+}
+.eyebrow .clock{
+  color:var(--ink-faint);
+  letter-spacing:.12em;
+}
+.eyebrow .clock::before{content:"· ";}
+
+h1{
+  font-size:60px;
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1.04;
+  margin:0 0 18px;
+  text-wrap:balance;
+  flex:none;
+}
+h2{
+  font-size:40px;
+  font-weight:700;
+  letter-spacing:-.022em;
+  line-height:1.1;
+  margin:0 0 22px;
+  text-wrap:balance;
+  flex:none;
+}
+h3{
+  font-size:23px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  margin:0 0 10px;
+  flex:none;
+}
+p{font-size:22px;line-height:1.5;margin:0 0 14px;max-width:64ch;}
+p.lead{font-size:26px;line-height:1.45;color:var(--ink);}
+p.dim{color:var(--ink-dim);}
+.big{font-size:34px;line-height:1.28;font-weight:500;letter-spacing:-.015em;max-width:52ch;}
+strong{font-weight:700;color:#fff;}
+em{font-style:italic;color:var(--ink-dim);}
+.brandtext{color:var(--brand);}
+
+.body{flex:1;min-height:0;display:flex;flex-direction:column;gap:18px;}
+.center{justify-content:center;}
+
+/* ---- the ask: a big question ------------------------------------------- */
+.ask{
+  font-size:66px;
+  font-weight:700;
+  letter-spacing:-.035em;
+  line-height:1.05;
+  max-width:26ch;
+  text-wrap:balance;
+}
+.ask .q{color:var(--brand);}
+
+/* ---- code / terminal --------------------------------------------------- */
+pre{
+  font-family:var(--mono);
+  background:#0b0b0d;
+  border:1px solid var(--rule);
+  border-left:3px solid var(--brand);
+  border-radius:8px;
+  padding:18px 22px;
+  margin:0;
+  font-size:19px;
+  line-height:1.55;
+  overflow-x:auto;
+  white-space:pre;
+  tab-size:2;
+}
+pre.tight{font-size:16px;line-height:1.5;}
+pre.mini{font-size:14px;line-height:1.45;}
+code{font-family:var(--mono);font-size:.92em;background:#000;padding:2px 6px;border-radius:4px;color:var(--brand);}
+pre code{background:none;padding:0;color:inherit;font-size:inherit;}
+
+/* comment + prompt colouring inside terminal blocks */
+.cm{color:var(--ink-faint);}
+.pr{color:var(--brand);}
+.ok{color:var(--ok);}
+.bad{color:var(--bad);}
+.warn{color:var(--warn);}
+.hl{color:#fff;font-weight:700;}
+
+/* ---- generic layout helpers -------------------------------------------- */
+.cols{display:grid;gap:26px;flex:1;min-height:0;align-content:start;}
+.c2{grid-template-columns:1fr 1fr;}
+.c2w{grid-template-columns:1.25fr .75fr;}
+.c2n{grid-template-columns:.8fr 1.2fr;}
+.c3{grid-template-columns:repeat(3,1fr);}
+.mid{align-items:center;align-content:center;}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  padding:20px 22px;
+}
+.card.accent{border-left:3px solid var(--brand);}
+.card h3{font-size:20px;margin-bottom:8px;}
+.card p{font-size:18px;line-height:1.45;margin:0;}
+.card p + p{margin-top:8px;}
+
+/* the four-gap / bullet list style */
+ul.plain{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;}
+ul.plain li{font-size:22px;line-height:1.4;padding-left:26px;position:relative;}
+ul.plain li::before{
+  content:"";
+  position:absolute;left:0;top:.55em;
+  width:10px;height:2px;background:var(--brand);
+}
+ul.plain li b{color:#fff;}
+
+/* numbered, only where order is real */
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:flex;flex-direction:column;gap:16px;}
+ol.steps li{
+  counter-increment:s;
+  font-size:21px;line-height:1.4;
+  padding-left:46px;position:relative;
+}
+ol.steps li::before{
+  content:counter(s);
+  position:absolute;left:0;top:-1px;
+  width:30px;height:30px;border-radius:50%;
+  background:var(--brand-glow);
+  border:1px solid var(--brand);
+  color:var(--brand);
+  font-family:var(--mono);font-size:14px;font-weight:700;
+  display:grid;place-items:center;
+}
+
+/* ---- tables ------------------------------------------------------------ */
+table{border-collapse:collapse;width:100%;font-size:19px;}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:top;}
+th{
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--brand);
+  border-bottom:1px solid var(--brand);
+}
+td b{color:#fff;}
+td.mono{font-family:var(--mono);font-size:17px;}
+tr.now td{background:rgba(244,102,34,.07);}
+
+/* ---- the persistent beat rail ------------------------------------------ */
+.rail{
+  position:absolute;
+  left:64px;right:64px;bottom:22px;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-faint);
+  flex:none;
+}
+.rail .seg{
+  flex:1;
+  display:flex;flex-direction:column;gap:5px;
+}
+.rail .bar{height:3px;background:var(--rule);border-radius:2px;}
+.rail .seg.done .bar{background:var(--brand-lo);}
+.rail .seg.here .bar{background:var(--brand);}
+.rail .seg.here span{color:var(--brand);font-weight:700;}
+.rail .pg{
+  font-family:var(--mono);font-size:11px;
+  color:var(--ink-faint);letter-spacing:.08em;
+  min-width:52px;text-align:right;
+}
+
+/* ---- section / beat opener -------------------------------------------- */
+.opener{justify-content:center;}
+.opener .num{
+  font-family:var(--mono);
+  font-size:15px;font-weight:700;letter-spacing:.28em;
+  color:var(--brand);margin-bottom:22px;
+}
+.opener h1{font-size:88px;letter-spacing:-.04em;margin-bottom:24px;}
+.opener .sub{font-size:27px;color:var(--ink-dim);max-width:40ch;line-height:1.35;}
+.opener .goal{
+  margin-top:34px;padding-top:22px;
+  border-top:1px solid var(--rule);
+  font-size:20px;color:var(--ink-dim);max-width:60ch;
+}
+.opener .goal b{color:var(--brand);}
+
+/* ---- title slide ------------------------------------------------------- */
+.title-slide{justify-content:center;}
+.title-slide .brand{
+  font-family:var(--mono);font-size:14px;font-weight:700;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--brand);
+  margin-bottom:34px;
+}
+.title-slide h1{font-size:96px;letter-spacing:-.045em;line-height:.98;margin-bottom:26px;}
+.title-slide .sub{font-size:29px;color:var(--ink-dim);}
+.title-slide .rule{width:120px;height:3px;background:var(--brand);margin:36px 0;}
+.title-slide .meta{font-size:19px;color:var(--ink-faint);line-height:1.75;}
+
+/* ---- a "say this" strip (mine, not theirs) ---------------------------- */
+.say{
+  margin-top:auto;
+  background:var(--brand-glow);
+  border-left:3px solid var(--brand);
+  border-radius:0 8px 8px 0;
+  padding:14px 20px;
+  font-size:20px;line-height:1.4;
+  flex:none;
+}
+.say b{color:var(--brand);font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:5px;}
+
+/* ---- callout / punchline ---------------------------------------------- */
+.punch{
+  background:var(--brand);
+  color:#16161a;
+  border-radius:10px;
+  padding:22px 26px;
+  font-size:29px;font-weight:700;line-height:1.3;
+  letter-spacing:-.015em;
+  max-width:62ch;
+}
+.punch.quiet{
+  background:transparent;
+  color:var(--ink);
+  border:1px solid var(--brand);
+  border-left:4px solid var(--brand);
+}
+
+/* ---- the "do this now" band ------------------------------------------- */
+.dothis{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:13px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--brand);
+  flex:none;
+}
+.dothis::before{
+  content:"▶";font-size:11px;
+}
+.dothis.room{color:var(--ok);}
+.dothis.room::before{content:"●";}
+
+/* ---- diagram bits ----------------------------------------------------- */
+.diagram{
+  font-family:var(--mono);
+  font-size:17px;line-height:1.5;
+  color:var(--ink-dim);
+  white-space:pre;
+  overflow-x:auto;
+}
+.diagram .hl{color:var(--brand);font-weight:700;}
+.diagram .w{color:#fff;}
+
+.tree{
+  font-family:var(--mono);
+  font-size:16.5px;line-height:1.58;
+  white-space:pre;
+  color:var(--ink-dim);
+}
+.tree .f{color:#fff;}
+.tree .now{color:var(--brand);font-weight:700;}
+.tree .wk{color:var(--ink-faint);}
+
+/* boxes-and-arrows built from real elements, so it scales cleanly */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:nowrap;}
+.flow .node{
+  background:var(--panel);border:1px solid var(--rule);border-radius:9px;
+  padding:14px 16px;flex:1;min-width:0;
+}
+.flow .node.you{border-color:var(--brand);background:var(--brand-glow);}
+.flow .node .t{
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brand);margin-bottom:6px;
+}
+.flow .node .d{font-size:17px;line-height:1.35;color:var(--ink-dim);}
+.flow .node .d b{color:#fff;}
+.flow .arrow{
+  color:var(--brand);font-size:22px;padding:0 12px;flex:none;
+}
+
+.stack{display:flex;flex-direction:column;gap:12px;}
+.row{display:flex;gap:14px;align-items:stretch;}
+
+/* status-code chips */
+.codes{display:flex;flex-direction:column;gap:11px;}
+.codes .r{display:flex;align-items:baseline;gap:18px;font-size:21px;line-height:1.35;}
+.codes .n{
+  font-family:var(--mono);font-weight:700;font-size:24px;
+  min-width:62px;
+}
+.codes .n.g{color:var(--ok);}
+.codes .n.y{color:var(--warn);}
+.codes .n.r{color:var(--bad);}
+.codes .wk{
+  font-family:var(--mono);font-size:12px;color:var(--ink-faint);
+  letter-spacing:.1em;margin-left:auto;white-space:nowrap;
+}
+
+/* before/after two-panel */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;}
+.ba > div{padding:20px 22px;}
+.ba .l{background:#131316;border-right:1px solid var(--rule);}
+.ba .r{background:var(--brand-glow);}
+.ba .lab{
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:12px;
+}
+.ba .l .lab{color:var(--ink-faint);}
+.ba .r .lab{color:var(--brand);}
+.ba ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
+.ba li{font-size:19px;line-height:1.35;}
+.ba .l li{color:var(--ink-dim);}
+.ba .r li b{color:#fff;}
+
+/* ---- presenter notes panel ------------------------------------------- */
+#notes{
+  position:fixed;
+  right:0;top:0;bottom:0;
+  width:392px;
+  background:#0a0a0c;
+  border-left:1px solid var(--rule);
+  padding:24px 26px 26px;
+  overflow-y:auto;
+  display:none;
+  z-index:40;
+}
+body.notes #notes{display:block;}
+#notes .nh{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--brand);
+  padding-bottom:12px;margin-bottom:16px;border-bottom:1px solid var(--rule);
+  display:flex;justify-content:space-between;
+}
+#notes .nb{font-size:16px;line-height:1.6;color:var(--ink-dim);}
+#notes .nb b{color:#fff;}
+/* The first <b> of a lifted .say block is its label ("Say this", "Do now"),
+   authored as a block-level eyebrow on stage. Keep that role in the panel. */
+#notes .nb > b:first-child{
+  display:block;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--brand);
+  margin-bottom:9px;
+}
+#notes .nb em{color:var(--brand);font-style:normal;}
+#notes .nb ul{padding-left:18px;margin:10px 0;}
+#notes .nb li{margin-bottom:8px;}
+#notes .nb .t{
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brand);
+  margin:18px 0 8px;
+}
+#notes .nb pre{font-size:13px;padding:11px 13px;margin:10px 0;}
+
+/* ---- help overlay ---------------------------------------------------- */
+#help{
+  position:fixed;inset:0;
+  background:rgba(6,6,8,.94);
+  display:none;place-items:center;
+  z-index:60;
+}
+body.help #help{display:grid;}
+#help .box{
+  background:var(--slide);border:1px solid var(--rule);
+  border-top:3px solid var(--brand);
+  border-radius:12px;padding:36px 40px;max-width:560px;
+}
+#help h3{font-size:24px;margin-bottom:20px;}
+#help table{font-size:17px;}
+#help td{padding:8px 10px;border-bottom:1px solid var(--rule);}
+#help kbd{
+  font-family:var(--mono);font-size:14px;
+  background:#000;border:1px solid var(--rule);border-radius:4px;
+  padding:3px 8px;color:var(--brand);
+}
+
+/* ---- progress dots on the very first load --------------------------- */
+#hint{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;
+  color:var(--ink-faint);text-transform:uppercase;
+  z-index:30;transition:opacity .5s;
+}
+#hint kbd{color:var(--brand);}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+}
+</style>
+
+<div id="stage">
+  <div id="scaler">
+
+<!-- ==================================================================== 1 -->
+<section class="slide title-slide" data-beat="0">
+  <div class="brand">Buildr Labs · Ship Production AI Systems</div>
+  <h1>Week 1<br>Package</h1>
+  <div class="sub">Give the agent an address, a voice, and a box.</div>
+  <div class="rule"></div>
+  <div class="meta">
+    Phase 2 · Session 1 of 8<br>
+    Branch <code>week-01-package</code><br>
+    Today: 2 hours, six beats, two files of your own code.
+  </div>
+</section>
+
+<!-- ==================================================================== 2 -->
+<section class="slide" data-beat="0">
+  <div class="eyebrow">Where we are</div>
+  <h2>Phase 1 built an agent.<br>Phase 2 makes it something a company can run.</h2>
+  <div class="body">
+    <div class="ba">
+      <div class="l">
+        <div class="lab">Phase 1 · done</div>
+        <ul>
+          <li>A loop that reasons</li>
+          <li>Tools it can call</li>
+          <li>Answers that are correct</li>
+          <li>Runs when you run it</li>
+        </ul>
+      </div>
+      <div class="r">
+        <div class="lab">Phase 2 · the next eight weeks</div>
+        <ul>
+          <li><b>Anyone</b> can call it</li>
+          <li>It survives restarts, strangers, outages</li>
+          <li>It cannot run up an unbounded bill</li>
+          <li>You can <b>see</b> whether it is healthy</li>
+        </ul>
+      </div>
+    </div>
+    <div class="punch quiet">Nothing in Phase 2 changes how the agent thinks.</div>
+  </div>
+  <div class="say"><b>Say this</b>Every week is the distance between <em>"it works on my laptop"</em> and <em>"it works for customers, at 3am, when a provider is down, and nobody is watching."</em></div>
+</section>
+
+<!-- ==================================================================== 3 -->
+<section class="slide" data-beat="0">
+  <div class="eyebrow">The shape of today <span class="clock">2 hours</span></div>
+  <h2>Six beats. The order matters.</h2>
+  <div class="body">
+    <table>
+      <tr><th style="width:64px">#</th><th style="width:150px">Beat</th><th style="width:88px">Time</th><th>What happens</th></tr>
+      <tr><td class="mono">1</td><td><b>Ask</b></td><td class="mono">10 min</td><td>Talk only. Laptops closed.</td></tr>
+      <tr class="now"><td class="mono">2</td><td><b>Ground</b></td><td class="mono">25 min</td><td><b>Hands on keyboards.</b> Terminal, folders, JSON, curl, clone the project.</td></tr>
+      <tr><td class="mono">3</td><td><b>Break</b></td><td class="mono">10 min</td><td>I kill the agent in front of you. We find four gaps.</td></tr>
+      <tr><td class="mono">4</td><td><b>Concept</b></td><td class="mono">20 min</td><td>Deploying, web services, DNS, URLs, HTTP.</td></tr>
+      <tr><td class="mono">5</td><td><b>Build</b></td><td class="mono">45 min</td><td>The front door, streaming, the container.</td></tr>
+      <tr><td class="mono">6</td><td><b>Prove</b></td><td class="mono">15 min</td><td>Checkpoint green. Then three questions you cannot answer yet.</td></tr>
+    </table>
+    <div class="punch">The tools come before the theory. That is deliberate.</div>
+  </div>
+  <div class="say"><b>Say this</b>By the time I explain what a URL is, you will already have fetched one. When I explain status codes, you will already have made a 404 appear on your own screen. These are <em>names for things you did</em>, not five new facts.</div>
+</section>
+
+<!-- ================================================================ BEAT 1 -->
+<section class="slide opener" data-beat="1">
+  <div class="num">BEAT 1 · 10 MIN · NO SLIDES AFTER THIS ONE</div>
+  <h1>Ask</h1>
+  <div class="sub">Three questions to the room. Laptops closed.</div>
+  <div class="goal">The only part of today where <b>nobody types anything</b> — and it sets up everything else.</div>
+</section>
+
+<!-- ==================================================================== 5 -->
+<section class="slide" data-beat="1">
+  <div class="eyebrow">Beat 1 · Question 1</div>
+  <div class="body center">
+    <div class="ask"><span class="q">What is</span><br>an agent?</div>
+  </div>
+  <div class="say"><b>Listen for</b>A <b>loop</b>. Do not accept "an AI that does things". Push once: <em>"Does the model run the tool, or does your code?"</em></div>
+</section>
+
+<!-- ==================================================================== 6 -->
+<section class="slide" data-beat="1">
+  <div class="eyebrow">Beat 1 · The answer we want, in their words</div>
+  <h2>An agent is a loop.</h2>
+  <div class="body">
+    <pre class="tight"><span class="cm">1.</span> you        <span class="hl">"where is order ORD-1002?"</span>
+
+<span class="cm">2.</span> model      <span class="hl">"call lookup_order with ORD-1002"</span>
+              <span class="cm">↑ it ASKS. It cannot fetch anything itself.</span>
+
+<span class="cm">3.</span> your code  <span class="hl">"ORD-1002: standing desk, $340..."</span>
+              <span class="cm">↑ YOU fetch it, and hand the result back.</span>
+
+<span class="cm">4.</span> model      <span class="hl">"Your standing desk arrives Thursday"</span></pre>
+    <div class="punch">Your code runs whatever the model asks for.</div>
+  </div>
+  <div class="say"><b>Say this</b>That last line is why budgets, traces and fences exist for the next eight weeks. Leave these four moves on the whiteboard all session.</div>
+</section>
+
+<!-- ==================================================================== 7 -->
+<section class="slide" data-beat="1">
+  <div class="eyebrow">Beat 1 · Question 2</div>
+  <div class="body center">
+    <div class="ask">Someone tell me <span class="q">what you built</span> in Phase 1.</div>
+  </div>
+  <div class="say"><b>How to run it</b>Pick someone who is <em>not</em> the most confident person in the room. You want a plain description, not a performance. Two minutes. Then ask them to draw the four moves on the board.</div>
+</section>
+
+<!-- ==================================================================== 8 -->
+<section class="slide" data-beat="1">
+  <div class="eyebrow">Beat 1 · Question 3 · the trap</div>
+  <div class="body center">
+    <div class="ask">So — <span class="q">who else</span> can use it?</div>
+  </div>
+  <div class="say"><b>The honest answer</b><b>Nobody.</b> Let the silence sit before you say it.</div>
+</section>
+
+<!-- ==================================================================== 9 -->
+<section class="slide" data-beat="1">
+  <div class="eyebrow">Beat 1 · The honest answer</div>
+  <h2>Nobody.</h2>
+  <div class="body">
+    <p class="big">Your Phase 1 agent works when <em>you</em> run it, on <em>your</em> laptop, in <em>your</em> terminal, with <em>your</em> Python installed.</p>
+    <div class="punch">That is not a product. It is a demo.</div>
+  </div>
+  <div class="say"><b>Say this, then move</b><em>"Today we fix that, and almost none of it is about AI. First I need to hand you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></div>
+</section>
+
+<!-- ================================================================ BEAT 2 -->
+<section class="slide opener" data-beat="2">
+  <div class="num">BEAT 2 · 25 MIN · HANDS ON KEYBOARDS</div>
+  <h1>Ground</h1>
+  <div class="sub">Five tools, each on a toy. None of them touch our agent yet.</div>
+  <div class="goal">Learn the tool on a toy. <b>Then</b> use the tool on our thing. When the real thing breaks, you will know which part broke.</div>
+</section>
+
+<!-- =================================================================== 11 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Beat 2 · The plan <span class="clock">25 min</span></div>
+  <h2>Nine short things, not five lessons.</h2>
+  <div class="body">
+    <pre class="tight">  <span class="hl">2a</span>  the terminal    where am I, what is here, how do I move     <span class="cm">5 min</span>
+  <span class="hl">2b</span>  folders         build a small tree by hand                  <span class="cm">4 min</span>
+  <span class="hl">2c</span>  process, port   what "running" means, and numbered doors     <span class="cm">3 min</span>
+  <span class="hl">2d</span>  JSON            how data is written down to travel          <span class="cm">3 min</span>
+  <span class="hl">2e</span>  curl            how to send a request from the terminal     <span class="cm">6 min</span>
+  <span class="hl">2f</span>  the project     clone it, run the tests, read the map        <span class="cm">4 min</span>
+                                                             <span class="cm">───────</span>
+                                                              <span class="hl">25 min</span></pre>
+    <div class="punch quiet">This beat feels like it is not about AI. It pays for the rest of the course.</div>
+  </div>
+  <div class="say"><b>Do now</b>Walk the room. This is where you find out who has never opened a terminal — and you want to know that now, not in Beat 5. If a laptop will not cooperate, pair them with a neighbour and fix it at the break.</div>
+</section>
+
+<!-- =================================================================== 12 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2a · The terminal <span class="clock">5 min</span></div>
+  <h2>A window where you type instead of click.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <div class="card accent">
+          <h3>Open one</h3>
+          <p><b>Mac</b> — <code>Cmd + Space</code>, type <code>terminal</code>, Enter</p>
+          <p><b>Windows</b> — Start key, type <code>powershell</code>, Enter</p>
+          <p><b>Linux</b> — <code>Ctrl + Alt + T</code></p>
+        </div>
+        <div class="card">
+          <h3>Two that save your afternoon</h3>
+          <p><b>Tab</b> completes what you are typing.</p>
+          <p><b>Up arrow</b> brings back the last command.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Every command has one shape</h3>
+        <pre class="tight">   mkdir  -p   practice/notes
+   <span class="pr">─────</span>  <span class="warn">──</span>   <span class="hl">──────────────</span>
+     <span class="pr">│</span>     <span class="warn">│</span>         <span class="hl">│</span>
+   <span class="pr">the</span>    <span class="warn">an</span>     <span class="hl">what to</span>
+  <span class="pr">command</span> <span class="warn">option</span>  <span class="hl">do it to</span>
+          <span class="warn">(a flag,</span>
+        <span class="warn">starts with -)</span></pre>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Demo on the projector</b>Show <b>Tab</b> rather than describing it: type <code>cd Doc</code>, press Tab, watch it become <code>cd Documents/</code>. Beginners type long paths one character at a time for weeks unless somebody shows them this in the first ten minutes.</div>
+</section>
+
+<!-- =================================================================== 13 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2a · Type these — do not paste</div>
+  <h2>Four commands, and you can move around.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre><span class="pr">$</span> pwd
+<span class="cm">Where am I? Every terminal is</span>
+<span class="cm">always "in" a folder.</span>
+
+<span class="pr">$</span> ls
+<span class="cm">What is in here?</span>
+
+<span class="pr">$</span> ls -la
+<span class="cm">Same, with detail — and the</span>
+<span class="cm">HIDDEN files starting with a dot.</span></pre>
+      <div class="stack">
+        <div class="card accent">
+          <h3>Flags stack</h3>
+          <p><code>-l</code> is "long", <code>-a</code> is "all". That is why you can write <code>-la</code> instead of <code>-l -a</code>.</p>
+        </div>
+        <div class="card">
+          <h3>Those dotfiles matter today</h3>
+          <p>Files starting with a dot are <b>hidden from <code>ls</code>, not secret</b>. Your API key will live in one called <code>.env</code>.</p>
+          <p class="dim">If you ever think a file has vanished, it is usually that.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do now</b>Have everyone run all three. Then point at one dotfile on the projector and say the <code>.env</code> line — it lands again in Beat 5 when <code>KODEKEY is not set</code> appears.</div>
+</section>
+
+<!-- =================================================================== 14 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2b · Folders <span class="clock">4 min</span></div>
+  <h2>This is the shape we are going to make.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="tree">   <span class="f">practice/</span>
+   │
+   ├── notes.txt
+   │
+   ├── <span class="f">src/</span>
+   │   ├── app.py
+   │   └── helper.py
+   │
+   └── <span class="f">data/</span>
+       └── orders.txt</div>
+      <div class="stack">
+        <div class="card accent">
+          <h3>How to read a tree</h3>
+          <p>The lines are just indentation.</p>
+          <p><code>│</code> means "more below at this level".</p>
+          <p><code>└──</code> means "last one here".</p>
+        </div>
+        <p class="dim">You will read trees for the rest of your career. Thirty seconds now.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do now</b>Draw this on the whiteboard <b>before anyone types</b>, and leave it up. They build it with commands and check their drawing against the real thing as they go.</div>
+</section>
+
+<!-- =================================================================== 15 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2b · Build it</div>
+  <h2>Six commands. That is the whole toolkit.</h2>
+  <div class="body">
+    <div class="cols c2">
+      <pre class="tight"><span class="pr">$</span> mkdir practice
+<span class="pr">$</span> cd practice
+
+<span class="pr">$</span> touch notes.txt
+<span class="pr">$</span> mkdir src data
+<span class="cm">↑ mkdir took TWO names at once</span>
+
+<span class="pr">$</span> touch src/app.py src/helper.py
+<span class="cm">↑ no need to cd in! A path with a /</span>
+<span class="cm">  says "go through this folder"</span>
+
+<span class="pr">$</span> echo "ORD-1002 standing desk" &gt; data/orders.txt
+<span class="cm">↑ &gt; sends output INTO A FILE</span>
+<span class="cm">  instead of onto the screen</span></pre>
+      <div class="stack">
+        <div class="punch">Silence means it worked.</div>
+        <p class="dim">A terminal only speaks up when something is wrong, or when you asked for output. Beginners assume no output means failure and run the command four more times.</p>
+        <table>
+          <tr><th>Command</th><th>In plain words</th></tr>
+          <tr><td class="mono">pwd</td><td>where am I?</td></tr>
+          <tr><td class="mono">ls</td><td>what is here?</td></tr>
+          <tr><td class="mono">cd</td><td>go somewhere (<code>..</code> = up)</td></tr>
+          <tr><td class="mono">mkdir</td><td>make a folder</td></tr>
+          <tr><td class="mono">touch</td><td>make an empty file</td></tr>
+          <tr><td class="mono">cat</td><td>show me this file</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Say it twice</b><b>Silence means it worked.</b> This single sentence prevents a specific, very common panic.</div>
+</section>
+
+<!-- =================================================================== 16 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2b · Check your work</div>
+  <h2>The same tree, written the way a terminal writes it.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre><span class="pr">$</span> ls -R
+<span class="cm">-R = recursive: go into</span>
+<span class="cm">every sub-folder too</span>
+
+data		notes.txt	src
+
+./data:
+orders.txt
+
+./src:
+app.py		helper.py</pre>
+      <div class="stack">
+        <div class="card accent">
+          <h3>Read it as</h3>
+          <p>"Here is this folder — then here is what is inside each sub-folder."</p>
+        </div>
+        <pre class="mini"><span class="pr">$</span> cat data/orders.txt
+ORD-1002 standing desk
+
+<span class="pr">$</span> cd ..
+<span class="pr">$</span> rm -r practice
+<span class="cm">rm = remove, -r = everything inside</span></pre>
+        <p class="dim"><b class="brandtext">Warning, then move on:</b> <code>rm</code> does not ask, and there is no recycle bin. Read it twice before you press Enter.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>If asked</b>Their column spacing will differ from yours — <code>ls</code> lays out columns to fit the window, so a narrow terminal prints one name per line. Same information. Do not install <code>tree</code> for them; reading <code>ls -R</code> is the more useful skill.</div>
+</section>
+
+<!-- =================================================================== 17 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2c · Word one of two <span class="clock">3 min</span></div>
+  <h2>A process is a running program.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="diagram">   <span class="w">ON DISK</span>                <span class="w">RUNNING</span>
+   ───────                ───────
+
+   app.py     <span class="hl">──you start it──▶</span>   a <span class="hl">process</span>
+   <span class="cm">(a file,</span>                    <span class="cm">(alive, using memory,</span>
+   <span class="cm"> doing nothing)</span>              <span class="cm">holding things in</span>
+                                <span class="cm">variables)</span>
+
+                                      <span class="hl">▲</span>
+                            <span class="bad">close the terminal</span>
+                            <span class="bad">and this is GONE</span></div>
+      <div class="stack">
+        <pre><span class="pr">$</span> sleep 30
+<span class="cm">...your terminal is stuck.</span>
+<span class="cm">It is waiting for a process.</span>
+
+<span class="hl">Press Ctrl + C</span></pre>
+        <div class="punch quiet">You just killed a process.</div>
+        <p class="dim">That is exactly what happens to your agent when you close the terminal — and it is why the memory disappears in Week 2.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do now</b>Everyone runs <code>sleep 30</code> and kills it. It takes fifteen seconds and it makes three later moments free: the server that "hangs" in Beat 5, the lost memory in Week 2, and the Prove question about where history lives.</div>
+</section>
+
+<!-- =================================================================== 18 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2c · Word two of two</div>
+  <h2>A port is a numbered door on a computer.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="diagram">        <span class="w">ONE COMPUTER</span>
+   ┌───────────────────────┐
+   │                       │
+   │   <span class="hl">:8080</span>  our agent    │<span class="hl">◀──</span> a request knocks
+   │   :5432  a database   │    on <span class="w">ONE</span> numbered
+   │   :3000  a dashboard  │    door
+   │                       │
+   └───────────────────────┘</div>
+      <div class="stack">
+        <div class="diagram">   localhost<span class="hl">:8080</span>
+   ─────────  ────
+       │        │
+    <span class="w">which</span>    <span class="w">which</span>
+   <span class="w">computer</span>   <span class="w">door</span></div>
+        <div class="card accent">
+          <h3><code>localhost</code></h3>
+          <p>A special name meaning <b>this computer — the one I am typing on.</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Stop here</b>Do <b>not</b> explain port ranges, TCP, or why 443. They need "numbered door" and "localhost means here", in ninety seconds. The rest is Week 2's problem and mostly never.</div>
+</section>
+
+<!-- =================================================================== 19 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2d · JSON <span class="clock">3 min</span></div>
+  <h2>A way to write data as text, so it can travel.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre>{<span class="hl">"name"</span>: <span class="ok">"Ada"</span>, <span class="hl">"age"</span>: <span class="warn">36</span>}</pre>
+        <ul class="plain">
+          <li><code>{ }</code> wraps a set of facts about one thing</li>
+          <li><code>"name"</code> is a <b>label</b>, always in double quotes</li>
+          <li><code>:</code> separates the label from its value</li>
+          <li><code>,</code> separates one fact from the next</li>
+        </ul>
+        <p class="dim">Values: text (quoted), numbers (unquoted), true/false, or another <code>{ }</code> nested inside.</p>
+      </div>
+      <div class="stack">
+        <pre class="tight"><span class="pr">$</span> echo '{"name":"Ada","age":36}' | python -m json.tool
+
+{
+    <span class="hl">"name"</span>: <span class="ok">"Ada"</span>,
+    <span class="hl">"age"</span>: <span class="warn">36</span>
+}</pre>
+        <div class="card accent">
+          <h3>The <code>|</code> pipe</h3>
+          <p>Takes what the left side printed and feeds it to the right side as input.</p>
+          <p class="dim"><code>&gt;</code> sends output to a <b>file</b>. <code>|</code> sends output to another <b>command</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Say this and stop</b>That is the whole purpose of JSON: a network can only carry text, so we agree on a way to write data down. Do not explain stdin.</div>
+</section>
+
+<!-- =================================================================== 20 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2d · Now break it on purpose</div>
+  <h2>The error tells you the rule.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre><span class="pr">$</span> echo "{<span class="bad">'name'</span>:<span class="bad">'Ada'</span>}" | python -m json.tool
+
+<span class="bad">Expecting property name enclosed
+in double quotes: line 1 column 2</span></pre>
+      <div class="stack">
+        <div class="punch">JSON labels need double quotes. Always.</div>
+        <p class="dim">Single quotes are legal in Python and <b>illegal in JSON</b>. This is the single most common JSON mistake.</p>
+        <div class="card">
+          <h3>If anyone knows Python</h3>
+          <p>It looks exactly like a dict. The two differences that bite: <b>double quotes only</b>, and <b>no trailing comma</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Why this is worth 30 seconds</b>They have now made this mistake <em>deliberately</em>. The error message that would confuse them in Week 4 is one they have already seen and understood.</div>
+</section>
+
+<!-- =================================================================== 21 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2e · curl <span class="clock">6 min · the highest-value minutes today</span></div>
+  <h2>A browser with no window.</h2>
+  <div class="body">
+    <div class="cols c2n mid">
+      <div class="stack">
+        <div class="punch quiet">It sends a request over the network and prints what came back.</div>
+        <p class="dim">You will use it in every session from here. So learn it on something simple first, where <b>nothing else can be the problem.</b></p>
+      </div>
+      <div class="stack">
+        <pre class="tight"><span class="cm">ONE — fetch a web page</span>
+<span class="pr">$</span> curl -s https://example.com
+
+&lt;!doctype html&gt;&lt;html lang="en"&gt;&lt;head&gt;
+&lt;title&gt;Example Domain&lt;/title&gt;...
+<span class="cm">...a pile of HTML, all one line.</span></pre>
+        <div class="card accent">
+          <p><b>That is what a web page IS underneath</b> — text your browser draws. You have just done what a browser does.</p>
+          <p class="dim"><code>-s</code> = silent; without it curl prints a progress bar that gets in the way.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Why this beat exists</b>The reason is diagnostic, not comfort. When a three-flag POST fails in Beat 5, a student who ran these five toys can tell <em>"my JSON is malformed"</em> from <em>"my flags are wrong"</em> from <em>"the service is down"</em>. One who cannot will raise their hand for every failure for eight weeks.<br><br><b>No internet?</b> <code>python -m http.server 9000</code> in one terminal, <code>curl -s localhost:9000</code> in another covers points 1–4.</div>
+</section>
+
+<!-- =================================================================== 22 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2e · Two — an API</div>
+  <h2>Same tool. Same protocol. Different audience.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre><span class="pr">$</span> curl -s https://api.github.com/zen
+
+<span class="ok">Keep it logically awesome.</span>
+
+<span class="cm">One sentence. No HTML, no page —</span>
+<span class="cm">just an answer.</span></pre>
+      <div class="stack">
+        <div class="ba">
+          <div class="l">
+            <div class="lab">example.com</div>
+            <ul><li>Sent something for a <b>human</b> to look at</li></ul>
+          </div>
+          <div class="r">
+            <div class="lab">api.github.com</div>
+            <ul><li>Sent something for a <b>program</b> to use</li></ul>
+          </div>
+        </div>
+        <div class="punch">That is all an API is.</div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Say this</b>Most people have never had that difference stated plainly. Then point forward once: <em>"By the end of today, your agent is the second kind."</em><br><br><b>Note:</b> that endpoint returns a <em>random</em> sentence each call, so yours and theirs will differ from the slide. Worth saying — otherwise someone assumes they typed it wrong.</div>
+</section>
+
+<!-- =================================================================== 23 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2e · Three — what a reply is made of</div>
+  <h2>Three things arrive, every time.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre class="tight"><span class="pr">$</span> curl -s <span class="hl">-i</span> https://api.github.com/zen
+
+<span class="ok">HTTP/2 200</span>
+<span class="warn">date: Mon, 31 Aug 2026 05:04:25 GMT</span>
+<span class="warn">content-type: text/plain;charset=utf-8</span>
+
+Keep it logically awesome.</pre>
+      <div class="diagram">  <span class="ok">HTTP/2 200</span>
+  <span class="hl">◀── a STATUS:</span> how it went
+
+  <span class="warn">content-type: text/plain</span>
+  <span class="hl">◀── HEADERS:</span> facts about
+      the reply
+  <span class="cm">(blank line: headers end here)</span>
+
+  Keep it logically awesome.
+  <span class="hl">◀── the BODY:</span> the actual
+      answer</div>
+    </div>
+  </div>
+  <div class="say"><b>Say this</b><code>-i</code> includes the headers. <b>Headers are extra facts about the request or reply that are not the body itself.</b> <code>content-type</code> is how the receiver knows what kind of thing it just got. That is the whole idea.</div>
+</section>
+
+<!-- =================================================================== 24 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2e · Four — make failures happen</div>
+  <h2>Same command. Different numbers.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre class="tight"><span class="pr">$</span> curl -s -o /dev/null \
+    -w <span class="hl">"%{http_code}\n"</span> \
+    https://httpbin.org/status/<span class="hl">404</span>
+
+<span class="bad">404</span>
+
+<span class="cm">Now try 200. Then 500.</span></pre>
+      <div class="stack">
+        <div class="card accent">
+          <h3>Two flags worth keeping</h3>
+          <p><code>-o /dev/null</code> — throw the body away, we do not care about it</p>
+          <p><code>-w "%{http_code}"</code> — print <b>just</b> the status code</p>
+        </div>
+        <p class="dim">You use <code>-w "%{http_code}"</code> heavily in Week 3.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do now, and do NOT explain the numbers</b>Have them run all three — 200, 404, 500. That is what turns status codes from a table on a slide into something real.<br><br>The meaning comes in Beat 4, twenty minutes from now, and it lands far better as <em>"remember the 404 you made?"</em> than as a table nobody has a memory attached to.</div>
+</section>
+
+<!-- =================================================================== 25 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2e · Five — send something</div>
+  <h2>Keep this command. We change one thing later.</h2>
+  <div class="body">
+    <div class="cols c2w mid">
+      <pre class="tight"><span class="pr">$</span> curl -s <span class="hl">-X POST</span> https://httpbin.org/post \
+    <span class="hl">-H</span> 'Content-Type: application/json' \
+    <span class="hl">-d</span> '{"message":"hello"}'
+
+{
+  ...
+  <span class="ok">"json"</span>: {
+    <span class="ok">"message"</span>: <span class="ok">"hello"</span>
+  },
+  ...
+}</pre>
+      <div class="stack">
+        <ul class="plain">
+          <li><code>-X POST</code> — we are <b>sending</b>, not just reading</li>
+          <li><code>-H</code> — a <b>header</b>: "the body I am sending is JSON"</li>
+          <li><code>-d</code> — the <b>body</b>. The actual thing being sent.</li>
+        </ul>
+        <div class="punch quiet">The server received your JSON, understood it, and read the <code>message</code> field out.</div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Write this promise on the board</b><em>"Keep that command. In Beat 5 we change the URL to your own laptop, and the answer comes back from your agent instead of an echo service. Nothing else about the command changes."</em><br><br>That one sentence is what stops FastAPI feeling like magic later.</div>
+</section>
+
+<!-- =================================================================== 26 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2f · Get the project <span class="clock">4 min</span></div>
+  <h2>Git is a time machine for a folder of code.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <pre><span class="pr">$</span> git clone https://github.com/\
+    nimeshmora/shipping-prod-ai-system.git
+
+<span class="pr">$</span> cd shipping-prod-ai-system
+
+<span class="pr">$</span> git checkout <span class="hl">week-01-package</span></pre>
+      <div class="stack">
+        <div class="card accent">
+          <h3><code>git clone</code></h3>
+          <p>Downloads a copy of the project, with all of its history.</p>
+        </div>
+        <div class="card accent">
+          <h3><code>git checkout</code></h3>
+          <p>Switches to a particular version — in our case, <b>this week's starting point</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Say this</b>Every week is its own branch. A student starting Week 5 cold gets a working Weeks 1–4 agent. <b>Nobody ever debugs someone else's half-finished code.</b></div>
+</section>
+
+<!-- =================================================================== 27 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2f · The map</div>
+  <h2>You only ever write inside <code>app/</code>. Today it is two files.</h2>
+  <div class="body">
+    <div class="cols c2w">
+      <div class="tree"><span class="f">shipping-prod-ai-system/</span>
+│
+├── <span class="now">app/</span>                  <span class="cm">◀── EVERYTHING YOU WRITE</span>
+│   ├── <span class="now">main.py</span>           the web service      <span class="now">← TODAY</span>
+│   ├── <span class="now">stream.py</span>         streaming replies    <span class="now">← TODAY</span>
+│   ├── <span class="f">agent.py</span>          the Phase 1 loop     <span class="cm">(works)</span>
+│   ├── <span class="f">orders.py</span>         the tool it calls    <span class="cm">(works)</span>
+│   ├── memory.py         conversation history <span class="wk">← Week 2</span>
+│   ├── store.py          where memory lives   <span class="wk">← Week 2</span>
+│   ├── guardrails.py     keys, limits, fences <span class="wk">← Wk 3,4,7</span>
+│   ├── trace.py          what happened        <span class="wk">← Week 5</span>
+│   ├── otel.py           traces, standard     <span class="wk">← Week 5</span>
+│   └── monitor.py        is it healthy?       <span class="wk">← Week 5</span>
+│
+├── tests/test_app.py     <span class="cm">◀── proves it still thinks right</span>
+├── checks/check.py       <span class="cm">◀── make check-week-01</span>
+│
+├── <span class="f">Makefile</span>              <span class="cm">◀── the shortcuts. READ THIS.</span>
+├── <span class="now">Dockerfile</span>            how to build the box <span class="now">← TODAY</span>
+├── <span class="now">.dockerignore</span>         what to keep OUT    <span class="now">← TODAY</span>
+├── <span class="f">.env</span>                  <span class="cm">◀── your key. Never committed.</span>
+│
+├── evals/                <span class="wk">← Week 8</span>  does it answer WELL?
+├── loadtest/             <span class="wk">← Week 7</span>  behaviour under load
+├── observability/        <span class="wk">← Week 5</span>  the dashboard stack
+├── deploy/               <span class="wk">← Week 8</span>  Kubernetes, portability
+└── guide/                <span class="cm">◀── the written version</span></div>
+      <div class="stack">
+        <div class="card accent">
+          <h3>Three things, and no more</h3>
+          <p><b>You only write inside <code>app/</code>.</b> Everything else is scaffolding somebody already built.</p>
+          <p><b>Today is two files.</b> <code>main.py</code> and <code>stream.py</code>. That is the whole assignment.</p>
+          <p><b>The file list is the syllabus.</b> Every remaining file has a week next to it.</p>
+        </div>
+        <pre class="mini"><span class="pr">$</span> ls
+<span class="pr">$</span> ls app</pre>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do NOT walk through all ten files</b>Point at <code>main.py</code> and <code>stream.py</code>: <em>"these two, today."</em> Then point down the right-hand column: <em>"and that is the rest of the course."</em><br><br>The map's real job is to remove an anxiety: beginners open a forty-file repo and assume they must understand all of it.</div>
+</section>
+
+<!-- =================================================================== 28 -->
+<section class="slide" data-beat="2">
+  <div class="eyebrow">Part 2f · Make it run</div>
+  <h2>Twelve green tests before you write a line.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre class="tight"><span class="pr">$</span> make install
+<span class="cm">fetches the libraries</span>
+
+<span class="pr">$</span> make test
+<span class="ok">........... 12 passed</span></pre>
+        <pre class="tight"><span class="pr">$</span> cat Makefile
+
+make test  <span class="cm">is a nickname for</span>  python -m pytest -q
+make run   <span class="cm">is a nickname for</span>  python -m app.main</pre>
+        <p class="dim"><b>There is no magic in <code>make</code></b> — it is a list of nicknames, and you can read every one.</p>
+      </div>
+      <div class="stack">
+        <pre class="tight"><span class="pr">$</span> make check-week-01
+
+<span class="bad">FAIL  app/main.py must define `app`,
+      the FastAPI application</span></pre>
+        <div class="punch">That is the assignment.</div>
+        <p class="dim">Every week works this way: <b>one command tells you exactly what is missing</b>, and you make it green.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Say this</b>Twelve green tests before they have written a line is deliberate: <em>"The agent loop already works. Phase 1 did that. Nothing you do today changes how it thinks."</em><br><br>Then end the beat and breathe. <em>"Laptops can stay open, but stop typing. I want to show you something break."</em></div>
+</section>
+
+<!-- ================================================================ BEAT 3 -->
+<section class="slide opener" data-beat="3">
+  <div class="num">BEAT 3 · 10 MIN · PROJECTOR ONLY</div>
+  <h1>Break</h1>
+  <div class="sub">I kill the agent in front of you, and we count what is missing.</div>
+  <div class="goal">Do not solve any of it here. <b>The discomfort is the setup</b> — a room that has just failed to think of a good way to share a Python function finds web services obvious rather than arbitrary.</div>
+</section>
+
+<!-- =================================================================== 30 -->
+<section class="slide" data-beat="3">
+  <div class="eyebrow">Beat 3 · Five questions, on the projector</div>
+  <h2>Watch it disappear.</h2>
+  <div class="body">
+    <ol class="steps">
+      <li>Show the Phase 1 agent working. Then <b>close the terminal.</b></li>
+      <li><b>"Where is the agent now?"</b> — Gone. It was a <em>process</em>, and you killed it. <span class="dim">They ran <code>sleep 30</code> and Ctrl+C twenty minutes ago.</span></li>
+      <li><b>"How would my colleague in another city use this?"</b> — They cannot.</li>
+      <li><b>"How would a website use it?"</b> — It has no address to call.</li>
+      <li><b>"Suppose I give you the file right now. Can you run it?"</b> <span class="dim">Make them answer this one properly.</span></li>
+    </ol>
+  </div>
+  <div class="say"><b>Point at their own screens</b><em>"You ran <code>make install</code> ten minutes ago. It took two minutes and downloaded a pile of libraries. That is what you are asking your colleague to do — and they do not have the key."</em></div>
+</section>
+
+<!-- =================================================================== 31 -->
+<section class="slide" data-beat="3">
+  <div class="eyebrow">Beat 3 · Write these on the board</div>
+  <h2>Four gaps. None of them are AI problems.</h2>
+  <div class="body">
+    <table>
+      <tr><th style="width:280px">The gap</th><th>What it means</th><th style="width:110px">Fixed</th></tr>
+      <tr class="now"><td><b>no address</b></td><td>nobody can reach it</td><td class="mono">today</td></tr>
+      <tr class="now"><td><b>no memory of who</b></td><td>it cannot hold a conversation across two requests</td><td class="mono">today</td></tr>
+      <tr class="now"><td><b>no health signal</b></td><td>nothing can check whether it is alive</td><td class="mono">today</td></tr>
+      <tr class="now"><td><b>runs in one place</b></td><td>only where Python is already set up just right</td><td class="mono">today</td></tr>
+    </table>
+    <div class="punch">All four are why agents die in notebooks.</div>
+  </div>
+  <div class="say"><b>Do not solve this now</b>Leave it as an open question and go straight into Beat 4, which answers it in its first five minutes. Leave these four on the board all session and tick them off as you build.</div>
+</section>
+
+<!-- ================================================================ BEAT 4 -->
+<section class="slide opener" data-beat="4">
+  <div class="num">BEAT 4 · 20 MIN</div>
+  <h1>Concept</h1>
+  <div class="sub">Five ideas, arranged as one story rather than five topics.</div>
+  <div class="goal">Every one of these is a <b>name for something you already ran</b> in Beat 2. Say that out loud each time.</div>
+</section>
+
+<!-- =================================================================== 33 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Why this order</div>
+  <h2>Each idea answers the question the last one raises.</h2>
+  <div class="body">
+    <pre class="tight">"put it on another computer"    <span class="hl">→</span>  fine — but how does anyone <span class="hl">TALK</span> to it?
+
+"you wrap it in a web service" <span class="hl">→</span>  <span class="hl">which</span> computer? how do I <span class="hl">find</span> it?
+
+"every computer has an address"<span class="hl">→</span>  what do I <span class="hl">say</span> when I get there?
+
+"you send a request"           <span class="hl">→</span>  what <span class="hl">comes back</span>?
+
+"a reply, with a number on it" <span class="hl">→</span>  ...and then it <span class="bad">forgets you</span>.</pre>
+    <div class="punch quiet">Teach them in order and the last one lands as an obvious consequence, not a new fact to memorise.</div>
+  </div>
+  <div class="say"><b>Protect idea 2</b>It is the one most courses skip, and the one that makes the rest feel inevitable rather than arbitrary. A student who does not know <em>why</em> an agent gets wrapped in a web service will treat FastAPI as a magic ritual for eight weeks.</div>
+</section>
+
+<!-- =================================================================== 34 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · One picture for the whole session</div>
+  <h2>Everything today is the arrow, or the box.</h2>
+  <div class="body">
+    <div class="diagram">    <span class="w">ANYONE, ANYWHERE</span>                   <span class="w">A COMPUTER THAT IS ALWAYS ON</span>
+   ┌─────────────────┐                  ┌──────────────────────────┐
+   │  a website      │                  │  ┌────────────────────┐  │
+   │  a phone app    │   "where is      │  │   <span class="hl">web service</span>      │  │
+   │  another        │ ─ ORD-1002?" ───▶│  │   <span class="cm">(the front door)</span> │  │
+   │  company        │                  │  │         ↓          │  │
+   │  a script       │◀── "Thursday" ───│  │   <span class="hl">your agent</span>       │  │
+   └─────────────────┘                  │  └────────────────────┘  │
+                                        └──────────────────────────┘
+            ▲                                        ▲
+     <span class="cm">none of these run</span>                      <span class="cm">this whole box is</span>
+     <span class="cm">your code, or have</span>                     <span class="hl">Part 3 (a container)</span>
+     <span class="cm">your key</span>
+            └───── <span class="hl">the arrow is Parts 1 and 2</span> ─────┘
+              <span class="cm">(a front door, and a fast-feeling reply)</span></div>
+  </div>
+  <div class="say"><b>Highest-value minute of the session</b>Beginners struggle far less with "what is a URL" than with "why are we doing any of this". Point at this diagram <b>every time you change topic</b>: <em>"Still the arrow. Now the box."</em><br><br>And: <em>"Twenty minutes ago, <code>curl</code> was one of those things on the left. You already know how to be the left-hand side. Today you build the right."</em></div>
+</section>
+
+<!-- =================================================================== 35 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 1 of 5</div>
+  <h2>Deploying means putting something where other people can use it.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <div class="card accent">
+          <p class="dim">A shop that only opens when the owner is standing in it <b>is not really a shop.</b></p>
+        </div>
+        <div class="card accent">
+          <p class="dim">A phone that is only on when you are looking at it <b>cannot receive calls.</b></p>
+        </div>
+        <p>Right now your agent runs on your computer, <em>only while you are watching it.</em></p>
+      </div>
+      <table>
+        <tr><th></th><th>Your laptop</th><th>A deployed computer</th></tr>
+        <tr><td>Always on?</td><td class="dim">no — it sleeps, it moves, it closes</td><td><b>yes</b></td></tr>
+        <tr><td>Belongs to you?</td><td class="dim">yes</td><td><b>no — and that is the point</b></td></tr>
+        <tr><td>Has an address others can reach?</td><td class="dim">no</td><td><b>yes</b></td></tr>
+      </table>
+    </div>
+    <div class="punch">There is no other magic in the word.</div>
+  </div>
+  <div class="say"><b>Why say it this plainly</b>Beginners assume "deploy" is a technical ritual they have not learned yet. Saying it means <em>"put it on an always-on computer that has an address"</em> removes a lot of anxiety, and is completely accurate.<br><br><b>"Whose computer?"</b> — <em>"A company that rents them by the minute. We use Google's next week. Nothing about today changes if you pick a different one."</em></div>
+</section>
+
+<!-- =================================================================== 36 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 of 5 · the most important ten minutes</div>
+  <h2>Your agent is a Python function.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre>reply = <span class="hl">run_turn</span>(
+  "where is my order ORD-1002?"
+)</pre>
+        <p>That function is excellent. It reasons, calls tools, comes back with an answer.</p>
+        <p class="dim">And exactly one thing can call it: <b>Python code, on that same computer, in that same folder, in that same running program.</b></p>
+      </div>
+      <div class="diagram">┌─── <span class="w">ONE COMPUTER, ONE PROGRAM</span> ────┐
+│                                  │
+│   your Python code               │
+│         │                        │
+│       calls                      │
+│         ▼                        │
+│   <span class="hl">run_turn()</span>                     │
+│                                  │
+└──────────────────────────────────┘
+
+  a website   <span class="bad">✗</span>      another company <span class="bad">✗</span>
+  a phone app <span class="bad">✗</span>      a shell script  <span class="bad">✗</span>
+
+  <span class="bad">nothing out here can get in</span></div>
+    </div>
+  </div>
+  <div class="say"><b>Do not rush to FastAPI</b>Let them feel the problem first. If the room takes one thing home today, make it this. Everything after it is mechanics.</div>
+</section>
+
+<!-- =================================================================== 37 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 · put it to the room</div>
+  <div class="body center">
+    <div class="ask">So how does <span class="q">anybody else</span> use it?</div>
+  </div>
+  <div class="say"><b>Take their answers seriously</b>Every wrong answer here teaches something, and the third one is nearly right. Next slide has all three.</div>
+</section>
+
+<!-- =================================================================== 38 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 · every wrong answer teaches something</div>
+  <h2>You will get these three.</h2>
+  <div class="body">
+    <div class="stack">
+      <div class="card accent">
+        <h3>"Send them the file."</h3>
+        <p class="dim">Then they need Python. The right version. The libraries at the right versions. And your API key — <b>which you have now given away.</b> And when you fix a bug, they are all still running the old one, forever.</p>
+      </div>
+      <div class="card accent">
+        <h3>"Give them my laptop."</h3>
+        <p class="dim">They laugh — but make the point anyway: <b>that is what "it works on my machine" actually offers.</b></p>
+      </div>
+      <div class="card accent">
+        <h3>"Put it in a mobile app / a website."</h3>
+        <p class="dim">Closer, and worth taking seriously. But a phone cannot run your Python, and it certainly cannot hold your API key. Something else has to do the thinking, and the app has to <em>ask</em> that something. <b>Which is the answer — they just described a web service without naming it.</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Call back to Beat 2, hard</b><em>"You ran <code>make install</code> half an hour ago. Two minutes, a screenful of downloads, and you still needed a key I gave you separately. Multiply that by every customer."</em></div>
+</section>
+
+<!-- =================================================================== 39 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 · the one-sentence version</div>
+  <div class="body center">
+    <div class="punch" style="font-size:34px;max-width:34ch;line-height:1.25;">A web service is how you let something that is not your program, on a computer that is not yours, use your code — without ever giving them the code.</div>
+  </div>
+  <div class="say"><b>Say it, then break it down</b>Next slide has the three things it buys. Each one can be checked against the three wrong answers they just gave.</div>
+</section>
+
+<!-- =================================================================== 40 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 · what it buys you</div>
+  <h2>Three things, and the third is the one to dwell on.</h2>
+  <div class="body">
+    <div class="cols c3">
+      <div class="card accent">
+        <h3>One copy, one place</h3>
+        <p class="dim">You fix a bug once, and <b>everyone has the fix immediately.</b></p>
+      </div>
+      <div class="card accent">
+        <h3>Your secrets stay yours</h3>
+        <p class="dim">The key lives on <em>your</em> server. <b>The caller never sees it.</b></p>
+      </div>
+      <div class="card accent">
+        <h3>Anything can call it</h3>
+        <p class="dim">A website, a phone app, another company's system, a shell script — <b>none of them need Python.</b></p>
+      </div>
+    </div>
+    <h3 style="margin-top:8px">Why a <em>web</em> service, specifically?</h3>
+    <div class="cols c2 mid">
+      <div class="diagram">   <span class="hl">your agent, as a web service</span>
+             ▲   ▲   ▲   ▲
+             │   │   │   │
+   a website ┘   │   │   └─ someone's script
+   a phone app ──┘   └───── another company</div>
+      <p class="dim">Not one of those four had to agree with you about anything in advance. They did not need your language, your libraries, or your operating system. <b>They needed a URL.</b></p>
+    </div>
+  </div>
+  <div class="say"><b>The line that lands</b><em>"HTTP is boring, and boring is the feature. It is the metric thread of software — everything already fits it."</em><br><br><b>If someone raises gRPC / queues / websockets:</b> agree, they are real and sometimes better. Then: <em>"Every one of them needs both sides to agree in advance. HTTP is what you use when you do not get to choose who calls you."</em><br><br><b>Cheap proof:</b> <em>"You called GitHub's API in Beat 2. You had never spoken to GitHub before, you agreed nothing in advance, and it worked first try."</em></div>
+</section>
+
+<!-- =================================================================== 41 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 · the turn it makes</div>
+  <h2>From a program to a service.</h2>
+  <div class="body">
+    <div class="ba">
+      <div class="l">
+        <div class="lab">A program</div>
+        <ul>
+          <li>you run it</li>
+          <li>it does its job</li>
+          <li>it exits</li>
+          <li>one user: you</li>
+          <li>crashes are your problem</li>
+        </ul>
+      </div>
+      <div class="r">
+        <div class="lab">A service</div>
+        <ul>
+          <li><b>it is already running</b>, waiting</li>
+          <li>it does its job <b>when asked</b></li>
+          <li><b>it never exits</b></li>
+          <li><b>many users, at once, strangers</b></li>
+          <li>crashes are <b>everyone's</b> problem</li>
+        </ul>
+      </div>
+    </div>
+    <div class="punch">Everything difficult in the next eight weeks comes from that right-hand column.</div>
+    <p class="dim">Memory that must outlive a restart <b>(Week 2)</b>. Strangers <b>(Week 3)</b>. Costs that scale with users you never met <b>(Week 4)</b>. Knowing it is healthy when nobody is watching <b>(Week 5)</b>.</p>
+  </div>
+  <div class="say"><b>Point at the right column</b><em>"That is the whole syllabus. Not one line of it is about AI."</em> This is the best moment in the course to answer <em>"why am I here?"</em> for students who arrived expecting more prompt engineering.<br><br><b>Row three, for free:</b> <em>"You ran <code>sleep 30</code>, a program that refused to exit, and it annoyed you. A server does that forever, on purpose."</em></div>
+</section>
+
+<!-- =================================================================== 42 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 2 · so what is FastAPI?</div>
+  <h2>A translator. That is all.</h2>
+  <div class="body">
+    <div class="diagram">   <span class="w">a request arrives over the network</span>        <span class="cm">FastAPI turns it into...</span>
+
+   POST /chat                                <span class="hl">→</span>  a Python function call
+   {"message": "where is ORD-1002?"}         <span class="hl">→</span>  an argument
+
+
+   <span class="w">your function returns a Python dict</span>       <span class="cm">FastAPI turns it into...</span>
+
+   {"reply": "Thursday"}                     <span class="hl">→</span>  JSON, sent back over
+                                                the network</div>
+    <div class="punch">You are wrapping your agent, not rewriting it.</div>
+    <p class="dim">Your agent logic does not change today — <b>not one line of <code>run_turn</code>.</b></p>
+  </div>
+  <div class="say"><b>Say the last part twice</b>It defuses real anxiety: <em>"You are not rewriting your agent. Phase 1's code still does the thinking. You are giving it a front door."</em><br><br><b>Honest scale check:</b> <em>"The part you write today is about forty lines. The reason it matters is not that it is hard."</em></div>
+</section>
+
+<!-- =================================================================== 43 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 3 of 5</div>
+  <h2>How one computer finds another.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <div class="diagram">   <span class="w">a phone number</span>    +94 71 234 5678
+   <span class="w">an IP address</span>     172.217.24.206</div>
+        <p class="dim"><b>Every computer on the internet has a number.</b> But nobody remembers numbers — so we use names, and something looks the name up for us.</p>
+        <div class="diagram">   <span class="w">you want</span>       <span class="w">you need</span>          <span class="w">the lookup</span>
+   ──────────     ───────────────   ──────────
+   "Mum"          +94 71 234 5678   contacts
+   "google.com"   172.217.24.206    <span class="hl">DNS</span></div>
+        <div class="punch quiet">DNS is the internet's contacts list.</div>
+      </div>
+      <div class="stack">
+        <pre class="tight"><span class="pr">$</span> ping -c 1 google.com
+
+PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
+<span class="cm">↑ a name just became a number</span></pre>
+        <pre class="tight"><span class="pr">$</span> ping -c 1 this-name-does-not-exist-xyz.com
+
+<span class="bad">ping: cannot resolve ...: Unknown host</span></pre>
+        <p class="dim"><b>"Cannot resolve" means the contacts list had no entry.</b> Not "the computer is down" — nobody even found out where to knock.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Keep it to three commands</b>This is the one concept in Beat 4 with its own toy, because it is the one they did <em>not</em> do in Beat 2.<br><br><b>Different numbers?</b> <em>"Big sites answer from many machines around the world, and DNS hands you a nearby one. You and the person next to you are talking to different computers, and both of you are right."</em><br><br><b>The ms figure</b> makes distance physical: same city = single digits, another continent = 200+. <em>"Nothing is instant. It is just fast."</em> That is the seed of Week 5's p95.</div>
+</section>
+
+<!-- =================================================================== 44 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 3 · the sentence that matters</div>
+  <div class="body center">
+    <div class="stack">
+      <div class="punch" style="font-size:33px;max-width:36ch;line-height:1.25;">When your agent is on the public internet, anyone who knows its address can send it a request.</div>
+      <p class="big" style="margin-top:8px">Anyone. <em>Not just your users.</em></p>
+    </div>
+  </div>
+  <div class="say"><b>Say it twice, and let it be uncomfortable</b>The phone analogy carries it: <em>"A phone number that only your friends can dial does not exist. If it can receive calls, it can receive calls from anyone."</em><br><br>This is the seed of <b>Week 3</b> (a stranger spending your model budget) and <b>Week 7</b> (a stranger attacking you). You will spend two entire weeks on it.</div>
+</section>
+
+<!-- =================================================================== 45 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 4 of 5</div>
+  <h2>A URL is a building, and a room inside it.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <div class="diagram">   <span class="hl">https</span>://<span class="ok">shop.example.com</span><span class="warn">/chat</span>
+   <span class="hl">─────</span>   <span class="ok">────────────────</span>  <span class="warn">────</span>
+     <span class="hl">│</span>            <span class="ok">│</span>            <span class="warn">│</span>
+   <span class="hl">how you</span>     <span class="ok">which</span>        <span class="warn">which</span>
+   <span class="hl">get in</span>     <span class="ok">building</span>      <span class="warn">room</span></div>
+        <div class="diagram">   <span class="hl">http</span>://<span class="ok">localhost</span>:8080<span class="warn">/chat</span>
+   <span class="hl">────</span>   <span class="ok">─────────</span>  ────  <span class="warn">────</span>
+    <span class="hl">│</span>        <span class="ok">│</span>        │     <span class="warn">│</span>
+   <span class="hl">how</span>     <span class="ok">which</span>    which  <span class="warn">which</span>
+   <span class="hl">in</span>    <span class="ok">computer</span>   door   <span class="warn">room</span></div>
+        <p class="dim"><b>That is the URL you will type in forty minutes.</b> You already met <code>localhost</code> and <code>:8080</code> in Part 2c.</p>
+      </div>
+      <div class="stack">
+        <h3>Our four rooms</h3>
+        <table>
+          <tr><th>Room</th><th>What happens in it</th><th>Built</th></tr>
+          <tr class="now"><td class="mono">/chat</td><td>ask the agent a question</td><td class="mono">today</td></tr>
+          <tr class="now"><td class="mono">/chat/stream</td><td>the same, but the answer arrives as it is written</td><td class="mono">today</td></tr>
+          <tr class="now"><td class="mono">/health</td><td>"are you alive?"</td><td class="mono">today</td></tr>
+          <tr><td class="mono">/metrics</td><td>"how are you doing, in detail?"</td><td class="mono">Week 5</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Two things beginners wonder and rarely ask</b><br><b>"Is a URL the same as a website?"</b> No — a website is one kind of thing you find at a URL. <em>They proved this in Part 2e:</em> example.com gave a page, GitHub's API gave a sentence. Same kind of address, different thing at the end of it.<br><br><b>"Why https and not www?"</b> <code>www</code> is just a name someone chose, like a building called "North Wing". <code>https</code> is the part that matters, and it is not part of the name at all.</div>
+</section>
+
+<!-- =================================================================== 46 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 5 of 5</div>
+  <h2>A request is a counter clerk who helps you, then forgets you.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="diagram">   <span class="w">you</span>    "I would like to collect
+          order ORD-1002."
+          <span class="hl">◀── the request</span>
+
+   <span class="w">clerk</span>  "Here it is.
+          Arriving Thursday."
+          <span class="hl">◀── the reply</span>
+
+          <span class="bad">...and the clerk immediately
+          forgets you exist.</span></div>
+      <div class="stack">
+        <h3>Every request has three parts</h3>
+        <table>
+          <tr><th>Part</th><th>In plain words</th><th>Ours</th></tr>
+          <tr><td><b>method</b></td><td>am I collecting, or handing in?</td><td class="mono">GET / POST</td></tr>
+          <tr><td><b>path</b></td><td>which counter am I at?</td><td class="mono">/chat</td></tr>
+          <tr><td><b>body</b></td><td>the form you filled in</td><td class="mono">{"message": ...}</td></tr>
+        </table>
+        <h3 style="margin-top:6px">Every reply has two</h3>
+        <table>
+          <tr><td><b>status code</b></td><td>a number saying how it went</td></tr>
+          <tr><td><b>body</b></td><td>the actual answer</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Next slide is the payoff</b>Do not present this table as new information. They typed all five of these things in Part 2e — the next slide puts their own command back on screen with the labels on it.</div>
+</section>
+
+<!-- =================================================================== 47 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 5 · you already typed all of this</div>
+  <h2>Your own command from Part 2e, labelled.</h2>
+  <div class="body">
+    <div class="diagram">   curl -s <span class="hl">-X POST</span> <span class="ok">https://httpbin.org</span><span class="warn">/post</span> \
+              <span class="hl">───────</span>  <span class="ok">───────────────────</span><span class="warn">─────</span>
+                 <span class="hl">│</span>              <span class="ok">│</span>          <span class="warn">│</span>
+              <span class="hl">METHOD</span>          <span class="ok">building</span>      <span class="warn">PATH</span>
+
+        -H 'Content-Type: application/json' \
+           ──────────────────────────────
+                     <span class="w">A HEADER</span>
+
+        -d '{"message":"hello"}'
+           ────────────────────
+                <span class="w">the BODY</span></div>
+    <div class="punch">This is a name for something you did twenty-five minutes ago.</div>
+  </div>
+  <div class="say"><b>Say exactly that</b>This is the single biggest payoff of putting Ground before Concept. The table on the last slide is not five new facts; it is labels on their own muscle memory.</div>
+</section>
+
+<!-- =================================================================== 48 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 5 · status codes</div>
+  <h2>As a receptionist would say them.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="codes">
+        <div class="r"><span class="n g">200</span><span>"here you go"</span><span class="wk">fine</span></div>
+        <div class="r"><span class="n y">400</span><span>"you filled the form in wrong"</span><span class="wk">YOUR mistake</span></div>
+        <div class="r"><span class="n y">401</span><span>"who are you?"</span><span class="wk">Week 3</span></div>
+        <div class="r"><span class="n y">429</span><span>"you have asked me eleven times, please wait"</span><span class="wk">Week 3</span></div>
+        <div class="r"><span class="n r">500</span><span>"something broke on our side, sorry"</span><span class="wk">OUR mistake</span></div>
+      </div>
+      <div class="stack">
+        <div class="punch quiet"><b>400</b> is "your form is wrong".<br><b>500</b> is "our filing cabinet fell over".</div>
+        <p class="dim">This distinction matters far more than it looks. Week 5 alerts on the error rate — if you return 500 when the caller sent nonsense, <b>your dashboard blames you for their mistake</b>, and you spend a morning investigating an outage that never happened.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Make it their story</b>Ask: <em>"Who remembers what number came back when you typed 404 in that URL?"</em> Let them tell you. They made a 200, a 404 and a 500 appear on their own screens twenty minutes ago — this table costs you nothing to teach that way.</div>
+</section>
+
+<!-- =================================================================== 49 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 5 · the consequence that shapes everything</div>
+  <div class="body center">
+    <div class="ask">The computer <span class="q">forgets you</span> after every request. So how does a conversation work at all?</div>
+  </div>
+  <div class="say"><b>Let them think</b>Someone usually gets it. The answer is the same one a real office uses — next slide.</div>
+</section>
+
+<!-- =================================================================== 50 -->
+<section class="slide" data-beat="4">
+  <div class="eyebrow">Beat 4 · Idea 5 · the ticket</div>
+  <h2>You get given a ticket, and you bring it back.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="diagram">   <span class="w">you</span>    "where is my order?"
+
+   <span class="w">them</span>   "Here's your answer —
+          and here's <span class="hl">ticket #47</span>."
+
+   <span class="w">you</span>    "<span class="hl">Ticket #47.</span>
+          When does it arrive?"
+
+   <span class="w">them</span>   <span class="cm">(looks up #47, sees the whole
+          conversation so far)</span></div>
+      <div class="stack">
+        <div class="punch">That ticket is called a <b>session ID</b>.</div>
+        <p class="dim">Building it is Part 1 of the build, in about twenty minutes.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do NOT explain further</b>They now have a question — <em>"so where does the ticket's information get stored?"</em> — and the answer is the thing they are about to build, then the thing that breaks in Week 2.<br><br>If someone asks out loud: <em>"Brilliant question. Hold it for twenty minutes, then hold it for a week."</em></div>
+</section>
+
+<!-- ================================================================ BEAT 5 -->
+<section class="slide opener" data-beat="5">
+  <div class="num">BEAT 5 · 45 MIN · BACK ON KEYBOARDS</div>
+  <h1>Build</h1>
+  <div class="sub">The front door, a fast-feeling reply, and a box that runs anywhere.</div>
+  <div class="goal">Three parts, mapping exactly onto the picture from Beat 4:<br><b>Part 1</b> the arrow · <b>Part 2</b> the arrow · <b>Part 3</b> the box</div>
+</section>
+
+<!-- =================================================================== 52 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Beat 5 · The plan <span class="clock">45 min</span></div>
+  <h2>Three parts.</h2>
+  <div class="body">
+    <div class="cols c3">
+      <div class="card accent">
+        <h3>Part 1 · 15 min</h3>
+        <p><b>Give it an address</b></p>
+        <p class="dim">Three doors: <code>/health</code>, <code>/chat</code>, <code>/chat/stream</code>. The arrow.</p>
+      </div>
+      <div class="card accent">
+        <h3>Part 2 · 10 min</h3>
+        <p><b>Make it feel fast</b></p>
+        <p class="dim">The answer arrives in pieces instead of all at once. The arrow.</p>
+      </div>
+      <div class="card accent">
+        <h3>Part 3 · 12 min</h3>
+        <p><b>Make it run anywhere</b></p>
+        <p class="dim">A container: your code plus everything it needs. The box.</p>
+      </div>
+    </div>
+    <div class="punch quiet">Two files of your own code: <code>app/main.py</code> and <code>app/stream.py</code>.</div>
+  </div>
+  <div class="say"><b>Walk the room continuously now</b>This is the beat where you find out whether Beat 2 did its job. If it did, you spend your time on their <em>code</em> rather than on their typos.</div>
+</section>
+
+<!-- =================================================================== 53 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · What actually happens when a request arrives</div>
+  <h2>Look how small your part is.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">YOUR TERMINAL</span>                    <span class="w">THE SERVER PROCESS</span> <span class="cm">(make run)</span>
+  ┌───────────┐             ┌────────────────────────────────────────┐
+  │           │ POST /chat  │                                        │
+  │  curl ────┼────────────▶│  <span class="hl">uvicorn</span>   listens on door 8080        │
+  │           │{"message":…}│     │      <span class="cm">takes bytes off the network</span> │
+  │           │             │     ▼                                  │
+  │           │             │  <span class="hl">FastAPI</span>   reads the JSON              │
+  │           │             │     │      <span class="cm">finds the route for /chat</span>   │
+  │           │             │     ▼                                  │
+  │           │             │  ┌──────────────────────────────┐      │
+  │           │             │  │  def chat(req):        <span class="hl">◀─────┼──── YOU</span>
+  │           │             │  │      run_turn(req.message)   │  <span class="hl">WRITE</span>
+  │           │             │  │      return {"reply": …}     │  <span class="hl">THIS BIT</span>
+  │           │             │  └──────────────┬───────────────┘      │
+  │           │             │                 ▼                      │
+  │           │             │  <span class="ok">agent.py</span>  the Phase 1 loop            │
+  │           │             │            <span class="cm">(untouched, already works)</span>  │
+  │           │{"reply":…}  │     │                                  │
+  │  output ◀─┼─────────────┼── FastAPI turns your dict into JSON    │
+  └───────────┘             └────────────────────────────────────────┘</div>
+  </div>
+  <div class="say"><b>Name the two words explicitly</b>Students conflate them for months otherwise: <em>"uvicorn is the doorman. FastAPI is the translator. You write the person in the back office who actually does the work."</em><br><br><b>And:</b> <code>agent.py</code> is untouched. Not one line of Phase 1 changes today.</div>
+</section>
+
+<!-- =================================================================== 54 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · The whole shape of an endpoint</div>
+  <h2>Four lines. Only one is about AI.</h2>
+  <div class="body">
+    <pre><span class="warn">@app.post("/chat")</span>                       <span class="cm"># ← when a POST arrives at /chat...</span>
+<span class="hl">def chat(req: ChatRequest):</span>              <span class="cm"># ← ...run this function</span>
+    reply, history, _ = <span class="ok">run_turn(...)</span>    <span class="cm"># ← the Phase 1 agent, untouched</span>
+    <span class="hl">return {"reply": reply, ...}</span>         <span class="cm"># ← FastAPI turns this into JSON</span></pre>
+    <div class="punch">...and that one line, you already wrote in Phase 1.</div>
+  </div>
+  <div class="say"><b>Say what the <code>@</code> line does</b>It is the first decorator many of them have met: <em>"The line with the <code>@</code> is a label. It tells FastAPI: when a POST request turns up at <code>/chat</code>, this is the function to run. That is the entire connection between the network and your code."</em><br><br>Then reassure: <em>"Everything else in this file is the same idea, three more times."</em><br><br><b>If someone notices</b> the real <code>chat()</code> has an extra header argument: say so plainly — it is there because the file grows an API key check in Week 3, and the starting code is the finished shape.</div>
+</section>
+
+<!-- =================================================================== 55 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · Take it apart — every piece is something you met</div>
+  <h2>Nothing here is new.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="warn">@app.post("/chat")</span>
+   ───  ────   ────
+    │    │      └── the <span class="w">PATH.</span>   <span class="cm">Beat 4, idea 4: which room.</span>
+    │    └───────── the <span class="w">METHOD.</span> <span class="cm">Beat 4, idea 5: GET reads, POST sends.</span>
+    └────────────── <span class="cm">"when that arrives, run the function below."</span>
+
+
+  <span class="hl">def chat(req: ChatRequest):</span>
+           ─── ────────────
+            │        └── the <span class="w">SHAPE</span> of the body you expect. Declare it,
+            │            and FastAPI rejects a request with no "message"
+            │            <span class="w">BEFORE your code runs.</span>
+            └─────────── your parsed JSON, as a Python object.
+                         <span class="cm">req.message is the text they sent.</span>
+
+
+  <span class="hl">return {"reply": reply, "session_id": session_id}</span>
+         ──────────────────────────────────────────
+                     a plain Python <span class="w">dict.</span> FastAPI turns it into the
+                     JSON body of the reply. <span class="cm">You never write JSON by
+                     hand — you return a dict.</span></div>
+  </div>
+  <div class="say"><b>A guardrail for free</b>That <code>ChatRequest</code> line is worth dwelling on: declaring the shape means a request with no <code>message</code> gets a <b>422</b> before your handler runs. They can prove it in the early-finish exercise.</div>
+</section>
+
+<!-- =================================================================== 56 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · Build them in this order</div>
+  <h2>Boring first. On purpose.</h2>
+  <div class="body">
+    <table>
+      <tr><th style="width:50px">#</th><th style="width:170px">Door</th><th style="width:90px">Method</th><th style="width:290px">Answers with</th><th>Why this order</th></tr>
+      <tr class="now"><td class="mono">1</td><td class="mono">/health</td><td class="mono">GET</td><td class="mono">{"status": "ok"}</td><td><b>Two lines, cannot fail</b> — proves the plumbing works</td></tr>
+      <tr><td class="mono">2</td><td class="mono">/chat</td><td class="mono">POST</td><td class="mono">{"reply": …, "session_id": …}</td><td>the real thing</td></tr>
+      <tr><td class="mono">3</td><td class="mono">/chat/stream</td><td class="mono">POST</td><td class="dim">the answer, as it arrives</td><td>Part 2</td></tr>
+    </table>
+    <div class="cols c2" style="margin-top:6px">
+      <div class="card accent">
+        <h3><code>/health</code> must be boring</h3>
+        <p class="dim">No model call. No database. It answers <b>one</b> question: <em>is this process running?</em></p>
+        <p class="dim">A health check that depends on other things fails when <em>those</em> things fail — and your container gets restarted for no reason.</p>
+      </div>
+      <div class="card accent">
+        <h3>Never let a raw error reach the caller</h3>
+        <p class="dim">Return <code>{"detail": "internal error"}</code> — not the actual error text.</p>
+        <p class="dim">Error messages carry file paths, database addresses, sometimes passwords. <b>That is a security bug, not a debugging aid.</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Insist on <code>/health</code> first</b>And have them curl it <em>before</em> writing <code>/chat</code>. A student whose first endpoint is <code>/chat</code> is debugging routing, JSON, sessions and the model at once. One who already got <code>{"status":"ok"}</code> back knows the door works — everything after that is their handler.<br><br>This is Beat 2's toy-first rule, applied inside the build.</div>
+</section>
+
+<!-- =================================================================== 57 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · The session ID, drawn</div>
+  <h2>How a forgetful protocol holds a conversation.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">REQUEST 1</span>                              <span class="w">THE SERVER</span>
+  {"message": "where is ORD-1002?"}  ─▶  <span class="cm">no session_id? make one:</span> <span class="hl">"a3f9"</span>
+                                         <span class="cm">history = []  (nothing yet)</span>
+                                         <span class="cm">run the turn</span>
+                                         <span class="cm">SAVE history under</span> <span class="hl">"a3f9"</span>
+  {"reply": "Thursday",              ◀─
+   "session_id": <span class="hl">"a3f9"</span>}
+        │
+        │  <span class="cm">the caller keeps this</span>
+        ▼
+  <span class="w">REQUEST 2</span>
+  {"message": "how much was it?",    ─▶  <span class="cm">session_id</span> <span class="hl">"a3f9"</span><span class="cm">? LOAD its history</span>
+   "session_id": <span class="hl">"a3f9"</span>}                    <span class="cm">["where is ORD-1002?", "Thursday"]</span>
+                                         <span class="cm">+ the new message</span>
+                                         <span class="cm">run the turn with</span> <span class="w">ALL of it</span>
+  {"reply": "$340",                  ◀─
+   "session_id": <span class="hl">"a3f9"</span>}</div>
+    <div class="punch">The model itself remembers nothing. Every turn re-sends the whole conversation.</div>
+  </div>
+  <div class="say"><b>Demo with two volunteers before they write it</b>One is the browser, one is the server. <em>"Hi, I'm asking about an order."</em> — <em>"Here's your answer, and here's ticket #47."</em> — <em>"Hi, ticket #47, what about delivery?"</em><br><br>Thirty seconds, and nobody is confused about session IDs again.<br><br><b>Point forward:</b> that last line is why Week 4 has to put a limit on how long the conversation can get.</div>
+</section>
+
+<!-- =================================================================== 58 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · Run it</div>
+  <h2>This command does not finish. That is correct.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre><span class="pr">$</span> make run
+
+INFO:     Uvicorn running on
+          http://0.0.0.0:8080
+<span class="cm">...and it just sits there.</span></pre>
+        <p class="dim">Because it is a <b>server</b>, and a server's job is to stay running and wait. <b>Same as the <code>sleep 30</code> from Part 2c</b> — this time on purpose.</p>
+      </div>
+      <div class="stack">
+        <div class="diagram">  <span class="w">TERMINAL 1</span>          <span class="w">TERMINAL 2</span>
+  ──────────          ──────────
+  make run            curl ...
+  <span class="cm">(never returns —</span>    <span class="cm">(asks questions,</span>
+  <span class="cm"> this IS the</span>        <span class="cm"> gets answers)</span>
+  <span class="cm"> server)</span>
+
+  <span class="bad">leave it alone</span>      <span class="ok">do all your work
+                      here</span></div>
+        <p class="dim">New window: <code>Cmd + N</code> on Mac, <code>Ctrl + Shift + N</code> elsewhere. Then <code>cd</code> back into the project.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Say this explicitly and write it on the board</b><em>"One terminal runs the server. The other one talks to it. That is the arrangement for the rest of the course."</em><br><br>Several people will otherwise Ctrl-C the server to get their prompt back, then wonder why nothing answers.</div>
+</section>
+
+<!-- =================================================================== 59 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · The payoff — and the promise from Beat 2</div>
+  <h2>Only the address changed.</h2>
+  <div class="body">
+    <div class="stack">
+      <pre class="tight"><span class="pr">$</span> curl -s http://localhost:8080/health
+{"status":<span class="ok">"ok"</span>}
+<span class="cm">↑ same shape as `curl -s https://example.com` — just your own machine, door 8080</span></pre>
+      <div class="diagram">  <span class="cm">Part 2e</span>   curl -s -X POST <span class="warn">https://httpbin.org/post</span> \
+                            <span class="warn">─────────────────────────</span>
+  <span class="cm">now</span>       curl -s -X POST <span class="hl">http://localhost:8080/chat</span> \
+                            <span class="hl">──────────────────────────</span>
+
+            <span class="cm">...and the -H and -d flags are identical.</span>
+            <span class="w">ONLY THE ADDRESS CHANGED.</span></div>
+      <pre class="tight"><span class="pr">$</span> curl -s -X POST http://localhost:8080/chat \
+    -H 'Content-Type: application/json' \
+    -d '{"message":"where is my order ORD-1002?"}'
+
+{"reply":<span class="ok">"Your standing desk arrives Thursday"</span>,"session_id":<span class="hl">"a3f9..."</span>}</pre>
+    </div>
+  </div>
+  <div class="say"><b>This is the moment Beat 2 pays for itself</b>Put both commands on screen together and point at the one thing that differs. You promised this on the board an hour ago — deliver it out loud.<br><br>Then have them paste the <code>session_id</code> into a second request and watch it remember.</div>
+</section>
+
+<!-- =================================================================== 60 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 1 · The error you will see most — every week</div>
+  <h2><code>KODEKEY is not set</code></h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <div class="card accent">
+          <h3>What an environment variable is</h3>
+          <p class="dim">A setting that lives <b>outside your code</b>, attached to the terminal session, that a program can read when it starts.</p>
+          <p class="dim">It is how you give a program a secret <b>without typing the secret into a file that gets shared.</b></p>
+        </div>
+        <pre class="mini"><span class="pr">$</span> export GREETING=hello
+<span class="pr">$</span> python -c "import os; print(os.environ.get('GREETING'))"
+<span class="ok">hello</span>
+<span class="pr">$</span> python -c "import os; print(os.environ.get('NOPE'))"
+<span class="bad">None</span></pre>
+      </div>
+      <div class="stack">
+        <div class="punch quiet"><code>KODEKEY is not set</code> means exactly what that second line printed.</div>
+        <h3>The fix — in the <em>same</em> terminal as <code>make run</code></h3>
+        <pre><span class="pr">$</span> set -a && source .env && set +a</pre>
+        <p class="dim">That reads your <code>.env</code> file — the hidden dotfile you met with <code>ls -la</code> in Part 2a — and exports every line in it.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Write this on the board and leave it for eight weeks</b>Thirty seconds on <code>export</code> now, and <code>KODEKEY is not set</code> stops being mysterious for the rest of the course.</div>
+</section>
+
+<!-- =================================================================== 61 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 2 · Make it feel fast <span class="clock">10 min</span></div>
+  <h2>Same eight seconds. Completely different product.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">WITHOUT STREAMING</span>
+  0s ──────────────────────────── 8s
+     [        <span class="bad">nothing</span>        ]  "Your standing desk arrives Thursday"
+      <span class="bad">▲</span>
+      <span class="bad">feels broken</span>
+
+
+  <span class="w">WITH STREAMING</span>
+  0s ──────────────────────────── 8s
+     [<span class="ok">Your</span>][<span class="ok"> standing</span>][<span class="ok"> desk</span>][<span class="ok"> arrives</span>][<span class="ok"> Thursday</span>]
+      <span class="ok">▲</span>
+      <span class="ok">0.4s: feels fast</span></div>
+    <div class="punch">This is why every AI assistant you have used streams.</div>
+  </div>
+  <div class="say"><b>Open with a question</b><em>"How long did that last curl take?"</em> Several seconds — and for all of it, they stared at nothing.<br><br>Eight seconds of nothing feels broken. Eight seconds with words appearing after 400 milliseconds feels fast. <b>Same duration.</b></div>
+</section>
+
+<!-- =================================================================== 62 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 2 · See it before building it</div>
+  <h2>Run both. In this order.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre><span class="pr">$</span> curl <span class="hl">-N</span> -s https://httpbin.org/stream/3</pre>
+        <div class="card accent">
+          <p>The lines <b>appear one at a time</b>, over three seconds. Nothing waited for the whole thing to be ready.</p>
+        </div>
+      </div>
+      <div class="stack">
+        <pre><span class="pr">$</span> curl -s https://httpbin.org/stream/3
+<span class="cm">(no -N)</span></pre>
+        <div class="card">
+          <p class="dim">Same three lines, same three seconds — but they all appear <b>at the end, in one lump.</b> Identical data, and it feels twice as slow.</p>
+        </div>
+      </div>
+    </div>
+    <div class="punch"><code>-N</code> means "do not buffer — show me pieces as they arrive."</div>
+  </div>
+  <div class="say"><b>The second demo is the more important one</b>It is exactly the bug they will report to you in twenty minutes: <em>"streaming isn't working"</em> — when in fact curl was buffering. Run it on the projector now so you can point back at it later instead of debugging it.</div>
+</section>
+
+<!-- =================================================================== 63 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 2 · What you build in <code>app/stream.py</code></div>
+  <h2>One open connection, many small events.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">ONE OPEN CONNECTION, over 8 seconds</span>
+  ─────────────────────────────────────────────────────────▶
+
+  event: <span class="ok">start</span>     <span class="cm">the turn was accepted — session id + turn id</span>
+  event: <span class="warn">status</span>    <span class="cm">something happened (a tool ran)</span>
+  event: <span class="hl">token</span>     "Your standing desk arrives"     ┐
+  event: <span class="hl">token</span>     " on Thursday the 4th, and"      │ <span class="cm">a chunk of</span>
+  event: <span class="hl">token</span>     " tracking is available now."    ┘ <span class="cm">the answer</span>
+  event: <span class="ok">done</span>      <span class="cm">finished — steps, tokens, cost, duration</span>
+
+  <span class="cm">(or, if it goes wrong halfway)</span>
+  event: <span class="bad">error</span>     <span class="cm">it failed — and this is always the LAST frame</span></div>
+    <div class="card accent">
+      <h3>Trap 1 · The blank line after each piece is not optional</h3>
+      <p class="dim">It is what tells the receiver "that piece is complete". Leave it out and <b>the client waits forever for something you already sent.</b></p>
+    </div>
+  </div>
+  <div class="say"><b>Three traps, all caught by the checkpoint</b>This slide has the first. Next slide has the second, which is the conceptually hard one. The third is the buffering they just watched.</div>
+</section>
+
+<!-- =================================================================== 64 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 2 · Trap 2 · the one worth slowing down for</div>
+  <h2>An error mid-stream cannot be an error code.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">NORMAL</span>                      <span class="w">MID-STREAM FAILURE</span>
+  ──────                      ──────────────────
+  status <span class="bad">500</span>  <span class="ok">◀── possible</span>    status <span class="ok">200</span>  <span class="bad">◀── already sent! too late.</span>
+  {"detail": …}               event: token …
+                              event: token …
+                              event: <span class="bad">error</span>  <span class="hl">◀── the ONLY way left to say it</span></div>
+    <div class="cols c2">
+      <div class="card accent">
+        <p class="dim">By the time the model fails, you already said <b>"200, here it comes"</b>. There is no status code left to change.</p>
+        <p class="dim">The error has to arrive as <b>another piece of the stream</b> — and the client has to read it.</p>
+      </div>
+      <div class="card accent">
+        <h3>Trap 3 · Proxies buffer</h3>
+        <p class="dim">Something between you and the user will collect your whole streamed answer and deliver it in one lump — <b>silently</b>, because the answer is still correct.</p>
+        <p class="dim"><code>X-Accel-Buffering: no</code> is how you tell a proxy not to.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Why trap 2 matters</b>Miss it and a broken agent shows the user half an answer and calls it success. Your dashboard will report a healthy service while users see truncated replies.<br><br><b>Trap 3 callback:</b> <em>"You just watched exactly this happen — curl with no <code>-N</code>."</em></div>
+</section>
+
+<!-- =================================================================== 65 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 2 · Watch it work</div>
+  <h2>The most satisfying thirty seconds of the session.</h2>
+  <div class="body center">
+    <pre><span class="pr">$</span> curl <span class="hl">-N</span> -X POST http://localhost:8080/chat/stream \
+    -H 'Content-Type: application/json' \
+    -d '{"message":"where is my order ORD-1002?"}'
+
+event: <span class="ok">start</span>
+data: {"session_id": "a3f9...", "turn_id": "3ab90f92..."}
+
+event: <span class="hl">token</span>
+data: {"text": "Your standing desk arrives Thursday, and tracking is "}
+
+event: <span class="hl">token</span>
+data: {"text": "available in your account now. "}
+<span class="cm">↑ chunks arriving one after another, not all at once</span>
+
+event: <span class="ok">done</span>
+data: {"steps": 1, "tokens": 412, "cost_usd": 0.0021, "duration_ms": 3180}</pre>
+  </div>
+  <div class="say"><b>Use the moment</b>Have someone shout when they see text appear in pieces. It is the most satisfying moment of the session — do not let it pass quietly.</div>
+</section>
+
+<!-- =================================================================== 66 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 3 · Make it run anywhere <span class="clock">12 min</span></div>
+  <h2>"Works on my machine" is not a deployment.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">WHAT YOU HAVE NOW</span>            <span class="w">WHAT A CONTAINER IS</span>
+  ─────────────────            ───────────────────
+  your code                    ┌──────────────────────┐
+     + <span class="bad">hope</span> that the           │  your code           │
+       other machine has:      │  the libraries       │
+       <span class="bad">-</span> the right Python      │  the right Python    │
+       <span class="bad">-</span> the right libraries   │  a whole Linux       │
+       <span class="bad">-</span> the right layout      └──────────────────────┘
+       <span class="bad">-</span> the right env vars       <span class="ok">one thing. runs anywhere.</span></div>
+    <div class="punch quiet">A container is a box holding your code <em>and everything it needs to run.</em> Hand the box to any computer and it behaves identically.</div>
+  </div>
+  <div class="say"><b>Open with the question</b><em>"What would my colleague need to run your agent?"</em> Let them list it.<br><br><b>The analogy that works:</b> a <b>food truck</b> versus a <b>recipe</b>. A recipe needs the other kitchen to already have the right oven, pans and ingredients. A food truck brings the whole kitchen with it and works in any car park.</div>
+</section>
+
+<!-- =================================================================== 67 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 3 · Toy first — a box with nothing in it</div>
+  <h2>Two files. Four lines.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre class="tight"><span class="pr">$</span> mkdir ~/box && cd ~/box
+<span class="pr">$</span> echo 'print("hello from inside the box")' &gt; hello.py</pre>
+        <p class="dim">You already know <code>mkdir</code> and <code>echo &gt;</code> from Part 2b.</p>
+        <pre class="tight"><span class="cm"># Dockerfile  (no extension — that exact name)</span>
+<span class="warn">FROM</span> python:3.12-slim
+<span class="warn">WORKDIR</span> /app
+<span class="warn">COPY</span> hello.py .
+<span class="warn">CMD</span> ["python", "hello.py"]</pre>
+      </div>
+      <div class="stack">
+        <ul class="plain">
+          <li><code>FROM</code> — start from a box that <b>already has Python 3.12</b>. Somebody else built that; we build on top.</li>
+          <li><code>WORKDIR</code> — work in <code>/app</code> <em>inside the box</em>.</li>
+          <li><code>COPY</code> — copy our file from <em>our computer</em> into <em>the box</em>.</li>
+          <li><code>CMD</code> — what to run when the box starts.</li>
+        </ul>
+        <pre class="mini"><span class="pr">$</span> docker build -t hello-box .
+<span class="pr">$</span> docker run --rm hello-box
+
+<span class="ok">hello from inside the box</span></pre>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Unpack that output — the significance is easy to miss</b><em>"That <code>print</code> ran on a Linux machine with a Python you did not install, in a folder that does not exist on your laptop. And it will print exactly that on anyone else's computer too."</em><br><br><b>build</b> = make the box (<code>-t</code> names it, <code>.</code> means "Dockerfile is here"). <b>run</b> = start it (<code>--rm</code> = throw it away when it exits).</div>
+</section>
+
+<!-- =================================================================== 68 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 3 · Now prove the box is sealed</div>
+  <h2>Delete the file. Run it again.</h2>
+  <div class="body center">
+    <div class="cols c2 mid">
+      <pre><span class="pr">$</span> rm hello.py
+<span class="pr">$</span> docker run --rm hello-box
+
+<span class="ok">hello from inside the box</span>
+<span class="cm">↑ it STILL prints.</span></pre>
+      <div class="stack">
+        <div class="punch">The code was copied <em>into</em> the box at build time.</div>
+        <p class="dim">The box is not pointing at your folder. <b>It contains a copy.</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Do this live</b>That single moment explains containers better than any diagram. Delete the source file in front of them and run it again — the room goes quiet.</div>
+</section>
+
+<!-- =================================================================== 69 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 3 · Now the real one</div>
+  <h2>The same four ideas, plus three lines.</h2>
+  <div class="body">
+    <div class="cols c2w mid">
+      <pre class="tight"><span class="warn">FROM</span> python:3.12-slim
+<span class="warn">WORKDIR</span> /app
+<span class="hl">COPY requirements.txt .</span>
+<span class="warn">RUN</span> pip install --no-cache-dir -r requirements.txt
+<span class="hl">COPY . .</span>
+<span class="warn">ENV</span> PORT=8080
+<span class="warn">EXPOSE</span> 8080
+<span class="warn">CMD</span> exec uvicorn app.main:app \
+      --host <span class="hl">0.0.0.0</span> --port <span class="hl">${PORT}</span></pre>
+      <div class="stack">
+        <ul class="plain">
+          <li><code>RUN</code> does something while <b>building</b>. <code>CMD</code> runs when the box <b>starts</b>.</li>
+          <li><code>ENV</code> sets an environment variable — same thing you met with <code>KODEKEY</code>.</li>
+          <li><code>EXPOSE</code> documents which door the thing inside listens on.</li>
+        </ul>
+        <div class="card accent">
+          <p><code>--host 0.0.0.0</code> — accept connections <b>from outside the box</b>. The default only accepts them from inside, so the platform's health check could never reach you.</p>
+        </div>
+        <div class="card accent">
+          <p><code>exec</code> — makes uvicorn the main process, so "please shut down" actually reaches it. Without it the platform waits, gives up, and kills you: <b>a slow, ugly deploy every single time.</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Two lines carry the whole lesson</b>The <code>COPY</code> order, and <code>${PORT}</code>. Both on the next slide — do not let them get lost in the flag details.</div>
+</section>
+
+<!-- =================================================================== 70 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 3 · The two lines that carry the lesson</div>
+  <h2>Order matters, and hardcoding hurts later.</h2>
+  <div class="body">
+    <div class="diagram">  <span class="w">THE ORDER WE USE</span>                   <span class="w">THE OBVIOUS-LOOKING ORDER</span>
+  ────────────────                   ─────────────────────────
+  COPY requirements.txt              COPY . .          <span class="cm">← your code</span>
+  RUN pip install      <span class="cm">← slow</span>        RUN pip install   <span class="cm">← slow</span>
+  COPY . .             <span class="cm">← your code</span>
+
+  <span class="cm">edit one line of code:</span>             <span class="cm">edit one line of code:</span>
+  pip install is <span class="ok">CACHED</span>              pip install <span class="bad">RUNS AGAIN</span>
+  rebuild: <span class="ok">3 seconds</span>                 rebuild: <span class="bad">3 minutes</span></div>
+    <div class="card accent">
+      <h3><code>--port ${PORT}</code>, never <code>--port 8080</code></h3>
+      <p class="dim">Every hosting platform tells your service which door to use, through a setting. Hardcode the number and you have <b>a service that works on your laptop and fails the moment you deploy it.</b></p>
+    </div>
+  </div>
+  <div class="say"><b>Docker remembers each step</b>...and redoes every step <em>after</em> the first thing that changed. Copy your code first and every one-character edit reinstalls every library.<br><br><b>Early finishers</b> can add a second file to the <code>~/box</code> toy, rebuild, and watch only the changed step re-run. The caching lesson, felt rather than described.</div>
+</section>
+
+<!-- =================================================================== 71 -->
+<section class="slide" data-beat="5">
+  <div class="eyebrow">Part 3 · <code>.dockerignore</code> · and the line that matters most</div>
+  <h2>Never put a secret in a container.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <pre><span class="cm"># .dockerignore</span>
+.venv/
+.git/
+__pycache__/
+<span class="bad">.env</span></pre>
+        <p class="dim"><b>A list of things NOT to copy into the box.</b> Without it, <code>COPY . .</code> copies everything in the folder.</p>
+      </div>
+      <div class="stack">
+        <div class="punch">That last line matters most.</div>
+        <p class="dim">Without it, <b>your API key gets baked into the box.</b> Boxes get copied, cached, and uploaded to servers other people can read.</p>
+        <pre class="mini"><span class="pr">$</span> make docker-build
+<span class="pr">$</span> make docker-run
+
+<span class="cm"># then, from another terminal,</span>
+<span class="cm"># the same curl as before</span></pre>
+        <div class="card accent">
+          <p><b>Same answers</b> — from inside a box that could run anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Two things that will happen — warn them first</b><br>1. The first build takes a few minutes and <b>looks stuck</b>.<br>2. Every build prints a warning about <code>JSONArgsRecommended</code> and OS signals. <b>It is safe to ignore</b> — the <code>exec</code> in our <code>CMD</code> already solves the problem the warning is about, but the build tool cannot tell. Say so before someone panics.</div>
+</section>
+
+<!-- ================================================================ BEAT 6 -->
+<section class="slide opener" data-beat="6">
+  <div class="num">BEAT 6 · 15 MIN</div>
+  <h1>Prove</h1>
+  <div class="sub">Make the checkpoint green. Then break your own confidence.</div>
+  <div class="goal">Three questions you cannot answer yet — and the honest answer to each is <b>"we don't know"</b>. Those are next week's hooks.</div>
+</section>
+
+<!-- =================================================================== 73 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Beat 6 · The checkpoint</div>
+  <h2>Every line is a promise about the service you built.</h2>
+  <div class="body">
+    <pre class="tight"><span class="pr">$</span> make check-week-01
+
+Week 01: the agent is a web service, and it streams
+<span class="ok">PASS</span>  app/main.py imports and defines `app`
+<span class="ok">PASS</span>  GET /health returns {"status": "ok"}
+<span class="ok">PASS</span>  POST /chat returns a reply
+<span class="ok">PASS</span>  and a session_id, so the caller can continue the conversation
+<span class="ok">PASS</span>  sending that session_id back continues the same conversation
+<span class="ok">PASS</span>  a request with no message is rejected with 422
+<span class="ok">PASS</span>  POST /chat/stream returns text/event-stream
+<span class="ok">PASS</span>  it opens with a start frame
+<span class="ok">PASS</span>  the answer arrives as token frames
+<span class="ok">PASS</span>  and closes with a done frame
+<span class="ok">PASS</span>  X-Accel-Buffering: no is set, so proxies will not buffer it
+<span class="ok">PASS</span>  the Dockerfile installs dependencies before copying the code
+<span class="ok">PASS</span>  and it listens on $PORT, not a hardcoded number
+
+<span class="ok">Checkpoint passed.</span></pre>
+  </div>
+  <div class="say"><b>Read it together, line by line</b>Do not just celebrate the green. Each line is a thing they now know how to reason about — and four of them are traps you warned about an hour ago.</div>
+</section>
+
+<!-- =================================================================== 74 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Beat 6 · Put the day back together</div>
+  <h2>What changed in two hours.</h2>
+  <div class="body">
+    <div class="ba">
+      <div class="l">
+        <div class="lab">What you had</div>
+        <ul>
+          <li>a Python function</li>
+          <li>callable from one folder</li>
+          <li>answers after 8 silent seconds</li>
+          <li>runs where Python is set up</li>
+          <li><span class="mono">run_turn()</span></li>
+        </ul>
+      </div>
+      <div class="r">
+        <div class="lab">What you have now</div>
+        <ul>
+          <li>a <b>service with an address</b></li>
+          <li>callable by <b>anything, anywhere</b></li>
+          <li>answers in pieces, <b>from 0.4s</b></li>
+          <li>runs in a box, <b>on any computer</b></li>
+          <li><span class="mono">http://localhost:8080/chat</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="punch">...and only the address is still missing. That is next week.</div>
+  </div>
+  <div class="say"><b>Tick off the four gaps</b>Go back to the board from Beat 3: <b>no address</b> ✓ (locally), <b>no memory of who</b> ✓, <b>no health signal</b> ✓, <b>runs in one place</b> ✓. All four, in one session, and none of them were AI problems.</div>
+</section>
+
+<!-- =================================================================== 75 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Beat 6 · Question 1 of 3</div>
+  <div class="body center">
+    <div class="ask" style="font-size:46px;max-width:34ch;">Your <code style="font-size:.9em">/health</code> says <span class="q">ok</span>. Suppose the provider is down and every <code style="font-size:.9em">/chat</code> returns 500. What does <code style="font-size:.9em">/health</code> say?</div>
+  </div>
+  <div class="say"><b>The answer</b>Still <code>ok</code>. <b>The process is fine. It just cannot do its job.</b><br><br>That gap is <b>Week 5</b>, and it is much bigger than it looks. Let the discomfort sit for a moment before you move on.</div>
+</section>
+
+<!-- =================================================================== 76 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Beat 6 · Question 2 of 3</div>
+  <div class="body center">
+    <div class="ask">Where does the <span class="q">conversation history</span> live?</div>
+  </div>
+  <div class="say"><b>The answer</b>In a variable, inside the running program — <b>inside the process</b> they met in Part 2c and killed with Ctrl+C.<br><br>Then ask: <em>"So what happens to it when we deploy a new version?"</em> <b>Let them work it out.</b><br><br>That is <b>Week 2</b>, and we are going to watch it happen.</div>
+</section>
+
+<!-- =================================================================== 77 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Beat 6 · Question 3 of 3</div>
+  <div class="body center">
+    <div class="ask">Anyone who finds your URL can use it. <span class="q">What does that cost you?</span></div>
+  </div>
+  <div class="say"><b>The answer</b><b>Real money, at the model provider, on your card.</b><br><br>That is <b>Week 3</b>. This is the third time today they have met this idea — the phone-number line in Beat 4, the 401/429 rows in the status table, and now the bill.</div>
+</section>
+
+<!-- =================================================================== 78 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">If you finish early</div>
+  <h2>Genuine extensions, not filler.</h2>
+  <div class="body">
+    <ul class="plain">
+      <li>Try <code>ORD-1001</code>, <code>ORD-1077</code>, and an ID that does not exist.</li>
+      <li>Then <code>ORD-1043</code>. <b>Do not explain it.</b> <em>"Note that one. We come back to it in Week 7."</em></li>
+      <li>Break your own service: return the wrong status code from <code>/health</code>, then watch <code>make check-week-01</code> catch it.</li>
+      <li>Point curl at a URL that does not exist — <code>curl -s -i http://localhost:8080/nope</code> — and read the <b>404</b> together. <b>You built that without writing it.</b></li>
+      <li>Send a body with no <code>message</code> at all: <code>-d '{}'</code> → a <b>422</b>, from the <code>ChatRequest</code> shape alone. <b>A guardrail you got for free by declaring the shape.</b></li>
+      <li>Add a second file to the <code>~/box</code> toy, rebuild, and watch only the changed step re-run.</li>
+    </ul>
+  </div>
+  <div class="say"><b>ORD-1043 is a planted prompt injection</b>Do not explain it today. A student who noticed something odd in Week 1 and gets the answer in Week 7 remembers it permanently.</div>
+</section>
+
+<!-- =================================================================== 79 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Homework</div>
+  <h2>Three things before next session.</h2>
+  <div class="body">
+    <ol class="steps">
+      <li><code>make check-week-01</code> <b>green</b>, committed and pushed.<br><span class="dim">Branch <code>week-01-&lt;your-name&gt;</code>, PR title <code>week 01: package</code>.</span></li>
+      <li>Read <code>guide/week-01.md</code> in the repo — <span class="dim">the same material, written for reference, with a terminal cheat sheet.</span></li>
+      <li><b>Install Docker Desktop</b> if you have not, and check <code>make docker-build</code> works <b>before</b> next session.</li>
+    </ol>
+    <div class="punch quiet">Stuck on one file? <code>git diff week-01-package..week-01-solution -- app/main.py</code><br>Peeking is <b>allowed</b>. Being stuck for 40 minutes teaches nothing.</div>
+  </div>
+  <div class="say"><b>Chase the Docker install</b>Week 2 deploys a container, and one student without Docker becomes twenty minutes of everyone else waiting. Send a reminder mid-week.</div>
+</section>
+
+<!-- =================================================================== 80 -->
+<section class="slide" data-beat="6">
+  <div class="eyebrow">Next week</div>
+  <h2>Week 2 · Deploy</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="stack">
+        <p class="big">A <b>public URL</b> — and memory that <b>survives a restart</b>.</p>
+        <ul class="plain">
+          <li>Your agent gets a real address on the internet</li>
+          <li>We watch the conversation history vanish on redeploy</li>
+          <li>Then we fix it properly</li>
+        </ul>
+      </div>
+      <div class="card accent">
+        <h3>The question you are leaving with</h3>
+        <p class="dim">"The history is in a variable, inside the process.</p>
+        <p><b>So what happens when the process restarts?"</b></p>
+        <p class="dim">You will not have to imagine it. We are going to make it happen in front of you.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>End here</b>Do not answer the question. The Break beat in Week 2 is 25 minutes long precisely because deploying — and losing the memory — happens inside it.</div>
+</section>
+
+  </div><!-- /scaler -->
+</div><!-- /stage -->
+
+<div id="notes">
+  <div class="nh"><span>Presenter notes</span><span id="nn"></span></div>
+  <div class="nb" id="nbody"></div>
+</div>
+
+<div id="help">
+  <div class="box">
+    <h3>Keyboard</h3>
+    <table>
+      <tr><td><kbd>→</kbd> <kbd>space</kbd> <kbd>N</kbd></td><td>next slide</td></tr>
+      <tr><td><kbd>←</kbd> <kbd>P</kbd></td><td>previous slide</td></tr>
+      <tr><td><kbd>S</kbd></td><td>toggle presenter notes panel</td></tr>
+      <tr><td><kbd>F</kbd></td><td>fullscreen</td></tr>
+      <tr><td><kbd>G</kbd></td><td>go to slide number</td></tr>
+      <tr><td><kbd>1</kbd>–<kbd>6</kbd></td><td>jump to that beat</td></tr>
+      <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>first / last slide</td></tr>
+      <tr><td><kbd>?</kbd></td><td>this help</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="hint">Press <kbd>→</kbd> to advance · <kbd>S</kbd> for notes · <kbd>?</kbd> for keys</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var BEATS = [
+    {n:"Ask",     t:"10m"},
+    {n:"Ground",  t:"25m"},
+    {n:"Break",   t:"10m"},
+    {n:"Concept", t:"20m"},
+    {n:"Build",   t:"45m"},
+    {n:"Prove",   t:"15m"}
+  ];
+
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var scaler = document.getElementById("scaler");
+  var hint   = document.getElementById("hint");
+  var nbody  = document.getElementById("nbody");
+  var nn     = document.getElementById("nn");
+  var i = 0;
+
+  // Lift each slide's .say block out into the presenter panel, and give every
+  // slide the beat rail. The .say markup stays in the DOM as the source of
+  // truth; we clone it rather than move it, and hide the original on stage.
+  slides.forEach(function(s, idx){
+    var beat = parseInt(s.getAttribute("data-beat"), 10) || 0;
+
+    var say = s.querySelector(".say");
+    s.__note = say ? say.innerHTML : "";
+    if (say) { say.remove(); }
+
+    if (!s.classList.contains("title-slide")) {
+      var rail = document.createElement("div");
+      rail.className = "rail";
+      var html = "";
+      for (var b = 1; b <= 6; b++) {
+        var cls = b === beat ? "seg here" : (b < beat ? "seg done" : "seg");
+        html += '<div class="' + cls + '"><div class="bar"></div>'
+              + '<span>' + b + ' ' + BEATS[b-1].n + '</span></div>';
+      }
+      html += '<div class="pg">' + (idx + 1) + '/' + slides.length + '</div>';
+      rail.innerHTML = html;
+      s.appendChild(rail);
+    }
+  });
+
+  function fit(){
+    var pad = document.body.classList.contains("notes") ? 392 : 0;
+    var w = window.innerWidth - pad;
+    var h = window.innerHeight;
+    var k = Math.min(w / 1280, h / 720);
+    scaler.style.transform = "scale(" + k + ")";
+    // keep the scaled slide centred in the space left of the notes panel
+    scaler.style.marginLeft = pad ? (-pad / 2) + "px" : "0px";
+  }
+
+  function show(n){
+    if (n < 0) { n = 0; }
+    if (n > slides.length - 1) { n = slides.length - 1; }
+    slides[i].classList.remove("on");
+    i = n;
+    slides[i].classList.add("on");
+    nbody.innerHTML = slides[i].__note || '<p class="dim">No notes for this slide.</p>';
+    nn.textContent = (i + 1) + " / " + slides.length;
+    if (location.hash !== "#" + (i + 1)) {
+      history.replaceState(null, "", "#" + (i + 1));
+    }
+    if (i > 0 && hint) { hint.style.opacity = "0"; }
+  }
+
+  function beatStart(b){
+    for (var k = 0; k < slides.length; k++) {
+      if (parseInt(slides[k].getAttribute("data-beat"), 10) === b) { return k; }
+    }
+    return -1;
+  }
+
+  document.addEventListener("keydown", function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) { return; }
+    var k = e.key;
+
+    if (document.body.classList.contains("help") && k !== "?") {
+      document.body.classList.remove("help");
+      if (k === "Escape") { e.preventDefault(); return; }
+    }
+
+    if (k === "ArrowRight" || k === " " || k === "n" || k === "N" || k === "PageDown") {
+      e.preventDefault(); show(i + 1);
+    } else if (k === "ArrowLeft" || k === "p" || k === "P" || k === "PageUp") {
+      e.preventDefault(); show(i - 1);
+    } else if (k === "Home") {
+      e.preventDefault(); show(0);
+    } else if (k === "End") {
+      e.preventDefault(); show(slides.length - 1);
+    } else if (k === "s" || k === "S") {
+      e.preventDefault();
+      document.body.classList.toggle("notes");
+      fit();
+    } else if (k === "f" || k === "F") {
+      e.preventDefault();
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    } else if (k === "?") {
+      e.preventDefault(); document.body.classList.toggle("help");
+    } else if (k === "g" || k === "G") {
+      e.preventDefault();
+      var a = prompt("Go to slide (1–" + slides.length + "):");
+      if (a) {
+        var t = parseInt(a, 10);
+        if (t >= 1 && t <= slides.length) { show(t - 1); }
+      }
+    } else if (k >= "1" && k <= "6") {
+      var s = beatStart(parseInt(k, 10));
+      if (s >= 0) { e.preventDefault(); show(s); }
+    }
+  });
+
+  // click / tap to advance; click the left eighth to go back
+  document.getElementById("stage").addEventListener("click", function(e){
+    if (e.target.closest("#notes")) { return; }
+    show(e.clientX < window.innerWidth / 8 ? i - 1 : i + 1);
+  });
+
+  window.addEventListener("resize", fit);
+  window.addEventListener("hashchange", function(){
+    var n = parseInt(location.hash.slice(1), 10);
+    if (n >= 1 && n <= slides.length && n - 1 !== i) { show(n - 1); }
+  });
+
+  fit();
+  var start = parseInt(location.hash.slice(1), 10);
+  show(start >= 1 && start <= slides.length ? start - 1 : 0);
+  setTimeout(function(){ if (hint && i === 0) { hint.style.opacity = "0.55"; } }, 3000);
+})();
+</script>

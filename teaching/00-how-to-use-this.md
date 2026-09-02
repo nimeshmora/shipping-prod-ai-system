@@ -60,7 +60,7 @@ Every week also closes with **If you finish early** and **Homework**. The
 early-finish items are genuine extensions, not filler: several of them are the
 cheapest way to make the week's point land twice.
 
-## Four rules that make this work
+## Five rules that make this work
 
 **1. Teach a concept the moment it is needed, never before.**
 
@@ -264,3 +264,35 @@ python teaching/build-pdf.py
 
 The HTML is also perfectly readable on screen, and easier to search than the
 PDF — some instructors prefer to teach from it in a browser tab.
+
+---
+
+## Week 1 slides
+
+`teaching/week-01-slides.html` is an 80-slide presenter deck for session one,
+in the same house style as the printable guide. Open it in a browser and press
+**F** for fullscreen.
+
+It follows the six beats of `week-01.md` exactly, so the deck and the written
+guide never disagree about what comes next.
+
+| Key | What it does |
+|---|---|
+| `→` / `space` / `N` | next slide |
+| `←` / `P` | previous slide |
+| **`S`** | **toggle the presenter-notes panel** |
+| `F` | fullscreen |
+| `1`–`6` | jump to that beat |
+| `G` | go to a slide number |
+| `?` | show all keys |
+
+**Press `S` before you start.** Every slide carries the "say this" line from
+the guide — the callback to make, the question to ask, the thing not to explain
+yet — in a side panel the room never sees. The slide itself stays clean; you
+read the cue.
+
+> **INSTRUCTOR** · The deck is a teaching aid, not the lesson. Beats 2 and 5
+> are 70 of the session's 125 minutes and both are hands-on: put the slide up,
+> then leave it up and walk the room. The slides that matter most are the ones
+> you *stop* on — the four gaps, the one picture for the whole session, and the
+> request-lifecycle diagram in Part 1.
