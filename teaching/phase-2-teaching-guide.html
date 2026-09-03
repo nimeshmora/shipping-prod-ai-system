@@ -736,7 +736,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 123-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 122-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -784,7 +784,7 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and twelve of the slides carry a
+<p><strong>Press <code>S</code> before you start.</strong> A hundred and eleven of the slides carry a
 presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
@@ -793,14 +793,14 @@ yet — in a side panel the room never sees.</p>
    0:32   11   The project                   a tour BEFORE they download it
    0:43   14   Set it up, and prove it       incl. the key, FINISHED here
    0:57   10   break
-   1:07   15   The terminal                  practised on a throwaway folder
-   1:22   20   Sending messages              JSON and curl, on public services
-   1:42   10   break
-   1:52   22   What a web service is         the shop story, then the words
-   2:14   16   Addresses, then messages
-   2:30   42   Build the web service         3 endpoints, line by line, each tested
-   3:12   32   Build the container           the cart story, then line by line
-   3:44   16   Prove it, and what breaks next
+   1:07   12   The terminal                  practised on a throwaway folder
+   1:19   20   Sending messages              JSON and curl, on public services
+   1:39   10   break
+   1:49   22   What a web service is         the shop story, then the words
+   2:11   16   Addresses, then messages
+   2:27   45   Build the web service         3 endpoints, line by line, each tested
+   3:12   30   Build the container           the cart story, then line by line
+   3:42   18   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
@@ -873,6 +873,86 @@ second nature, we point it at anything you like."</em></p>
 <p>One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.</p>
+<h3>Nothing arrives before it is needed</h3>
+<p>Every one of the 122 transitions was checked for topic jumps. The rule the
+deck now follows: <strong>a word is introduced at the moment the room needs it, not
+in a lecture beforehand.</strong></p>
+<p>The clearest example is the word <strong>process</strong>. It used to be taught at the end
+of the terminal exercise — a definition arriving out of nowhere, straight after
+a folder drill. It is now at 2:27, immediately after <code>make run</code> refuses to give
+the prompt back, so the question <em>"why has my terminal stopped?"</em> comes from
+the room and the word answers it.</p>
+<table>
+<thead>
+<tr>
+<th>Was</th>
+<th>Now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>process, after a folder exercise</td>
+<td>process, when <code>make run</code> will not finish</td>
+</tr>
+<tr>
+<td>error handling, after testing <code>/chat</code></td>
+<td>error handling, before testing it</td>
+</tr>
+<tr>
+<td>the port warning, five slides after the port line</td>
+<td>directly after the port line</td>
+</tr>
+<tr>
+<td>the day's recap, after homework</td>
+<td>before homework, closing the teaching</td>
+</tr>
+</tbody>
+</table>
+<p>One container slide was deleted outright: the shop story already taught what
+it said, so it read as a repeat.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · If you ever feel a slide arrive from nowhere while
+teaching, that is a real defect — tell us. The fix is almost never to explain
+it better; it is to <strong>move it to where the need appears.</strong></p>
+</blockquote>
+<h3>Every section hands over out loud</h3>
+<p>The last presenter note in each section carries the sentence that leads into
+the next one, so the day never changes subject without warning:</p>
+<table>
+<thead>
+<tr>
+<th>Handover</th>
+<th>The line to say</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>terminal → messages</td>
+<td><em>"You can now find your way around a computer by typing. Everything from here is about talking to something else."</em></td>
+</tr>
+<tr>
+<td><code>/health</code> → <code>/chat</code></td>
+<td><em>"The door works, but it only says 'I am alive'. Nobody can ask it anything yet."</em></td>
+</tr>
+<tr>
+<td><code>/chat</code> → streaming</td>
+<td><em>"It works. But how long did that take, and what were you looking at while you waited?"</em></td>
+</tr>
+<tr>
+<td>cart story → image/container</td>
+<td><em>"So we need to build a cart. Two words first, because people mix them up."</em></td>
+</tr>
+<tr>
+<td>service → container</td>
+<td><em>"Three of the four gaps are closed. The last one: it still only runs on your laptop."</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Read the handover <strong>before</strong> you advance, while the previous
+slide is still up. It is one sentence and it is what makes the day feel like
+one lesson rather than twelve.</p>
+</blockquote>
 <h3>The build sections match the repository exactly</h3>
 <p>Every code line on a build slide is <strong>the line that goes in the student's
 file</strong>, checked against the <code>week-01-solution</code> branch. Not a paraphrase, not a

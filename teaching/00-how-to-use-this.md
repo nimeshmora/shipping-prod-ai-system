@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 123-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 122-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,7 +290,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and twelve of the slides carry a
+**Press `S` before you start.** A hundred and eleven of the slides carry a
 presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -302,14 +302,14 @@ yet — in a side panel the room never sees.
    0:32   11   The project                   a tour BEFORE they download it
    0:43   14   Set it up, and prove it       incl. the key, FINISHED here
    0:57   10   break
-   1:07   15   The terminal                  practised on a throwaway folder
-   1:22   20   Sending messages              JSON and curl, on public services
-   1:42   10   break
-   1:52   22   What a web service is         the shop story, then the words
-   2:14   16   Addresses, then messages
-   2:30   42   Build the web service         3 endpoints, line by line, each tested
-   3:12   32   Build the container           the cart story, then line by line
-   3:44   16   Prove it, and what breaks next
+   1:07   12   The terminal                  practised on a throwaway folder
+   1:19   20   Sending messages              JSON and curl, on public services
+   1:39   10   break
+   1:49   22   What a web service is         the shop story, then the words
+   2:11   16   Addresses, then messages
+   2:27   45   Build the web service         3 endpoints, line by line, each tested
+   3:12   30   Build the container           the cart story, then line by line
+   3:42   18   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -368,6 +368,49 @@ is always wondering why they are not using the agent they are proud of:
 One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
+
+### Nothing arrives before it is needed
+
+Every one of the 122 transitions was checked for topic jumps. The rule the
+deck now follows: **a word is introduced at the moment the room needs it, not
+in a lecture beforehand.**
+
+The clearest example is the word **process**. It used to be taught at the end
+of the terminal exercise — a definition arriving out of nowhere, straight after
+a folder drill. It is now at 2:27, immediately after `make run` refuses to give
+the prompt back, so the question *"why has my terminal stopped?"* comes from
+the room and the word answers it.
+
+| Was | Now |
+|---|---|
+| process, after a folder exercise | process, when `make run` will not finish |
+| error handling, after testing `/chat` | error handling, before testing it |
+| the port warning, five slides after the port line | directly after the port line |
+| the day's recap, after homework | before homework, closing the teaching |
+
+One container slide was deleted outright: the shop story already taught what
+it said, so it read as a repeat.
+
+> **INSTRUCTOR** · If you ever feel a slide arrive from nowhere while
+> teaching, that is a real defect — tell us. The fix is almost never to explain
+> it better; it is to **move it to where the need appears.**
+
+### Every section hands over out loud
+
+The last presenter note in each section carries the sentence that leads into
+the next one, so the day never changes subject without warning:
+
+| Handover | The line to say |
+|---|---|
+| terminal → messages | *"You can now find your way around a computer by typing. Everything from here is about talking to something else."* |
+| `/health` → `/chat` | *"The door works, but it only says 'I am alive'. Nobody can ask it anything yet."* |
+| `/chat` → streaming | *"It works. But how long did that take, and what were you looking at while you waited?"* |
+| cart story → image/container | *"So we need to build a cart. Two words first, because people mix them up."* |
+| service → container | *"Three of the four gaps are closed. The last one: it still only runs on your laptop."* |
+
+> **INSTRUCTOR** · Read the handover **before** you advance, while the previous
+> slide is still up. It is one sentence and it is what makes the day feel like
+> one lesson rather than twelve.
 
 ### The build sections match the repository exactly
 
