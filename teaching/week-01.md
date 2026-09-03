@@ -102,8 +102,8 @@ docker --version       # and the app must actually be running
 ### Three steps
 
 ```bash
-git clone https://github.com/nimeshmora/shipping-prod-ai-system.git
-cd shipping-prod-ai-system
+git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
+cd agentic-ai-cohort-01-phase-02
 git checkout week-01-package
 ```
 
@@ -926,7 +926,7 @@ Then draw the map. **This is the only picture of the repo they get, so leave it
 up on a second board or a printed handout if you can.**
 
 ```
-   shipping-prod-ai-system/
+   agentic-ai-cohort-01-phase-02/
    │
    ├── app/                    ◀── EVERYTHING YOU WRITE LIVES HERE
    │   ├── main.py                  the web service      ← TODAY

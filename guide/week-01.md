@@ -29,7 +29,7 @@ change.** You are giving it a front door, not rewriting it.
 You only ever write inside `app/`. Today it is two files.
 
 ```
-   shipping-prod-ai-system/
+   agentic-ai-cohort-01-phase-02/
    │
    ├── app/                    <- everything you write lives here
    │   ├── main.py                 the web service      <- TODAY
