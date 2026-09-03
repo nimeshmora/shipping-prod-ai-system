@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 116-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 120-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,7 +290,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and four of the slides carry a
+**Press `S` before you start.** A hundred and eight of the slides carry a
 presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -303,13 +303,13 @@ yet — in a side panel the room never sees.
    0:43   11   Set it up, and prove it       the checklist, and check-week-00
    0:54   10   break
    1:04   16   The terminal                  practised on a throwaway folder
-   1:20   22   Sending messages              JSON and curl, on public services
-   1:42   10   break
-   1:52   20   What a web service is         service, API, endpoint
-   2:12   18   Addresses, then messages
-   2:30   40   Build the web service         ONE LINE PER SLIDE
-   3:10   11   Make it feel fast
-   3:21   30   Build the container           three examples, then line by line
+   1:20   20   Sending messages              JSON and curl, on public services
+   1:40   10   break
+   1:50   24   What a web service is         the shop story, then the words
+   2:14   18   Addresses, then messages
+   2:32   36   Build the web service         ONE LINE PER SLIDE
+   3:08   11   Make it feel fast
+   3:19   32   Build the container           the cart story, then line by line
    3:51    9   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -426,7 +426,7 @@ run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
 
-### Containers get 30 minutes, and are taught from nothing
+### Containers get 32 minutes, and are taught from nothing
 
 This is the longest section of the day, and deliberately so — it is the topic
 a non-technical room finds hardest, and the one most courses rush. Fourteen
@@ -512,6 +512,63 @@ that the student branch has **no** `evals/`, `loadtest/`, `observability/` or
 > filenames. Purposes, top to bottom, ninety seconds. Then say the line that
 > settles the room: *"Eleven of those twelve are already done. You will open
 > two files all day."*
+
+### One story carries both hard topics
+
+The two ideas a non-technical room finds hardest — *why a web service* and
+*why a container* — are taught through **the same running story**, one stage
+apart. It arrives before any technical word, and each stage is followed by a
+mapping strip with the story on the left and our agent on the right.
+
+**Stage one, at 1:50 — why a web service.**
+
+> You cook very well and your family loves it. Doors closed, kitchen at the
+> back. Now you want to sell sweets to the street. What has to change?
+
+Ask it as a question and let them answer. **They will produce most of the list
+themselves** — a table at the front, a sign with the address, set opening
+hours, serve whoever turns up, take orders one after another. That is a web
+service, arrived at with no technical vocabulary.
+
+The line that lands: *"Notice you did not change your recipe. You changed
+everything around it. That is exactly what we are about to do to your agent."*
+
+**Stage two, at 3:19 — why a container.**
+
+> The table works, the sweets sell. Now open a second shop across town. You
+> post your cousin the recipe — what goes wrong?
+
+Again they answer it: wrong oven, different pans, other flour, and it comes
+out tasting different. Then the reveal: *"A container is a fitted-out food
+cart. Your code, plus the oven and the pans and the flour, in one thing. She
+opens it and it works."*
+
+That stage also carries **image versus container** before either word is
+introduced: **one cart design, ten carts.**
+
+| The story | Our agent |
+|---|---|
+| you cook only when you feel like it | the agent runs only when you start it |
+| only people in the house can eat | only code in the same folder can call it |
+| no sign, no address | nothing to type in to reach it |
+| you go out, nothing is served | you close the terminal, the agent is gone |
+| a table, a sign, opening hours | **a web service** |
+| the recipe on its own | your code, sent as files |
+| the right oven | the right Python version |
+| the right pans and ingredients | the right libraries |
+| she sets the kitchen up herself | the twelve-minute setup at 0:43 |
+| the fitted-out cart | **a container** |
+| ten carts from one design | ten containers from one image |
+
+> **INSTRUCTOR** · **Tell it, do not read it.** Take a full minute on each
+> stage, and ask before you show — the value is in them producing the list,
+> not in seeing it.
+>
+> Keep the thread alive when you reach the wrong answers: *"send them the
+> files"* is posting the recipe to strangers, *"use my laptop"* is inviting
+> them into your kitchen. Neither is a shop.
+>
+> Two stages of one story beat six unrelated comparisons. Do not add more.
 
 ### Anchor every new word to their own laptop
 

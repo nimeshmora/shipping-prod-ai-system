@@ -1188,6 +1188,50 @@ about what goes wrong once that is true.
 
 ### 2 · Why the agent has to become a web service
 
+#### Start with the shop, not with HTTP
+
+Before any technical word, put this to the room and let them answer it:
+
+> *"You cook very well, and your family loves it. Doors closed, kitchen at the
+> back. Now you want to sell sweets to the street. What has to change?"*
+
+They will produce most of the list themselves:
+
+| Cooking for the family | Selling to the street |
+|---|---|
+| you cook when you feel like it | you **stay open** at set hours |
+| only people in the house can eat | **anyone who turns up** is served |
+| no sign, no address | a **sign with your address** |
+| you go out, nothing is served | the shop is open whether or not you feel like it |
+| one dish, when you choose | **orders one after another**, all day |
+
+**Then the line that does the work:** *"Notice you did not change your recipe.
+You changed everything around it. That is exactly what we are about to do to
+your agent."*
+
+Now map it, and let them complete the right-hand side:
+
+```
+   you cook when you feel like it   =  it runs only when you start it
+   only the house can eat           =  only code in the same folder can call it
+   no sign, no address              =  nothing to type in to reach it
+   you go out, nothing is served    =  close the terminal, the agent is gone
+   a table, a sign, opening hours   =  A WEB SERVICE
+```
+
+> **INSTRUCTOR** · **Ask before you tell.** The value is in them producing the
+> list, not in reading it. It takes about a minute and it is the single
+> cheapest way to make a non-technical room *want* the next twenty minutes.
+>
+> Keep the thread when you get to the wrong answers below: *"send them the
+> files"* is posting the recipe to strangers, and *"use my laptop"* is inviting
+> them into your kitchen. **Neither one is a shop.**
+>
+> The same story returns in Part 3 for containers — sending your cousin the
+> recipe versus sending a fitted-out food cart. Two stages of one story beat
+> six unrelated comparisons; do not add more.
+
+
 > **INSTRUCTOR** · **This is the most important ten minutes of Week 1**, and it
 > is the part every course skips. Everything after it is mechanics. If the room
 > only takes one thing home today, make it this.
@@ -2011,6 +2055,31 @@ Ask: *"What would my colleague need to run your agent?"*
 The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. **"Works on my machine" is not a
 deployment.**
+
+#### The shop story, one stage later
+
+Go back to the sweets. The table works, the sweets sell, and now you want a
+second shop across town:
+
+> *"You post your cousin the recipe. What goes wrong?"*
+
+They will answer it themselves: wrong oven, different pans, other flour — and
+it comes out tasting different, with no way to tell why.
+
+```
+   the recipe on its own            =  your code, sent as files
+   the right oven                   =  the right Python version
+   the right pans and ingredients   =  the right libraries
+   she sets the kitchen up herself  =  the setup from Beat 0, again
+   THE FITTED-OUT FOOD CART         =  A CONTAINER
+   ten carts from one design        =  ten containers from one image
+```
+
+**Stop sending the recipe. Send the whole kitchen.**
+
+> **INSTRUCTOR** · That last row smuggles in **image versus container** before
+> either word is introduced: one cart design, any number of carts. Name the
+> words properly straight afterwards and the distinction is already there.
 
 A **container** is a box holding your code *and* everything it needs to run.
 Hand the box to any computer and it behaves identically.

@@ -426,6 +426,46 @@ tr.okrow td{background:rgba(95,191,127,.07);}
 .pips .pip.done{background:var(--brand-lo);}
 .pips .pip.here{background:var(--brand);}
 
+/* ---- the running story: cooking at home -> selling to the street ------
+   One scenario reused for the web service and again for the container, so
+   a non-technical room has a single thread to hang both ideas on. */
+.story{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;}
+.story .panel{border:1.5px solid var(--rule);border-radius:11px;
+  background:var(--panel);padding:17px 19px;}
+.story .panel.home{border-color:var(--info);}
+.story .panel.shop{border-color:var(--ok);}
+.story .panel .cap3{font-family:var(--mono);font-size:11.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px;}
+.story .panel.home .cap3{color:var(--info);}
+.story .panel.shop .cap3{color:var(--ok);}
+.story .panel .hd{font-size:21px;font-weight:700;line-height:1.25;margin-bottom:9px;}
+.story .panel ul{list-style:none;padding:0;margin:0;display:flex;
+  flex-direction:column;gap:7px;}
+.story .panel li{font-size:16.5px;line-height:1.32;color:var(--ink-dim);
+  padding-left:19px;position:relative;}
+.story .panel li::before{content:"";position:absolute;left:0;top:.52em;
+  width:9px;height:2px;background:var(--rule);}
+.story .panel.shop li::before{background:var(--ok);}
+.story .panel.home li::before{background:var(--info);}
+.story .panel li b{color:#fff;}
+.story .between{padding:0 15px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;}
+.story .between .ar{font-family:var(--mono);font-size:26px;color:var(--brand);}
+.story .between .tx{font-size:14px;color:var(--ink-dim);text-align:center;
+  margin-top:6px;max-width:110px;line-height:1.25;}
+
+/* the mapping strip: story on the left, our agent on the right */
+.maps{display:flex;flex-direction:column;gap:8px;}
+.maps .m2{display:grid;grid-template-columns:1fr 34px 1fr;gap:12px;
+  align-items:center;background:#131316;border:1px solid var(--rule);
+  border-radius:8px;padding:11px 14px;}
+.maps .m2 .a2{font-size:17px;color:var(--ink-dim);line-height:1.3;}
+.maps .m2 .a2 b{color:var(--info);}
+.maps .m2 .eq{font-family:var(--mono);font-size:15px;color:var(--brand);
+  text-align:center;}
+.maps .m2 .b2{font-size:17px;line-height:1.3;}
+.maps .m2 .b2 b{color:#fff;}
+
 /* progress rail */
 .rail{position:absolute;left:60px;right:60px;bottom:19px;
   display:flex;align-items:center;gap:6px;flex:none;}
@@ -852,11 +892,11 @@ body.help #help{display:grid;}
       <tr><td class="mono">0:54</td><td class="dim">— break —</td><td class="dim"></td></tr>
       <tr><td class="mono">1:04</td><td><b>The terminal</b></td><td>the tool you need before any other tool</td></tr>
       <tr><td class="mono">1:20</td><td><b>Sending messages</b></td><td>practise on public services, not on ours</td></tr>
-      <tr><td class="mono">1:42</td><td class="dim">— break —</td><td class="dim"></td></tr>
-      <tr class="now"><td class="mono">1:52</td><td><b>What a web service is</b></td><td>now you have felt the problem</td></tr>
-      <tr><td class="mono">2:12</td><td>Addresses, then messages</td><td>how to reach it, then what to say</td></tr>
-      <tr class="now"><td class="mono">2:30</td><td><b>Build the address</b>, then make it feel fast</td><td>everything above, typed</td></tr>
-      <tr class="now"><td class="mono">3:21</td><td><b>Packing it up</b> — containers, from scratch</td><td>so it runs on any computer, not just yours</td></tr>
+      <tr><td class="mono">1:40</td><td class="dim">— break —</td><td class="dim"></td></tr>
+      <tr class="now"><td class="mono">1:50</td><td><b>What a web service is</b></td><td>now you have felt the problem</td></tr>
+      <tr><td class="mono">2:14</td><td>Addresses, then messages</td><td>how to reach it, then what to say</td></tr>
+      <tr class="now"><td class="mono">2:32</td><td><b>Build the address</b>, then make it feel fast</td><td>everything above, typed</td></tr>
+      <tr class="now"><td class="mono">3:19</td><td><b>Packing it up</b> — containers, from scratch</td><td>so it runs on any computer, not just yours</td></tr>
       <tr><td class="mono">3:51</td><td>Prove it, and what breaks next</td><td>next week's opening</td></tr>
     </table>
   </div>
@@ -1336,7 +1376,7 @@ while True:
   <div class="num">0:43 – 0:54 · 11 MINUTES</div>
   <h1>Get set up,<br>and prove it</h1>
   <div class="sub">Five things installed, and one command that checks all of them.</div>
-  <div class="goal">Find broken laptops <b>now</b>, while everyone is sitting still. The same problem at 3:18, with six people needing help, costs the whole room an hour.</div>
+  <div class="goal">Find broken laptops <b>now</b>, while everyone is sitting still. The same problem at 3:20, with six people needing help, costs the whole room an hour.</div>
 </section>
 
 <!-- =================================================================== 18 -->
@@ -1362,7 +1402,7 @@ while True:
       </div>
       <div class="row">
         <div class="box2">4</div>
-        <div class="name">Docker Desktop<span>needed at 3:21 today, and every week after</span></div>
+        <div class="name">Docker Desktop<span>needed at 3:19 today, and every week after</span></div>
         <div class="cmd">docker --version<i>and it must be running, not just installed</i></div>
       </div>
       <div class="row">
@@ -1490,7 +1530,7 @@ the loop runs a tool then answers
   <h1>Break</h1>
   <div class="sub">Ten minutes. Come back with your terminal open.</div>
   <div class="when">0:54 – 1:04</div>
-  <div class="say"><b>Use the break</b>Go to anyone whose hand was up. Fix them now — this is the last quiet moment until 1:42.<br><br><b>Open the next section with this:</b> <em>"You have a working agent, and nobody but you can reach it. Everything after this break is about fixing that — and the first thing I need to give you is a way to talk to your own computer."</em></div>
+  <div class="say"><b>Use the break</b>Go to anyone whose hand was up. Fix them now — this is the last quiet moment until 1:40.<br><br><b>Open the next section with this:</b> <em>"You have a working agent, and nobody but you can reach it. Everything after this break is about fixing that — and the first thing I need to give you is a way to talk to your own computer."</em></div>
 </section>
 
 <!-- ==================================================== 4 · THE TERMINAL -->
@@ -1686,7 +1726,7 @@ ORD-1002 desk
 
 <!-- ============================================ 5 · HOW PROGRAMS MESSAGE -->
 <section class="slide opener" data-sec="5" data-label="Sending messages">
-  <div class="num">1:20 – 1:42 · 22 MINUTES</div>
+  <div class="num">1:20 – 1:40 · 20 MINUTES</div>
   <h1>How programs<br>send messages</h1>
   <div class="sub">A format for the message, and a tool to send it.</div>
   <div class="goal">We practise both against <b>public services on the internet</b> before pointing them at our own agent. When something fails later, you will know whether it is your typing or our code.</div>
@@ -1694,7 +1734,7 @@ ORD-1002 desk
 
 <!-- =================================================================== 30 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">The format<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">The format<span class="t">1:20 – 1:40</span></div>
   <h2>JSON: a standard way to write data as text.</h2>
   <div class="body">
     <div class="def">
@@ -1735,7 +1775,7 @@ ORD-1002 desk
 
 <!-- =================================================================== 31 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Break it on purpose<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">Break it on purpose<span class="t">1:20 – 1:40</span></div>
   <h2>Make the common mistake now, while nothing depends on it.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1757,7 +1797,7 @@ in double quotes: line 1 column 2</span></pre>
 
 <!-- =================================================================== 32 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">The tool<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">The tool<span class="t">1:20 – 1:40</span></div>
   <h2><code>curl</code> sends a message to an address and prints the reply.</h2>
   <div class="body">
     <div class="def">
@@ -1787,7 +1827,7 @@ in double quotes: line 1 column 2</span></pre>
 
 <!-- =================================================================== 33 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Two — a different kind of reply<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">Two — a different kind of reply<span class="t">1:20 – 1:40</span></div>
   <h2>Same tool. One reply is for people, one is for programs.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1820,7 +1860,7 @@ in double quotes: line 1 column 2</span></pre>
 
 <!-- =================================================================== 34 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Three — what a reply contains<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">Three — what a reply contains<span class="t">1:20 – 1:40</span></div>
   <h2>Every reply has three parts.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1857,7 +1897,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 35 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Four — make failures happen<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">Four — make failures happen<span class="t">1:20 – 1:40</span></div>
   <h2>Same command. Different number back.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1886,7 +1926,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 36 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Five — sending data, not just asking<span class="t">1:20 – 1:42</span></div>
+  <div class="eyebrow">Five — sending data, not just asking<span class="t">1:20 – 1:40</span></div>
   <h2>Keep this command. We change one part later.</h2>
   <div class="body">
     <div class="cols c2w mid">
@@ -1917,22 +1957,96 @@ Keep it logically awesome.</pre>
 <section class="slide breaks" data-sec="5" data-label="Sending messages">
   <h1>Break</h1>
   <div class="sub">Ten minutes. After this, we solve the problem.</div>
-  <div class="when">1:42 – 1:52</div>
+  <div class="when">1:40 – 1:50</div>
   <div class="say"><b>Where they are at halfway</b>They have: a working agent they understand, a terminal they can navigate, and the ability to send a message to any address on the internet.<br><br><b>What they do not have:</b> any way for the internet to send a message to <em>them</em>. That is the whole second half.<br><br>Open with: <em>"You can now send a message to anything out there. Nothing out there can send one to you. Let us fix that."</em></div>
 </section>
 
 <!-- ==================================================== 6 · WEB SERVICE -->
 <section class="slide opener" data-sec="6" data-label="What a web service is">
-  <div class="num">1:52 – 2:12 · 20 MINUTES</div>
+  <div class="num">1:50 – 2:14 · 24 MINUTES</div>
   <h1>What a web service<br>is, and why</h1>
   <div class="sub">The most important part of the day.</div>
   <div class="goal">Everything after this is just steps to follow. If the room takes <b>one</b> idea home, make it this one — because if you do not know <em>why</em>, the rest just looks like magic words.</div>
 </section>
 
+<!-- ==== 6.0b · the running story ==== -->
+<section class="slide" data-sec="6" data-label="What a web service is">
+  <div class="eyebrow">Before the technical words · a situation you know<span class="t">1:50 – 2:14</span></div>
+  <h2>You cook very well. Your family loves it.</h2>
+  <div class="body">
+    <div class="story">
+      <div class="panel home">
+        <div class="cap3">cooking for the family</div>
+        <div class="hd">Doors closed. Kitchen at the back.</div>
+        <ul>
+          <li>You cook <b>when you feel like it</b></li>
+          <li>Only people <b>already in the house</b> can eat</li>
+          <li>Nobody outside knows you exist</li>
+          <li>No sign, no address, no opening hours</li>
+          <li>If you go out, <b>nothing is served</b></li>
+        </ul>
+      </div>
+      <div class="between">
+        <div class="ar">→</div>
+        <div class="tx">now you want to sell to strangers</div>
+      </div>
+      <div class="panel shop">
+        <div class="cap3">selling to the street</div>
+        <div class="hd">What has to change?</div>
+        <ul>
+          <li>Put a <b>table at the front</b> — somewhere to be served</li>
+          <li>Put up a <b>sign with your address</b></li>
+          <li><b>Stay open</b> at set hours, whether or not anyone comes</li>
+          <li>Serve <b>anyone who turns up</b>, including strangers</li>
+          <li>Take orders <b>one after another</b>, all day</li>
+        </ul>
+      </div>
+    </div>
+    <div class="punch quiet">The food did not change. Everything around it did.</div>
+  </div>
+  <div class="say"><b>Tell this as a story, not a slide — take a full minute</b>Ask the room first: <em>"Say you cook well and your family loves it. Now you want to sell sweets from your house. What do you actually have to do?"</em><br><br>Let them list it. <b>They will get most of it themselves</b> — a table, a sign, opening hours, serving strangers. That is the whole idea of a web service, arrived at without a technical word.<br><br><b>Then the line that lands:</b> <em>"Notice you did not change your recipe. You changed everything around it. That is exactly what we are about to do to your agent."</em></div>
+</section>
+
+<!-- ==== 6.0c · the mapping ==== -->
+<section class="slide" data-sec="6" data-label="What a web service is">
+  <div class="eyebrow">Same situation, our agent<span class="t">1:50 – 2:14</span></div>
+  <h2>Your agent is the family kitchen right now.</h2>
+  <div class="body">
+    <div class="maps">
+      <div class="m2">
+        <div class="a2"><b>You cook only when you feel like it</b></div>
+        <div class="eq">=</div>
+        <div class="b2">The agent runs <b>only when you start it</b></div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>Only people in the house can eat</b></div>
+        <div class="eq">=</div>
+        <div class="b2">Only code <b>in the same folder</b> can call it</div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>No sign, no address</b></div>
+        <div class="eq">=</div>
+        <div class="b2">Nothing to type in to reach it — <b>no address</b></div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>You go out, nothing is served</b></div>
+        <div class="eq">=</div>
+        <div class="b2">You close the terminal, <b>the agent is gone</b></div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>A table, a sign, opening hours</b></div>
+        <div class="eq">=</div>
+        <div class="b2"><b>A web service</b> — and that is what we build now</div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Read the left column, let them supply the right</b>Go line by line and pause after each. They have just met all four problems on the right this morning, so most of the room can complete the sentence.<br><br><b>Then name it:</b> <em>"Everything in the right-hand column is one job: giving your agent a front table, a sign, and opening hours. The word for that job is 'web service'."</em><br><br>The definition slide is next, and it will now sound like a summary rather than a new fact.</div>
+</section>
+
 <!-- ==== 6.1 · the problem, felt ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">Start from the problem<span class="t">1:52 – 2:12</span></div>
-  <h2>You have something that works. How do you let someone else use it?</h2>
+  <div class="eyebrow">The wrong ways first<span class="t">1:50 – 2:14</span></div>
+  <h2>So how do you let someone else use your agent?</h2>
   <div class="body">
     <div class="stack">
       <div class="card accent">
@@ -1951,12 +2065,12 @@ Keep it logically awesome.</pre>
       </div>
     </div>
   </div>
-  <div class="say"><b>Ask the room and take the answers seriously</b>Each wrong answer teaches something, and the third one is nearly right. Let them get there.<br><br><b>Use their own morning:</b> <em>"You downloaded this, waited for the install, and pasted in a key I emailed you. That is what you would be asking of every customer — except they never get a key at all."</em><br><br>If anybody put a hand up for question 3 this morning, ask them: <em>"What did you actually have to do to get your site online?"</em></div>
+  <div class="say"><b>Ask the room and take the answers seriously</b>Each wrong answer teaches something, and the third one is nearly right. Let them get there.<br><br><b>Keep the shop story running:</b> answer 1 is <em>"post the recipe to strangers"</em>, answer 2 is <em>"invite them into your kitchen"</em>. Neither is a shop. Only the third one is a table at the front.<br><br><b>And use their own morning:</b> <em>"You downloaded this, waited for the install, and pasted in a key I emailed you. That is what you would be asking of every customer."</em></div>
 </section>
 
 <!-- ==== 6.2 · the shift in thinking ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The change you have to make<span class="t">1:52 – 2:12</span></div>
+  <div class="eyebrow">The change you have to make<span class="t">1:50 – 2:14</span></div>
   <h2>Stop shipping the code. Start answering questions.</h2>
   <div class="body">
     <div class="vs">
@@ -1979,7 +2093,7 @@ Keep it logically awesome.</pre>
 
 <!-- ==== 6.3 · the definition ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">So here is the definition<span class="t">1:52 – 2:12</span></div>
+  <div class="eyebrow">So here is the definition<span class="t">1:50 – 2:14</span></div>
   <h2>A web service is a program that waits to be asked.</h2>
   <div class="body">
     <div class="def">
@@ -2013,7 +2127,7 @@ Keep it logically awesome.</pre>
 
 <!-- ==== 6.4 · what it looks like ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">What it looks like<span class="t">1:52 – 2:12</span></div>
+  <div class="eyebrow">What it looks like<span class="t">1:50 – 2:14</span></div>
   <h2>One copy in one place, and anything can ask it.</h2>
   <div class="body">
     <div class="fig">
@@ -2048,7 +2162,7 @@ Keep it logically awesome.</pre>
 
 <!-- ==== 6.5 · service vs API vs endpoint ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">Three words people mix up<span class="t">1:52 – 2:12</span></div>
+  <div class="eyebrow">Three words people mix up<span class="t">1:50 – 2:14</span></div>
   <h2>Service, API, endpoint.</h2>
   <div class="body">
     <div class="cols c3">
@@ -2083,7 +2197,7 @@ Keep it logically awesome.</pre>
 
 <!-- ==== 6.6 · program vs service ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The change happening today<span class="t">1:52 – 2:12</span></div>
+  <div class="eyebrow">The change happening today<span class="t">1:50 – 2:14</span></div>
   <h2>From a program you run, to a service that waits.</h2>
   <div class="body">
     <div class="ba">
@@ -2116,7 +2230,7 @@ Keep it logically awesome.</pre>
 
 <!-- ==== 6.7 · the tool ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">And the tool that does it<span class="t">1:52 – 2:12</span></div>
+  <div class="eyebrow">And the tool that does it<span class="t">1:50 – 2:14</span></div>
   <h2>FastAPI sits between the network and your code.</h2>
   <div class="body">
     <div class="fig">
@@ -2146,7 +2260,7 @@ Keep it logically awesome.</pre>
 
 <!-- =========================================== 7 · ADDRESSES & MESSAGES -->
 <section class="slide opener" data-sec="7" data-label="Addresses & messages">
-  <div class="num">2:12 – 2:30 · 18 MINUTES</div>
+  <div class="num">2:14 – 2:32 · 18 MINUTES</div>
   <h1>Addresses,<br>then messages</h1>
   <div class="sub">How a program finds your service — then what it actually sends.</div>
   <div class="goal">Two halves, in that order. You cannot send a message until you can address it, and <b>every part of both halves is something you already typed this morning.</b></div>
@@ -2154,7 +2268,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 46 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Addresses — names and numbers<span class="t">2:12 – 2:21</span></div>
+  <div class="eyebrow">Addresses — names and numbers<span class="t">2:14 – 2:23</span></div>
   <h2>Every computer has a number. Names are looked up.</h2>
   <div class="body">
     <div class="fig">
@@ -2188,7 +2302,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- =================================================================== 47 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Addresses — the full address<span class="t">2:12 – 2:21</span></div>
+  <div class="eyebrow">Addresses — the full address<span class="t">2:14 – 2:23</span></div>
   <h2>Four parts, and you have seen three of them.</h2>
   <div class="body">
     <div class="stack">
@@ -2233,7 +2347,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- =================================================================== 48 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Messages — what you send<span class="t">2:21 – 2:30</span></div>
+  <div class="eyebrow">Messages — what you send<span class="t">2:23 – 2:32</span></div>
   <h2>A request has three parts. A reply has two.</h2>
   <div class="body">
     <div class="cols c2">
@@ -2260,12 +2374,12 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
     </div>
     <div class="punch quiet">You typed all five of these before the break.</div>
   </div>
-  <div class="say"><b>Do not present this as new — the next slide proves it is not</b>They sent a method, a path, a body, and received a status and a body, at 1:38. The next slide puts their own command back on screen with these five labels written onto it.<br><br>That is the payoff for spending the first half on tools.</div>
+  <div class="say"><b>Do not present this as new — the next slide proves it is not</b>They sent a method, a path, a body, and received a status and a body, at 1:36. The next slide puts their own command back on screen with these five labels written onto it.<br><br>That is the payoff for spending the first half on tools.</div>
 </section>
 
 <!-- =================================================================== 49 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Messages — your own command, labelled<span class="t">2:21 – 2:30</span></div>
+  <div class="eyebrow">Messages — your own command, labelled<span class="t">2:23 – 2:32</span></div>
   <h2>These are names for what you already did.</h2>
   <div class="body">
     <div class="stack">
@@ -2288,7 +2402,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- =================================================================== 50 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Messages — the status numbers<span class="t">2:21 – 2:30</span></div>
+  <div class="eyebrow">Messages — the status numbers<span class="t">2:23 – 2:32</span></div>
   <h2>The numbers you made appear earlier.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2310,7 +2424,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- =================================================================== 51 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Messages — the part that surprises people<span class="t">2:21 – 2:30</span></div>
+  <div class="eyebrow">Messages — the part that surprises people<span class="t">2:23 – 2:32</span></div>
   <h2>Each request is completely separate.</h2>
   <div class="body">
     <div class="fig">
@@ -2339,7 +2453,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- =================================================================== 52 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Messages — the answer<span class="t">2:21 – 2:30</span></div>
+  <div class="eyebrow">Messages — the answer<span class="t">2:23 – 2:32</span></div>
   <h2>The service hands out an id, and the caller sends it back.</h2>
   <div class="body">
     <div class="flowv">
@@ -2377,7 +2491,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ============================================ 8 · BUILD THE WEB SERVICE -->
 <section class="slide opener" data-sec="8" data-label="Build the service">
-  <div class="num">2:30 – 3:10 · 40 MINUTES</div>
+  <div class="num">2:32 – 3:08 · 36 MINUTES</div>
   <h1>Build the<br>web service</h1>
   <div class="sub">One line at a time. Nothing skipped.</div>
   <div class="goal">We write about twenty lines together, <b>adding one line per slide</b> and saying what it does in one sentence. If you have never written code, you will still be able to follow every line.</div>
@@ -2385,7 +2499,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.1 · the two helpers, named ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">First, the two tools that do the hard part<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">First, the two tools that do the hard part<span class="t">2:32 – 3:08</span></div>
   <h2>You do not write the network bit. Two tools do that.</h2>
   <div class="body">
     <div class="cols c2">
@@ -2412,7 +2526,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.2 · the journey of one message ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">The journey of one question<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">The journey of one question<span class="t">2:32 – 3:08</span></div>
   <h2>Four hand-offs. You own the third.</h2>
   <div class="body">
     <div class="flowv">
@@ -2439,7 +2553,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.3 · the empty file ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Open the file we are going to fill<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Open the file we are going to fill<span class="t">2:32 – 3:08</span></div>
   <h2>We are writing <code>app/main.py</code>, from empty.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2480,7 +2594,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.4 · LINE 1 ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 1 of 6 · bring in the tools<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 1 of 6 · bring in the tools<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2 new"><span class="k">from</span> fastapi <span class="k">import</span> <span class="w2">FastAPI</span></div><div class="l2 ghost">app = FastAPI()</div><div class="l2 ghost">&nbsp;</div><div class="l2 ghost">@app.get("/health")</div><div class="l2 ghost">def health():</div><div class="l2 ghost">    return {"status": "ok"}</div></div>
     <div class="oneline">
@@ -2495,7 +2609,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.5 · LINE 2 ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 2 of 6 · create the application<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 2 of 6 · create the application<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">from fastapi import FastAPI</div><div class="l2 new"><span class="w2">app</span> = <span class="v">FastAPI()</span></div><div class="l2 ghost">&nbsp;</div><div class="l2 ghost">@app.get("/health")</div><div class="l2 ghost">def health():</div><div class="l2 ghost">    return {"status": "ok"}</div></div>
     <div class="oneline">
@@ -2510,7 +2624,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.6 · LINE 3+4 the decorator ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 3 of 6 · the label that connects an address to a function<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 3 of 6 · the label that connects an address to a function<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">from fastapi import FastAPI</div><div class="l2">app = FastAPI()</div><div class="l2">&nbsp;</div><div class="l2 new"><span class="k">@app.get(</span><span class="v">"/health"</span><span class="k">)</span></div><div class="l2 ghost">def health():</div><div class="l2 ghost">    return {"status": "ok"}</div></div>
     <div class="oneline">
@@ -2525,7 +2639,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.7 · LINE 5 the function ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 3 continued · the function itself<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 3 continued · the function itself<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">from fastapi import FastAPI</div><div class="l2">app = FastAPI()</div><div class="l2">&nbsp;</div><div class="l2">@app.get("/health")</div><div class="l2 new"><span class="k">def</span> <span class="w2">health</span>():</div><div class="l2 new">    <span class="k">return</span> {<span class="v">"status"</span>: <span class="v">"ok"</span>}</div></div>
     <div class="oneline">
@@ -2540,7 +2654,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- ==== 8.8 · run it, first win ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Six lines. Run it.<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Six lines. Run it.<span class="t">2:32 – 3:08</span></div>
   <h2>You now have a working web service.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2567,7 +2681,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.9 · why /health first ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Why we built the boring one first<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Why we built the boring one first<span class="t">2:32 – 3:08</span></div>
   <h2><code>/health</code> answers one question: is this thing on?</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2597,7 +2711,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.10 · piece 4 · the request shape ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 4 of 6 · describe what a question looks like<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 4 of 6 · describe what a question looks like<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">from fastapi import FastAPI</div><div class="l2 new"><span class="k">from</span> pydantic <span class="k">import</span> <span class="w2">BaseModel</span></div><div class="l2">app = FastAPI()</div><div class="l2">&nbsp;</div><div class="l2 new"><span class="k">class</span> <span class="w2">ChatRequest</span>(BaseModel):</div><div class="l2 new">    message: <span class="v">str</span></div><div class="l2 new">    session_id: <span class="v">str | None</span> = <span class="v">None</span></div></div>
     <div class="oneline">
@@ -2612,7 +2726,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.11 · piece 5a · the chat label ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 5 of 6 · the real endpoint<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 5 of 6 · the real endpoint<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">@app.get("/health")</div><div class="l2">def health():</div><div class="l2">    return {"status": "ok"}</div><div class="l2">&nbsp;</div><div class="l2 new"><span class="k">@app.post(</span><span class="v">"/chat"</span><span class="k">)</span></div><div class="l2 new"><span class="k">def</span> <span class="w2">chat</span>(req: ChatRequest):</div><div class="l2 ghost">    reply, history = run_turn(req.message, history)</div><div class="l2 ghost">    return {"reply": reply, "session_id": session_id}</div></div>
     <div class="oneline">
@@ -2627,7 +2741,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.12 · piece 5b · calling the agent ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 5 continued · call the agent<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 5 continued · call the agent<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">@app.post("/chat")</div><div class="l2">def chat(req: ChatRequest):</div><div class="l2 new">    reply, history = <span class="w2">run_turn</span>(req.message, history)</div><div class="l2 ghost">    return {"reply": reply, "session_id": session_id}</div></div>
     <div class="oneline">
@@ -2642,7 +2756,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.13 · piece 5c · returning ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 5 continued · hand the answer back<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 5 continued · hand the answer back<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">@app.post("/chat")</div><div class="l2">def chat(req: ChatRequest):</div><div class="l2">    reply, history = run_turn(req.message, history)</div><div class="l2 new">    <span class="k">return</span> {<span class="v">"reply"</span>: reply, <span class="v">"session_id"</span>: session_id}</div></div>
     <div class="oneline">
@@ -2657,7 +2771,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.14 · piece 6 · the session ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Piece 6 of 6 · remember the conversation<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Piece 6 of 6 · remember the conversation<span class="t">2:32 – 3:08</span></div>
   <div class="body">
     <div class="build"><div class="l2">@app.post("/chat")</div><div class="l2">def chat(req: ChatRequest):</div><div class="l2 new">    session_id = req.session_id <span class="k">or</span> <span class="w2">uuid.uuid4().hex</span></div><div class="l2 new">    history = <span class="w2">memory.load</span>(session_id)</div><div class="l2">    reply, history = run_turn(req.message, history)</div><div class="l2 new">    <span class="w2">memory.save</span>(session_id, history)</div><div class="l2">    return {"reply": reply, "session_id": session_id}</div></div>
     <div class="oneline">
@@ -2672,7 +2786,7 @@ INFO: Uvicorn running on http://0.0.0.0:8080
 
 <!-- ==== 8.15 · the whole file ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">All of it, on one slide<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">All of it, on one slide<span class="t">2:32 – 3:08</span></div>
   <h2>Nineteen lines. You wrote every one.</h2>
   <div class="body">
     <pre class="tight"><span class="k" style="color:var(--warn)">from</span> fastapi <span class="k" style="color:var(--warn)">import</span> FastAPI
@@ -2705,7 +2819,7 @@ app = FastAPI()
 
 <!-- ==== 8.16 · two windows ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">Running it · the arrangement for the whole course<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">Running it · the arrangement for the whole course<span class="t">2:32 – 3:08</span></div>
   <h2>This command never finishes. That is correct.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2735,7 +2849,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 8.17 · the payoff ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">The promise from before the break<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">The promise from before the break<span class="t">2:32 – 3:08</span></div>
   <h2>Only the address changed.</h2>
   <div class="body">
     <div class="stack">
@@ -2755,12 +2869,12 @@ INFO: Uvicorn running on
  "session_id":<span class="hl">"a3f9..."</span>}</pre>
     </div>
   </div>
-  <div class="say"><b>Collect the promise you wrote on the board at 1:38 — out loud</b><em>"An hour ago you sent that exact command to a practice service on the other side of the world. The only thing that changed is the address — and now the answer comes from the agent you just wired up."</em><br><br>Then have them paste the <code>session_id</code> into a second question and watch it continue the conversation. <b>That is piece 6 working.</b></div>
+  <div class="say"><b>Collect the promise you wrote on the board at 1:36 — out loud</b><em>"An hour ago you sent that exact command to a practice service on the other side of the world. The only thing that changed is the address — and now the answer comes from the agent you just wired up."</em><br><br>Then have them paste the <code>session_id</code> into a second question and watch it continue the conversation. <b>That is piece 6 working.</b></div>
 </section>
 
 <!-- ==== 8.18 · the error ==== -->
 <section class="slide" data-sec="8" data-label="Build the service">
-  <div class="eyebrow">The error you will see most<span class="t">2:30 – 3:10</span></div>
+  <div class="eyebrow">The error you will see most<span class="t">2:32 – 3:08</span></div>
   <h2><code>KODEKEY is not set</code></h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2788,7 +2902,7 @@ INFO: Uvicorn running on
 
 <!-- ========================================================= 9 · BUILD 2 -->
 <section class="slide opener" data-sec="9" data-label="Build: speed">
-  <div class="num">3:10 – 3:21 · 11 MINUTES</div>
+  <div class="num">3:08 – 3:19 · 11 MINUTES</div>
   <h1>Build it:<br>make it feel fast</h1>
   <div class="sub">Same eight seconds. Very different experience.</div>
   <div class="goal">This does not make the agent quicker. It changes <b>when the person starts seeing something</b> — which is what people actually mean by "fast".</div>
@@ -2796,7 +2910,7 @@ INFO: Uvicorn running on
 
 <!-- =================================================================== 61 -->
 <section class="slide" data-sec="9" data-label="Build: speed">
-  <div class="eyebrow">The problem<span class="t">3:10 – 3:21</span></div>
+  <div class="eyebrow">The problem<span class="t">3:08 – 3:19</span></div>
   <h2>Eight seconds of nothing looks broken.</h2>
   <div class="body">
     <div class="tl">
@@ -2827,7 +2941,7 @@ INFO: Uvicorn running on
 
 <!-- =================================================================== 62 -->
 <section class="slide" data-sec="9" data-label="Build: speed">
-  <div class="eyebrow">See it on something else first<span class="t">3:10 – 3:21</span></div>
+  <div class="eyebrow">See it on something else first<span class="t">3:08 – 3:19</span></div>
   <h2>Run both of these, in this order.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2852,7 +2966,7 @@ INFO: Uvicorn running on
 
 <!-- =================================================================== 63 -->
 <section class="slide" data-sec="9" data-label="Build: speed">
-  <div class="eyebrow">What you build<span class="t">3:10 – 3:21</span></div>
+  <div class="eyebrow">What you build<span class="t">3:08 – 3:19</span></div>
   <h2>The connection stays open, and updates travel down it.</h2>
   <div class="body">
     <div class="flowv">
@@ -2878,7 +2992,7 @@ INFO: Uvicorn running on
 
 <!-- =================================================================== 64 -->
 <section class="slide" data-sec="9" data-label="Build: speed">
-  <div class="eyebrow">The trap worth slowing down for<span class="t">3:10 – 3:21</span></div>
+  <div class="eyebrow">The trap worth slowing down for<span class="t">3:08 – 3:19</span></div>
   <h2>Once you start answering, you cannot report failure.</h2>
   <div class="body">
     <div class="cols c2">
@@ -2918,7 +3032,7 @@ INFO: Uvicorn running on
 
 <!-- ==================================================== 10 · CONTAINERS -->
 <section class="slide opener" data-sec="10" data-label="Containers">
-  <div class="num">3:21 – 3:51 · 30 MINUTES</div>
+  <div class="num">3:19 – 3:51 · 32 MINUTES</div>
   <h1>Packing it up<br>to run anywhere</h1>
   <div class="sub">The last gap: it only runs on your laptop.</div>
   <div class="goal">We build up to it in small steps — <b>what the problem is, what an image is, what a container is, then three tiny examples</b> — before we pack up the agent. Nothing here needs prior knowledge.</div>
@@ -2926,7 +3040,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.1 · the problem ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">The problem<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">The problem<span class="t">3:19 – 3:51</span></div>
   <h2>Your agent works. On your laptop. Only.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2951,9 +3065,88 @@ INFO: Uvicorn running on
   <div class="say"><b>Open by asking, and let them answer</b><em>"What would your colleague need, to run what you have just built?"</em><br><br>Let them rebuild the list themselves. They lived it this morning, so they can — and doing it that way makes the next slide feel like relief rather than a new topic.</div>
 </section>
 
+<!-- ==== 10.1b · the story continues ==== -->
+<section class="slide" data-sec="10" data-label="Containers">
+  <div class="eyebrow">Back to the sweet shop<span class="t">3:19 – 3:51</span></div>
+  <h2>The table works. Now open a second location.</h2>
+  <div class="body">
+    <div class="story">
+      <div class="panel home">
+        <div class="cap3">what you tried first</div>
+        <div class="hd">Send your cousin the recipe.</div>
+        <ul>
+          <li>She needs <b>the same oven</b></li>
+          <li>The same pans, the same size</li>
+          <li>The same flour, the same brand</li>
+          <li>She has to <b>set the kitchen up</b> herself</li>
+          <li>It comes out <b>different</b> — and you cannot tell why</li>
+        </ul>
+      </div>
+      <div class="between">
+        <div class="ar">→</div>
+        <div class="tx">so instead</div>
+      </div>
+      <div class="panel shop">
+        <div class="cap3">what actually works</div>
+        <div class="hd">Send a fitted-out food cart.</div>
+        <ul>
+          <li>Oven, pans, ingredients — <b>already inside</b></li>
+          <li>She <b>sets nothing up</b>. She opens it</li>
+          <li>Tastes <b>identical</b> to yours</li>
+          <li>Park it anywhere — <b>any street works</b></li>
+          <li>Want ten shops? <b>Send ten carts</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="punch quiet">Stop sending the recipe. Send the whole kitchen.</div>
+  </div>
+  <div class="say"><b>This is the same story from 1:50, one stage later</b>Point back at it: <em>"We gave your kitchen a front table. Now the sweets sell, and you want a second shop across town."</em><br><br>Ask first: <em>"You send your cousin the recipe. What goes wrong?"</em> They will say it themselves — wrong oven, different ingredients, tastes different.<br><br><b>Then the reveal:</b> <em>"A container is the fitted-out cart. Your code, plus the oven and the pans and the flour, all in one thing. She opens it and it works."</em></div>
+</section>
+
+<!-- ==== 10.1c · the mapping ==== -->
+<section class="slide" data-sec="10" data-label="Containers">
+  <div class="eyebrow">Same situation, our agent<span class="t">3:19 – 3:51</span></div>
+  <h2>The recipe is your code. The cart is a container.</h2>
+  <div class="body">
+    <div class="maps">
+      <div class="m2">
+        <div class="a2"><b>The recipe on its own</b></div>
+        <div class="eq">=</div>
+        <div class="b2">Your code, sent as files</div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>The right oven</b></div>
+        <div class="eq">=</div>
+        <div class="b2">The right <b>Python version</b></div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>The right pans and ingredients</b></div>
+        <div class="eq">=</div>
+        <div class="b2">The right <b>libraries</b></div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>Setting the kitchen up herself</b></div>
+        <div class="eq">=</div>
+        <div class="b2">The twelve-minute setup we did at <b>0:43</b></div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>The fitted-out cart</b></div>
+        <div class="eq">=</div>
+        <div class="b2">A <b>container</b> — and that is what we build now</div>
+      </div>
+      <div class="m2">
+        <div class="a2"><b>Ten carts from one design</b></div>
+        <div class="eq">=</div>
+        <div class="b2">Ten <b>containers</b> from one <b>image</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>That last row is the image-versus-container idea, arriving early</b>You will name both words properly in two slides. Here they meet the difference through the story first: <b>one cart design, any number of carts.</b><br><br><b>Point at row four</b> and let it sting a little: <em>"That is the setup you did this morning. It took twelve minutes with me teaching it, and it still broke for somebody. A container means nobody ever does it again."</em></div>
+</section>
+
 <!-- ==== 10.2 · the idea, before any tool ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">The idea<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">The idea<span class="t">3:19 – 3:51</span></div>
   <h2>Send the whole set-up, not just the code.</h2>
   <div class="body">
     <div class="vs">
@@ -2969,8 +3162,8 @@ INFO: Uvicorn running on
       </div>
     </div>
     <div class="anchor">
-      <div class="tagx">closest everyday thing</div>
-      <div class="txt">Installing a <b>phone app.</b> You do not install a language, or libraries, or configure anything — you install one item and it works. Containers do that for server software.</div>
+      <div class="tagx">one more everyday version</div>
+      <div class="txt">Installing a <b>phone app.</b> You do not install a language, or libraries, or configure anything — <b>you install one item and it works.</b> Containers do that for server software.</div>
     </div>
   </div>
   <div class="say"><b>Say the idea before the word</b>Do not say "Docker" yet. The idea is: <em>"stop sending the recipe, send the finished meal."</em> Once they have the idea, the words are just labels.<br><br><b>The phone-app anchor is the one that lands.</b> Everybody has installed an app and had it just work. That is the experience we are giving to whoever runs our agent.</div>
@@ -2978,7 +3171,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.3 · image vs container ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Two words you will hear constantly<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Two words you will hear constantly<span class="t">3:19 – 3:51</span></div>
   <h2>An image, and a container.</h2>
   <div class="body">
     <div class="imgcon">
@@ -2995,8 +3188,12 @@ INFO: Uvicorn running on
       </div>
     </div>
     <div class="anchor">
-      <div class="tagx">you have both on your laptop</div>
-      <div class="txt">The <b>Zoom installer</b> you downloaded is the image — one file, not running. <b>Zoom open on your screen</b> is the container. One installer, and you can install it on any number of machines.</div>
+      <div class="tagx">back to the carts</div>
+      <div class="txt">The <b>cart design</b> is the image — one plan, not selling anything. <b>A cart parked on a street, open for business</b> is a container. One design, ten carts.</div>
+    </div>
+    <div class="anchor">
+      <div class="tagx">and on your laptop</div>
+      <div class="txt">The <b>Zoom installer</b> you downloaded is the image — one file, not running. <b>Zoom open on your screen</b> is the container.</div>
     </div>
     <div class="cols c2">
       <div class="card info"><p><b>Image</b> = the thing you build and ship. <b>Sitting still.</b></p></div>
@@ -3008,7 +3205,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.4 · what a Dockerfile is ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">How the package gets made<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">How the package gets made<span class="t">3:19 – 3:51</span></div>
   <h2>You write the instructions. Docker follows them.</h2>
   <div class="body">
     <div class="flowv">
@@ -3038,7 +3235,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.5 · EXAMPLE 1 · smallest possible ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Example 1 of 3 · the smallest one possible<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Example 1 of 3 · the smallest one possible<span class="t">3:19 – 3:51</span></div>
   <h2>Two lines. It prints one word.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -3073,7 +3270,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.6 · EXAMPLE 2 · your own file inside ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Example 2 of 3 · put your own file inside<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Example 2 of 3 · put your own file inside<span class="t">3:19 – 3:51</span></div>
   <h2>Now the package contains something you wrote.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -3102,7 +3299,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.7 · prove it is sealed ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Proof · do this live<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Proof · do this live<span class="t">3:19 – 3:51</span></div>
   <h2>Delete the file. Run it again.</h2>
   <div class="body center">
     <div class="cols c2 mid">
@@ -3128,7 +3325,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.8 · EXAMPLE 3 · a program that waits, and ports ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Example 3 of 3 · one that waits to be asked<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Example 3 of 3 · one that waits to be asked<span class="t">3:19 – 3:51</span></div>
   <h2>A package that stays running needs a door opened.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -3168,7 +3365,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.9 · layers and why order matters ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Why builds are sometimes instant, sometimes slow<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Why builds are sometimes instant, sometimes slow<span class="t">3:19 – 3:51</span></div>
   <h2>Docker remembers each step.</h2>
   <div class="body">
     <div class="cols c2">
@@ -3202,7 +3399,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.10 · our Dockerfile, line by line ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Our agent · line 1 and 2<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Our agent · line 1 and 2<span class="t">3:19 – 3:51</span></div>
   <div class="body">
     <div class="build"><div class="l2 new"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2 new"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 ghost">COPY requirements.txt .</div><div class="l2 ghost">RUN pip install --no-cache-dir -r requirements.txt</div><div class="l2 ghost">COPY . .</div><div class="l2 ghost">ENV PORT=8080</div><div class="l2 ghost">EXPOSE 8080</div><div class="l2 ghost">CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</div></div>
     <div class="oneline">
@@ -3217,7 +3414,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.10b ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Our agent · the shopping list<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Our agent · the shopping list<span class="t">3:19 – 3:51</span></div>
   <div class="body">
     <div class="build"><div class="l2">FROM python:3.12-slim</div><div class="l2">WORKDIR /app</div><div class="l2 new"><span class="k">COPY</span> <span class="w2">requirements.txt</span> .</div><div class="l2 new"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost">COPY . .</div><div class="l2 ghost">ENV PORT=8080</div><div class="l2 ghost">EXPOSE 8080</div><div class="l2 ghost">CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</div></div>
     <div class="oneline">
@@ -3232,7 +3429,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.10c ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Our agent · the code<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Our agent · the code<span class="t">3:19 – 3:51</span></div>
   <div class="body">
     <div class="build"><div class="l2">FROM python:3.12-slim</div><div class="l2">WORKDIR /app</div><div class="l2">COPY requirements.txt .</div><div class="l2">RUN pip install --no-cache-dir -r requirements.txt</div><div class="l2 new"><span class="k">COPY</span> <span class="w2">.</span> <span class="w2">.</span></div><div class="l2 ghost">ENV PORT=8080</div><div class="l2 ghost">EXPOSE 8080</div><div class="l2 ghost">CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</div></div>
     <div class="oneline">
@@ -3247,7 +3444,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.10d ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Our agent · the port setting<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Our agent · the port setting<span class="t">3:19 – 3:51</span></div>
   <div class="body">
     <div class="build"><div class="l2">COPY requirements.txt .</div><div class="l2">RUN pip install --no-cache-dir -r requirements.txt</div><div class="l2">COPY . .</div><div class="l2 new"><span class="k">ENV</span> <span class="w2">PORT</span>=<span class="v">8080</span></div><div class="l2 new"><span class="k">EXPOSE</span> <span class="v">8080</span></div><div class="l2 ghost">CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</div></div>
     <div class="oneline">
@@ -3262,7 +3459,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.10e ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Our agent · the last line<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Our agent · the last line<span class="t">3:19 – 3:51</span></div>
   <div class="body">
     <div class="build"><div class="l2">ENV PORT=8080</div><div class="l2">EXPOSE 8080</div><div class="l2 new"><span class="k">CMD</span> <span class="v">exec</span> <span class="w2">uvicorn app.main:app</span> \</div><div class="l2 new">      --host <span class="w2">0.0.0.0</span> --port <span class="w2">${PORT}</span></div></div>
     <div class="oneline">
@@ -3277,7 +3474,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.11 · the port setting ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">One line that catches everybody<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">One line that catches everybody<span class="t">3:19 – 3:51</span></div>
   <h2>Never write the port number in by hand.</h2>
   <div class="body">
     <div class="vs">
@@ -3303,7 +3500,7 @@ INFO: Uvicorn running on
 
 <!-- ==== 10.12 · what to leave out ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Last file · and the most important line today<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Last file · and the most important line today<span class="t">3:19 – 3:51</span></div>
   <h2>Never put a secret in a package.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -3334,7 +3531,7 @@ __pycache__/
 
 <!-- ==== 10.13 · build and run ours ==== -->
 <section class="slide" data-sec="10" data-label="Containers">
-  <div class="eyebrow">Do it<span class="t">3:21 – 3:51</span></div>
+  <div class="eyebrow">Do it<span class="t">3:19 – 3:51</span></div>
   <h2>Same answers, from inside the package.</h2>
   <div class="body">
     <div class="cols c2 mid">
