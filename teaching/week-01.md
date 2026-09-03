@@ -20,153 +20,53 @@ answer, and runs inside a container.
 
 ## The shape of today
 
-Seven beats. **Read this before you teach — the order is load-bearing.**
+**Four hours, two breaks, twelve sections.** Week 1 does not use the five-beat
+shape the other weeks use — it is the only session that can assume nothing at
+all, so it spends its first two hours handing over tools and its last two
+building with them.
 
 ```
-   0  SETUP     10 min   ── install and prove it ──
-                         the checklist, the clone, the key, check-week-00
-   1  ASK       15 min   talk only, laptops closed
-                         what an agent is, and what OURS is
-   2  GROUND    25 min   ── hands on keyboards ──
-                         terminal, folders, JSON, curl, the map
-   3  BREAK     10 min   kill the agent; find the four gaps
-   4  CONCEPT   20 min   deploy, web service, DNS, URL, HTTP
-   5  BUILD     45 min   the front door, streaming, the container
-   6  PROVE     15 min   checkpoint green; three questions they cannot answer
+   0:00   16   Three questions to the room   settle the room, and read it
+   0:16   16   Meet today's agent            our small teaching agent
+   0:32   11   The project                   a tour BEFORE they download it
+   0:43   14   Set it up, and prove it       incl. the key, finished here
+   0:57   10   break
+   1:07   12   The terminal                  practised on a throwaway folder
+   1:19   20   Sending messages              JSON and curl, on public services
+   1:39   10   break
+   1:49   22   What a web service is         the shop story, then the words
+   2:11   16   Addresses, then messages
+   2:27   45   Build the web service         3 endpoints, line by line, tested
+   3:12   30   Build the container           the cart story, then line by line
+   3:42   18   Prove it, and what breaks next
+   ────────────
+   4:00        exactly four hours, including both breaks
 ```
 
-That is 2h20 of content. Budget a 2h30 slot, or move Setup to a
-pre-session email and start at Beat 1.
+> **INSTRUCTOR** · Three things about this order, all deliberate.
+>
+> **It opens with questions, not a plan.** Three of them, and the third —
+> *"have you ever built a website and put it somewhere?"* — is for you, not
+> them: it tells you who is in the room. The agenda appears once they have
+> something to hang it on.
+>
+> **Tools come before theory.** By the time you explain what an address is,
+> they will have typed one. Every concept in the second half is a *name for
+> something they already did*, which is the difference between five new facts
+> and five labels.
+>
+> **Only the last ninety minutes is writing code.** Say that out loud when you
+> show the agenda, or the morning feels slow.
 
-> **INSTRUCTOR** · **Beat 0 is not optional and it is not padding.** One
-> student with Python 3.9 or a stopped Docker daemon becomes twenty minutes of
-> everyone else waiting, and it always surfaces at the worst moment — in the
-> middle of Beat 5, when you are trying to help six people at once.
->
-> Ten minutes at the start, with everyone sitting still and nothing else
-> happening, is the cheapest version of that conversation you will ever get.
->
-> If you sent a setup email a week early: still run Beat 0, but as a check
-> rather than an install. `make check-week-00` is the whole beat in one
-> command.
-
-> **INSTRUCTOR** · Beat 2 is the change that makes this session work, and it is
-> worth knowing why it is where it is.
->
-> **The tools come before the theory.** By the time you explain what a URL is
-> in Beat 4, they will have already fetched one. When you explain status codes,
-> they will have already made a `404` and a `500` appear on their own screen.
-> When you explain that a request has a method, a path and a body, you are
-> naming three things they typed twenty minutes earlier.
->
-> That is the difference between *"here are five new facts"* and *"here are
-> names for five things you already did"*. The second one survives the week.
->
-> The cost is that Beat 2 feels like it is not about AI. Say so cheerfully:
-> *"Twenty-five minutes of plumbing, then it pays for the rest of the course."*
+**The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
+is 122 slides with a presenter note on 111 of them, and it carries material this
+file does not: the eight-week journey map, the repository tour, the shop story,
+and the line-by-line code build. This file is the reference version — read it
+before you teach, and teach from the slides.
 
 ---
 
----
-
-## Beat 0 · Setup (10 min)
-
-> **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
-> failure. You are hunting for broken machines now, while it costs the room ten
-> minutes instead of an hour.
-
-Five things have to exist before anything today works.
-
-```
-   1  Python 3.10+     the project uses `str | None` syntax
-   2  Git              to get the project, and to hand work in
-   3  A terminal       Terminal, PowerShell, or WSL
-   4  Docker Desktop   installed AND running (Part 3, and every week after)
-   5  Your API key     emailed to you; starts with `sk-`
-```
-
-Check them, do not assume them:
-
-```bash
-python3 --version      # must NOT be 3.9 or lower
-git --version
-docker --version       # and the app must actually be running
-```
-
-> **INSTRUCTOR** · **Python 3.9 is the killer**, and it is worth knowing why
-> before you meet it. The project declares `session_id: str | None = None`,
-> which is a *syntax* error before 3.10 — so the failure is an unreadable
-> traceback at import time that never mentions versions at all. A student can
-> lose twenty minutes to it.
-
-### Three steps
-
-```bash
-git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
-cd agentic-ai-cohort-01-phase-02
-git checkout week-01-package
-```
-
-**Each week is its own branch.** Someone joining at Week 5 gets a working
-Weeks 1–4 agent. Nobody ever debugs someone else's half-finished code.
-
-```bash
-make install
-make test          # 12 passed
-```
-
-**Twelve green tests before they write a line.** The agent loop already works;
-Phase 1 did that.
-
-```bash
-cp .env.example .env
-# then edit .env and replace sk-your-kodekey-here with the real key
-```
-
-**The key lives outside the code, on purpose.** `.env` is in `.gitignore`, so
-git will never send it anywhere. It is also a hidden file — plain `ls` will not
-show it, which is the first reason they need `ls -la` in Part 2a.
-
-### Prove it
-
-```bash
-make check-week-00
-```
-
-```
-Week 00: the loop runs a tool then answers
-  PASS  the agent looked up a real order it could not have known
-  PASS  history has all four moves
-  PASS  and the calculator still works
-
-Checkpoint passed.
-```
-
-**Green here means they are ready for today.** This checkpoint needs **no API
-key** — it drives the loop with a fake model, so it proves their Python, their
-install and the code without spending anything or needing the network.
-
-> **INSTRUCTOR** · Do not start Beat 1 until every hand is down. Read those
-> three PASS lines out loud, too — *"looked up a real order it could not have
-> known"* and *"history has all four moves"* **are the agent loop**, which is
-> the next beat. The checkpoint previews the lesson.
-
-### The four errors you will actually see
-
-| Error | What it means | The fix |
-|---|---|---|
-| `SyntaxError` near `str \| None` | Python older than 3.10 | install 3.12, re-run `make install` |
-| `KODEKEY is not set` | `.env` missing, misnamed, or not loaded in *this* terminal | `set -a && source .env && set +a` |
-| `Cannot connect to the Docker daemon` | Docker installed but **not running** | open Docker Desktop, wait for the icon to settle |
-| `make: command not found` | common on Windows outside WSL | use WSL, or `cat Makefile` and run the real command |
-
-> **INSTRUCTOR** · Write `set -a && source .env && set +a` on the whiteboard
-> now. You will point at it four times today and every week after. Also watch
-> for editors that helpfully save `.env` as `.env.txt` — `ls -la` catches it.
-
----
-
-## Beat 1 · Ask (15 min, no slides)
+## 1 · Three questions to the room (0:00 – 0:16)
 
 > **INSTRUCTOR** · Laptops closed. Slides off. Just talk. This is the only part
 > of the session where nobody types anything, and it sets up everything else.
@@ -206,7 +106,38 @@ Pick a volunteer. Let them talk for two minutes.
 >
 > Keep that on the board all session.
 
-### "So what does *our* agent actually do?"
+
+### "So — who else can use it?"
+
+This is the trap question. The honest answer is **nobody**.
+
+**And it lands much harder than it did five minutes ago**, because they have
+just *seen* the thing: a loop, three tools, four real orders, a carefully
+written prompt. It is real code that does real work — and it is unreachable.
+
+```
+   ┌──────── THEIR LAPTOP, THEIR TERMINAL ────────┐
+   │                                              │
+   │   run_turn("where is ORD-1002?")             │
+   │        ▲                                     │
+   │   only Python code, in this folder,          │
+   │   in this running program, can call it       │
+   │                                              │
+   └──────────────────────────────────────────────┘
+```
+
+Their agent works when *they* run it, on *their* laptop, in *their* terminal,
+with *their* Python installed. That is not a product. It is a demo.
+
+> **INSTRUCTOR** · Let that land. Then say what happens next, so the plumbing
+> beat does not feel like a detour:
+>
+> *"Today we fix that, and almost none of it is about AI. First I need to hand
+> you five tools, because you cannot fix it bare-handed. Twenty-five minutes."*
+
+---
+
+## 2 · Meet today's agent (0:16 – 0:32)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -363,7 +294,7 @@ reply, history = run_turn("where is my order ORD-1002?")
   assistant  -> text         Your standing desk is shipped and arrives Thursday.
 ```
 
-**Four messages — the four moves from Beat 1's whiteboard.** Not a metaphor;
+**Four messages — the four moves from the whiteboard.** Not a metaphor;
 literally what the list contains.
 
 And notice **where the tool result went**: back as a `user` message. From the
@@ -373,49 +304,252 @@ of its own reply.
 > **INSTRUCTOR** · This is the slide that makes later sessions click. That
 > growing `history` list is:
 >
-> - the thing a **session ID** looks up (Part 1, in about ninety minutes)
+> - the thing a **session ID** looks up (endpoint 1, in about ninety minutes)
 > - the thing that **vanishes on restart** (Week 2)
 > - the thing that has to be **capped** (Week 4)
 >
 > Say it once now: *"Every turn re-sends this entire list. The model remembers
 > nothing."*
 
-### "So — who else can use it?"
+---
 
-This is the trap question. The honest answer is **nobody**.
+## 3 · The project (0:32 – 0:43)
 
-**And it lands much harder than it did five minutes ago**, because they have
-just *seen* the thing: a loop, three tools, four real orders, a carefully
-written prompt. It is real code that does real work — and it is unreachable.
+They already cloned this in the setup section. Now that they can move around a folder,
+**give the commands they ran a meaning**, and give them the map.
+
+**Git is a time machine for a folder of code.** It remembers every version, and
+lets you move between them.
+
+- **`git clone`** downloaded a copy of the project, with all of its history.
+- **`git checkout`** switched to a particular version — this week's starting
+  point.
+
+> **INSTRUCTOR** · Thirty seconds, no more. They typed both commands an hour
+> ago and they worked; this is a label, not a lesson. Git proper is Week 3,
+> when `git push` starts a deploy.
+
+#### The map of the project
+
+**They have `ls` now, so have them use it:**
+
+```bash
+ls
+ls app
+```
+
+Then draw the map. **This is the only picture of the repo they get, so leave it
+up on a second board or a printed handout if you can.**
 
 ```
-   ┌──────── THEIR LAPTOP, THEIR TERMINAL ────────┐
-   │                                              │
-   │   run_turn("where is ORD-1002?")             │
-   │        ▲                                     │
-   │   only Python code, in this folder,          │
-   │   in this running program, can call it       │
-   │                                              │
-   └──────────────────────────────────────────────┘
+   agentic-ai-cohort-01-phase-02/
+   │
+   ├── app/                    ◀── EVERYTHING YOU WRITE LIVES HERE
+   │   ├── main.py                  the web service      ← TODAY
+   │   ├── stream.py                streaming replies    ← TODAY
+   │   ├── agent.py                 the Phase 1 loop     (already works)
+   │   ├── orders.py                the tool it calls    (already works)
+   │   ├── memory.py                conversation history ← Week 2
+   │   ├── store.py                 where memory lives   ← Week 2
+   │   ├── guardrails.py            keys, limits, fences ← Weeks 3, 4, 7
+   │   ├── trace.py                 what happened        ← Week 5
+   │   ├── otel.py                  traces, standard     ← Week 5
+   │   └── monitor.py               is it healthy?       ← Week 5
+   │
+   ├── tests/test_app.py       ◀── proves the agent still thinks correctly
+   ├── checks/check.py         ◀── `make check-week-01` lives here
+   │
+   ├── Makefile                ◀── the shortcuts. READ THIS ONE.
+   ├── Dockerfile              ◀── how to build the box   ← TODAY
+   ├── .dockerignore           ◀── what to keep OUT of it ← TODAY
+   ├── .env                    ◀── your API key. Never committed.
+   │
+   ├── evals/                  ← Week 8    does it answer WELL?
+   ├── loadtest/               ← Week 7    what happens under load
+   ├── observability/          ← Week 5    the dashboard stack
+   ├── deploy/                 ← Week 8    Kubernetes, portability
+   └── guide/                  ◀── the written version of every session
 ```
 
-Their agent works when *they* run it, on *their* laptop, in *their* terminal,
-with *their* Python installed. That is not a product. It is a demo.
+Three things to say about that map, and no more:
 
-> **INSTRUCTOR** · Let that land. Then say what happens next, so the plumbing
-> beat does not feel like a detour:
+**You only ever write inside `app/`.** Everything else is scaffolding somebody
+already built: tests that check your work, a Makefile of shortcuts, a guide to
+read afterwards.
+
+**Today is two files.** `app/main.py` and `app/stream.py`. That is the whole
+assignment.
+
+**The file list is the syllabus.** Every remaining file has a week next to it.
+They can see the shape of the next eight weeks in one picture.
+
+> **INSTRUCTOR** · Do not walk through all ten files in `app/`. Point at
+> `main.py` and `stream.py`, say *"these two, today"*, then point at the arrows
+> down the right-hand side and say *"and that is the rest of the course"*.
 >
-> *"Today we fix that, and almost none of it is about AI. First I need to hand
-> you five tools, because you cannot fix it bare-handed. Twenty-five minutes."*
+> The map's real job is to remove a specific anxiety. Beginners open a
+> forty-file repo and assume they are expected to understand all of it. Saying
+> *"you write in one folder, and today it is two files"* is worth more than any
+> individual explanation on the page.
+
+#### There is no magic in `make`
+
+They ran `make install` and `make test` in the setup section without knowing what `make`
+was. Now they have `cat`, so show them:
+
+```bash
+cat Makefile
+```
+
+**`make` runs a shortcut somebody already wrote down.** It is a list of
+nicknames, and they can read every one:
+
+```
+   make test    is a nickname for    python -m pytest -q
+   make run     is a nickname for    python -m app.main
+```
+
+> **INSTRUCTOR** · This matters more than it looks. A student who thinks `make`
+> is a build system they have not learned yet will not try to debug it. A
+> student who knows it is a file of nicknames will open the file. Thirty
+> seconds buys that.
+
+#### The assignment
+
+```bash
+make check-week-01
+```
+
+This one **fails**, and says:
+
+```
+FAIL  app/main.py must define `app`, the FastAPI application
+```
+
+**That is the assignment.** Every week works this way: one command tells you
+exactly what is missing, and you make it green.
+
+Put it next to the earlier check, because the pair is the whole story:
+
+```
+   make test              12 passed    the agent thinks correctly
+   make check-week-00     PASS         the loop runs a tool and answers
+   make check-week-01     FAIL         ...but it has no front door
+```
+
+> **INSTRUCTOR** · End the beat here and take a breath. They now have: working
+> tools, a project on disk, twelve green tests, one red checkpoint, and a
+> picture of the agent they are about to wrap. Nothing has been explained about
+> the web yet.
+>
+> *"Laptops can stay open, but stop typing. I want to show you something
+> break."*
 
 ---
 
-## Beat 2 · Ground (25 min)
+## 4 · Set it up, and prove it (0:43 – 0:57)
+
+> **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
+> failure. You are hunting for broken machines now, while it costs the room ten
+> minutes instead of an hour.
+
+Five things have to exist before anything today works.
+
+```
+   1  Python 3.10+     the project uses `str | None` syntax
+   2  Git              to get the project, and to hand work in
+   3  A terminal       Terminal, PowerShell, or WSL
+   4  Docker Desktop   installed AND running (needed at 3:12, and after)
+   5  Your API key     emailed to you; starts with `sk-`
+```
+
+Check them, do not assume them:
+
+```bash
+python3 --version      # must NOT be 3.9 or lower
+git --version
+docker --version       # and the app must actually be running
+```
+
+> **INSTRUCTOR** · **Python 3.9 is the killer**, and it is worth knowing why
+> before you meet it. The project declares `session_id: str | None = None`,
+> which is a *syntax* error before 3.10 — so the failure is an unreadable
+> traceback at import time that never mentions versions at all. A student can
+> lose twenty minutes to it.
+
+### Three steps
+
+```bash
+git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
+cd agentic-ai-cohort-01-phase-02
+git checkout week-01-package
+```
+
+**Each week is its own branch.** Someone joining at Week 5 gets a working
+Weeks 1–4 agent. Nobody ever debugs someone else's half-finished code.
+
+```bash
+make install
+make test          # 12 passed
+```
+
+**Twelve green tests before they write a line.** The agent loop already works;
+Phase 1 did that.
+
+```bash
+cp .env.example .env
+# then edit .env and replace sk-your-kodekey-here with the real key
+```
+
+**The key lives outside the code, on purpose.** `.env` is in `.gitignore`, so
+git will never send it anywhere. It is also a hidden file — plain `ls` will not
+show it, which is the first reason they need `ls -la` in the terminal exercise.
+
+### Prove it
+
+```bash
+make check-week-00
+```
+
+```
+Week 00: the loop runs a tool then answers
+  PASS  the agent looked up a real order it could not have known
+  PASS  history has all four moves
+  PASS  and the calculator still works
+
+Checkpoint passed.
+```
+
+**Green here means they are ready for today.** This checkpoint needs **no API
+key** — it drives the loop with a fake model, so it proves their Python, their
+install and the code without spending anything or needing the network.
+
+> **INSTRUCTOR** · Do not start the opening section until every hand is down. Read those
+> three PASS lines out loud, too — *"looked up a real order it could not have
+> known"* and *"history has all four moves"* **are the agent loop**, which is
+> the next beat. The checkpoint previews the lesson.
+
+### The four errors you will actually see
+
+| Error | What it means | The fix |
+|---|---|---|
+| `SyntaxError` near `str \| None` | Python older than 3.10 | install 3.12, re-run `make install` |
+| `KODEKEY is not set` | `.env` missing, misnamed, or not loaded in *this* terminal | `set -a && source .env && set +a` |
+| `Cannot connect to the Docker daemon` | Docker installed but **not running** | open Docker Desktop, wait for the icon to settle |
+| `make: command not found` | common on Windows outside WSL | use WSL, or `cat Makefile` and run the real command |
+
+> **INSTRUCTOR** · Write `set -a && source .env && set +a` on the whiteboard
+> now. You will point at it four times today and every week after. Also watch
+> for editors that helpfully save `.env` as `.env.txt` — `ls -la` catches it.
+
+---
+
+## 5–6 · The terminal, then sending messages (1:07 – 1:39)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
 > the one where you find out who has never used a terminal, and you want to
-> find that out now rather than in Beat 5.
+> find that out now rather than in the build.
 
 Five tools, each on a toy. Nothing here touches our agent — that is deliberate.
 
@@ -434,7 +568,7 @@ Five tools, each on a toy. Nothing here touches our agent — that is deliberate
 > lessons. If somebody's terminal will not open, pair them with a neighbour and
 > fix it at the break — do not hold twenty people for one laptop.
 
-### Part 2a · The terminal (5 min)
+### The terminal · what it is
 
 A terminal is a window where you **type commands instead of clicking**. Nothing
 more mysterious than that.
@@ -496,7 +630,7 @@ Two more that save everybody's afternoon:
 > long paths character by character for weeks unless somebody shows them this
 > in the first ten minutes.
 
-### Part 2b · Folders, built by hand (4 min)
+### The terminal · folders, built by hand
 
 They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.
@@ -634,7 +768,7 @@ rm -r practice
 | `touch` | make an empty file |
 | `cat` | show me what is in this file |
 
-### Part 2c · Two words you will hear all course (3 min)
+### A word you need later · process
 
 Two ideas that everything else sits on. Ninety seconds each, with something to
 run.
@@ -697,7 +831,7 @@ our case `8080`.
 > They need "numbered door" and "localhost means here", and they need it in
 > ninety seconds. The rest is Week 2's problem and mostly never.
 
-### Part 2d · JSON, before we send any (3 min)
+### Sending messages · JSON first
 
 They are about to send and receive JSON all course. Four minutes now saves
 confusion in all eight weeks.
@@ -735,7 +869,7 @@ echo '{"name":"Ada","age":36}' | python -m json.tool
 > pipe takes what the left side printed and feeds it to the right side as
 > input."* That is enough. Do not explain stdin.
 >
-> Note the pair with `>` from Part 2b: *"`>` sends output to a file. `|` sends
+> Note the pair with `>` from the folder exercise: *"`>` sends output to a file. `|` sends
 > output to another command."*
 
 **Now break it on purpose.** Use single quotes around the label — which is legal
@@ -759,7 +893,7 @@ Expecting property name enclosed in double quotes: line 1 column 2
 > If anyone knows Python: *"It looks exactly like a dict. The differences that
 > bite are double quotes only, and no trailing comma."*
 
-### Part 2e · curl, on things that are not ours (6 min)
+### Sending messages · curl, on public services
 
 **`curl` sends a request over the network from the terminal, and prints what
 came back.** It is a browser with no window.
@@ -768,7 +902,7 @@ They will use it in every session from here. So learn it on something simple
 first, where nothing else can be the problem.
 
 > **INSTRUCTOR** · This is the highest-value seven minutes in the session, and
-> the reason is diagnostic. When a three-flag POST at our agent fails in Beat 5,
+> the reason is diagnostic. When a three-flag POST at our agent fails in the build,
 > a student who ran these five toys can tell *"my JSON is malformed"* from *"my
 > flags are wrong"* from *"our service is broken"*. A student who cannot make
 > that distinction will raise their hand for every failure for eight weeks.
@@ -854,7 +988,7 @@ Try `200` and `500` in place of `404`. Same command, different numbers.
 > from the same command is what turns status codes from a table on a slide into
 > something real. They use `-w "%{http_code}"` heavily in Week 3.
 >
-> Do not explain what the numbers *mean* yet — that is Beat 4, twenty minutes
+> Do not explain what the numbers *mean* yet — that is the concepts section, twenty minutes
 > from now, and it lands much better as *"remember the 404 you made?"* than as
 > a table nobody has a memory attached to.
 
@@ -891,147 +1025,14 @@ same method, the same header, the same body shape.
 
 > **INSTRUCTOR** · Make the promise explicit, and write it on the board:
 >
-> *"Keep that command. In Beat 5 we change the URL to your own laptop, and the
+> *"Keep that command. In the build we change the URL to your own laptop, and the
 > answer comes back from your agent instead of an echo service. Nothing else
 > about the command changes."*
 >
 > That single sentence is what stops FastAPI feeling like magic later.
 
-### Part 2f · Reading the project (4 min)
 
-They already cloned this in Beat 0. Now that they can move around a folder,
-**give the commands they ran a meaning**, and give them the map.
-
-**Git is a time machine for a folder of code.** It remembers every version, and
-lets you move between them.
-
-- **`git clone`** downloaded a copy of the project, with all of its history.
-- **`git checkout`** switched to a particular version — this week's starting
-  point.
-
-> **INSTRUCTOR** · Thirty seconds, no more. They typed both commands an hour
-> ago and they worked; this is a label, not a lesson. Git proper is Week 3,
-> when `git push` starts a deploy.
-
-#### The map of the project
-
-**They have `ls` now, so have them use it:**
-
-```bash
-ls
-ls app
-```
-
-Then draw the map. **This is the only picture of the repo they get, so leave it
-up on a second board or a printed handout if you can.**
-
-```
-   agentic-ai-cohort-01-phase-02/
-   │
-   ├── app/                    ◀── EVERYTHING YOU WRITE LIVES HERE
-   │   ├── main.py                  the web service      ← TODAY
-   │   ├── stream.py                streaming replies    ← TODAY
-   │   ├── agent.py                 the Phase 1 loop     (already works)
-   │   ├── orders.py                the tool it calls    (already works)
-   │   ├── memory.py                conversation history ← Week 2
-   │   ├── store.py                 where memory lives   ← Week 2
-   │   ├── guardrails.py            keys, limits, fences ← Weeks 3, 4, 7
-   │   ├── trace.py                 what happened        ← Week 5
-   │   ├── otel.py                  traces, standard     ← Week 5
-   │   └── monitor.py               is it healthy?       ← Week 5
-   │
-   ├── tests/test_app.py       ◀── proves the agent still thinks correctly
-   ├── checks/check.py         ◀── `make check-week-01` lives here
-   │
-   ├── Makefile                ◀── the shortcuts. READ THIS ONE.
-   ├── Dockerfile              ◀── how to build the box   ← TODAY
-   ├── .dockerignore           ◀── what to keep OUT of it ← TODAY
-   ├── .env                    ◀── your API key. Never committed.
-   │
-   ├── evals/                  ← Week 8    does it answer WELL?
-   ├── loadtest/               ← Week 7    what happens under load
-   ├── observability/          ← Week 5    the dashboard stack
-   ├── deploy/                 ← Week 8    Kubernetes, portability
-   └── guide/                  ◀── the written version of every session
-```
-
-Three things to say about that map, and no more:
-
-**You only ever write inside `app/`.** Everything else is scaffolding somebody
-already built: tests that check your work, a Makefile of shortcuts, a guide to
-read afterwards.
-
-**Today is two files.** `app/main.py` and `app/stream.py`. That is the whole
-assignment.
-
-**The file list is the syllabus.** Every remaining file has a week next to it.
-They can see the shape of the next eight weeks in one picture.
-
-> **INSTRUCTOR** · Do not walk through all ten files in `app/`. Point at
-> `main.py` and `stream.py`, say *"these two, today"*, then point at the arrows
-> down the right-hand side and say *"and that is the rest of the course"*.
->
-> The map's real job is to remove a specific anxiety. Beginners open a
-> forty-file repo and assume they are expected to understand all of it. Saying
-> *"you write in one folder, and today it is two files"* is worth more than any
-> individual explanation on the page.
-
-#### There is no magic in `make`
-
-They ran `make install` and `make test` in Beat 0 without knowing what `make`
-was. Now they have `cat`, so show them:
-
-```bash
-cat Makefile
-```
-
-**`make` runs a shortcut somebody already wrote down.** It is a list of
-nicknames, and they can read every one:
-
-```
-   make test    is a nickname for    python -m pytest -q
-   make run     is a nickname for    python -m app.main
-```
-
-> **INSTRUCTOR** · This matters more than it looks. A student who thinks `make`
-> is a build system they have not learned yet will not try to debug it. A
-> student who knows it is a file of nicknames will open the file. Thirty
-> seconds buys that.
-
-#### The assignment
-
-```bash
-make check-week-01
-```
-
-This one **fails**, and says:
-
-```
-FAIL  app/main.py must define `app`, the FastAPI application
-```
-
-**That is the assignment.** Every week works this way: one command tells you
-exactly what is missing, and you make it green.
-
-Put it next to Beat 0's result, because the pair is the whole story:
-
-```
-   make test              12 passed    the agent thinks correctly
-   make check-week-00     PASS         the loop runs a tool and answers
-   make check-week-01     FAIL         ...but it has no front door
-```
-
-> **INSTRUCTOR** · End the beat here and take a breath. They now have: working
-> tools, a project on disk, twelve green tests, one red checkpoint, and a
-> picture of the agent they are about to wrap. Nothing has been explained about
-> the web yet.
->
-> *"Laptops can stay open, but stop typing. I want to show you something
-> break."*
-
----
-
-## Beat 3 · Break (10 min)
+## Break (1:39 – 1:49)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1041,7 +1042,7 @@ Show them the Phase 1 agent working. Then:
 2. Ask: *"Where is the agent now?"* — Gone. It was a **process**, and you killed
    it. They met that word twenty minutes ago and ran `Ctrl + C` themselves.
 3. Ask: *"And where did `history` go?"* — With it. **They saw that list
-   printed in Beat 1**, so this is concrete rather than theoretical.
+   printed in the opening section**, so this is concrete rather than theoretical.
 4. Ask: *"How would my colleague in another city use this?"* — They cannot.
 5. Ask: *"How would a website use it?"* — It has no address to call.
 
@@ -1054,13 +1055,13 @@ the libraries, the folder layout, an API key — **yours**. And when you fix a b
 tomorrow, they are still running yesterday's copy.
 
 > **INSTRUCTOR** · Do not solve this. **Leave it as an open question and move
-> straight into Beat 4**, which answers it in its first five minutes.
+> straight into the concepts section**, which answers it in its first five minutes.
 >
 > The discomfort is the setup. A room that has just failed to think of a good
 > way to share a Python function is a room that finds web services obvious
 > rather than arbitrary.
 >
-> Point at their own screens, using Beat 0 against them: *"You cloned this,
+> Point at their own screens, using the setup section against them: *"You cloned this,
 > waited two minutes for `make install`, and pasted a key I emailed you
 > separately. That is exactly what you are asking your colleague to do — except
 > they do not get a key at all."*
@@ -1082,7 +1083,7 @@ agents die in notebooks.
 
 ---
 
-## Beat 4 · Concept (20 min)
+## 7–8 · What a web service is, then addresses and messages (1:49 – 2:27)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1104,7 +1105,7 @@ agents die in notebooks.
 > know *why* an agent gets wrapped in a web service will treat FastAPI as a
 > magic ritual for the next eight weeks.
 >
-> And use Beat 2 constantly here. **Every single one of these five ideas is a
+> And use the tools section constantly here. **Every single one of these five ideas is a
 > name for something they have already run.** Say *"you have already done
 > this"* out loud each time — it is the difference between five new facts and
 > five labels.
@@ -1125,7 +1126,7 @@ Draw this once, before anything else, and leave it up:
                                         └──────────────────────────┘
             ▲                                        ▲
      none of these run                      this whole box is
-     your code, or have                     Part 3 (a container)
+     your code, or have                     the container section (a container)
      your key
             └──── the arrow is Parts 1 and 2 ────┘
               (a front door, and a fast-feeling reply)
@@ -1227,7 +1228,7 @@ Now map it, and let them complete the right-hand side:
 > files"* is posting the recipe to strangers, and *"use my laptop"* is inviting
 > them into your kitchen. **Neither one is a shop.**
 >
-> The same story returns in Part 3 for containers — sending your cousin the
+> The same story returns in the container section for containers — sending your cousin the
 > recipe versus sending a fitted-out food cart. Two stages of one story beat
 > six unrelated comparisons; do not add more.
 
@@ -1275,7 +1276,7 @@ Then they need Python installed. And the right version. And the libraries, at
 the right versions. And your API key — *which you have now given away*. And when
 you fix a bug, all of them are still running the old one, forever.
 
-> **INSTRUCTOR** · Call back to Beat 2 here, hard: *"You ran `make install`
+> **INSTRUCTOR** · Call back to the tools section here, hard: *"You ran `make install`
 > half an hour ago. Two minutes, a screenful of downloads, and you still needed
 > a key I gave you separately. Multiply that by every customer."*
 
@@ -1337,7 +1338,7 @@ a URL.**
 > you."*
 >
 > There is also a cheap proof available now that was not before: *"You called
-> GitHub's API in Beat 2. You had never spoken to GitHub before, you agreed
+> GitHub's API in the tools section. You had never spoken to GitHub before, you agreed
 > nothing with them in advance, and it worked first try. That is the whole
 > argument."*
 
@@ -1367,7 +1368,7 @@ when nobody is watching (Week 5).
 > Several students arrive expecting more prompt engineering; this table is the
 > honest answer to *"why am I here?"*
 >
-> The `sleep 30` from Part 2c is the cheapest illustration of row three: *"You
+> The `sleep 30` from the process slide is the cheapest illustration of row three: *"You
 > ran a program that refused to exit for thirty seconds and it annoyed you. A
 > server does that forever, on purpose."*
 
@@ -1455,8 +1456,8 @@ ping: cannot resolve this-name-does-not-exist-xyz.com: Unknown host
 **"Cannot resolve" means the contacts list had no entry.** Not "the computer is
 down" — nobody even found out where to knock.
 
-> **INSTRUCTOR** · This is the one concept in Beat 4 with its own toy attached,
-> because it is the one they did *not* do in Beat 2. Keep it to three commands.
+> **INSTRUCTOR** · This is the one concept in the concepts section with its own toy attached,
+> because it is the one they did *not* do in the tools section. Keep it to three commands.
 >
 > Everyone's number will be different from the one printed above, and different
 > from their neighbour's. That is worth thirty seconds rather than confusion:
@@ -1519,7 +1520,7 @@ And when it is running on their own laptop, the same three parts look like this:
 ```
 
 **That is the URL they will type in forty minutes.** They already met
-`localhost` and `:8080` in Part 2c.
+`localhost` and `:8080` in the process slide.
 
 Ours will have four rooms by the end of the course:
 
@@ -1533,7 +1534,7 @@ Ours will have four rooms by the end of the course:
 > **INSTRUCTOR** · Two things beginners quietly wonder and rarely ask:
 >
 > **"Is a URL the same as a website?"** No — a website is one kind of thing you
-> can find at a URL. They already proved this in Part 2e, where `example.com`
+> can find at a URL. They already proved this in the curl exercise, where `example.com`
 > gave them a page and GitHub's API gave them a sentence. Same kind of address,
 > different kind of thing at the end of it.
 >
@@ -1604,7 +1605,7 @@ new thing to learn.** Say so.
 ```
 
 > **INSTRUCTOR** · They made a `200`, a `404` and a `500` appear on their own
-> screens in Part 2e, four flags at a time. Ask *"who remembers what number
+> screens in the curl exercise, four flags at a time. Ask *"who remembers what number
 > came back when you typed 404 in that URL?"* and let them tell you — this
 > table is a story about their own output, and it costs you nothing to teach it
 > that way.
@@ -1639,7 +1640,7 @@ office uses:
 ```
 
 **You get given a ticket, and you bring it back.** That ticket is called a
-**session ID**, and building it is Part 1 of the build.
+**session ID**, and building it is endpoint 2.
 
 > **INSTRUCTOR** · This is the moment to *not* explain further. They now have a
 > question — *"so where does the ticket's information get stored?"* — and the
@@ -1651,23 +1652,23 @@ office uses:
 
 ---
 
-## Beat 5 · Build (45 min)
+## 9 · Build the web service (2:27 – 3:12)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
-> is the beat where you find out whether Beat 2 did its job — and if it did,
+> is the beat where you find out whether the tools section did its job — and if it did,
 > you will spend your time on their code rather than on their typos.
 
-Three parts, and they map exactly onto the picture from Beat 4:
+Three parts, and they map exactly onto the picture from the concepts section:
 
 ```
-   Part 1   give it an address        the arrow   15 min
-   Part 2   make it feel fast         the arrow   10 min
-   Part 3   make it run anywhere      the box     12 min
+   endpoint 1   give it an address        the arrow   15 min
+   endpoint 3   make it feel fast     the arrow
+   the container section   make it run anywhere      the box     12 min
 ```
 
-### Part 1 · Give it an address (15 min)
+### Endpoints 1 and 2 · /health, then /chat
 
-**This is the front door from Beat 4, built.** Point back at the diagram before
+**This is the front door from the concepts section, built.** Point back at the diagram before
 anyone types: the agent already works, and they are wrapping it so that anything
 — a website, a phone, another company — can reach it.
 
@@ -1707,7 +1708,7 @@ Four things to say while it is on the board:
 speaks HTTP and knows nothing about your agent.
 
 **FastAPI is the translator** — bytes and JSON on one side, Python arguments and
-dicts on the other. Exactly as promised in Beat 4.
+dicts on the other. Exactly as promised in the concepts section.
 
 **Your handler is the only new code**, and it is a few lines.
 
@@ -1738,8 +1739,8 @@ have already met:
    @app.post("/chat")
     ───  ────   ────
      │    │      │
-     │    │      └── the PATH.  Beat 4, idea 4: which room.
-     │    └───────── the METHOD. Beat 4, idea 5: GET reads, POST sends.
+     │    │      └── the PATH.  which endpoint is being asked for.
+     │    └───────── the METHOD. GET reads, POST sends.
      └────────────── "when that arrives, run the function below."
 
 
@@ -1788,7 +1789,7 @@ They build three doors. **The order matters** — say why:
 |---|---|---|---|---|
 | 1 | `/health` | GET | `{"status": "ok"}` | two lines, cannot fail — proves the plumbing works |
 | 2 | `/chat` | POST | `{"reply": "...", "session_id": "..."}` | the real thing |
-| 3 | `/chat/stream` | POST | the answer, as it arrives | Part 2 |
+| 3 | `/chat/stream` | POST | the answer, as it arrives | next |
 
 > **INSTRUCTOR** · Insist on `/health` first, and have them curl it before
 > writing `/chat`. A student whose first endpoint is `/chat` is debugging
@@ -1796,7 +1797,7 @@ They build three doors. **The order matters** — say why:
 > `{"status":"ok"}` back knows the door works and everything after that is
 > their handler.
 >
-> This is Beat 2's rule — toy first — applied inside the build.
+> That is the same rule as the whole morning — prove the simple thing first.
 
 Three things to say while they work:
 
@@ -1891,12 +1892,12 @@ curl -s -X POST http://localhost:8080/chat \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
 
-**That is the same command they ran against httpbin in Part 2e**, with our
+**That is the same command they ran against httpbin in the curl exercise**, with our
 address and our message. Put both on the screen together — this is the moment
-Beat 2 pays for itself:
+the tools section pays for itself:
 
 ```
-   Part 2e   curl -s -X POST https://httpbin.org/post \
+   the curl exercise   curl -s -X POST https://httpbin.org/post \
                              ─────────────────────────
    now       curl -s -X POST http://localhost:8080/chat \
                              ──────────────────────────
@@ -1940,10 +1941,10 @@ above, running.
 > ```
 >
 > That reads their `.env` file — the hidden dotfile they met with `ls -la` in
-> Part 2a — and exports every line in it. Write it on the board. Leave it there
+> the terminal exercise — and exports every line in it. Write it on the board. Leave it there
 > for eight weeks.
 
-### Part 2 · Make it feel fast (10 min)
+### Endpoint 3 · /chat/stream, so it feels fast
 
 Ask: *"How long did that take?"*
 
@@ -2048,7 +2049,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-### Part 3 · Make it run anywhere (12 min)
+## 10 · Build the container (3:12 – 3:42)
 
 Ask: *"What would my colleague need to run your agent?"*
 
@@ -2070,7 +2071,7 @@ it comes out tasting different, with no way to tell why.
    the recipe on its own            =  your code, sent as files
    the right oven                   =  the right Python version
    the right pans and ingredients   =  the right libraries
-   she sets the kitchen up herself  =  the setup from Beat 0, again
+   she sets the kitchen up herself  =  the setup from the setup section, again
    THE FITTED-OUT FOOD CART         =  A CONTAINER
    ten carts from one design        =  ten containers from one image
 ```
@@ -2162,7 +2163,7 @@ hello
 > created, used for one second, and threw away. You did not install Linux."*
 
 **Example 2 — your own file inside.** They already know `mkdir` and `echo >`
-from Part 2b.
+from the folder exercise.
 
 Before containerising our agent — with its libraries, its port, its key — build
 the smallest possible box. Two files, in a fresh folder.
@@ -2250,7 +2251,7 @@ curl -s localhost:9000 | head -4
 
 A web page comes back. **They did not install nginx** — Docker fetched a
 ready-made package, ran it, and they asked it a question with the same `curl`
-from Part 2e.
+from the curl exercise.
 
 The flag is the lesson:
 
@@ -2357,7 +2358,7 @@ inside a box that could run anywhere.**
 
 ---
 
-## Beat 6 · Prove (15 min)
+## 11 · Prove it, and what breaks next (3:42 – 4:00)
 
 ```bash
 make check-week-01
@@ -2394,8 +2395,8 @@ Still `ok`. The process is fine. It just cannot do its job.
 ### "Where does that history list live?"
 
 In a variable, inside the running program — **inside the process** they met in
-Part 2c and killed with `Ctrl + C`. It is the same list they watched print in
-Beat 1.
+the process slide and killed with `Ctrl + C`. It is the same list they watched print in
+the opening section.
 
 *"So what happens to it when we deploy a new version?"* Let them work it out.
 
@@ -2416,7 +2417,7 @@ Real money, at the model provider, on your card.
 - Then `ORD-1043`. Do not explain it. *"Note that one. We come back to it in
   Week 7."*
 - Ask it something off-topic — the weather, a recipe. **Watch the system prompt
-  from Beat 1 do its job.**
+  from the opening section do its job.**
 - Ask `"what is 12 * 41?"` and watch it choose `calculator` instead of
   `lookup_order`. **That is tool selection, happening in front of them.**
 - Have them break their own service: return the wrong status code from
@@ -2439,3 +2440,4 @@ Real money, at the model provider, on your card.
 
 > **INSTRUCTOR** · Chase the Docker install. Week 2 deploys a container, and one
 > student without Docker becomes twenty minutes of everyone else waiting.
+

@@ -28,8 +28,11 @@ distance between *"it works on my laptop"* and *"it works for customers, at
 
 ## The shape of every week
 
-Every session follows the same five beats. Students learn the rhythm by week
-three and stop needing to be told what is happening.
+Weeks 2–8 follow the same five beats. Students learn the rhythm and stop
+needing to be told what is happening.
+
+**Week 1 is different and does not use beats at all** — it is a four-hour day
+in twelve named sections. See **Week 1 slides** at the end of this file.
 
 | Beat | Time | What happens |
 |---|---|---|
@@ -488,8 +491,8 @@ echo $TEST          # empty
 ### Code is built one line per slide
 
 The two build sections do not show a finished file and explain it. They
-**write it in front of the room, one line at a time** — 19 slides for the web
-service, 5 for the agent's Dockerfile.
+**write it in front of the room, one line at a time** — 15 line-by-line slides
+in the web service section, 6 in the container section.
 
 Each of those slides has exactly three things on it:
 
@@ -541,11 +544,11 @@ run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
 
-### Containers get 32 minutes, and are taught from nothing
+### Containers get 30 minutes, and are taught from nothing
 
-This is the longest section of the day, and deliberately so — it is the topic
-a non-technical room finds hardest, and the one most courses rush. Fourteen
-slides, in this order:
+The second-longest section of the day, after the web service build. It is the
+topic a non-technical room finds hardest and the one most courses rush.
+Nineteen slides, in this order:
 
 1. **The problem** — they rebuild the setup list from 0:43 themselves
 2. **The idea, before the word "Docker"** — send the set-up, not just the code
