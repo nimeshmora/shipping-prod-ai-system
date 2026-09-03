@@ -736,7 +736,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 79-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 78-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -784,7 +784,7 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> Sixty-eight of the slides carry a presenter
+<p><strong>Press <code>S</code> before you start.</strong> Sixty-seven of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
@@ -827,6 +827,46 @@ second nature, we point it at anything you like."</em></p>
 <p>One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.</p>
+<h3>Two rules the deck follows</h3>
+<p><strong>Plain English before analogy.</strong> The deck defines each new term in one
+sentence, in a highlighted box, and only reaches for a comparison when the
+plain version genuinely is not enough. A web service is <em>"a program that stays
+running, waits for questions to arrive over a network, and sends answers
+back"</em> — not a shop, a clerk, or a phone system. Analogies feel helpful to the
+person explaining and often add a second thing to learn.</p>
+<p><strong>Simple pictures.</strong> Diagrams are a few labelled boxes with an arrow between
+them, not dense line art. Three or four boxes, one arrow, a short caption. If
+a picture needs more than that, it is doing too much and gets split across
+two slides.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The three slides at 2:00–2:25 are the ones to protect. They
+define <strong>web service</strong>, <strong>web API</strong> and <strong>endpoint</strong> separately, because
+students conflate all three for months otherwise:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>One line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>web service</td>
+<td>the running program</td>
+</tr>
+<tr>
+<td>web API</td>
+<td>the list of questions it accepts, and what each returns</td>
+</tr>
+<tr>
+<td>endpoint</td>
+<td>one of those questions</td>
+</tr>
+</tbody>
+</table>
+<p>Say the compressed version once: <em>"The service is the program. The API is
+what you may ask it. An endpoint is one question."</em></p>
+</blockquote>
 <h3>Code for a non-technical room</h3>
 <p>Six slides pair a code snippet with a <strong>numbered plain-English reading</strong> of
 each line beside it — so somebody who has never programmed can follow what the

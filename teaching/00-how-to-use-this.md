@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 79-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 78-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,7 +290,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Sixty-eight of the slides carry a presenter
+**Press `S` before you start.** Sixty-seven of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -340,6 +340,33 @@ is always wondering why they are not using the agent they are proud of:
 One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
+
+### Two rules the deck follows
+
+**Plain English before analogy.** The deck defines each new term in one
+sentence, in a highlighted box, and only reaches for a comparison when the
+plain version genuinely is not enough. A web service is *"a program that stays
+running, waits for questions to arrive over a network, and sends answers
+back"* — not a shop, a clerk, or a phone system. Analogies feel helpful to the
+person explaining and often add a second thing to learn.
+
+**Simple pictures.** Diagrams are a few labelled boxes with an arrow between
+them, not dense line art. Three or four boxes, one arrow, a short caption. If
+a picture needs more than that, it is doing too much and gets split across
+two slides.
+
+> **INSTRUCTOR** · The three slides at 2:00–2:25 are the ones to protect. They
+> define **web service**, **web API** and **endpoint** separately, because
+> students conflate all three for months otherwise:
+>
+> | Term | One line |
+> |---|---|
+> | web service | the running program |
+> | web API | the list of questions it accepts, and what each returns |
+> | endpoint | one of those questions |
+>
+> Say the compressed version once: *"The service is the program. The API is
+> what you may ask it. An endpoint is one question."*
 
 ### Code for a non-technical room
 
