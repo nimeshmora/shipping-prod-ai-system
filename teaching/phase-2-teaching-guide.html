@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 139-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 141-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,22 +786,22 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and twenty-eight of the slides carry
-a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
+<p><strong>Press <code>S</code> before you start.</strong> A hundred and thirty of the slides carry a
+presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
-<pre><code>   0:00   13   Three questions to the room   settle the room, and read it
-   0:13   22   Meet today's agent            described, then RUN three ways
-   0:35    9   The project                   a tour BEFORE they download it
-   0:44   11   Set it up, and prove it       incl. the key, finished here
-   0:55   10   break
-   1:05   25   The terminal                  a real lesson: 9 commands
-   1:30   17   Sending messages              JSON and curl, on public services
-   1:47   10   break
-   1:57   18   What a web service is         the shop story, then the words
-   2:15   13   Addresses, then messages
-   2:28   39   Build the web service         3 endpoints, line by line, tested
-   3:07   36   Build the container           5 examples, then line by line
+<pre><code>   0:00   12   Three questions to the room   settle the room, and read it
+   0:12   26   Meet today's agent            described, then RUN step by step
+   0:38    9   The project                   a tour BEFORE they download it
+   0:47   11   Set it up, and prove it       incl. the key, finished here
+   0:58   10   break
+   1:08   24   The terminal                  a real lesson: 9 commands
+   1:32   17   Sending messages              JSON and curl, on public services
+   1:49   10   break
+   1:59   18   What a web service is         the shop story, then the words
+   2:17   13   Addresses, then messages
+   2:30   39   Build the web service         3 endpoints, line by line, tested
+   3:09   34   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -1099,55 +1099,87 @@ last line.</p>
 run against the real agent: <code>/health</code> returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.</p>
-<h3>The agent is demonstrated, not just described</h3>
-<p>The section used to describe the agent for fifteen minutes without ever
-running it. It now closes with <strong>three demos, smallest first</strong> — the same
-prove-the-simple-thing-first order as every other section.</p>
+<h3>The agent is demonstrated one step at a time</h3>
+<p>The section used to describe the agent and never run it. It now ends by
+<strong>watching it work</strong>, through one command:</p>
+<pre><code class="language-bash">python -m checks.demo_turn        # no key, no internet, works on any laptop
+python -m checks.demo_turn --real # with a key: the real model decides
+</code></pre>
+<p><code>checks/demo_turn.py</code> prints <strong>four labelled steps with a pause between each</strong>,
+so the room can read one before the next appears, then prints the conversation
+it kept:</p>
+<pre><code>  The agent can reach for 3 tools:  lookup_order, calculator, word_count
+
+  STEP 1 · YOU ASK                  where is my order ORD-1002?
+  STEP 2 · THE MODEL DECIDES        tool: lookup_order  input: {&quot;order_id&quot;: ...}
+  STEP 3 · YOUR CODE RUNS THE TOOL  ORD-1002: standing desk, $340.00, shipped...
+  STEP 4 · THE MODEL ANSWERS        Your standing desk is shipped and arrives...
+
+  AND IT KEPT THE CONVERSATION - 4 entries
+</code></pre>
+<p><strong>Each step gets its own slide</strong> with what to say on it. The deck does not show
+all four at once.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Run it twice.</strong> First straight through with no
+commentary — eight seconds, and they see all four steps land. Then again,
+talking over it, using the slides.</p>
+<p><strong>Step 2 is the one to slow down on.</strong> Two things happened and they are worth
+naming separately: it <em>chose</em> a tool out of three, and it <em>filled in the
+input</em> by reading <code>ORD-1002</code> out of an ordinary sentence. Then: <em>"And now it
+has stopped. It did not fetch anything. It asked, and it is waiting for us."</em></p>
+<p><strong>Step 3 carries the reason for the next eight weeks.</strong> <em>"Our code obeyed. It
+did not check whether the id was reasonable, or who was asking, or how many
+times."</em> That is why Week 3 adds a locked door and Week 4 adds spending
+limits — <strong>every guard sits in your code, not in the model.</strong></p>
+<p><strong>If you have time</strong>, ask it <code>what is 12 * 41?</code> and watch step 2 pick
+<code>calculator</code> instead. Tool choice, visible.</p>
+</blockquote>
+<h3>Is our agent industry-standard? Yes — and there is a slide saying so</h3>
+<p>Somebody always wonders whether this is a real agent or a classroom version,
+so the deck answers it outright. What students watch is <strong>tool use</strong> (also
+called function calling): the pattern Anthropic, OpenAI and Google all
+document, and what every agent framework does underneath.</p>
 <table>
 <thead>
 <tr>
-<th>Demo</th>
-<th>Command</th>
-<th>What it shows</th>
+<th>Standard practice</th>
+<th>In our agent</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1 · just the tool</td>
-<td><code>python</code> then <code>lookup_order("ORD-1002")</code></td>
-<td>the data is real, and there is <strong>no AI in a lookup</strong></td>
+<td>tools described in JSON Schema</td>
+<td>yes — <code>input_schema</code> on each tool</td>
 </tr>
 <tr>
-<td>2 · the whole loop</td>
-<td><code>make check-week-00</code>, then <code>python -m checks.demo_turn</code></td>
-<td>the four moves happening, one line printed each</td>
+<td>loop ends when the model answers</td>
+<td>yes — on <code>stop_reason != "tool_use"</code></td>
 </tr>
 <tr>
-<td>3 · what it kept</td>
-<td><code>len(history)</code> → <code>4</code></td>
-<td>the conversation as an actual list</td>
+<td>tool results returned as messages</td>
+<td>yes, as a <code>tool_result</code> block</td>
+</tr>
+<tr>
+<td>a step cap, so it cannot run forever</td>
+<td>yes — <code>MAX_STEPS = 6</code></td>
+</tr>
+<tr>
+<td>a timeout on the model call</td>
+<td>yes — <code>MODEL_TIMEOUT_SECONDS</code></td>
+</tr>
+<tr>
+<td>tool errors returned as readable text</td>
+<td>yes — not raised as a crash</td>
 </tr>
 </tbody>
 </table>
-<p><strong>None of the three needs an API key</strong>, which is the point — they work on
-every laptop in the room on the first morning, before anything is configured.
-Demo 2 uses <code>checks/demo_turn.py</code>, which was added for this: it narrates one
-turn with a stand-in model, and takes <code>--real</code> if you have a key and want to
-watch the real model decide.</p>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · <strong>You run these; they watch.</strong> Laptops are closed until
-after the first break. Four minutes for all three.</p>
-<p><strong>Demo 1 is the one people underestimate.</strong> Calling the tool directly, with
-no model involved, is what makes <em>"the model asks, your code does it"</em>
-concrete: <em>"There is no AI in what you just saw. It is a lookup returning a
-line of text. The clever part is deciding WHEN to call it."</em></p>
-<p><strong>In demo 2, say the step numbers out loud</strong> as they scroll past, pointing at
-the whiteboard. The four labels on screen are the four moves you drew at
-0:02.</p>
-<p><strong>Demo 3 is the slide that pays off five times.</strong> That growing list is what a
-session id looks up, what disappears when the program stops, what vanishes on
-a new release next week, and what has to be capped in Week 4. Say the
-punchline twice.</p>
+<p><strong>INSTRUCTOR</strong> · <strong>One honest detail, for the technical question only.</strong> Our
+gateway speaks the OpenAI message format while the loop internally uses the
+Anthropic block shape, with a small translator between them. That is a
+deliberate production pattern — provider portability — and <strong>Week 6 uses
+exactly that seam to add a fallback model.</strong></p>
+<p>Do not volunteer it to a non-technical room. Keep it for the person who asks.</p>
 </blockquote>
 <h3>The terminal gets a real lesson, not a warm-up</h3>
 <p>Twenty-six minutes and fifteen slides. It used to be five slides with four
@@ -1555,18 +1587,18 @@ and when it fails they cannot tell you which part broke.</p>
 shape the other weeks use — it is the only session that can assume nothing at
 all, so it spends its first two hours handing over tools and its last two
 building with them.</p>
-<pre><code>   0:00   13   Three questions to the room   settle the room, and read it
-   0:13   22   Meet today's agent            described, then RUN three ways
-   0:35    9   The project                   a tour BEFORE they download it
-   0:44   11   Set it up, and prove it       incl. the key, finished here
-   0:55   10   break
-   1:05   25   The terminal                  a real lesson: 9 commands
-   1:30   17   Sending messages              JSON and curl, on public services
-   1:47   10   break
-   1:57   18   What a web service is         the shop story, then the words
-   2:15   13   Addresses, then messages
-   2:28   39   Build the web service         3 endpoints, line by line, tested
-   3:07   36   Build the container           5 examples, then line by line
+<pre><code>   0:00   12   Three questions to the room   settle the room, and read it
+   0:12   26   Meet today's agent            described, then RUN step by step
+   0:38    9   The project                   a tour BEFORE they download it
+   0:47   11   Set it up, and prove it       incl. the key, finished here
+   0:58   10   break
+   1:08   24   The terminal                  a real lesson: 9 commands
+   1:32   17   Sending messages              JSON and curl, on public services
+   1:49   10   break
+   1:59   18   What a web service is         the shop story, then the words
+   2:17   13   Addresses, then messages
+   2:30   39   Build the web service         3 endpoints, line by line, tested
+   3:09   34   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -1585,12 +1617,12 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 139 slides with a presenter note on 128 of them, and it carries material this
+is 141 slides with a presenter note on 130 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
 <hr />
-<h2>1 · Three questions to the room (0:00 – 0:13)</h2>
+<h2>1 · Three questions to the room (0:00 – 0:12)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Laptops closed. Slides off. Just talk. This is the only part
 of the session where nobody types anything, and it sets up everything else.</p>
@@ -1705,7 +1737,7 @@ beat does not feel like a detour:</p>
 you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></p>
 </blockquote>
 <hr />
-<h2>2 · Meet today's agent (0:13 – 0:35)</h2>
+<h2>2 · Meet today's agent (0:12 – 0:38)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <strong>This section is new and it is load-bearing.</strong> They are
 about to spend two hours deploying this thing. If they cannot say what it does
@@ -1871,33 +1903,115 @@ cost.</p>
 The model asks, and your code obeys. That inversion is what makes this an
 agent rather than a chatbot with functions."</em></p>
 </blockquote>
-<h4>5 · Show it running · three demos (7 min)</h4>
-<p>Run this on the projector. It is the whiteboard drawing, as an actual list:</p>
-<pre><code>reply, history = run_turn(&quot;where is my order ORD-1002?&quot;)
-
-  user       -&gt; where is my order ORD-1002?
-  assistant  -&gt; tool_use     lookup_order  {&quot;order_id&quot;: &quot;ORD-1002&quot;}
-  user       -&gt; tool_result  ORD-1002: standing desk, $340.00, status shipped...
-  assistant  -&gt; text         Your standing desk is shipped and arrives Thursday.
+<h4>5 · Watch it work, step by step (9 min)</h4>
+<p>Describing the agent is not enough. <strong>Run it</strong>, on the projector, and let them
+watch the four steps happen one at a time.</p>
+<pre><code class="language-bash">python -m checks.demo_turn
 </code></pre>
-<p><strong>Four messages — the four moves from the whiteboard.</strong> Not a metaphor;
-literally what the list contains.</p>
-<p>And notice <strong>where the tool result went</strong>: back as a <code>user</code> message. From the
-model's point of view, the tool is <em>the outside world talking to it</em>, not part
-of its own reply.</p>
+<p>No key, no internet - it uses a stand-in for the model, so it works on any
+laptop before anything is configured. It <strong>pauses between steps</strong> so the room
+can read each one as it appears.</p>
+<pre><code>  The agent can reach for 3 tools:
+     - lookup_order
+     - calculator
+     - word_count
+
+  STEP 1 - YOU ASK
+     where is my order ORD-1002?
+
+  STEP 2 - THE MODEL DECIDES
+     It cannot look anything up. So it asks for a tool:
+     tool:  lookup_order
+     input: {&quot;order_id&quot;: &quot;ORD-1002&quot;}
+
+  STEP 3 - YOUR CODE RUNS THE TOOL
+     It looked the order up and handed the answer back:
+     ORD-1002: standing desk, $340.00, status shipped, arriving Thursday...
+
+  STEP 4 - THE MODEL ANSWERS
+     Now it has the facts, so now it can answer:
+     Your standing desk is shipped and arrives Thursday.
+
+  AND IT KEPT THE CONVERSATION - 4 entries:
+    1. user      where is my order ORD-1002?
+    2. assistant tool_use     lookup_order
+    3. user      tool result: ORD-1002: standing desk...
+    4. assistant text         Your standing desk is shipped...
+</code></pre>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · This is the slide that makes later sessions click. That
-growing <code>history</code> list is:</p>
-<ul>
-<li>the thing a <strong>session ID</strong> looks up (endpoint 1, in about ninety minutes)</li>
-<li>the thing that <strong>vanishes on restart</strong> (Week 2)</li>
-<li>the thing that has to be <strong>capped</strong> (Week 4)</li>
-</ul>
-<p>Say it once now: <em>"Every turn re-sends this entire list. The model remembers
-nothing."</em></p>
+<p><strong>INSTRUCTOR</strong> · <strong>Run it twice.</strong> First straight through, no commentary —
+eight seconds, and they see all four steps land. Then again, talking over it.</p>
+<p><strong>Step 2 is the one to slow down on.</strong> Two things happened, and they are
+worth naming separately: it <strong>chose</strong> a tool out of three, and it <strong>filled
+in the input</strong> by reading <code>ORD-1002</code> out of an ordinary sentence. Then the
+line that matters: <em>"And now it has stopped. It did not fetch anything. It
+asked, and it is waiting for us."</em></p>
+<p><strong>Step 3 carries the reason for the next eight weeks:</strong> <em>"Our code obeyed.
+It did not check whether the id was reasonable, or who was asking, or how
+many times."</em> That is why Week 3 adds a locked door and Week 4 adds spending
+limits — <strong>every guard sits in your code, not in the model.</strong></p>
+<p><strong>Step 4, worth naming:</strong> the tool returned a price, a status and a delivery
+note; the answer was one clean sentence. <strong>Deciding what to say is the
+model's job; getting the facts is yours.</strong></p>
+<p><strong>The last four lines pay off five times.</strong> That growing list is what a
+session id looks up (at 2:30), what disappears when the program stops (at
+2:52), what vanishes on a new release (next week), and what has to be capped
+because re-sending it costs money (Week 4).</p>
+<p><strong>If you have time</strong>, ask it <code>what is 12 * 41?</code> and watch step 2 pick
+<code>calculator</code> instead. That is tool choice, visible.</p>
+<p>With a key configured, <code>python -m checks.demo_turn --real</code> runs the same four
+steps with the real model deciding for itself.</p>
 </blockquote>
-<hr />
-<h2>3 · The project (0:35 – 0:44)</h2>
+<h4>6 · Is this a real agent? (2 min)</h4>
+<p>Somebody always wonders, so answer it before they ask. <strong>Yes</strong> — what they
+just watched is called <strong>tool use</strong> (or function calling): the pattern
+Anthropic, OpenAI and Google all document, and what every agent framework does
+underneath.</p>
+<table>
+<thead>
+<tr>
+<th>Standard practice</th>
+<th>In our agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tools described in JSON Schema</td>
+<td>yes — <code>input_schema</code> on each tool</td>
+</tr>
+<tr>
+<td>loop ends when the model answers</td>
+<td>yes — on <code>stop_reason != "tool_use"</code></td>
+</tr>
+<tr>
+<td>tool results returned as messages</td>
+<td>yes, as a <code>tool_result</code> block</td>
+</tr>
+<tr>
+<td>a step cap, so it cannot run forever</td>
+<td>yes — <code>MAX_STEPS = 6</code></td>
+</tr>
+<tr>
+<td>a timeout on the model call</td>
+<td>yes — <code>MODEL_TIMEOUT_SECONDS</code></td>
+</tr>
+<tr>
+<td>tool errors returned as readable text</td>
+<td>yes — not raised as a crash</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ours is small. It is not simplified.</strong> The only thing small about it is that
+it has three tools instead of thirty.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>One honest detail, for the technical question only.</strong> Our
+gateway speaks the OpenAI message format, while the loop internally uses the
+Anthropic block shape, with a small translator at the boundary. That is a
+deliberate production pattern — provider portability — and <strong>Week 6 uses
+exactly that seam to add a fallback model.</strong></p>
+<p>Do not volunteer it to a non-technical room. Keep it for the person who asks.</p>
+</blockquote>
+<h2>3 · The project (0:38 – 0:47)</h2>
 <p>They already cloned this in the setup section. Now that they can move around a folder,
 <strong>give the commands they ran a meaning</strong>, and give them the map.</p>
 <p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
@@ -2002,7 +2116,7 @@ the web yet.</p>
 break."</em></p>
 </blockquote>
 <hr />
-<h2>4 · Set it up, and prove it (0:44 – 0:55)</h2>
+<h2>4 · Set it up, and prove it (0:47 – 0:58)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Everyone sitting still, one command at a time, hands up on
 failure. You are hunting for broken machines now, while it costs the room ten
@@ -2102,7 +2216,7 @@ now. You will point at it four times today and every week after. Also watch
 for editors that helpfully save <code>.env</code> as <code>.env.txt</code> — <code>ls -la</code> catches it.</p>
 </blockquote>
 <hr />
-<h2>5–6 · The terminal, then sending messages (1:05 – 1:47)</h2>
+<h2>5–6 · The terminal, then sending messages (1:08 – 1:49)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
 window."</em> Then walk the room. Do not stay at the front for this beat; this is
@@ -2574,7 +2688,7 @@ answer comes back from your agent instead of an echo service. Nothing else
 about the command changes."</em></p>
 <p>That single sentence is what stops FastAPI feeling like magic later.</p>
 </blockquote>
-<h2>Break (1:47 – 1:57)</h2>
+<h2>Break (1:49 – 1:59)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do this on the projector, not on their machines.</p>
 </blockquote>
@@ -2617,7 +2731,7 @@ runs in one place   only where Python is already set up just right
 <p><strong>Those four gaps are today.</strong> None of them are AI problems. All of them are why
 agents die in notebooks.</p>
 <hr />
-<h2>7–8 · What a web service is, then addresses and messages (1:57 – 2:28)</h2>
+<h2>7–8 · What a web service is, then addresses and messages (1:59 – 2:30)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Five ideas, and they are deliberately arranged as <strong>one
 story rather than five topics</strong>. Each answers a question the previous one
@@ -3172,7 +3286,7 @@ Week 2.</p>
 then hold it for a week."</em></p>
 </blockquote>
 <hr />
-<h2>9 · Build the web service (2:28 – 3:07)</h2>
+<h2>9 · Build the web service (2:30 – 3:09)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Back on keyboards."</em> Now walk the room continuously. This
 is the beat where you find out whether the tools section did its job — and if it did,
@@ -3511,7 +3625,7 @@ is how you tell a proxy not to do it.</p>
 <p><strong>INSTRUCTOR</strong> · Have someone shout when they see text appear in pieces. It is
 the most satisfying moment of the session — use it.</p>
 </blockquote>
-<h2>10 · Build the container (3:07 – 3:43)</h2>
+<h2>10 · Build the container (3:09 – 3:43)</h2>
 <p>Ask: <em>"What would my colleague need to run your agent?"</em></p>
 <p>The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. <strong>"Works on my machine" is not a
@@ -3630,7 +3744,7 @@ the Docker daemon"</em> — which is the third of the four errors from setup.</p
 <p>Have them confirm it is alive before you start:</p>
 <pre><code class="language-bash">docker --version
 </code></pre>
-<h4>Three toy examples, before our agent (10 min)</h4>
+<h4>Three toy examples, before our agent (9 min)</h4>
 <p>Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.</p>
 <p><strong>Example 1 — the smallest possible.</strong> Two lines.</p>
@@ -3772,7 +3886,7 @@ is the only place <code>-p</code> appears with two <em>different</em> numbers. O
 <p>Say it as a sentence every time, because people flip it: <strong>"outside number,
 then inside number."</strong></p>
 </blockquote>
-<h4>Now the real one — line by line (13 min)</h4>
+<h4>Now the real one — line by line (12 min)</h4>
 <p>Their <code>Dockerfile</code> is the same four ideas plus three lines:</p>
 <pre><code class="language-dockerfile">FROM python:3.12-slim
 WORKDIR /app

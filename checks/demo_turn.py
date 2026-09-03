@@ -1,39 +1,50 @@
-"""A narrated single turn, for showing the room what the agent does.
+"""Show, step by step, what the agent does with one question.
 
-    python -m checks.demo_turn
+    python -m checks.demo_turn          # no API key needed
+    python -m checks.demo_turn --real   # uses your key, the real model decides
 
-Prints the four moves as they happen. Uses a stand-in model, so it needs
-no API key and no internet - which means it works for every laptop in the
-room, on the first morning, before anything is configured.
-
-With a real key set, pass --real to watch the same four moves with the
-actual model deciding for itself:
-
-    python -m checks.demo_turn --real
+Prints one labelled step at a time, pausing between them, so a room can follow
+what happens and when. This is a teaching aid, not part of the agent.
 """
 import sys
-from types import SimpleNamespace as NS
+import time
 
-from app.agent import run_turn
+from app.agent import TOOLS, run_turn
 
 QUESTION = "where is my order ORD-1002?"
+PAUSE = 1.2          # seconds between steps, so the room can read each one
 
 
-def _narrating_model():
-    """A stand-in that asks for one tool, then answers - printing as it goes."""
-    state = {"n": 0}
+def _step(n, who, what, detail=None):
+    print(f"\n  STEP {n} · {who}")
+    print(f"     {what}")
+    if detail:
+        for line in detail:
+            print(f"     {line}")
+    sys.stdout.flush()
+    time.sleep(PAUSE)
+
+
+def _fake_model():
+    """Stands in for the model. Asks for one tool, then answers."""
+    calls = {"n": 0}
 
     def model(messages):
-        state["n"] += 1
-        if state["n"] == 1:
-            print("  [2] the model asks   for a tool: lookup_order, with ORD-1002")
-            return NS(
-                content=[NS(type="tool_use", name="lookup_order",
-                            input={"order_id": "ORD-1002"}, id="t1")],
-                stop_reason="tool_use")
+        calls["n"] += 1
+        if calls["n"] == 1:
+            _step(2, "THE MODEL DECIDES",
+                  'It cannot look anything up. So it asks for a tool:',
+                  ['tool:  lookup_order', 'input: {"order_id": "ORD-1002"}'])
+            from types import SimpleNamespace as NS
+            return NS(content=[NS(type="tool_use", name="lookup_order",
+                                  input={"order_id": "ORD-1002"}, id="t1")],
+                      stop_reason="tool_use")
 
         result = messages[-1]["content"][0]["content"]
-        print(f"  [3] your code runs   it -> {result[:58]}...")
+        _step(3, "YOUR CODE RUNS THE TOOL",
+              "It looked the order up and handed the answer back:",
+              [result])
+        from types import SimpleNamespace as NS
         return NS(content=[NS(type="text",
                               text="Your standing desk is shipped and arrives "
                                    "Thursday.")],
@@ -42,33 +53,43 @@ def _narrating_model():
 
 
 def main(real=False):
-    print(f"\n  [1] you ask          {QUESTION}")
+    print("\n" + "=" * 62)
+    print("  ONE QUESTION, STEP BY STEP")
+    print("=" * 62)
 
-    if real:
-        # The real model decides for itself. The four moves are the same; only
-        # the wording of the answer changes.
-        result = run_turn(QUESTION)
-    else:
-        result = run_turn(QUESTION, model_fn=_narrating_model())
+    print(f"\n  The agent can reach for {len(TOOLS)} tools:")
+    for t in TOOLS:
+        print(f"     - {t['name']}")
+    time.sleep(PAUSE)
 
+    _step(1, "YOU ASK", QUESTION)
+
+    result = run_turn(QUESTION) if real else run_turn(QUESTION,
+                                                     model_fn=_fake_model())
     reply, history = result[0], result[1]
-    print(f"  [4] the model answers {reply}\n")
 
-    print(f"  the conversation is now {len(history)} entries long:")
-    for m in history:
+    _step(4, "THE MODEL ANSWERS", "Now it has the facts, so now it can answer:",
+          [reply])
+
+    print("\n" + "-" * 62)
+    print(f"  AND IT KEPT THE CONVERSATION - {len(history)} entries:")
+    print("-" * 62)
+    for i, m in enumerate(history, 1):
         content = m["content"]
         if isinstance(content, str):
-            print(f"    {m['role']:<10} {content[:56]}")
+            print(f"    {i}. {m['role']:<9} {content[:46]}")
             continue
         for block in content:
             if isinstance(block, dict):
-                print(f"    {m['role']:<10} tool result: "
-                      f"{str(block['content'])[:44]}")
+                print(f"    {i}. {m['role']:<9} tool result: "
+                      f"{str(block['content'])[:34]}")
             else:
                 label = getattr(block, "name", None) or getattr(block, "text", "")
-                print(f"    {m['role']:<10} {getattr(block, 'type', '')} {label[:44]}")
-    print("\n  Every new question re-sends this whole list. The model remembers"
-          " nothing.\n")
+                print(f"    {i}. {m['role']:<9} {getattr(block, 'type', '')}"
+                      f"  {label[:34]}")
+
+    print("\n  Every new question re-sends this whole list.")
+    print("  The model itself remembers nothing.\n")
 
 
 if __name__ == "__main__":

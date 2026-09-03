@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 139-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 141-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,25 +293,25 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and twenty-eight of the slides carry
-a presenter cue — the callback to make, the question to ask, the thing *not* to explain
+**Press `S` before you start.** A hundred and thirty of the slides carry a
+presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   13   Three questions to the room   settle the room, and read it
-   0:13   22   Meet today's agent            described, then RUN three ways
-   0:35    9   The project                   a tour BEFORE they download it
-   0:44   11   Set it up, and prove it       incl. the key, finished here
-   0:55   10   break
-   1:05   25   The terminal                  a real lesson: 9 commands
-   1:30   17   Sending messages              JSON and curl, on public services
-   1:47   10   break
-   1:57   18   What a web service is         the shop story, then the words
-   2:15   13   Addresses, then messages
-   2:28   39   Build the web service         3 endpoints, line by line, tested
-   3:07   36   Build the container           5 examples, then line by line
+   0:00   12   Three questions to the room   settle the room, and read it
+   0:12   26   Meet today's agent            described, then RUN step by step
+   0:38    9   The project                   a tour BEFORE they download it
+   0:47   11   Set it up, and prove it       incl. the key, finished here
+   0:58   10   break
+   1:08   24   The terminal                  a real lesson: 9 commands
+   1:32   17   Sending messages              JSON and curl, on public services
+   1:49   10   break
+   1:59   18   What a web service is         the shop story, then the words
+   2:17   13   Addresses, then messages
+   2:30   39   Build the web service         3 endpoints, line by line, tested
+   3:09   34   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -544,40 +544,74 @@ run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
 
-### The agent is demonstrated, not just described
+### The agent is demonstrated one step at a time
 
-The section used to describe the agent for fifteen minutes without ever
-running it. It now closes with **three demos, smallest first** — the same
-prove-the-simple-thing-first order as every other section.
+The section used to describe the agent and never run it. It now ends by
+**watching it work**, through one command:
 
-| Demo | Command | What it shows |
-|---|---|---|
-| 1 · just the tool | `python` then `lookup_order("ORD-1002")` | the data is real, and there is **no AI in a lookup** |
-| 2 · the whole loop | `make check-week-00`, then `python -m checks.demo_turn` | the four moves happening, one line printed each |
-| 3 · what it kept | `len(history)` → `4` | the conversation as an actual list |
+```bash
+python -m checks.demo_turn        # no key, no internet, works on any laptop
+python -m checks.demo_turn --real # with a key: the real model decides
+```
 
-**None of the three needs an API key**, which is the point — they work on
-every laptop in the room on the first morning, before anything is configured.
-Demo 2 uses `checks/demo_turn.py`, which was added for this: it narrates one
-turn with a stand-in model, and takes `--real` if you have a key and want to
-watch the real model decide.
+`checks/demo_turn.py` prints **four labelled steps with a pause between each**,
+so the room can read one before the next appears, then prints the conversation
+it kept:
 
-> **INSTRUCTOR** · **You run these; they watch.** Laptops are closed until
-> after the first break. Four minutes for all three.
+```
+  The agent can reach for 3 tools:  lookup_order, calculator, word_count
+
+  STEP 1 · YOU ASK                  where is my order ORD-1002?
+  STEP 2 · THE MODEL DECIDES        tool: lookup_order  input: {"order_id": ...}
+  STEP 3 · YOUR CODE RUNS THE TOOL  ORD-1002: standing desk, $340.00, shipped...
+  STEP 4 · THE MODEL ANSWERS        Your standing desk is shipped and arrives...
+
+  AND IT KEPT THE CONVERSATION - 4 entries
+```
+
+**Each step gets its own slide** with what to say on it. The deck does not show
+all four at once.
+
+> **INSTRUCTOR** · **Run it twice.** First straight through with no
+> commentary — eight seconds, and they see all four steps land. Then again,
+> talking over it, using the slides.
 >
-> **Demo 1 is the one people underestimate.** Calling the tool directly, with
-> no model involved, is what makes *"the model asks, your code does it"*
-> concrete: *"There is no AI in what you just saw. It is a lookup returning a
-> line of text. The clever part is deciding WHEN to call it."*
+> **Step 2 is the one to slow down on.** Two things happened and they are worth
+> naming separately: it *chose* a tool out of three, and it *filled in the
+> input* by reading `ORD-1002` out of an ordinary sentence. Then: *"And now it
+> has stopped. It did not fetch anything. It asked, and it is waiting for us."*
 >
-> **In demo 2, say the step numbers out loud** as they scroll past, pointing at
-> the whiteboard. The four labels on screen are the four moves you drew at
-> 0:02.
+> **Step 3 carries the reason for the next eight weeks.** *"Our code obeyed. It
+> did not check whether the id was reasonable, or who was asking, or how many
+> times."* That is why Week 3 adds a locked door and Week 4 adds spending
+> limits — **every guard sits in your code, not in the model.**
 >
-> **Demo 3 is the slide that pays off five times.** That growing list is what a
-> session id looks up, what disappears when the program stops, what vanishes on
-> a new release next week, and what has to be capped in Week 4. Say the
-> punchline twice.
+> **If you have time**, ask it `what is 12 * 41?` and watch step 2 pick
+> `calculator` instead. Tool choice, visible.
+
+### Is our agent industry-standard? Yes — and there is a slide saying so
+
+Somebody always wonders whether this is a real agent or a classroom version,
+so the deck answers it outright. What students watch is **tool use** (also
+called function calling): the pattern Anthropic, OpenAI and Google all
+document, and what every agent framework does underneath.
+
+| Standard practice | In our agent |
+|---|---|
+| tools described in JSON Schema | yes — `input_schema` on each tool |
+| loop ends when the model answers | yes — on `stop_reason != "tool_use"` |
+| tool results returned as messages | yes, as a `tool_result` block |
+| a step cap, so it cannot run forever | yes — `MAX_STEPS = 6` |
+| a timeout on the model call | yes — `MODEL_TIMEOUT_SECONDS` |
+| tool errors returned as readable text | yes — not raised as a crash |
+
+> **INSTRUCTOR** · **One honest detail, for the technical question only.** Our
+> gateway speaks the OpenAI message format while the loop internally uses the
+> Anthropic block shape, with a small translator between them. That is a
+> deliberate production pattern — provider portability — and **Week 6 uses
+> exactly that seam to add a fallback model.**
+>
+> Do not volunteer it to a non-technical room. Keep it for the person who asks.
 
 ### The terminal gets a real lesson, not a warm-up
 

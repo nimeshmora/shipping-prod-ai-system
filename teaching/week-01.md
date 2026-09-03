@@ -26,18 +26,18 @@ all, so it spends its first two hours handing over tools and its last two
 building with them.
 
 ```
-   0:00   13   Three questions to the room   settle the room, and read it
-   0:13   22   Meet today's agent            described, then RUN three ways
-   0:35    9   The project                   a tour BEFORE they download it
-   0:44   11   Set it up, and prove it       incl. the key, finished here
-   0:55   10   break
-   1:05   25   The terminal                  a real lesson: 9 commands
-   1:30   17   Sending messages              JSON and curl, on public services
-   1:47   10   break
-   1:57   18   What a web service is         the shop story, then the words
-   2:15   13   Addresses, then messages
-   2:28   39   Build the web service         3 endpoints, line by line, tested
-   3:07   36   Build the container           5 examples, then line by line
+   0:00   12   Three questions to the room   settle the room, and read it
+   0:12   26   Meet today's agent            described, then RUN step by step
+   0:38    9   The project                   a tour BEFORE they download it
+   0:47   11   Set it up, and prove it       incl. the key, finished here
+   0:58   10   break
+   1:08   24   The terminal                  a real lesson: 9 commands
+   1:32   17   Sending messages              JSON and curl, on public services
+   1:49   10   break
+   1:59   18   What a web service is         the shop story, then the words
+   2:17   13   Addresses, then messages
+   2:30   39   Build the web service         3 endpoints, line by line, tested
+   3:09   34   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -59,14 +59,14 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 139 slides with a presenter note on 128 of them, and it carries material this
+is 141 slides with a presenter note on 130 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
 
 ---
 
-## 1 · Three questions to the room (0:00 – 0:13)
+## 1 · Three questions to the room (0:00 – 0:12)
 
 > **INSTRUCTOR** · Laptops closed. Slides off. Just talk. This is the only part
 > of the session where nobody types anything, and it sets up everything else.
@@ -217,7 +217,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:13 – 0:35)
+## 2 · Meet today's agent (0:12 – 0:38)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -361,39 +361,106 @@ cost.
 > The model asks, and your code obeys. That inversion is what makes this an
 > agent rather than a chatbot with functions."*
 
-#### 5 · Show it running · three demos (7 min)
+#### 5 · Watch it work, step by step (9 min)
 
-Run this on the projector. It is the whiteboard drawing, as an actual list:
+Describing the agent is not enough. **Run it**, on the projector, and let them
+watch the four steps happen one at a time.
 
-```
-reply, history = run_turn("where is my order ORD-1002?")
-
-  user       -> where is my order ORD-1002?
-  assistant  -> tool_use     lookup_order  {"order_id": "ORD-1002"}
-  user       -> tool_result  ORD-1002: standing desk, $340.00, status shipped...
-  assistant  -> text         Your standing desk is shipped and arrives Thursday.
+```bash
+python -m checks.demo_turn
 ```
 
-**Four messages — the four moves from the whiteboard.** Not a metaphor;
-literally what the list contains.
+No key, no internet - it uses a stand-in for the model, so it works on any
+laptop before anything is configured. It **pauses between steps** so the room
+can read each one as it appears.
 
-And notice **where the tool result went**: back as a `user` message. From the
-model's point of view, the tool is *the outside world talking to it*, not part
-of its own reply.
+```
+  The agent can reach for 3 tools:
+     - lookup_order
+     - calculator
+     - word_count
 
-> **INSTRUCTOR** · This is the slide that makes later sessions click. That
-> growing `history` list is:
+  STEP 1 - YOU ASK
+     where is my order ORD-1002?
+
+  STEP 2 - THE MODEL DECIDES
+     It cannot look anything up. So it asks for a tool:
+     tool:  lookup_order
+     input: {"order_id": "ORD-1002"}
+
+  STEP 3 - YOUR CODE RUNS THE TOOL
+     It looked the order up and handed the answer back:
+     ORD-1002: standing desk, $340.00, status shipped, arriving Thursday...
+
+  STEP 4 - THE MODEL ANSWERS
+     Now it has the facts, so now it can answer:
+     Your standing desk is shipped and arrives Thursday.
+
+  AND IT KEPT THE CONVERSATION - 4 entries:
+    1. user      where is my order ORD-1002?
+    2. assistant tool_use     lookup_order
+    3. user      tool result: ORD-1002: standing desk...
+    4. assistant text         Your standing desk is shipped...
+```
+
+> **INSTRUCTOR** · **Run it twice.** First straight through, no commentary —
+> eight seconds, and they see all four steps land. Then again, talking over it.
 >
-> - the thing a **session ID** looks up (endpoint 1, in about ninety minutes)
-> - the thing that **vanishes on restart** (Week 2)
-> - the thing that has to be **capped** (Week 4)
+> **Step 2 is the one to slow down on.** Two things happened, and they are
+> worth naming separately: it **chose** a tool out of three, and it **filled
+> in the input** by reading `ORD-1002` out of an ordinary sentence. Then the
+> line that matters: *"And now it has stopped. It did not fetch anything. It
+> asked, and it is waiting for us."*
 >
-> Say it once now: *"Every turn re-sends this entire list. The model remembers
-> nothing."*
+> **Step 3 carries the reason for the next eight weeks:** *"Our code obeyed.
+> It did not check whether the id was reasonable, or who was asking, or how
+> many times."* That is why Week 3 adds a locked door and Week 4 adds spending
+> limits — **every guard sits in your code, not in the model.**
+>
+> **Step 4, worth naming:** the tool returned a price, a status and a delivery
+> note; the answer was one clean sentence. **Deciding what to say is the
+> model's job; getting the facts is yours.**
+>
+> **The last four lines pay off five times.** That growing list is what a
+> session id looks up (at 2:30), what disappears when the program stops (at
+> 2:52), what vanishes on a new release (next week), and what has to be capped
+> because re-sending it costs money (Week 4).
+>
+> **If you have time**, ask it `what is 12 * 41?` and watch step 2 pick
+> `calculator` instead. That is tool choice, visible.
+>
+> With a key configured, `python -m checks.demo_turn --real` runs the same four
+> steps with the real model deciding for itself.
 
----
+#### 6 · Is this a real agent? (2 min)
 
-## 3 · The project (0:35 – 0:44)
+Somebody always wonders, so answer it before they ask. **Yes** — what they
+just watched is called **tool use** (or function calling): the pattern
+Anthropic, OpenAI and Google all document, and what every agent framework does
+underneath.
+
+| Standard practice | In our agent |
+|---|---|
+| tools described in JSON Schema | yes — `input_schema` on each tool |
+| loop ends when the model answers | yes — on `stop_reason != "tool_use"` |
+| tool results returned as messages | yes, as a `tool_result` block |
+| a step cap, so it cannot run forever | yes — `MAX_STEPS = 6` |
+| a timeout on the model call | yes — `MODEL_TIMEOUT_SECONDS` |
+| tool errors returned as readable text | yes — not raised as a crash |
+
+**Ours is small. It is not simplified.** The only thing small about it is that
+it has three tools instead of thirty.
+
+> **INSTRUCTOR** · **One honest detail, for the technical question only.** Our
+> gateway speaks the OpenAI message format, while the loop internally uses the
+> Anthropic block shape, with a small translator at the boundary. That is a
+> deliberate production pattern — provider portability — and **Week 6 uses
+> exactly that seam to add a fallback model.**
+>
+> Do not volunteer it to a non-technical room. Keep it for the person who asks.
+
+
+## 3 · The project (0:38 – 0:47)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.
@@ -527,7 +594,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:44 – 0:55)
+## 4 · Set it up, and prove it (0:47 – 0:58)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -624,7 +691,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:05 – 1:47)
+## 5–6 · The terminal, then sending messages (1:08 – 1:49)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -1151,7 +1218,7 @@ same method, the same header, the same body shape.
 > That single sentence is what stops FastAPI feeling like magic later.
 
 
-## Break (1:47 – 1:57)
+## Break (1:49 – 1:59)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1202,7 +1269,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (1:57 – 2:28)
+## 7–8 · What a web service is, then addresses and messages (1:59 – 2:30)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1771,7 +1838,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:28 – 3:07)
+## 9 · Build the web service (2:30 – 3:09)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -2168,7 +2235,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:07 – 3:43)
+## 10 · Build the container (3:09 – 3:43)
 
 Ask: *"What would my colleague need to run your agent?"*
 
@@ -2276,7 +2343,7 @@ Have them confirm it is alive before you start:
 docker --version
 ```
 
-#### Three toy examples, before our agent (10 min)
+#### Three toy examples, before our agent (9 min)
 
 Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.
@@ -2472,7 +2539,7 @@ deliberately connecting one number on your machine to one number inside.
 > Say it as a sentence every time, because people flip it: **"outside number,
 > then inside number."**
 
-#### Now the real one — line by line (13 min)
+#### Now the real one — line by line (12 min)
 
 Their `Dockerfile` is the same four ideas plus three lines:
 
