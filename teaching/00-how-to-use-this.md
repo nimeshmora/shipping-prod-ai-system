@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 93-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 100-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,26 +290,25 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Eighty-one of the slides carry a presenter
+**Press `S` before you start.** Eighty-eight of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   20   Three questions to the room   settle the room, and read it
-   0:20   18   Meet today's agent            our small teaching agent
-   0:38   13   The project                   a tour BEFORE they download it
-   0:51   12   Set it up, and prove it       the checklist, and check-week-00
-   1:03   10   break
-   1:13   20   The terminal                  practised on a throwaway folder
-   1:33   25   Sending messages              JSON and curl, on public services
-   1:58   10   break
-   2:08   24   What a web service is         service, API, endpoint
-   2:32   22   Addresses, then messages
-   2:54   28   Build: the address
-   3:22   12   Build: make it feel fast
-   3:34   16   Build: the container
+   0:00   18   Three questions to the room   settle the room, and read it
+   0:18   18   Meet today's agent            our small teaching agent
+   0:36   12   The project                   a tour BEFORE they download it
+   0:48   12   Set it up, and prove it       the checklist, and check-week-00
+   1:00   10   break
+   1:10   18   The terminal                  practised on a throwaway folder
+   1:28   24   Sending messages              JSON and curl, on public services
+   1:52   10   break
+   2:02   22   What a web service is         service, API, endpoint
+   2:24   20   Addresses, then messages
+   2:44   26   Build the address, then speed
+   3:21   29   Packing it up                 containers, from scratch
    3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -369,6 +368,70 @@ is always wondering why they are not using the agent they are proud of:
 One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
+
+### Containers get 29 minutes, and are taught from nothing
+
+This is the longest section of the day, and deliberately so — it is the topic
+a non-technical room finds hardest, and the one most courses rush. Fourteen
+slides, in this order:
+
+1. **The problem** — they rebuild the setup list from 0:48 themselves
+2. **The idea, before the word "Docker"** — send the set-up, not just the code
+3. **Image vs container** — the installer you downloaded, versus the app open
+   on your screen
+4. **The chain**: Dockerfile → build → image → run → container
+5. **Example 1** — two lines, prints `hello`
+6. **Example 2** — your own file copied in
+7. **Proof it is sealed** — delete the file, run it again, it still works
+8. **Example 3** — a real web server, and `-p` explained
+9. **Layers** — a visual stack of which steps are reused and which are redone
+10. **Our agent's Dockerfile** — only four lines are new
+11. **`${PORT}`** — why never to write the number in
+12. **`.dockerignore`** — and never packaging a secret
+13. **Build and run ours** — the same `curl`, from inside a package
+
+> **INSTRUCTOR** · Three things to protect here.
+>
+> **Say the idea before the tool.** Slide 2 has no Docker in it at all. Once
+> they have *"stop sending the recipe, send the finished meal"*, the words are
+> just labels.
+>
+> **Image versus container is the most-confused pair in the topic.** Spend two
+> minutes. The installer-versus-open-app comparison is exact, not loose. Then
+> check it: *"If I build one image and start it on three computers, how many
+> images and how many containers?"* One image, three containers.
+>
+> **Do example 3 even if you are running late.** It is the only place `-p` is
+> taught with two *different* numbers. Our agent uses `-p 8080:8080`, where the
+> matching numbers hide the rule — so if you skip example 3, they never learn
+> that the outside number comes first.
+
+Three worked examples build up before the agent's own Dockerfile is shown.
+Each one runs in under a minute and none of them touch the project, so a
+mistake costs nothing.
+
+### Ports get a drawn computer
+
+`port` used to be a one-line definition. It is now a drawn machine with four
+numbered programs inside it — a website on 443, a database on 5432, **our
+agent on 8080** highlighted, a dashboard on 3000 — beside the anchor that
+Zoom, Chrome and Spotify are all running on their laptop right now, and the
+port number is how a message finds the right one.
+
+### Every section is bridged to the next
+
+The last presenter note in each section contains the sentence that hands over
+to the following one, so the day never changes subject without warning:
+
+| Handover | The line to say |
+|---|---|
+| agent → project | *"All that code lives in a project you are about to download. Before you do, let me show you what is in it."* |
+| break → terminal | *"You have a working agent and nobody but you can reach it. The first thing I need to give you is a way to talk to your own computer."* |
+| address → speed | *"It works. But how long did that answer take, and what were you looking at while you waited?"* |
+| speed → containers | *"Three of the four gaps are closed. The last one: it still only runs on your laptop."* |
+
+> **INSTRUCTOR** · These are in the notes panel, not on the slides. Read the
+> handover line *before* you advance, while the previous slide is still up.
 
 ### The repository tour, before they clone it
 

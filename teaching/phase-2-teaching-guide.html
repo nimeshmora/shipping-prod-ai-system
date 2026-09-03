@@ -736,7 +736,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 93-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 100-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -784,23 +784,22 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> Eighty-one of the slides carry a presenter
+<p><strong>Press <code>S</code> before you start.</strong> Eighty-eight of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
-<pre><code>   0:00   20   Three questions to the room   settle the room, and read it
-   0:20   18   Meet today's agent            our small teaching agent
-   0:38   13   The project                   a tour BEFORE they download it
-   0:51   12   Set it up, and prove it       the checklist, and check-week-00
-   1:03   10   break
-   1:13   20   The terminal                  practised on a throwaway folder
-   1:33   25   Sending messages              JSON and curl, on public services
-   1:58   10   break
-   2:08   24   What a web service is         service, API, endpoint
-   2:32   22   Addresses, then messages
-   2:54   28   Build: the address
-   3:22   12   Build: make it feel fast
-   3:34   16   Build: the container
+<pre><code>   0:00   18   Three questions to the room   settle the room, and read it
+   0:18   18   Meet today's agent            our small teaching agent
+   0:36   12   The project                   a tour BEFORE they download it
+   0:48   12   Set it up, and prove it       the checklist, and check-week-00
+   1:00   10   break
+   1:10   18   The terminal                  practised on a throwaway folder
+   1:28   24   Sending messages              JSON and curl, on public services
+   1:52   10   break
+   2:02   22   What a web service is         service, API, endpoint
+   2:24   20   Addresses, then messages
+   2:44   26   Build the address, then speed
+   3:21   29   Packing it up                 containers, from scratch
    3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -874,6 +873,82 @@ second nature, we point it at anything you like."</em></p>
 <p>One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.</p>
+<h3>Containers get 29 minutes, and are taught from nothing</h3>
+<p>This is the longest section of the day, and deliberately so — it is the topic
+a non-technical room finds hardest, and the one most courses rush. Fourteen
+slides, in this order:</p>
+<ol>
+<li><strong>The problem</strong> — they rebuild the setup list from 0:48 themselves</li>
+<li><strong>The idea, before the word "Docker"</strong> — send the set-up, not just the code</li>
+<li><strong>Image vs container</strong> — the installer you downloaded, versus the app open
+   on your screen</li>
+<li><strong>The chain</strong>: Dockerfile → build → image → run → container</li>
+<li><strong>Example 1</strong> — two lines, prints <code>hello</code></li>
+<li><strong>Example 2</strong> — your own file copied in</li>
+<li><strong>Proof it is sealed</strong> — delete the file, run it again, it still works</li>
+<li><strong>Example 3</strong> — a real web server, and <code>-p</code> explained</li>
+<li><strong>Layers</strong> — a visual stack of which steps are reused and which are redone</li>
+<li><strong>Our agent's Dockerfile</strong> — only four lines are new</li>
+<li><strong><code>${PORT}</code></strong> — why never to write the number in</li>
+<li><strong><code>.dockerignore</code></strong> — and never packaging a secret</li>
+<li><strong>Build and run ours</strong> — the same <code>curl</code>, from inside a package</li>
+</ol>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Three things to protect here.</p>
+<p><strong>Say the idea before the tool.</strong> Slide 2 has no Docker in it at all. Once
+they have <em>"stop sending the recipe, send the finished meal"</em>, the words are
+just labels.</p>
+<p><strong>Image versus container is the most-confused pair in the topic.</strong> Spend two
+minutes. The installer-versus-open-app comparison is exact, not loose. Then
+check it: <em>"If I build one image and start it on three computers, how many
+images and how many containers?"</em> One image, three containers.</p>
+<p><strong>Do example 3 even if you are running late.</strong> It is the only place <code>-p</code> is
+taught with two <em>different</em> numbers. Our agent uses <code>-p 8080:8080</code>, where the
+matching numbers hide the rule — so if you skip example 3, they never learn
+that the outside number comes first.</p>
+</blockquote>
+<p>Three worked examples build up before the agent's own Dockerfile is shown.
+Each one runs in under a minute and none of them touch the project, so a
+mistake costs nothing.</p>
+<h3>Ports get a drawn computer</h3>
+<p><code>port</code> used to be a one-line definition. It is now a drawn machine with four
+numbered programs inside it — a website on 443, a database on 5432, <strong>our
+agent on 8080</strong> highlighted, a dashboard on 3000 — beside the anchor that
+Zoom, Chrome and Spotify are all running on their laptop right now, and the
+port number is how a message finds the right one.</p>
+<h3>Every section is bridged to the next</h3>
+<p>The last presenter note in each section contains the sentence that hands over
+to the following one, so the day never changes subject without warning:</p>
+<table>
+<thead>
+<tr>
+<th>Handover</th>
+<th>The line to say</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent → project</td>
+<td><em>"All that code lives in a project you are about to download. Before you do, let me show you what is in it."</em></td>
+</tr>
+<tr>
+<td>break → terminal</td>
+<td><em>"You have a working agent and nobody but you can reach it. The first thing I need to give you is a way to talk to your own computer."</em></td>
+</tr>
+<tr>
+<td>address → speed</td>
+<td><em>"It works. But how long did that answer take, and what were you looking at while you waited?"</em></td>
+</tr>
+<tr>
+<td>speed → containers</td>
+<td><em>"Three of the four gaps are closed. The last one: it still only runs on your laptop."</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · These are in the notes panel, not on the slides. Read the
+handover line <em>before</em> you advance, while the previous slide is still up.</p>
+</blockquote>
 <h3>The repository tour, before they clone it</h3>
 <p>Six slides at 0:38 walk the <strong>real</strong> project on the projector, before anyone
 downloads anything. A beginner who clones twenty unfamiliar files spends the
@@ -2825,10 +2900,68 @@ recipe needs the other kitchen to already have the right oven, pans and
 ingredients. A food truck brings the whole kitchen with it and works in any
 car park.</p>
 </blockquote>
-<h4>First, build a box with nothing in it (5 min)</h4>
+<h4>Two words before anything else</h4>
+<p>Beginners conflate these for months, so name them once, plainly:</p>
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>an <strong>image</strong></td>
+<td>the finished package. One file, <strong>not running.</strong> You build it once and copy it anywhere.</td>
+</tr>
+<tr>
+<td>a <strong>container</strong></td>
+<td>the image <strong>running.</strong> Start ten containers from one image if you want ten.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The comparison that is exact rather than loose: the <strong>Zoom
+installer</strong> you downloaded is the image; <strong>Zoom open on your screen</strong> is the
+container. One installer, any number of machines.</p>
+<p>Then check it, because it is the pair they get wrong: <em>"If I build one image
+and start it on three computers, how many images and how many containers?"</em>
+One image, three containers.</p>
+</blockquote>
+<p>And the chain, written on the board as four words:</p>
+<pre><code>   Dockerfile  -&gt;  docker build  -&gt;  an image  -&gt;  docker run  -&gt;  a container
+   (your steps)    (the doing)       (the result)                  (it runs)
+</code></pre>
+<h4>Three toy examples, before our agent (10 min)</h4>
+<p>Do all three. Each takes under a minute, none of them touch the project, and a
+mistake costs nothing.</p>
+<p><strong>Example 1 — the smallest possible.</strong> Two lines.</p>
+<pre><code class="language-bash">mkdir ~/demo1 &amp;&amp; cd ~/demo1
+</code></pre>
+<p>Create <code>Dockerfile</code> (that exact name, capital D, no extension):</p>
+<pre><code class="language-dockerfile">FROM alpine
+CMD [&quot;echo&quot;, &quot;hello&quot;]
+</code></pre>
+<pre><code class="language-bash">docker build -t demo1 .
+docker run --rm demo1
+</code></pre>
+<pre><code>hello
+</code></pre>
+<ul>
+<li><strong><code>FROM alpine</code></strong> — start from a tiny ready-made operating system.</li>
+<li><strong><code>CMD [...]</code></strong> — what to run when it starts.</li>
+<li><strong><code>build -t demo1 .</code></strong> — build a package, name it <code>demo1</code>, instructions are
+  here (the dot).</li>
+<li><strong><code>run --rm demo1</code></strong> — start it, and throw the running copy away afterwards.</li>
+</ul>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <em>"That word was printed by a small Linux computer Docker
+created, used for one second, and threw away. You did not install Linux."</em></p>
+</blockquote>
+<p><strong>Example 2 — your own file inside.</strong> They already know <code>mkdir</code> and <code>echo &gt;</code>
+from Part 2b.</p>
 <p>Before containerising our agent — with its libraries, its port, its key — build
-the smallest possible box. Two files, in a fresh folder. <strong>They already know
-<code>mkdir</code> and <code>echo &gt;</code> from Part 2b:</strong></p>
+the smallest possible box. Two files, in a fresh folder.</p>
 <pre><code class="language-bash">mkdir ~/box &amp;&amp; cd ~/box
 </code></pre>
 <p>One file of "code":</p>
@@ -2878,6 +3011,30 @@ docker run --rm hello-box</code></p>
 <p>It still prints. <strong>The code was copied <em>into</em> the box at build time.</strong> That
 single moment explains containers better than any diagram — the box is not
 pointing at their folder, it <em>contains</em> a copy.</p>
+</blockquote>
+<p><strong>Example 3 — one that waits to be asked, and the door you have to open.</strong></p>
+<pre><code class="language-bash">docker run --rm -p 9000:80 nginx
+</code></pre>
+<p>Then, in another terminal:</p>
+<pre><code class="language-bash">curl -s localhost:9000 | head -4
+</code></pre>
+<p>A web page comes back. <strong>They did not install nginx</strong> — Docker fetched a
+ready-made package, ran it, and they asked it a question with the same <code>curl</code>
+from Part 2e.</p>
+<p>The flag is the lesson:</p>
+<pre><code>   -p 9000:80
+      ────  ──
+       │     └── the number INSIDE the package
+       └──────── the number on MY computer
+</code></pre>
+<p><strong>A package is sealed by default</strong> — nothing outside can reach in. <code>-p</code> is you
+deliberately connecting one number on your machine to one number inside.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Do this example even if you are running late</strong>, because it
+is the only place <code>-p</code> appears with two <em>different</em> numbers. Our agent uses
+<code>-p 8080:8080</code>, where the matching numbers hide the rule entirely.</p>
+<p>Say it as a sentence every time, because people flip it: <strong>"outside number,
+then inside number."</strong></p>
 </blockquote>
 <h4>Now the real one</h4>
 <p>Their <code>Dockerfile</code> is the same four ideas plus three lines:</p>

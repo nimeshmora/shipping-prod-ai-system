@@ -2032,11 +2032,71 @@ Hand the box to any computer and it behaves identically.
 > ingredients. A food truck brings the whole kitchen with it and works in any
 > car park.
 
-#### First, build a box with nothing in it (5 min)
+#### Two words before anything else
+
+Beginners conflate these for months, so name them once, plainly:
+
+| Word | What it is |
+|---|---|
+| an **image** | the finished package. One file, **not running.** You build it once and copy it anywhere. |
+| a **container** | the image **running.** Start ten containers from one image if you want ten. |
+
+> **INSTRUCTOR** · The comparison that is exact rather than loose: the **Zoom
+> installer** you downloaded is the image; **Zoom open on your screen** is the
+> container. One installer, any number of machines.
+>
+> Then check it, because it is the pair they get wrong: *"If I build one image
+> and start it on three computers, how many images and how many containers?"*
+> One image, three containers.
+
+And the chain, written on the board as four words:
+
+```
+   Dockerfile  ->  docker build  ->  an image  ->  docker run  ->  a container
+   (your steps)    (the doing)       (the result)                  (it runs)
+```
+
+#### Three toy examples, before our agent (10 min)
+
+Do all three. Each takes under a minute, none of them touch the project, and a
+mistake costs nothing.
+
+**Example 1 — the smallest possible.** Two lines.
+
+```bash
+mkdir ~/demo1 && cd ~/demo1
+```
+
+Create `Dockerfile` (that exact name, capital D, no extension):
+
+```dockerfile
+FROM alpine
+CMD ["echo", "hello"]
+```
+
+```bash
+docker build -t demo1 .
+docker run --rm demo1
+```
+
+```
+hello
+```
+
+- **`FROM alpine`** — start from a tiny ready-made operating system.
+- **`CMD [...]`** — what to run when it starts.
+- **`build -t demo1 .`** — build a package, name it `demo1`, instructions are
+  here (the dot).
+- **`run --rm demo1`** — start it, and throw the running copy away afterwards.
+
+> **INSTRUCTOR** · *"That word was printed by a small Linux computer Docker
+> created, used for one second, and threw away. You did not install Linux."*
+
+**Example 2 — your own file inside.** They already know `mkdir` and `echo >`
+from Part 2b.
 
 Before containerising our agent — with its libraries, its port, its key — build
-the smallest possible box. Two files, in a fresh folder. **They already know
-`mkdir` and `echo >` from Part 2b:**
+the smallest possible box. Two files, in a fresh folder.
 
 ```bash
 mkdir ~/box && cd ~/box
@@ -2106,6 +2166,41 @@ hello from inside the box
 > It still prints. **The code was copied *into* the box at build time.** That
 > single moment explains containers better than any diagram — the box is not
 > pointing at their folder, it *contains* a copy.
+
+**Example 3 — one that waits to be asked, and the door you have to open.**
+
+```bash
+docker run --rm -p 9000:80 nginx
+```
+
+Then, in another terminal:
+
+```bash
+curl -s localhost:9000 | head -4
+```
+
+A web page comes back. **They did not install nginx** — Docker fetched a
+ready-made package, ran it, and they asked it a question with the same `curl`
+from Part 2e.
+
+The flag is the lesson:
+
+```
+   -p 9000:80
+      ────  ──
+       │     └── the number INSIDE the package
+       └──────── the number on MY computer
+```
+
+**A package is sealed by default** — nothing outside can reach in. `-p` is you
+deliberately connecting one number on your machine to one number inside.
+
+> **INSTRUCTOR** · **Do this example even if you are running late**, because it
+> is the only place `-p` appears with two *different* numbers. Our agent uses
+> `-p 8080:8080`, where the matching numbers hide the rule entirely.
+>
+> Say it as a sentence every time, because people flip it: **"outside number,
+> then inside number."**
 
 #### Now the real one
 
