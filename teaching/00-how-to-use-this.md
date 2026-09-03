@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is an 87-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 93-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,25 +290,26 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Seventy-six of the slides carry a presenter
+**Press `S` before you start.** Eighty-one of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   22   Three questions to the room   settle the room, and read it
-   0:22   20   Meet today's agent            our small teaching agent
-   0:42   13   Get set up, and prove it      the checklist, and check-week-00
-   0:55   10   break
-   1:05   20   The terminal                  practised on a throwaway folder
-   1:25   27   Sending messages              JSON and curl, on public services
-   1:52   10   break
-   2:02   25   What a web service is         service, API, endpoint
-   2:27   25   Addresses, then messages
-   2:52   28   Build: the address
-   3:20   12   Build: make it feel fast
-   3:32   18   Build: the container
+   0:00   20   Three questions to the room   settle the room, and read it
+   0:20   18   Meet today's agent            our small teaching agent
+   0:38   13   The project                   a tour BEFORE they download it
+   0:51   12   Set it up, and prove it       the checklist, and check-week-00
+   1:03   10   break
+   1:13   20   The terminal                  practised on a throwaway folder
+   1:33   25   Sending messages              JSON and curl, on public services
+   1:58   10   break
+   2:08   24   What a web service is         service, API, endpoint
+   2:32   22   Addresses, then messages
+   2:54   28   Build: the address
+   3:22   12   Build: make it feel fast
+   3:34   16   Build: the container
    3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -368,6 +369,49 @@ is always wondering why they are not using the agent they are proud of:
 One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
+
+### The repository tour, before they clone it
+
+Six slides at 0:38 walk the **real** project on the projector, before anyone
+downloads anything. A beginner who clones twenty unfamiliar files spends the
+day quietly lost.
+
+1. What a *program* and a *project* are — anchored to Zoom and a trip folder
+2. All twelve top-level items, each with one plain-English purpose
+3. The six files in `app/`, with the two empty ones marked "you write these"
+4. Why the folders are separated — `app/` works, `tests/` is it correct,
+   `checks/` am I done, `guide/` and `solutions/` where to get unstuck
+5. One branch per week, and that reading the answer key is allowed
+
+Every filename on those slides was checked against the `week-01-package`
+branch, so the tour cannot drift from what students actually receive. Note
+that the student branch has **no** `evals/`, `loadtest/`, `observability/` or
+`deploy/` — those arrive in later weeks, and the slides do not claim them.
+
+> **INSTRUCTOR** · Read the **right-hand column** of the file listing, not the
+> filenames. Purposes, top to bottom, ninety seconds. Then say the line that
+> settles the room: *"Eleven of those twelve are already done. You will open
+> two files all day."*
+
+### Anchor every new word to their own laptop
+
+Eleven slides carry a blue box tying a technical term to software the learner
+already has. This is the single biggest change for a non-technical room.
+
+| Term | The anchor used |
+|---|---|
+| program | Zoom, Chrome, Excel — somebody wrote instructions, your laptop follows them |
+| process | Zoom while it is open; quit it and it is gone, with anything unsaved |
+| port | Zoom, Chrome and Spotify all running — the port keeps their messages apart |
+| library | a font you installed, or an Excel plug-in — you did not make it, you use it |
+| project | a folder for a trip: flight PDF, photo, costs spreadsheet |
+| JSON | a spreadsheet row with column headings, written on one line |
+| web service | your banking app holds no money — it asks a service and shows the answer |
+| container | a phone app: you install one item, it works, nothing to set up |
+| branches | report-v1, report-final, report-final-actually — but tracked properly |
+
+> **INSTRUCTOR** · Give the anchor **first**, then the definition. In that
+> order it lands; the other way round they are decoding two things at once.
 
 ### The eight-week journey map
 
