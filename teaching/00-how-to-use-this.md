@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 120-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 123-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,7 +290,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and eight of the slides carry a
+**Press `S` before you start.** A hundred and twelve of the slides carry a
 presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -300,17 +300,16 @@ yet — in a side panel the room never sees.
    0:00   16   Three questions to the room   settle the room, and read it
    0:16   16   Meet today's agent            our small teaching agent
    0:32   11   The project                   a tour BEFORE they download it
-   0:43   11   Set it up, and prove it       the checklist, and check-week-00
-   0:54   10   break
-   1:04   16   The terminal                  practised on a throwaway folder
-   1:20   20   Sending messages              JSON and curl, on public services
-   1:40   10   break
-   1:50   24   What a web service is         the shop story, then the words
-   2:14   18   Addresses, then messages
-   2:32   36   Build the web service         ONE LINE PER SLIDE
-   3:08   11   Make it feel fast
-   3:19   32   Build the container           the cart story, then line by line
-   3:51    9   Prove it, and what breaks next
+   0:43   14   Set it up, and prove it       incl. the key, FINISHED here
+   0:57   10   break
+   1:07   15   The terminal                  practised on a throwaway folder
+   1:22   20   Sending messages              JSON and curl, on public services
+   1:42   10   break
+   1:52   22   What a web service is         the shop story, then the words
+   2:14   16   Addresses, then messages
+   2:30   42   Build the web service         3 endpoints, line by line, each tested
+   3:12   32   Build the container           the cart story, then line by line
+   3:44   16   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -369,6 +368,79 @@ is always wondering why they are not using the agent they are proud of:
 One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
+
+### The build sections match the repository exactly
+
+Every code line on a build slide is **the line that goes in the student's
+file**, checked against the `week-01-solution` branch. Not a paraphrase, not a
+simplified teaching version.
+
+Where a slide shows less than the final line, it is because we add to it
+later, and the notes say so:
+
+| Slide shows | Real file ends up with | When |
+|---|---|---|
+| `from fastapi import FastAPI` | `..., HTTPException` | when errors are added |
+| `from app import memory` | `..., stream` | at endpoint 3 |
+| `from app.agent import run_turn` | `AgentError, run_turn` | when errors are added |
+| `app = FastAPI()` | `FastAPI(title="...")` | optional, mentioned once |
+
+All eight Dockerfile lines match `week-01-solution:Dockerfile` character for
+character.
+
+> **INSTRUCTOR** · Every code slide **names its file in the eyebrow** —
+> `app/main.py · line 1`, `Endpoint 2 of 3`. Students can follow along in
+> their own editor without asking which file they are in.
+
+### Each endpoint is tested the moment it exists
+
+The build does not write the whole file and then run it. It goes:
+
+```
+   write /health        (5 lines)  ->  TEST IT   curl /health        ✓
+   write /chat          (9 lines)  ->  TEST IT   curl /chat          ✓
+                                       and again with the session id ✓
+   add error handling               ->
+   write /chat/stream   (8 lines)  ->  TEST IT   curl -N /chat/stream ✓
+                                   ->  ALL FOUR, one after another
+```
+
+> **INSTRUCTOR** · This is the point of the section. **When something breaks,
+> it is the thing they just typed** — not one of nine unknowns.
+>
+> The last slide runs all four commands in order, including the `422` from an
+> empty body. Do that one on the projector: it is the demo that makes the
+> afternoon feel finished, and every tick is something they wrote.
+
+### Streaming is endpoint 3, not a separate topic
+
+It used to be its own section, which made students ask *why are we talking
+about this now.* It is now simply **the third endpoint**, introduced by the
+question it answers:
+
+> *"How long did that last answer take? And what were you looking at while you
+> waited?"*
+
+Nothing. That is the problem streaming solves, and it arrives immediately
+after they have felt it on their own screen.
+
+### The key is finished during setup
+
+`KODEKEY is not set` used to appear mid-afternoon, which was confusing — a new
+concept arriving in the middle of a build. **The whole topic is now closed at
+0:43**, with the `set -a && source .env && set +a` command on the whiteboard
+and a ten-second demo of why:
+
+```bash
+export TEST=hello
+echo $TEST          # hello
+# now open a NEW window
+echo $TEST          # empty
+```
+
+> **INSTRUCTOR** · Do that demo rather than describing it. Once they have
+> *seen* a setting fail to cross windows, the error never needs explaining
+> again — you just point at the board.
 
 ### Code is built one line per slide
 
