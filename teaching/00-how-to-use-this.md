@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 141-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 145-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,25 +293,25 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and thirty of the slides carry a
-presenter cue — the callback to make, the question to ask, the thing *not* to explain
+**Press `S` before you start.** A hundred and thirty-four of the slides carry
+a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
    0:00   12   Three questions to the room   settle the room, and read it
-   0:12   26   Meet today's agent            described, then RUN step by step
-   0:38    9   The project                   a tour BEFORE they download it
-   0:47   11   Set it up, and prove it       incl. the key, finished here
-   0:58   10   break
-   1:08   24   The terminal                  a real lesson: 9 commands
-   1:32   17   Sending messages              JSON and curl, on public services
-   1:49   10   break
-   1:59   18   What a web service is         the shop story, then the words
-   2:17   13   Addresses, then messages
-   2:30   39   Build the web service         3 endpoints, line by line, tested
-   3:09   34   Build the container           5 examples, then line by line
+   0:12   25   Meet today's agent            described, then RUN step by step
+   0:37    8   The project                   a tour BEFORE they download it
+   0:45   19   Set it up, and prove it       .env, the key, then the demo
+   1:04   10   break
+   1:14   23   The terminal                  a real lesson: 9 commands
+   1:37   16   Sending messages              JSON and curl, on public services
+   1:53   10   break
+   2:03   17   What a web service is         the shop story, then the words
+   2:20   12   Addresses, then messages
+   2:32   38   Build the web service         3 endpoints, line by line, tested
+   3:10   33   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -543,6 +543,65 @@ The nineteen-line file taught across those slides was written out in full and
 run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
+
+### The demo is the instructor's, and they run it later
+
+**A real contradiction, caught while reviewing:** the demo runs at 0:12, but
+the project is not downloaded until 0:45. Students were shown a command they
+could not possibly run yet.
+
+Fixed in two places:
+
+- **At 0:12** the slide says so plainly: *"This one is on my machine, not
+  yours. I have the project downloaded already — you will do that at 0:45, and
+  then run this exact command yourself."*
+- **At 0:45**, after the key is set and `check-week-00` is green, a new slide
+  hands it to them: *"The command you watched me run at 0:12."*
+
+> **INSTRUCTOR** · Say that first sentence out loud. Without it, somebody
+> spends ten minutes wondering why they cannot follow along — or tries, fails,
+> and stops listening.
+>
+> The 0:45 slide is the payoff. Collect it: *"Remember this from the start of
+> the session? Now it is yours."*
+
+**The question is an argument**, so they can poke at the decision from step 2:
+
+```bash
+python -m checks.demo_turn                        # picks lookup_order
+python -m checks.demo_turn "what is 12 * 41?"     # picks calculator -> 492
+```
+
+That was a false claim on the slide until now — the stand-in model hardcoded
+`lookup_order`, so changing the question changed nothing. `checks/demo_turn.py`
+now chooses a tool from the question, and both variations are verified on the
+`week-01-package` branch.
+
+### `.env` gets three slides, in plain English
+
+Telling a non-technical room to "put your key in `.env`" means nothing. Three
+slides at 0:45 build it up **before** the step that asks them to:
+
+1. **Some things must not live in the code** — the code is the same for
+   everybody; your key is only yours. *"A shared document everyone edits,
+   versus the sticky note with your own password on it."*
+2. **That separate place is a file called `.env`** — the format is
+   `NAME=value`, one per line, and nothing more. The leading dot means hidden
+   (which they met with `ls -la`), and it is on the never-upload list.
+3. **Every project works this way** — one copy of the code, a different
+   `.env` on your laptop, on a test server, and in production.
+
+> **INSTRUCTOR** · **Do not say "environment variable" on those three
+> slides.** That phrase arrives on the next slide, with the command that loads
+> the file — the moment it actually means something.
+>
+> Slide 3 answers the question people ask silently: *"why not just edit the
+> code when I need a different setting?"* Because then you have three slightly
+> different copies of the code and no way to tell them apart.
+>
+> It also pre-loads two later moments: next week the hosting platform supplies
+> the settings instead of a file, and at 3:10 the container must not have the
+> key baked into it.
 
 ### The agent is demonstrated one step at a time
 
@@ -850,7 +909,7 @@ are dimmed.
 
 ```
    TODAY    [ agent ][ a web address ][ a container ]
-   WEEK 2   [ agent ][ address ][ container ][ on the internet ][ memory that lasts ]
+   WEEK 2   [ ...above ][ on the internet ][ memory that lasts ]
    WEEK 3   [ everything above ][ a locked door ][ automatic deploy ]
    WEEK 4   [ everything above ][ spending limits ]
    WEEK 5   [ everything above ][ a health dashboard ]

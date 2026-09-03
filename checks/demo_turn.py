@@ -6,8 +6,11 @@
 Prints one labelled step at a time, pausing between them, so a room can follow
 what happens and when. This is a teaching aid, not part of the agent.
 """
+import json
+import re
 import sys
 import time
+from types import SimpleNamespace as NS
 
 from app.agent import TOOLS, run_turn
 
@@ -25,37 +28,60 @@ def _step(n, who, what, detail=None):
     time.sleep(PAUSE)
 
 
-def _fake_model():
-    """Stands in for the model. Asks for one tool, then answers."""
+def _pick_tool(question):
+    """Stand in for the model's choice of tool.
+
+    The real model reads the question and decides. This mimics that decision
+    just well enough for the demo to be honest when the question changes:
+    an order id means look it up, an arithmetic expression means calculate.
+    """
+    order = re.search(r"ORD-\d+", question, re.I)
+    if order:
+        return ("lookup_order", {"order_id": order.group().upper()},
+                "Your standing desk is shipped and arrives Thursday.")
+
+    sum_ = re.search(r"(\d+)\s*([*+/-])\s*(\d+)", question)
+    if sum_:
+        expr = f"{sum_.group(1)} {sum_.group(2)} {sum_.group(3)}"
+        return ("calculator", {"expression": expr}, None)
+
+    return ("word_count", {"text": question}, None)
+
+
+def _fake_model(question):
+    """Stands in for the model. Asks for one tool, then reports the result."""
+    name, args, canned = _pick_tool(question)
     calls = {"n": 0}
 
     def model(messages):
         calls["n"] += 1
         if calls["n"] == 1:
             _step(2, "THE MODEL DECIDES",
-                  'It cannot look anything up. So it asks for a tool:',
-                  ['tool:  lookup_order', 'input: {"order_id": "ORD-1002"}'])
-            from types import SimpleNamespace as NS
-            return NS(content=[NS(type="tool_use", name="lookup_order",
-                                  input={"order_id": "ORD-1002"}, id="t1")],
+                  "It cannot work this out on its own. So it asks for a tool:",
+                  [f"tool:  {name}",
+                   f"input: {json.dumps(args)}"])
+            return NS(content=[NS(type="tool_use", name=name,
+                                  input=args, id="t1")],
                       stop_reason="tool_use")
 
         result = messages[-1]["content"][0]["content"]
         _step(3, "YOUR CODE RUNS THE TOOL",
-              "It looked the order up and handed the answer back:",
+              "It ran the tool and handed the answer back:",
               [result])
-        from types import SimpleNamespace as NS
-        return NS(content=[NS(type="text",
-                              text="Your standing desk is shipped and arrives "
-                                   "Thursday.")],
+        answer = canned or f"The answer is {result}."
+        return NS(content=[NS(type="text", text=answer)],
                   stop_reason="end_turn")
     return model
 
 
-def main(real=False):
+def main(real=False, question=None):
     print("\n" + "=" * 62)
     print("  ONE QUESTION, STEP BY STEP")
     print("=" * 62)
+
+    global QUESTION
+    if question:
+        QUESTION = question
 
     print(f"\n  The agent can reach for {len(TOOLS)} tools:")
     for t in TOOLS:
@@ -65,7 +91,7 @@ def main(real=False):
     _step(1, "YOU ASK", QUESTION)
 
     result = run_turn(QUESTION) if real else run_turn(QUESTION,
-                                                     model_fn=_fake_model())
+                                                     model_fn=_fake_model(QUESTION))
     reply, history = result[0], result[1]
 
     _step(4, "THE MODEL ANSWERS", "Now it has the facts, so now it can answer:",
@@ -93,4 +119,6 @@ def main(real=False):
 
 
 if __name__ == "__main__":
-    main(real="--real" in sys.argv)
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(real="--real" in sys.argv,
+         question=" ".join(args) or None)

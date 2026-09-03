@@ -27,17 +27,17 @@ building with them.
 
 ```
    0:00   12   Three questions to the room   settle the room, and read it
-   0:12   26   Meet today's agent            described, then RUN step by step
-   0:38    9   The project                   a tour BEFORE they download it
-   0:47   11   Set it up, and prove it       incl. the key, finished here
-   0:58   10   break
-   1:08   24   The terminal                  a real lesson: 9 commands
-   1:32   17   Sending messages              JSON and curl, on public services
-   1:49   10   break
-   1:59   18   What a web service is         the shop story, then the words
-   2:17   13   Addresses, then messages
-   2:30   39   Build the web service         3 endpoints, line by line, tested
-   3:09   34   Build the container           5 examples, then line by line
+   0:12   25   Meet today's agent            described, then RUN step by step
+   0:37    8   The project                   a tour BEFORE they download it
+   0:45   19   Set it up, and prove it       .env, the key, then the demo
+   1:04   10   break
+   1:14   23   The terminal                  a real lesson: 9 commands
+   1:37   16   Sending messages              JSON and curl, on public services
+   1:53   10   break
+   2:03   17   What a web service is         the shop story, then the words
+   2:20   12   Addresses, then messages
+   2:32   38   Build the web service         3 endpoints, line by line, tested
+   3:10   33   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 141 slides with a presenter note on 130 of them, and it carries material this
+is 145 slides with a presenter note on 134 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -217,7 +217,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:12 – 0:38)
+## 2 · Meet today's agent (0:12 – 0:37)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -460,7 +460,7 @@ it has three tools instead of thirty.
 > Do not volunteer it to a non-technical room. Keep it for the person who asks.
 
 
-## 3 · The project (0:38 – 0:47)
+## 3 · The project (0:37 – 0:45)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.
@@ -594,7 +594,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:47 – 0:58)
+## 4 · Set it up, and prove it (0:45 – 1:04)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -624,7 +624,59 @@ docker --version       # and the app must actually be running
 > traceback at import time that never mentions versions at all. A student can
 > lose twenty minutes to it.
 
-### Three steps
+### What a settings file is, before we ask for a key (5 min)
+
+Telling a non-technical room to "put your key in `.env`" means nothing. Build
+it up first — three short ideas.
+
+**1 · Some things must not live in the code.**
+
+| The code | The settings |
+|---|---|
+| the same for **everybody** | different for **each person** |
+| shared on purpose | yours alone, and often secret |
+| every computer gets the identical copy | your key, your database, your paths |
+
+> **INSTRUCTOR** · The comparison that lands: *"A shared document everyone
+> edits, versus the sticky note with your own password on it. You would never
+> type the password into the document you are about to email round."*
+
+**2 · That separate place is a file called `.env`.**
+
+```
+# this is a whole .env file
+KODEKEY=sk-your-real-key-here
+PORT=8080
+```
+
+That is the entire format — **a name, an equals sign, a value**, one per line.
+No quotes, no punctuation. People expect something harder, so say so.
+
+- **The leading dot means hidden**, which they met with `ls -la`. Not secret,
+  just out of the way.
+- **It is on the project's never-upload list**, so the key physically cannot
+  travel with the code.
+
+**3 · Every project works this way.**
+
+The identical code runs on your laptop, on a test server, and in production —
+with a **different `.env` in each**. Different key, different database,
+different port, and *nothing in the code changes*.
+
+> **INSTRUCTOR** · **Do not say "environment variable" yet.** That phrase
+> belongs on the next slide, with the command that loads the file — the moment
+> it actually means something.
+>
+> Idea 3 answers what people ask silently: *"why not just edit the code when I
+> need a different setting?"* Because then you have three slightly different
+> copies and no way to tell them apart. **One copy plus three settings files is
+> manageable; three copies is not.**
+>
+> It also pre-loads two later moments: next week the hosting platform supplies
+> the settings instead of a file, and the container at 3:10 must not have the
+> key baked in.
+
+### Three steps (6 min)
 
 ```bash
 git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
@@ -652,7 +704,7 @@ cp .env.example .env
 git will never send it anywhere. It is also a hidden file — plain `ls` will not
 show it, which is the first reason they need `ls -la` in the terminal exercise.
 
-### Prove it
+### Prove it, then run the demo yourself (5 min)
 
 ```bash
 make check-week-00
@@ -676,7 +728,7 @@ install and the code without spending anything or needing the network.
 > known"* and *"history has all four moves"* **are the agent loop**, which is
 > the next beat. The checkpoint previews the lesson.
 
-### The four errors you will actually see
+### The four errors you will actually see (3 min)
 
 | Error | What it means | The fix |
 |---|---|---|
@@ -691,7 +743,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:08 – 1:49)
+## 5–6 · The terminal, then sending messages (1:14 – 1:53)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -816,7 +868,7 @@ Two more that save everybody's afternoon:
 > long paths character by character for weeks unless somebody shows them this
 > in the first ten minutes.
 
-### The terminal · folders, built by hand (21 min)
+### The terminal · folders, built by hand (19 min)
 
 They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.
@@ -1017,7 +1069,7 @@ our case `8080`.
 > They need "numbered door" and "localhost means here", and they need it in
 > ninety seconds. The rest is Week 2's problem and mostly never.
 
-### Sending messages · JSON first (6 min)
+### Sending messages · JSON first (5 min)
 
 They are about to send and receive JSON all course. Four minutes now saves
 confusion in all eight weeks.
@@ -1218,7 +1270,7 @@ same method, the same header, the same body shape.
 > That single sentence is what stops FastAPI feeling like magic later.
 
 
-## Break (1:49 – 1:59)
+## Break (1:53 – 2:03)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1269,7 +1321,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (1:59 – 2:30)
+## 7–8 · What a web service is, then addresses and messages (2:03 – 2:32)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1838,7 +1890,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:30 – 3:09)
+## 9 · Build the web service (2:32 – 3:10)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -1852,7 +1904,7 @@ Three parts, and they map exactly onto the picture from the concepts section:
    the container section   make it run anywhere      the box     12 min
 ```
 
-### Endpoints 1 and 2 · /health, then /chat (26 min)
+### Endpoints 1 and 2 · /health, then /chat (25 min)
 
 **This is the front door from the concepts section, built.** Point back at the diagram before
 anyone types: the agent already works, and they are wrapping it so that anything
@@ -2130,7 +2182,7 @@ above, running.
 > the terminal exercise — and exports every line in it. Write it on the board. Leave it there
 > for eight weeks.
 
-### Endpoint 3 · /chat/stream, so it feels fast (14 min)
+### Endpoint 3 · /chat/stream, so it feels fast (13 min)
 
 Ask: *"How long did that take?"*
 
@@ -2235,7 +2287,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:09 – 3:43)
+## 10 · Build the container (3:10 – 3:43)
 
 Ask: *"What would my colleague need to run your agent?"*
 
