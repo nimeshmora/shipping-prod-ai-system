@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 100-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 116-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,26 +290,27 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Eighty-eight of the slides carry a presenter
-cue — the callback to make, the question to ask, the thing *not* to explain
+**Press `S` before you start.** A hundred and four of the slides carry a
+presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   18   Three questions to the room   settle the room, and read it
-   0:18   18   Meet today's agent            our small teaching agent
-   0:36   12   The project                   a tour BEFORE they download it
-   0:48   12   Set it up, and prove it       the checklist, and check-week-00
-   1:00   10   break
-   1:10   18   The terminal                  practised on a throwaway folder
-   1:28   24   Sending messages              JSON and curl, on public services
-   1:52   10   break
-   2:02   22   What a web service is         service, API, endpoint
-   2:24   20   Addresses, then messages
-   2:44   26   Build the address, then speed
-   3:21   29   Packing it up                 containers, from scratch
-   3:50   10   Prove it, and what breaks next
+   0:00   16   Three questions to the room   settle the room, and read it
+   0:16   16   Meet today's agent            our small teaching agent
+   0:32   11   The project                   a tour BEFORE they download it
+   0:43   11   Set it up, and prove it       the checklist, and check-week-00
+   0:54   10   break
+   1:04   16   The terminal                  practised on a throwaway folder
+   1:20   22   Sending messages              JSON and curl, on public services
+   1:42   10   break
+   1:52   20   What a web service is         service, API, endpoint
+   2:12   18   Addresses, then messages
+   2:30   40   Build the web service         ONE LINE PER SLIDE
+   3:10   11   Make it feel fast
+   3:21   30   Build the container           three examples, then line by line
+   3:51    9   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -369,13 +370,69 @@ One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
 
-### Containers get 29 minutes, and are taught from nothing
+### Code is built one line per slide
+
+The two build sections do not show a finished file and explain it. They
+**write it in front of the room, one line at a time** — 19 slides for the web
+service, 5 for the agent's Dockerfile.
+
+Each of those slides has exactly three things on it:
+
+```
+   the file so far      lines already written, dimmed
+                        THE NEW LINE, bright, marked "new"
+                        lines still to come, very faint
+
+   one sentence         what the new line does, in plain English
+
+   a progress strip     which piece of six you are on
+```
+
+> **INSTRUCTOR** · This is the format to keep for every week. It costs more
+> slides and no more time, because you were going to say these sentences
+> anyway — the difference is that **the room can see which line you are
+> talking about.**
+>
+> Advance, read the one sentence, take questions, advance. Do not read the
+> dimmed lines again; they have already had their slide.
+>
+> Median on-screen text is **96 words per slide**. Anything over about 150 is
+> a reference table meant to stay up while people work, not something to read
+> aloud.
+
+### uvicorn and FastAPI are separated
+
+Students meet these two words together and assume they are one thing. They now
+get separate one-line definitions and a four-step journey slide:
+
+| | What it is |
+|---|---|
+| **uvicorn** | the program that **waits** for network messages on one port. A program you *start* — it is what `make run` runs. |
+| **FastAPI** | the library that **reads** each message and picks which of your functions answers it. Code you *import*; you never start it. |
+
+> **INSTRUCTOR** · The sentence that settles it: *"uvicorn listens. FastAPI
+> decides who answers. You write the answering."*
+>
+> Do not explain ASGI, workers or event loops. None of it changes anything
+> they do that afternoon.
+>
+> If somebody asks how uvicorn finds their code: it is the `app.main:app` in
+> the run command — the file `app/main.py`, and the thing called `app` inside
+> it. That pays off later, when the same string appears in the Dockerfile's
+> last line.
+
+The nineteen-line file taught across those slides was written out in full and
+run against the real agent: `/health` returns 200, an empty body is refused
+with 422, and two turns with the same session id produce a history that grows
+from four messages to eight. It is not a paraphrase of the answer key.
+
+### Containers get 30 minutes, and are taught from nothing
 
 This is the longest section of the day, and deliberately so — it is the topic
 a non-technical room finds hardest, and the one most courses rush. Fourteen
 slides, in this order:
 
-1. **The problem** — they rebuild the setup list from 0:48 themselves
+1. **The problem** — they rebuild the setup list from 0:43 themselves
 2. **The idea, before the word "Docker"** — send the set-up, not just the code
 3. **Image vs container** — the installer you downloaded, versus the app open
    on your screen
@@ -385,7 +442,7 @@ slides, in this order:
 7. **Proof it is sealed** — delete the file, run it again, it still works
 8. **Example 3** — a real web server, and `-p` explained
 9. **Layers** — a visual stack of which steps are reused and which are redone
-10. **Our agent's Dockerfile** — only four lines are new
+10. **Our agent's Dockerfile** — five slides, one line at a time
 11. **`${PORT}`** — why never to write the number in
 12. **`.dockerignore`** — and never packaging a secret
 13. **Build and run ours** — the same `curl`, from inside a package
