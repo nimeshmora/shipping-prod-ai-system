@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 135-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 139-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,26 +293,26 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and twenty-four of the slides carry
+**Press `S` before you start.** A hundred and twenty-eight of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   14   Three questions to the room   settle the room, and read it
-   0:14   15   Meet today's agent            our small teaching agent
-   0:29   10   The project                   a tour BEFORE they download it
-   0:39   12   Set it up, and prove it       incl. the key, finished here
-   0:51   10   break
-   1:01   26   The terminal                  a real lesson: 9 commands, 15 slides
-   1:27   18   Sending messages              JSON and curl, on public services
-   1:45   10   break
-   1:55   19   What a web service is         the shop story, then the words
-   2:14   14   Addresses, then messages
-   2:28   40   Build the web service         3 endpoints, line by line, tested
-   3:08   38   Build the container           5 examples, then line by line
-   3:46   14   Prove it, and what breaks next
+   0:00   13   Three questions to the room   settle the room, and read it
+   0:13   22   Meet today's agent            described, then RUN three ways
+   0:35    9   The project                   a tour BEFORE they download it
+   0:44   11   Set it up, and prove it       incl. the key, finished here
+   0:55   10   break
+   1:05   25   The terminal                  a real lesson: 9 commands
+   1:30   17   Sending messages              JSON and curl, on public services
+   1:47   10   break
+   1:57   18   What a web service is         the shop story, then the words
+   2:15   13   Addresses, then messages
+   2:28   39   Build the web service         3 endpoints, line by line, tested
+   3:07   36   Build the container           5 examples, then line by line
+   3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -543,6 +543,41 @@ The nineteen-line file taught across those slides was written out in full and
 run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
+
+### The agent is demonstrated, not just described
+
+The section used to describe the agent for fifteen minutes without ever
+running it. It now closes with **three demos, smallest first** — the same
+prove-the-simple-thing-first order as every other section.
+
+| Demo | Command | What it shows |
+|---|---|---|
+| 1 · just the tool | `python` then `lookup_order("ORD-1002")` | the data is real, and there is **no AI in a lookup** |
+| 2 · the whole loop | `make check-week-00`, then `python -m checks.demo_turn` | the four moves happening, one line printed each |
+| 3 · what it kept | `len(history)` → `4` | the conversation as an actual list |
+
+**None of the three needs an API key**, which is the point — they work on
+every laptop in the room on the first morning, before anything is configured.
+Demo 2 uses `checks/demo_turn.py`, which was added for this: it narrates one
+turn with a stand-in model, and takes `--real` if you have a key and want to
+watch the real model decide.
+
+> **INSTRUCTOR** · **You run these; they watch.** Laptops are closed until
+> after the first break. Four minutes for all three.
+>
+> **Demo 1 is the one people underestimate.** Calling the tool directly, with
+> no model involved, is what makes *"the model asks, your code does it"*
+> concrete: *"There is no AI in what you just saw. It is a lookup returning a
+> line of text. The clever part is deciding WHEN to call it."*
+>
+> **In demo 2, say the step numbers out loud** as they scroll past, pointing at
+> the whiteboard. The four labels on screen are the four moves you drew at
+> 0:02.
+>
+> **Demo 3 is the slide that pays off five times.** That growing list is what a
+> session id looks up, what disappears when the program stops, what vanishes on
+> a new release next week, and what has to be capped in Week 4. Say the
+> punchline twice.
 
 ### The terminal gets a real lesson, not a warm-up
 

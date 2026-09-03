@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 135-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 139-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,23 +786,23 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and twenty-four of the slides carry
+<p><strong>Press <code>S</code> before you start.</strong> A hundred and twenty-eight of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
-<pre><code>   0:00   14   Three questions to the room   settle the room, and read it
-   0:14   15   Meet today's agent            our small teaching agent
-   0:29   10   The project                   a tour BEFORE they download it
-   0:39   12   Set it up, and prove it       incl. the key, finished here
-   0:51   10   break
-   1:01   26   The terminal                  a real lesson: 9 commands, 15 slides
-   1:27   18   Sending messages              JSON and curl, on public services
-   1:45   10   break
-   1:55   19   What a web service is         the shop story, then the words
-   2:14   14   Addresses, then messages
-   2:28   40   Build the web service         3 endpoints, line by line, tested
-   3:08   38   Build the container           5 examples, then line by line
-   3:46   14   Prove it, and what breaks next
+<pre><code>   0:00   13   Three questions to the room   settle the room, and read it
+   0:13   22   Meet today's agent            described, then RUN three ways
+   0:35    9   The project                   a tour BEFORE they download it
+   0:44   11   Set it up, and prove it       incl. the key, finished here
+   0:55   10   break
+   1:05   25   The terminal                  a real lesson: 9 commands
+   1:30   17   Sending messages              JSON and curl, on public services
+   1:47   10   break
+   1:57   18   What a web service is         the shop story, then the words
+   2:15   13   Addresses, then messages
+   2:28   39   Build the web service         3 endpoints, line by line, tested
+   3:07   36   Build the container           5 examples, then line by line
+   3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
@@ -1099,6 +1099,56 @@ last line.</p>
 run against the real agent: <code>/health</code> returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.</p>
+<h3>The agent is demonstrated, not just described</h3>
+<p>The section used to describe the agent for fifteen minutes without ever
+running it. It now closes with <strong>three demos, smallest first</strong> — the same
+prove-the-simple-thing-first order as every other section.</p>
+<table>
+<thead>
+<tr>
+<th>Demo</th>
+<th>Command</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 · just the tool</td>
+<td><code>python</code> then <code>lookup_order("ORD-1002")</code></td>
+<td>the data is real, and there is <strong>no AI in a lookup</strong></td>
+</tr>
+<tr>
+<td>2 · the whole loop</td>
+<td><code>make check-week-00</code>, then <code>python -m checks.demo_turn</code></td>
+<td>the four moves happening, one line printed each</td>
+</tr>
+<tr>
+<td>3 · what it kept</td>
+<td><code>len(history)</code> → <code>4</code></td>
+<td>the conversation as an actual list</td>
+</tr>
+</tbody>
+</table>
+<p><strong>None of the three needs an API key</strong>, which is the point — they work on
+every laptop in the room on the first morning, before anything is configured.
+Demo 2 uses <code>checks/demo_turn.py</code>, which was added for this: it narrates one
+turn with a stand-in model, and takes <code>--real</code> if you have a key and want to
+watch the real model decide.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>You run these; they watch.</strong> Laptops are closed until
+after the first break. Four minutes for all three.</p>
+<p><strong>Demo 1 is the one people underestimate.</strong> Calling the tool directly, with
+no model involved, is what makes <em>"the model asks, your code does it"</em>
+concrete: <em>"There is no AI in what you just saw. It is a lookup returning a
+line of text. The clever part is deciding WHEN to call it."</em></p>
+<p><strong>In demo 2, say the step numbers out loud</strong> as they scroll past, pointing at
+the whiteboard. The four labels on screen are the four moves you drew at
+0:02.</p>
+<p><strong>Demo 3 is the slide that pays off five times.</strong> That growing list is what a
+session id looks up, what disappears when the program stops, what vanishes on
+a new release next week, and what has to be capped in Week 4. Say the
+punchline twice.</p>
+</blockquote>
 <h3>The terminal gets a real lesson, not a warm-up</h3>
 <p>Twenty-six minutes and fifteen slides. It used to be five slides with four
 commands crammed onto each, which is unusable for anyone who has not used a
@@ -1505,19 +1555,19 @@ and when it fails they cannot tell you which part broke.</p>
 shape the other weeks use — it is the only session that can assume nothing at
 all, so it spends its first two hours handing over tools and its last two
 building with them.</p>
-<pre><code>   0:00   14   Three questions to the room   settle the room, and read it
-   0:14   15   Meet today's agent            our small teaching agent
-   0:29   10   The project                   a tour BEFORE they download it
-   0:39   12   Set it up, and prove it       incl. the key, finished here
-   0:51   10   break
-   1:01   26   The terminal                  a real lesson: 9 commands
-   1:27   18   Sending messages              JSON and curl, on public services
-   1:45   10   break
-   1:55   19   What a web service is         the shop story, then the words
-   2:14   14   Addresses, then messages
-   2:28   40   Build the web service         3 endpoints, line by line, tested
-   3:08   38   Build the container           5 examples, then line by line
-   3:46   14   Prove it, and what breaks next
+<pre><code>   0:00   13   Three questions to the room   settle the room, and read it
+   0:13   22   Meet today's agent            described, then RUN three ways
+   0:35    9   The project                   a tour BEFORE they download it
+   0:44   11   Set it up, and prove it       incl. the key, finished here
+   0:55   10   break
+   1:05   25   The terminal                  a real lesson: 9 commands
+   1:30   17   Sending messages              JSON and curl, on public services
+   1:47   10   break
+   1:57   18   What a web service is         the shop story, then the words
+   2:15   13   Addresses, then messages
+   2:28   39   Build the web service         3 endpoints, line by line, tested
+   3:07   36   Build the container           5 examples, then line by line
+   3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
@@ -1535,18 +1585,18 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 135 slides with a presenter note on 124 of them, and it carries material this
+is 139 slides with a presenter note on 128 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
 <hr />
-<h2>1 · Three questions to the room (0:00 – 0:14)</h2>
+<h2>1 · Three questions to the room (0:00 – 0:13)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Laptops closed. Slides off. Just talk. This is the only part
 of the session where nobody types anything, and it sets up everything else.</p>
 </blockquote>
 <p>Three questions to the room, in this order.</p>
-<h3>"What is an agent?"</h3>
+<h3>"What is an agent?" (3 min)</h3>
 <p>Let them answer. You are listening for <strong>a loop</strong>.</p>
 <p>The answer you want to arrive at, in their words if possible:</p>
 <blockquote>
@@ -1559,7 +1609,7 @@ lesson of Phase 1 and the foundation of every Phase 2 guardrail. Your code
 runs whatever the model asks for. That is why budgets, traces and fences
 exist.</p>
 </blockquote>
-<h3>"Someone tell me what you built in Phase 1."</h3>
+<h3>"Is that different from ChatGPT?" (4 min)</h3>
 <p>Pick a volunteer. Let them talk for two minutes.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Pick someone who is <em>not</em> the most confident person in the
@@ -1571,7 +1621,68 @@ four moves on the whiteboard if they are willing:</p>
 4. model      "Your standing desk arrives Thursday"</code></p>
 <p>Keep that on the board all session.</p>
 </blockquote>
-<h3>"So — who else can use it?"</h3>
+<p>Describing the agent is not enough — <strong>run it</strong>, smallest first, on the
+projector. Laptops stay closed; this is a demonstration.</p>
+<p><strong>Demo 1 — just the tool.</strong> No model, no key, no internet.</p>
+<pre><code class="language-bash">python
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; from app.orders import lookup_order
+&gt;&gt;&gt; lookup_order(&quot;ORD-1002&quot;)
+'ORD-1002: standing desk, $340.00, status shipped, arriving Thursday.
+ Note: signature required on delivery'
+&gt;&gt;&gt; lookup_order(&quot;ORD-9999&quot;)
+'no order found with id ORD-9999'
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This is the one people underestimate. Calling the tool
+directly, with no model involved, is what makes <em>"the model asks, your code
+does it"</em> concrete:</p>
+<p><em>"There is no AI in what you just saw. It is a lookup that returns a line of
+text. The clever part is deciding WHEN to call it."</em></p>
+<p>A wrong id says so plainly rather than inventing a date — worth naming out
+loud. <code>exit()</code> or Ctrl+D leaves the Python prompt.</p>
+</blockquote>
+<p><strong>Demo 2 — the whole loop, narrated.</strong> Also no key needed.</p>
+<pre><code class="language-bash">make check-week-00
+python -m checks.demo_turn
+</code></pre>
+<pre><code>  [1] you ask          where is my order ORD-1002?
+  [2] the model asks   for a tool: lookup_order, with ORD-1002
+  [3] your code runs   it -&gt; ORD-1002: standing desk, $340.00, status...
+  [4] the model answers Your standing desk is shipped and arrives Thursday.
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Say the step numbers out loud as they appear, pointing at
+the whiteboard — those four labels are the four moves you drew at 0:02.</p>
+<p><strong>The line that lands:</strong> <em>"Look at step 2 again. It did not fetch anything.
+It said 'use lookup_order with ORD-1002' — and then waited for us."</em></p>
+<p>With a key configured, <code>python -m checks.demo_turn --real</code> shows the same
+four steps with the real model deciding for itself. Only the wording of the
+final answer changes, which is itself worth pointing out.</p>
+</blockquote>
+<p><strong>Demo 3 — what it remembered.</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; reply, history = run_turn(&quot;where is my order ORD-1002?&quot;)
+&gt;&gt;&gt; len(history)
+4
+</code></pre>
+<pre><code>   user       where is my order ORD-1002?
+   assistant  tool_use     lookup_order  {&quot;order_id&quot;: &quot;ORD-1002&quot;}
+   user       tool_result  ORD-1002: standing desk, $340.00, shipped...
+   assistant  text         Your standing desk is shipped and arrives Thursday.
+</code></pre>
+<p><strong>Four entries — the four moves.</strong> Not a diagram; literally what the list
+contains. And notice line 3 is labelled <code>user</code>: <strong>the tool result goes back as
+if you said it.</strong> To the model, a tool result is news from outside, not part of
+its own thinking.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This is the slide that pays off five times. That growing
+list is what a session id looks up (at 2:28), what disappears when the
+program stops (at 2:50), what vanishes on a new release (next week), and
+what has to be capped because re-sending it costs money (Week 4).</p>
+<p>Say the punchline twice: <strong>every new question re-sends this whole list, and
+the model remembers nothing.</strong></p>
+</blockquote>
+<h3>"Have you ever built a website — and put it somewhere?" (6 min)</h3>
 <p>This is the trap question. The honest answer is <strong>nobody</strong>.</p>
 <p><strong>And it lands much harder than it did five minutes ago</strong>, because they have
 just <em>seen</em> the thing: a loop, three tools, four real orders, a carefully
@@ -1594,7 +1705,7 @@ beat does not feel like a detour:</p>
 you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></p>
 </blockquote>
 <hr />
-<h2>2 · Meet today's agent (0:14 – 0:29)</h2>
+<h2>2 · Meet today's agent (0:13 – 0:35)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <strong>This section is new and it is load-bearing.</strong> They are
 about to spend two hours deploying this thing. If they cannot say what it does
@@ -1639,7 +1750,7 @@ the projector, reading the real files. Twelve minutes, no typing.</p>
 That is the normal shape of production work — the thing that thinks is small,
 and the thing that keeps it alive is everything else."</em></p>
 </blockquote>
-<h4>1 · What it can reach for: three tools</h4>
+<h4>1 · What it can reach for: three tools (3 min)</h4>
 <pre><code>   lookup_order    look up an order by id — the one that matters today
    calculator      basic arithmetic, e.g. '12 * 41'
    word_count      counts words in some text
@@ -1660,7 +1771,7 @@ question. It is instructions to an AI, not a comment for a human."</em></p>
 <p>Vague there means a tool that never gets used, or gets used at the wrong
 moment. It is the most underrated line in an agent codebase.</p>
 </blockquote>
-<h4>2 · The data it looks up: four orders</h4>
+<h4>2 · The data it looks up: four orders (3 min)</h4>
 <table>
 <thead>
 <tr>
@@ -1713,7 +1824,7 @@ come back to it in Week 7."</em></p>
 <p>A student who notices something odd in Week 1 and gets the answer in Week 7
 remembers it permanently. Explaining it now spends that for nothing.</p>
 </blockquote>
-<h4>3 · The instructions it carries</h4>
+<h4>3 · The instructions it carries (4 min)</h4>
 <p>The <strong>system prompt</strong> is the agent's standing orders, re-sent with every single
 turn because the model has no memory:</p>
 <pre><code>You are a customer support assistant for an online shop.
@@ -1738,7 +1849,7 @@ team versions and rolls back.</p>
 Then say the honest part: <em>"A system prompt is not a security boundary. It is
 a strong suggestion. Week 7 is where we find out the difference."</em></p>
 </blockquote>
-<h4>4 · The one function they will call today</h4>
+<h4>4 · The one function they will call today (5 min)</h4>
 <pre><code class="language-python">reply, history = run_turn(message, history)
 </code></pre>
 <p><strong>That is the entire interface</strong> between today's work and Phase 1's agent. One
@@ -1760,7 +1871,7 @@ cost.</p>
 The model asks, and your code obeys. That inversion is what makes this an
 agent rather than a chatbot with functions."</em></p>
 </blockquote>
-<h4>5 · The four moves, as real data</h4>
+<h4>5 · Show it running · three demos (7 min)</h4>
 <p>Run this on the projector. It is the whiteboard drawing, as an actual list:</p>
 <pre><code>reply, history = run_turn(&quot;where is my order ORD-1002?&quot;)
 
@@ -1786,7 +1897,7 @@ growing <code>history</code> list is:</p>
 nothing."</em></p>
 </blockquote>
 <hr />
-<h2>3 · The project (0:29 – 0:39)</h2>
+<h2>3 · The project (0:35 – 0:44)</h2>
 <p>They already cloned this in the setup section. Now that they can move around a folder,
 <strong>give the commands they ran a meaning</strong>, and give them the map.</p>
 <p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
@@ -1891,7 +2002,7 @@ the web yet.</p>
 break."</em></p>
 </blockquote>
 <hr />
-<h2>4 · Set it up, and prove it (0:39 – 0:51)</h2>
+<h2>4 · Set it up, and prove it (0:44 – 0:55)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Everyone sitting still, one command at a time, hands up on
 failure. You are hunting for broken machines now, while it costs the room ten
@@ -1991,7 +2102,7 @@ now. You will point at it four times today and every week after. Also watch
 for editors that helpfully save <code>.env</code> as <code>.env.txt</code> — <code>ls -la</code> catches it.</p>
 </blockquote>
 <hr />
-<h2>5–6 · The terminal, then sending messages (1:01 – 1:45)</h2>
+<h2>5–6 · The terminal, then sending messages (1:05 – 1:47)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
 window."</em> Then walk the room. Do not stay at the front for this beat; this is
@@ -2140,7 +2251,7 @@ Type <code>cd Doc</code>, press Tab, watch it become <code>cd Documents/</code>.
 long paths character by character for weeks unless somebody shows them this
 in the first ten minutes.</p>
 </blockquote>
-<h3>The terminal · folders, built by hand (22 min)</h3>
+<h3>The terminal · folders, built by hand (21 min)</h3>
 <p>They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.</p>
 <p><strong>This is the shape we are going to make:</strong></p>
@@ -2362,7 +2473,7 @@ seen and understood.</p>
 <p>If anyone knows Python: <em>"It looks exactly like a dict. The differences that
 bite are double quotes only, and no trailing comma."</em></p>
 </blockquote>
-<h3>Sending messages · curl, on public services (12 min)</h3>
+<h3>Sending messages · curl, on public services (11 min)</h3>
 <p><strong><code>curl</code> sends a request over the network from the terminal, and prints what
 came back.</strong> It is a browser with no window.</p>
 <p>They will use it in every session from here. So learn it on something simple
@@ -2463,7 +2574,7 @@ answer comes back from your agent instead of an echo service. Nothing else
 about the command changes."</em></p>
 <p>That single sentence is what stops FastAPI feeling like magic later.</p>
 </blockquote>
-<h2>Break (1:45 – 1:55)</h2>
+<h2>Break (1:47 – 1:57)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do this on the projector, not on their machines.</p>
 </blockquote>
@@ -2506,7 +2617,7 @@ runs in one place   only where Python is already set up just right
 <p><strong>Those four gaps are today.</strong> None of them are AI problems. All of them are why
 agents die in notebooks.</p>
 <hr />
-<h2>7–8 · What a web service is, then addresses and messages (1:55 – 2:28)</h2>
+<h2>7–8 · What a web service is, then addresses and messages (1:57 – 2:28)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Five ideas, and they are deliberately arranged as <strong>one
 story rather than five topics</strong>. Each answers a question the previous one
@@ -3061,7 +3172,7 @@ Week 2.</p>
 then hold it for a week."</em></p>
 </blockquote>
 <hr />
-<h2>9 · Build the web service (2:28 – 3:08)</h2>
+<h2>9 · Build the web service (2:28 – 3:07)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Back on keyboards."</em> Now walk the room continuously. This
 is the beat where you find out whether the tools section did its job — and if it did,
@@ -3400,7 +3511,7 @@ is how you tell a proxy not to do it.</p>
 <p><strong>INSTRUCTOR</strong> · Have someone shout when they see text appear in pieces. It is
 the most satisfying moment of the session — use it.</p>
 </blockquote>
-<h2>10 · Build the container (3:08 – 3:46)</h2>
+<h2>10 · Build the container (3:07 – 3:43)</h2>
 <p>Ask: <em>"What would my colleague need to run your agent?"</em></p>
 <p>The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. <strong>"Works on my machine" is not a
@@ -3519,7 +3630,7 @@ the Docker daemon"</em> — which is the third of the four errors from setup.</p
 <p>Have them confirm it is alive before you start:</p>
 <pre><code class="language-bash">docker --version
 </code></pre>
-<h4>Three toy examples, before our agent (11 min)</h4>
+<h4>Three toy examples, before our agent (10 min)</h4>
 <p>Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.</p>
 <p><strong>Example 1 — the smallest possible.</strong> Two lines.</p>
@@ -3661,7 +3772,7 @@ is the only place <code>-p</code> appears with two <em>different</em> numbers. O
 <p>Say it as a sentence every time, because people flip it: <strong>"outside number,
 then inside number."</strong></p>
 </blockquote>
-<h4>Now the real one — line by line (14 min)</h4>
+<h4>Now the real one — line by line (13 min)</h4>
 <p>Their <code>Dockerfile</code> is the same four ideas plus three lines:</p>
 <pre><code class="language-dockerfile">FROM python:3.12-slim
 WORKDIR /app
@@ -3729,7 +3840,7 @@ inside a box that could run anywhere.</strong></p>
 </ol>
 </blockquote>
 <hr />
-<h2>11 · Prove it, and what breaks next (3:46 – 4:00)</h2>
+<h2>11 · Prove it, and what breaks next (3:43 – 4:00)</h2>
 <pre><code class="language-bash">make check-week-01
 </code></pre>
 <p>Green, line by line. Read the output together — each line is a promise about the

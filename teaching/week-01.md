@@ -26,19 +26,19 @@ all, so it spends its first two hours handing over tools and its last two
 building with them.
 
 ```
-   0:00   14   Three questions to the room   settle the room, and read it
-   0:14   15   Meet today's agent            our small teaching agent
-   0:29   10   The project                   a tour BEFORE they download it
-   0:39   12   Set it up, and prove it       incl. the key, finished here
-   0:51   10   break
-   1:01   26   The terminal                  a real lesson: 9 commands
-   1:27   18   Sending messages              JSON and curl, on public services
-   1:45   10   break
-   1:55   19   What a web service is         the shop story, then the words
-   2:14   14   Addresses, then messages
-   2:28   40   Build the web service         3 endpoints, line by line, tested
-   3:08   38   Build the container           5 examples, then line by line
-   3:46   14   Prove it, and what breaks next
+   0:00   13   Three questions to the room   settle the room, and read it
+   0:13   22   Meet today's agent            described, then RUN three ways
+   0:35    9   The project                   a tour BEFORE they download it
+   0:44   11   Set it up, and prove it       incl. the key, finished here
+   0:55   10   break
+   1:05   25   The terminal                  a real lesson: 9 commands
+   1:30   17   Sending messages              JSON and curl, on public services
+   1:47   10   break
+   1:57   18   What a web service is         the shop story, then the words
+   2:15   13   Addresses, then messages
+   2:28   39   Build the web service         3 endpoints, line by line, tested
+   3:07   36   Build the container           5 examples, then line by line
+   3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -59,21 +59,21 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 135 slides with a presenter note on 124 of them, and it carries material this
+is 139 slides with a presenter note on 128 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
 
 ---
 
-## 1 · Three questions to the room (0:00 – 0:14)
+## 1 · Three questions to the room (0:00 – 0:13)
 
 > **INSTRUCTOR** · Laptops closed. Slides off. Just talk. This is the only part
 > of the session where nobody types anything, and it sets up everything else.
 
 Three questions to the room, in this order.
 
-### "What is an agent?"
+### "What is an agent?" (3 min)
 
 Let them answer. You are listening for **a loop**.
 
@@ -89,7 +89,7 @@ The answer you want to arrive at, in their words if possible:
 > runs whatever the model asks for. That is why budgets, traces and fences
 > exist.
 
-### "Someone tell me what you built in Phase 1."
+### "Is that different from ChatGPT?" (4 min)
 
 Pick a volunteer. Let them talk for two minutes.
 
@@ -107,7 +107,87 @@ Pick a volunteer. Let them talk for two minutes.
 > Keep that on the board all session.
 
 
-### "So — who else can use it?"
+Describing the agent is not enough — **run it**, smallest first, on the
+projector. Laptops stay closed; this is a demonstration.
+
+**Demo 1 — just the tool.** No model, no key, no internet.
+
+```bash
+python
+```
+
+```python
+>>> from app.orders import lookup_order
+>>> lookup_order("ORD-1002")
+'ORD-1002: standing desk, $340.00, status shipped, arriving Thursday.
+ Note: signature required on delivery'
+>>> lookup_order("ORD-9999")
+'no order found with id ORD-9999'
+```
+
+> **INSTRUCTOR** · This is the one people underestimate. Calling the tool
+> directly, with no model involved, is what makes *"the model asks, your code
+> does it"* concrete:
+>
+> *"There is no AI in what you just saw. It is a lookup that returns a line of
+> text. The clever part is deciding WHEN to call it."*
+>
+> A wrong id says so plainly rather than inventing a date — worth naming out
+> loud. `exit()` or Ctrl+D leaves the Python prompt.
+
+**Demo 2 — the whole loop, narrated.** Also no key needed.
+
+```bash
+make check-week-00
+python -m checks.demo_turn
+```
+
+```
+  [1] you ask          where is my order ORD-1002?
+  [2] the model asks   for a tool: lookup_order, with ORD-1002
+  [3] your code runs   it -> ORD-1002: standing desk, $340.00, status...
+  [4] the model answers Your standing desk is shipped and arrives Thursday.
+```
+
+> **INSTRUCTOR** · Say the step numbers out loud as they appear, pointing at
+> the whiteboard — those four labels are the four moves you drew at 0:02.
+>
+> **The line that lands:** *"Look at step 2 again. It did not fetch anything.
+> It said 'use lookup_order with ORD-1002' — and then waited for us."*
+>
+> With a key configured, `python -m checks.demo_turn --real` shows the same
+> four steps with the real model deciding for itself. Only the wording of the
+> final answer changes, which is itself worth pointing out.
+
+**Demo 3 — what it remembered.**
+
+```python
+>>> reply, history = run_turn("where is my order ORD-1002?")
+>>> len(history)
+4
+```
+
+```
+   user       where is my order ORD-1002?
+   assistant  tool_use     lookup_order  {"order_id": "ORD-1002"}
+   user       tool_result  ORD-1002: standing desk, $340.00, shipped...
+   assistant  text         Your standing desk is shipped and arrives Thursday.
+```
+
+**Four entries — the four moves.** Not a diagram; literally what the list
+contains. And notice line 3 is labelled `user`: **the tool result goes back as
+if you said it.** To the model, a tool result is news from outside, not part of
+its own thinking.
+
+> **INSTRUCTOR** · This is the slide that pays off five times. That growing
+> list is what a session id looks up (at 2:28), what disappears when the
+> program stops (at 2:50), what vanishes on a new release (next week), and
+> what has to be capped because re-sending it costs money (Week 4).
+>
+> Say the punchline twice: **every new question re-sends this whole list, and
+> the model remembers nothing.**
+
+### "Have you ever built a website — and put it somewhere?" (6 min)
 
 This is the trap question. The honest answer is **nobody**.
 
@@ -137,7 +217,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:14 – 0:29)
+## 2 · Meet today's agent (0:13 – 0:35)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -168,7 +248,7 @@ The whole thing is three files:
 > That is the normal shape of production work — the thing that thinks is small,
 > and the thing that keeps it alive is everything else."*
 
-#### 1 · What it can reach for: three tools
+#### 1 · What it can reach for: three tools (3 min)
 
 ```
    lookup_order    look up an order by id — the one that matters today
@@ -195,7 +275,7 @@ tools. Show them what the model actually reads:
 > Vague there means a tool that never gets used, or gets used at the wrong
 > moment. It is the most underrated line in an agent codebase.
 
-#### 2 · The data it looks up: four orders
+#### 2 · The data it looks up: four orders (3 min)
 
 | Order id | Item | Total | Status |
 |---|---|---|---|
@@ -223,7 +303,7 @@ goes and gets it.
 > A student who notices something odd in Week 1 and gets the answer in Week 7
 > remembers it permanently. Explaining it now spends that for nothing.
 
-#### 3 · The instructions it carries
+#### 3 · The instructions it carries (4 min)
 
 The **system prompt** is the agent's standing orders, re-sent with every single
 turn because the model has no memory:
@@ -253,7 +333,7 @@ You are a customer support assistant for an online shop.
 > Then say the honest part: *"A system prompt is not a security boundary. It is
 > a strong suggestion. Week 7 is where we find out the difference."*
 
-#### 4 · The one function they will call today
+#### 4 · The one function they will call today (5 min)
 
 ```python
 reply, history = run_turn(message, history)
@@ -281,7 +361,7 @@ cost.
 > The model asks, and your code obeys. That inversion is what makes this an
 > agent rather than a chatbot with functions."*
 
-#### 5 · The four moves, as real data
+#### 5 · Show it running · three demos (7 min)
 
 Run this on the projector. It is the whiteboard drawing, as an actual list:
 
@@ -313,7 +393,7 @@ of its own reply.
 
 ---
 
-## 3 · The project (0:29 – 0:39)
+## 3 · The project (0:35 – 0:44)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.
@@ -447,7 +527,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:39 – 0:51)
+## 4 · Set it up, and prove it (0:44 – 0:55)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -544,7 +624,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:01 – 1:45)
+## 5–6 · The terminal, then sending messages (1:05 – 1:47)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -669,7 +749,7 @@ Two more that save everybody's afternoon:
 > long paths character by character for weeks unless somebody shows them this
 > in the first ten minutes.
 
-### The terminal · folders, built by hand (22 min)
+### The terminal · folders, built by hand (21 min)
 
 They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.
@@ -932,7 +1012,7 @@ Expecting property name enclosed in double quotes: line 1 column 2
 > If anyone knows Python: *"It looks exactly like a dict. The differences that
 > bite are double quotes only, and no trailing comma."*
 
-### Sending messages · curl, on public services (12 min)
+### Sending messages · curl, on public services (11 min)
 
 **`curl` sends a request over the network from the terminal, and prints what
 came back.** It is a browser with no window.
@@ -1071,7 +1151,7 @@ same method, the same header, the same body shape.
 > That single sentence is what stops FastAPI feeling like magic later.
 
 
-## Break (1:45 – 1:55)
+## Break (1:47 – 1:57)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1122,7 +1202,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (1:55 – 2:28)
+## 7–8 · What a web service is, then addresses and messages (1:57 – 2:28)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1691,7 +1771,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:28 – 3:08)
+## 9 · Build the web service (2:28 – 3:07)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -2088,7 +2168,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:08 – 3:46)
+## 10 · Build the container (3:07 – 3:43)
 
 Ask: *"What would my colleague need to run your agent?"*
 
@@ -2196,7 +2276,7 @@ Have them confirm it is alive before you start:
 docker --version
 ```
 
-#### Three toy examples, before our agent (11 min)
+#### Three toy examples, before our agent (10 min)
 
 Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.
@@ -2392,7 +2472,7 @@ deliberately connecting one number on your machine to one number inside.
 > Say it as a sentence every time, because people flip it: **"outside number,
 > then inside number."**
 
-#### Now the real one — line by line (14 min)
+#### Now the real one — line by line (13 min)
 
 Their `Dockerfile` is the same four ideas plus three lines:
 
@@ -2478,7 +2558,7 @@ inside a box that could run anywhere.**
 
 ---
 
-## 11 · Prove it, and what breaks next (3:46 – 4:00)
+## 11 · Prove it, and what breaks next (3:43 – 4:00)
 
 ```bash
 make check-week-01
