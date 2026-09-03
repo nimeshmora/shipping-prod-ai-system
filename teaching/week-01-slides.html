@@ -231,6 +231,30 @@ tr.okrow td{background:rgba(95,191,127,.07);}
 .tl .note{grid-column:2;font-size:16px;color:var(--ink-dim);}
 .tl .note b{color:#fff;}
 
+/* ---- a "raise your hand" poll bar, for the opening questions ---------- */
+.poll{display:flex;flex-direction:column;gap:11px;}
+.poll .q{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+  background:var(--panel);border:1.5px solid var(--rule);border-radius:9px;
+  padding:14px 17px;}
+.poll .q .txt{font-size:19px;line-height:1.35;}
+.poll .q .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-faint);white-space:nowrap;}
+.poll .q.b{border-color:var(--brand);}
+.poll .q.b .tag{color:var(--brand);}
+
+/* ---- side-by-side compare, two labelled columns with a verdict -------- */
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:center;}
+.vs .side{background:var(--panel);border:1.5px solid var(--rule);
+  border-radius:10px;padding:16px 18px;text-align:center;}
+.vs .side .h{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;}
+.vs .side .m{font-size:22px;font-weight:700;line-height:1.25;}
+.vs .side .s{font-size:15.5px;color:var(--ink-dim);margin-top:6px;line-height:1.3;}
+.vs .side.g{border-color:var(--ok);} .vs .side.g .m{color:var(--ok);}
+.vs .side.r{border-color:var(--bad);} .vs .side.r .m{color:var(--bad);}
+.vs .mid2{padding:0 16px;font-family:var(--mono);font-size:15px;
+  color:var(--ink-faint);text-align:center;}
+
 /* progress rail */
 .rail{position:absolute;left:60px;right:60px;bottom:19px;
   display:flex;align-items:center;gap:6px;flex:none;}
@@ -403,17 +427,28 @@ body.help #help{display:grid;}
   </div>
 </section>
 
-<!-- ================================================= 1 · WHAT IS AN AGENT -->
-<section class="slide" data-sec="1" data-label="What is an agent">
+<!-- ================================================ 1 · OPENING QUESTIONS -->
+<!-- Three questions, in this order. Q1 and Q2 teach. Q3 tells me who is in
+     the room, which changes how I teach the rest of the day. -->
+<section class="slide" data-sec="1" data-label="Three questions">
   <div class="body center">
-    <div class="ask"><span class="q">What is</span><br>an agent?</div>
+    <div class="ask">Before we start —<br><span class="q">three questions</span></div>
   </div>
-  <div class="say"><b>Start here — no agenda yet</b>Laptops closed. Just talk for two or three minutes. The room needs one easy thing to think about before it can absorb a four-hour plan, and so do you.<br><br><b>Listen for a loop.</b> If you get "an AI that does things", ask one follow-up: <em>"Does the model run the tool, or does your code?"</em> That single distinction sets up the entire day.</div>
+  <div class="say"><b>Laptops closed. Just talk.</b>Three questions, about eight minutes each with discussion. Nobody types anything.<br><br><b>Why three and not one:</b> the first two teach. The third one tells you <b>who is in the room</b> — and that changes how you teach the rest of the day. Ask it properly.</div>
 </section>
 
 <!-- ==================================================================== 3 -->
-<section class="slide" data-sec="1" data-label="What is an agent">
-  <div class="eyebrow">The answer<span class="t">0:00 – 0:15</span></div>
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 1<span class="t">0:00 – 0:22</span></div>
+  <div class="body center">
+    <div class="ask"><span class="q">What is</span><br>an agent?</div>
+  </div>
+  <div class="say"><b>Let them answer first</b>You are listening for the word <b>loop</b>.<br><br>If somebody says "an AI that does things", ask one more question: <em>"Does the model run the tool, or does your code run it?"</em><br><br>That one question sets up the whole day. Do not answer it yourself yet.</div>
+</section>
+
+<!-- ==================================================================== 4 -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 1 · the answer<span class="t">0:00 – 0:22</span></div>
   <h2>An agent is a loop between a model and your code.</h2>
   <div class="body">
     <div class="loop">
@@ -423,81 +458,157 @@ body.help #help{display:grid;}
       </div>
       <div class="step model">
         <div class="who">The model</div>
-        <div class="what">"Use <code>lookup_order</code> with ORD-1002."
-          <span class="note">It asks for the tool. It cannot run anything itself.</span></div>
+        <div class="what">"Use the <code>lookup_order</code> tool. The id is ORD-1002."
+          <span class="note">It asks. It cannot run the tool itself.</span></div>
       </div>
       <div class="step code">
         <div class="who">Your code</div>
-        <div class="what">Runs the lookup → "standing desk, $340, shipped, arriving Thursday"
+        <div class="what">Runs the tool → "standing desk, $340, shipped, arriving Thursday"
           <span class="note">Your code does the work and sends the result back.</span></div>
       </div>
       <div class="step model">
         <div class="who">The model</div>
-        <div class="what">"Your standing desk is shipped and arrives Thursday."
-          <span class="note">It can answer now, because it has the facts.</span></div>
+        <div class="what">"Your standing desk is shipped. It arrives Thursday."
+          <span class="note">Now it has the facts, so now it can answer.</span></div>
       </div>
     </div>
     <div class="punch">The model decides what it needs. Your code does it.</div>
   </div>
-  <div class="say"><b>Draw this on the whiteboard and leave it up all day</b>You will point at it at least four times: when we read the code, when we put a network address on it, when we talk about cost, and at the end.<br><br><b>The key sentence:</b> <em>"The model cannot reach a database, a website, or a file. It can only ask your code to."</em> Everything we build today, and every safety rule in the next eight weeks, exists because <b>your code is the part that acts.</b></div>
-</section>
-
-<!-- ==================================================================== 4 -->
-<section class="slide" data-sec="1" data-label="What is an agent">
-  <div class="eyebrow">Why that matters<span class="t">0:00 – 0:15</span></div>
-  <h2>The difference between a chatbot and an agent.</h2>
-  <div class="body">
-    <div class="ba">
-      <div class="l">
-        <div class="lab">A chatbot</div>
-        <ul>
-          <li>Answers from what it already knows</li>
-          <li>Cannot look anything up</li>
-          <li>Can be confidently wrong about facts</li>
-          <li>Costs one model call per question</li>
-        </ul>
-      </div>
-      <div class="r">
-        <div class="lab">An agent</div>
-        <ul>
-          <li><b>Fetches real data</b> before answering</li>
-          <li>Can check, and say "there is no such order"</li>
-          <li><b>Can take actions</b> — send, update, book</li>
-          <li>Costs <b>one call per trip round the loop</b></li>
-        </ul>
-      </div>
-    </div>
-    <p class="dim">That last row is where the money goes. A question that goes round the loop six times costs six times as much as one that goes round once. <b>Week 4 is about controlling that.</b></p>
-  </div>
-  <div class="say"><b>Keep it concrete</b>The useful test: <em>"Can it tell you something that was only true as of this morning?"</em> A chatbot cannot. An agent can, because your code went and looked.<br><br>Do not spend long here. One minute, then move — they will feel the difference properly in fifteen minutes when they see the real tool run.</div>
+  <div class="say"><b>Draw this on the whiteboard. Leave it up all day.</b>You will point at it four times today.<br><br><b>The sentence to say:</b> <em>"The model cannot open a file, or a database, or a website. It can only ask your code to do it."</em><br><br>That is why everything we build today is about <b>your code</b>, not about the model.</div>
 </section>
 
 <!-- ==================================================================== 5 -->
-<section class="slide" data-sec="1" data-label="What is an agent">
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 2<span class="t">0:00 – 0:22</span></div>
+  <div class="body center">
+    <div class="ask">Is that different from <span class="q">ChatGPT</span>?</div>
+  </div>
+  <div class="say"><b>This is the question everyone is already thinking</b>Most of the room has used ChatGPT. So use it — it is the one example they all share.<br><br><b>Listen for:</b> "it looks things up". That is the right answer. The next slide has the full comparison.</div>
+</section>
+
+<!-- ==================================================================== 6 -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 2 · the answer<span class="t">0:00 – 0:22</span></div>
+  <h2>Yes. One of them can go and check.</h2>
+  <div class="body">
+    <div class="vs">
+      <div class="side r">
+        <div class="h">answers from memory</div>
+        <div class="m">"I think it ships<br>in 3–5 days."</div>
+        <div class="s">A guess. It has never seen<br>your orders.</div>
+      </div>
+      <div class="mid2">vs</div>
+      <div class="side g">
+        <div class="h">looks it up first</div>
+        <div class="m">"ORD-1002 shipped.<br>Arrives Thursday."</div>
+        <div class="s">A fact. It checked<br>your actual data.</div>
+      </div>
+    </div>
+    <div class="cols c2 mid">
+      <ul class="plain">
+        <li>An agent can <b>fetch real data</b> before it answers</li>
+        <li>It can say <b>"there is no such order"</b> instead of guessing</li>
+        <li>It can <b>do things</b> — send, book, update</li>
+      </ul>
+      <div class="card accent">
+        <h3>The test, in one question</h3>
+        <p class="dim">"Can it tell me something that only became true this morning?"</p>
+        <p><b>Only if your code goes and looks.</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>Keep this short — one or two minutes</b>They will feel the difference properly in twenty minutes, when they watch the real tool run.<br><br><b>One extra point, if somebody asks about cost:</b> a question that goes round the loop six times costs six times as much as one that goes round once. That is Week 4, and it is worth planting now.</div>
+</section>
+
+<!-- ==================================================================== 7 -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 3<span class="t">0:00 – 0:22</span></div>
+  <div class="body center">
+    <div class="ask">Have you ever built <span class="q">a website</span> — and put it somewhere so friends could see it?</div>
+  </div>
+  <div class="say"><b>This question is for YOU, not for them</b>It tells you who is in the room, and that changes how you teach the next four hours.<br><br><b>Ask it as three quick shows of hands</b>, in this order — next slide has them. Count roughly; you are not marking anyone.<br><br>Say plainly: <em>"There is no wrong answer here. I am asking so I know where to start."</em></div>
+</section>
+
+<!-- ==================================================================== 8 -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 3 · three shows of hands<span class="t">0:00 – 0:22</span></div>
+  <h2>Who has done which of these?</h2>
+  <div class="body">
+    <div class="poll">
+      <div class="q">
+        <div class="txt">Made a web page, or a document, on your own computer</div>
+        <div class="tag">hands up</div>
+      </div>
+      <div class="q b">
+        <div class="txt"><b>Put it somewhere</b> so a friend could open it on their phone</div>
+        <div class="tag">hands up</div>
+      </div>
+      <div class="q b">
+        <div class="txt">Had to <b>keep it working</b> afterwards — it broke, or got slow, or ran out of space</div>
+        <div class="tag">hands up</div>
+      </div>
+    </div>
+    <div class="punch">The gap between the first hand and the second is today.</div>
+  </div>
+  <div class="say"><b>What each answer tells you</b><br><b>Mostly first-only:</b> a genuine beginner room. Go slowly at 1:05, and say "no output means it worked" twice.<br><br><b>Many second hands:</b> they have felt the problem already. At 2:02, ask <em>"what did you actually have to do?"</em> and let them tell the story — it saves you ten minutes of explaining.<br><br><b>Any third hands:</b> you have allies. Ask those people to help their neighbours during the two build sections, and call on them by name later.</div>
+</section>
+
+<!-- ==================================================================== 9 -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Question 3 · why it matters<span class="t">0:00 – 0:22</span></div>
+  <h2>Making a thing, and letting other people use it, are two different jobs.</h2>
+  <div class="body">
+    <div class="fig">
+      <div class="box wide" style="padding:20px">
+        <div class="t">You make it</div>
+        <div class="s" style="margin-top:8px">It works.<br>On your computer.<br>While you are sitting there.</div>
+      </div>
+      <div class="arr"><div class="line">→</div><div class="cap">this step is<br>a whole other job</div></div>
+      <div class="box wide b" style="padding:20px">
+        <div class="t">Other people use it</div>
+        <div class="s" style="margin-top:8px">It has an address.<br>It stays on.<br>Strangers can reach it.</div>
+      </div>
+    </div>
+    <div class="cols c2 mid">
+      <div class="card accent">
+        <h3>You already know the first job</h3>
+        <p class="dim">You built an agent. It works.</p>
+      </div>
+      <div class="card good">
+        <h3>Today is the second job</h3>
+        <p class="dim">And almost none of it is about AI.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>This is the frame for the whole day</b>If somebody in the room has published a website, they already know this feeling: the site worked fine on their laptop, and then getting it online was a completely separate struggle.<br><br><b>Say it plainly:</b> <em>"An agent that only runs on your laptop is like a website you never uploaded. It works, and nobody can see it."</em><br><br>That is the one comparison worth using today, because half the room has lived it.</div>
+</section>
+
+<!-- =================================================================== 10 -->
+<section class="slide" data-sec="1" data-label="Three questions">
   <div class="eyebrow">Today<span class="t">four hours, two breaks</span></div>
   <h2>Where we are going.</h2>
   <div class="body">
     <table>
-      <tr><th style="width:82px">Clock</th><th style="width:296px">What we do</th><th>Why here</th></tr>
-      <tr class="okrow"><td class="mono">0:00</td><td><b>What is an agent</b></td><td>the one idea everything hangs on</td></tr>
-      <tr class="okrow"><td class="mono">0:15</td><td><b>Meet today's agent</b></td><td>you cannot deploy what you cannot describe</td></tr>
-      <tr><td class="mono">0:37</td><td>Get set up, and prove it</td><td>find broken laptops now, not at 3pm</td></tr>
-      <tr><td class="mono">0:50</td><td class="dim">— break —</td><td class="dim"></td></tr>
-      <tr><td class="mono">1:00</td><td><b>The terminal</b></td><td>the tool needed before any other tool</td></tr>
-      <tr><td class="mono">1:22</td><td><b>How programs send messages</b></td><td>practise on public services, not on us</td></tr>
-      <tr><td class="mono">1:50</td><td class="dim">— break —</td><td class="dim"></td></tr>
-      <tr class="now"><td class="mono">2:00</td><td><b>What a web service is, and why</b></td><td>now the problem has been felt</td></tr>
-      <tr><td class="mono">2:25</td><td>Addresses, then messages</td><td>how to reach it, then what to say</td></tr>
+      <tr><th style="width:78px">Clock</th><th style="width:290px">What we do</th><th>Why it comes here</th></tr>
+      <tr class="okrow"><td class="mono">0:00</td><td><b>Three questions</b></td><td>the ideas the rest of the day sits on</td></tr>
+      <tr class="okrow"><td class="mono">0:22</td><td><b>Meet today's agent</b></td><td>you cannot share what you cannot describe</td></tr>
+      <tr><td class="mono">0:42</td><td>Get set up, and prove it</td><td>find broken laptops now, not at 3pm</td></tr>
+      <tr><td class="mono">0:55</td><td class="dim">— break —</td><td class="dim"></td></tr>
+      <tr><td class="mono">1:05</td><td><b>The terminal</b></td><td>the tool you need before any other tool</td></tr>
+      <tr><td class="mono">1:25</td><td><b>Sending messages</b></td><td>practise on public services, not on ours</td></tr>
+      <tr><td class="mono">1:52</td><td class="dim">— break —</td><td class="dim"></td></tr>
+      <tr class="now"><td class="mono">2:02</td><td><b>What a web service is</b></td><td>now you have felt the problem</td></tr>
+      <tr><td class="mono">2:27</td><td>Addresses, then messages</td><td>how to reach it, then what to say</td></tr>
       <tr class="now"><td class="mono">2:52</td><td><b>Build it</b> — address, speed, container</td><td>everything above, typed</td></tr>
       <tr><td class="mono">3:50</td><td>Prove it, and what breaks next</td><td>next week's opening</td></tr>
     </table>
   </div>
-  <div class="say"><b>Now they can hear the plan</b>Show it once. You have the clock on every slide after this, so you never need to show it again.<br><br><b>Say this out loud:</b> <em>"Only the last hour is writing code. The three hours before it are the reason the last hour works."</em> It stops people feeling the morning is slow.</div>
+  <div class="say"><b>Now they can hear the plan</b>Show it once. After this you have the clock on every slide, so you never need it again.<br><br><b>Say this:</b> <em>"Only the last hour is writing code. The three hours before it are what make that hour work."</em> Otherwise the morning feels slow to them.</div>
 </section>
 
 <!-- ==================================================== 2 · TODAY'S AGENT -->
 <section class="slide opener" data-sec="2" data-label="Today's agent">
-  <div class="num">0:15 – 0:37 · 22 MINUTES</div>
+  <div class="num">0:22 – 0:42 · 20 MINUTES</div>
   <h1>Meet today's<br>agent</h1>
   <div class="sub">Small on purpose. You will know all of it by the first break.</div>
   <div class="goal">A support assistant for an online shop. Later in the course you bring in the larger agent you built with Isuru — but <b>today the agent stays simple so the deployment can be the hard part.</b></div>
@@ -505,7 +616,7 @@ body.help #help{display:grid;}
 
 <!-- ==================================================================== 7 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">Why the small one<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">Why the small one<span class="t">0:22 – 0:42</span></div>
   <h2>One new hard thing at a time.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -513,12 +624,12 @@ body.help #help{display:grid;}
         <div class="card warnb">
           <h3>Big agent + new deployment</h3>
           <p class="dim">Something breaks. Is it the reasoning? The prompt? A tool? The network code? The container?</p>
-          <p><b>Five suspects, and no way to tell them apart.</b></p>
+          <p><b>Five possible causes, and no way to tell which.</b></p>
         </div>
         <div class="card good">
           <h3>Known agent + new deployment</h3>
           <p class="dim">The agent already works and twelve tests prove it. So when something breaks today,</p>
-          <p><b>it is the thing you just wrote.</b></p>
+          <p><b>it is the part you just wrote.</b></p>
         </div>
       </div>
       <div class="stack">
@@ -533,7 +644,7 @@ body.help #help{display:grid;}
             <div class="s"><b style="color:#fff">your larger agent</b><br>+ deployment you now know</div>
           </div>
         </div>
-        <p class="dim">Same skills, learned in an order where you can always tell what went wrong.</p>
+        <p class="dim">Same skills, in an order where you can always tell what went wrong.</p>
       </div>
     </div>
   </div>
@@ -542,7 +653,7 @@ body.help #help{display:grid;}
 
 <!-- ==================================================================== 8 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">What it does<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">What it does<span class="t">0:22 – 0:42</span></div>
   <h2>Answers questions about shop orders.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -572,12 +683,12 @@ body.help #help{display:grid;}
       </div>
     </div>
   </div>
-  <div class="say"><b>The reframe that makes the day make sense</b><em>"Everything you write today wraps around code you will not touch. That is the normal shape of production work: the part that thinks is small, and the part that keeps it running is everything else."</em><br><br>Several people arrive expecting more prompt engineering. This is the honest answer to <em>"why am I here?"</em></div>
+  <div class="say"><b>The reframe that makes the day make sense</b><em>"Everything you write today wraps around code you will not touch. That is normal. The part that thinks is small. The part that keeps it running is everything else."</em><br><br>Several people arrive expecting more prompt engineering. This is the honest answer to <em>"why am I here?"</em></div>
 </section>
 
 <!-- ==================================================================== 9 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">The data<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">The data<span class="t">0:22 – 0:42</span></div>
   <h2>Four orders. That is the whole dataset.</h2>
   <div class="body">
     <table>
@@ -607,7 +718,7 @@ Note: signature required on delivery</pre>
 
 <!-- =================================================================== 10 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">The tools<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">The tools<span class="t">0:22 – 0:42</span></div>
   <h2>Three tools. The model picks one; your code runs it.</h2>
   <div class="body">
     <div class="cols c3">
@@ -642,12 +753,12 @@ Note: signature required on delivery</pre>
         </div>
     </div>
   </div>
-  <div class="say"><b>Read the three fields in plain words</b><em>"Name is what we call it. Description tells the model what it is for and when to use it. Input schema says what it needs: one order id, as text."</em><br><br><b>Then the point:</b> a vague description means a tool that never gets used, or gets used at the wrong moment. It is the most underrated line in an agent codebase, and the easiest to fix.</div>
+  <div class="say"><b>Read the three fields in plain words</b><em>"Name is what we call it. Description tells the model what it is for and when to use it. Input schema says what it needs: one order id, as text."</em><br><br><b>Then the point:</b> a vague description means a tool that never gets used, or gets used at the wrong moment. It is the easiest thing to get wrong, and the easiest to fix.</div>
 </section>
 
 <!-- =================================================================== 11 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">The instructions<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">The instructions<span class="t">0:22 – 0:42</span></div>
   <h2>Rules sent with every single question.</h2>
   <div class="body">
     <div class="cols c2w mid">
@@ -680,7 +791,7 @@ Note: signature required on delivery</pre>
 
 <!-- =================================================================== 12 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">The one function you will use<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">The one function you will use<span class="t">0:22 – 0:42</span></div>
   <h2>All of that, behind one line.</h2>
   <div class="body">
     <pre>reply, history = <span class="hl">run_turn</span>(message, history)</pre>
@@ -701,7 +812,7 @@ Note: signature required on delivery</pre>
 
 <!-- =================================================================== 13 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">Inside the loop<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">Inside the loop<span class="t">0:22 – 0:42</span></div>
   <h2>Twelve lines, and you already know what they do.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -734,7 +845,7 @@ while True:
 
 <!-- =================================================================== 14 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">What "the conversation so far" is<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">What "the conversation so far" is<span class="t">0:22 – 0:42</span></div>
   <h2>One question produces four entries.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">&gt;&gt;&gt;</span> reply, history = run_turn("where is my order ORD-1002?")
@@ -745,13 +856,18 @@ while True:
   <span class="info">you</span>        <span class="ok">tool result:</span> ORD-1002: standing desk, $340.00, shipped...
   <span class="bt">the model</span>  Your standing desk is shipped and arrives Thursday.</pre>
     <div class="cols c2 mid">
-      <div class="card accent">
-        <h3>Those are the four steps</h3>
-        <p class="dim">Not a diagram — literally what the list contains, in order.</p>
+      <div class="fig">
+        <div class="box i" style="padding:13px 15px"><div class="t" style="font-size:16px">1 entry</div><div class="s">the question</div></div>
+        <div class="arr" style="padding:0 8px"><div class="line">→</div></div>
+        <div class="box b" style="padding:13px 15px"><div class="t" style="font-size:16px">2</div><div class="s">tool asked for</div></div>
+        <div class="arr" style="padding:0 8px"><div class="line">→</div></div>
+        <div class="box g" style="padding:13px 15px"><div class="t" style="font-size:16px">3</div><div class="s">tool result</div></div>
+        <div class="arr" style="padding:0 8px"><div class="line">→</div></div>
+        <div class="box b" style="padding:13px 15px"><div class="t" style="font-size:16px">4</div><div class="s">the answer</div></div>
       </div>
       <div class="card warnb">
-        <h3>Line 3 is labelled "you"</h3>
-        <p class="dim">The tool's result goes back as if <b>you</b> said it. To the model, a tool result is <b>information arriving from outside</b>, not part of its own thinking.</p>
+        <h3>Look at line 3 — it says "you"</h3>
+        <p class="dim">The tool's result goes back <b>as if you said it.</b> To the model, a tool result is <b>news from outside</b>, not part of its own thinking.</p>
       </div>
     </div>
     <div class="punch">Every new question re-sends this whole list. The model remembers nothing.</div>
@@ -761,7 +877,7 @@ while True:
 
 <!-- =================================================================== 15 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">The question that starts the real work<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">The question that starts the real work<span class="t">0:22 – 0:42</span></div>
   <div class="body center">
     <div class="ask">Right now, <span class="q">who else</span> can use this?</div>
   </div>
@@ -770,7 +886,7 @@ while True:
 
 <!-- =================================================================== 16 -->
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">Nobody<span class="t">0:15 – 0:37</span></div>
+  <div class="eyebrow">Nobody<span class="t">0:22 – 0:42</span></div>
   <h2>It only works where it sits.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -802,15 +918,15 @@ while True:
 
 <!-- ========================================================== 3 · SETUP -->
 <section class="slide opener" data-sec="3" data-label="Setup">
-  <div class="num">0:37 – 0:50 · 13 MINUTES</div>
+  <div class="num">0:42 – 0:55 · 13 MINUTES</div>
   <h1>Get set up,<br>and prove it</h1>
   <div class="sub">Five things installed, and one command that checks all of them.</div>
-  <div class="goal">Doing this now, with everyone sitting still, is the <b>cheapest version of this conversation.</b> The same problem found at 3:15, while six people need help, costs the room an hour.</div>
+  <div class="goal">Find broken laptops <b>now</b>, while everyone is sitting still. The same problem at 3:15, with six people needing help, costs the whole room an hour.</div>
 </section>
 
 <!-- =================================================================== 18 -->
 <section class="slide" data-sec="3" data-label="Setup">
-  <div class="eyebrow">Check, do not assume<span class="t">0:37 – 0:50</span></div>
+  <div class="eyebrow">Check, do not assume<span class="t">0:42 – 0:55</span></div>
   <h2>Five things, and how to prove each one.</h2>
   <div class="body">
     <div class="checks">
@@ -846,7 +962,7 @@ while True:
 
 <!-- =================================================================== 19 -->
 <section class="slide" data-sec="3" data-label="Setup">
-  <div class="eyebrow">Three steps<span class="t">0:37 – 0:50</span></div>
+  <div class="eyebrow">Three steps<span class="t">0:42 – 0:55</span></div>
   <h2>Download, install, add your key.</h2>
   <div class="body">
     <div class="cols c2">
@@ -887,7 +1003,7 @@ while True:
 
 <!-- =================================================================== 20 -->
 <section class="slide" data-sec="3" data-label="Setup">
-  <div class="eyebrow">One command proves it<span class="t">0:37 – 0:50</span></div>
+  <div class="eyebrow">One command proves it<span class="t">0:42 – 0:55</span></div>
   <h2>Am I ready?</h2>
   <div class="body">
     <div class="cols c2n mid">
@@ -916,12 +1032,12 @@ the loop runs a tool then answers
       </div>
     </div>
   </div>
-  <div class="say"><b>This is your gate — do not move on with hands up</b>Somebody still installing at 1:00 will be lost all afternoon, and catching them up costs everyone else.<br><br>If someone is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.</div>
+  <div class="say"><b>This is your gate — do not move on with hands up</b>Somebody still installing at 1:05 will be lost all afternoon, and catching them up costs everyone else.<br><br>If someone is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.</div>
 </section>
 
 <!-- =================================================================== 21 -->
 <section class="slide" data-sec="3" data-label="Setup">
-  <div class="eyebrow">The four errors you will see<span class="t">0:37 – 0:50</span></div>
+  <div class="eyebrow">The four errors you will see<span class="t">0:42 – 0:55</span></div>
   <h2>Each one, and what to do.</h2>
   <div class="body">
     <div class="fixes">
@@ -954,13 +1070,13 @@ the loop runs a tool then answers
 <section class="slide breaks" data-sec="3" data-label="Setup">
   <h1>Break</h1>
   <div class="sub">Ten minutes. Come back with your terminal open.</div>
-  <div class="when">0:50 – 1:00</div>
+  <div class="when">0:55 – 1:05</div>
   <div class="say"><b>Use the break</b>Go to anyone whose hand was up. Fix them now — this is the last quiet moment until 1:50.<br><br>When they return: <em>"You have a working agent that nobody can reach. Now the tools to fix that."</em></div>
 </section>
 
 <!-- ==================================================== 4 · THE TERMINAL -->
 <section class="slide opener" data-sec="4" data-label="The terminal">
-  <div class="num">1:00 – 1:22 · 22 MINUTES</div>
+  <div class="num">1:05 – 1:25 · 20 MINUTES</div>
   <h1>The terminal</h1>
   <div class="sub">Where am I, what is here, how do I move around.</div>
   <div class="goal">We practise on a <b>throwaway folder</b>, not on the project. Learn each tool where nothing can go wrong, <b>then</b> point it at something that matters. That is how we introduce every tool today.</div>
@@ -968,7 +1084,7 @@ the loop runs a tool then answers
 
 <!-- =================================================================== 24 -->
 <section class="slide" data-sec="4" data-label="The terminal">
-  <div class="eyebrow">What it is<span class="t">1:00 – 1:22</span></div>
+  <div class="eyebrow">What it is<span class="t">1:05 – 1:25</span></div>
   <h2>A window where you type commands instead of clicking.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1007,7 +1123,7 @@ the loop runs a tool then answers
 
 <!-- =================================================================== 25 -->
 <section class="slide" data-sec="4" data-label="The terminal">
-  <div class="eyebrow">Practice — the shape we will build<span class="t">1:00 – 1:22</span></div>
+  <div class="eyebrow">Practice — the shape we will build<span class="t">1:05 – 1:25</span></div>
   <h2>Folders sit inside folders. Here is what that looks like written down.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1037,7 +1153,7 @@ the loop runs a tool then answers
 
 <!-- =================================================================== 26 -->
 <section class="slide" data-sec="4" data-label="The terminal">
-  <div class="eyebrow">Practice — six commands<span class="t">1:00 – 1:22</span></div>
+  <div class="eyebrow">Practice — six commands<span class="t">1:05 – 1:25</span></div>
   <h2>This is the whole toolkit.</h2>
   <div class="body">
     <div class="cols c2">
@@ -1075,7 +1191,7 @@ the loop runs a tool then answers
 
 <!-- =================================================================== 27 -->
 <section class="slide" data-sec="4" data-label="The terminal">
-  <div class="eyebrow">Practice — check it, then delete it<span class="t">1:00 – 1:22</span></div>
+  <div class="eyebrow">Practice — check it, then delete it<span class="t">1:05 – 1:25</span></div>
   <h2>The same structure, printed by the terminal.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1110,7 +1226,7 @@ ORD-1002 desk
 
 <!-- =================================================================== 28 -->
 <section class="slide" data-sec="4" data-label="The terminal">
-  <div class="eyebrow">One word you need next<span class="t">1:00 – 1:22</span></div>
+  <div class="eyebrow">One word you need next<span class="t">1:05 – 1:25</span></div>
   <h2>A program running is called a process.</h2>
   <div class="body">
     <div class="fig">
@@ -1147,7 +1263,7 @@ ORD-1002 desk
 
 <!-- ============================================ 5 · HOW PROGRAMS MESSAGE -->
 <section class="slide opener" data-sec="5" data-label="Sending messages">
-  <div class="num">1:22 – 1:50 · 28 MINUTES</div>
+  <div class="num">1:25 – 1:52 · 27 MINUTES</div>
   <h1>How programs<br>send messages</h1>
   <div class="sub">A format for the message, and a tool to send it.</div>
   <div class="goal">We practise both against <b>public services on the internet</b> before pointing them at our own agent. When something fails later, you will know whether it is your typing or our code.</div>
@@ -1155,7 +1271,7 @@ ORD-1002 desk
 
 <!-- =================================================================== 30 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">The format<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">The format<span class="t">1:25 – 1:52</span></div>
   <h2>JSON: a standard way to write data as text.</h2>
   <div class="body">
     <div class="def">
@@ -1192,7 +1308,7 @@ ORD-1002 desk
 
 <!-- =================================================================== 31 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Break it on purpose<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">Break it on purpose<span class="t">1:25 – 1:52</span></div>
   <h2>Make the common mistake now, while nothing depends on it.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1214,7 +1330,7 @@ in double quotes: line 1 column 2</span></pre>
 
 <!-- =================================================================== 32 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">The tool<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">The tool<span class="t">1:25 – 1:52</span></div>
   <h2><code>curl</code> sends a message to an address and prints the reply.</h2>
   <div class="body">
     <div class="def">
@@ -1239,12 +1355,12 @@ in double quotes: line 1 column 2</span></pre>
       </div>
     </div>
   </div>
-  <div class="say"><b>Why we spend twenty minutes here</b>The reason is practical. At 3:10 they type a longer version of this command at our own agent. When it fails — and for somebody it will — they need to tell <em>"my typing is wrong"</em> from <em>"the service is broken"</em>.<br><br>Somebody who has only ever run curl against our agent cannot tell those apart, and will raise a hand for every failure for eight weeks.<br><br><b>No internet?</b> <code>python -m http.server 9000</code> in one window, <code>curl -s localhost:9000</code> in another covers the first four.</div>
+  <div class="say"><b>Why we spend twenty minutes here</b>Here is the practical reason. At 3:10 they type a longer version of this command at our own agent. When it fails — and for somebody it will — they need to tell <em>"my typing is wrong"</em> from <em>"the service is broken"</em>.<br><br>If you have only ever used curl on our agent, you cannot tell the difference — and you will be stuck every time.<br><br><b>No internet?</b> <code>python -m http.server 9000</code> in one window, <code>curl -s localhost:9000</code> in another covers the first four.</div>
 </section>
 
 <!-- =================================================================== 33 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Two — a different kind of reply<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">Two — a different kind of reply<span class="t">1:25 – 1:52</span></div>
   <h2>Same tool. One reply is for people, one is for programs.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1277,7 +1393,7 @@ in double quotes: line 1 column 2</span></pre>
 
 <!-- =================================================================== 34 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Three — what a reply contains<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">Three — what a reply contains<span class="t">1:25 – 1:52</span></div>
   <h2>Every reply has three parts.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1314,7 +1430,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 35 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Four — make failures happen<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">Four — make failures happen<span class="t">1:25 – 1:52</span></div>
   <h2>Same command. Different number back.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1343,7 +1459,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 36 -->
 <section class="slide" data-sec="5" data-label="Sending messages">
-  <div class="eyebrow">Five — sending data, not just asking<span class="t">1:22 – 1:50</span></div>
+  <div class="eyebrow">Five — sending data, not just asking<span class="t">1:25 – 1:52</span></div>
   <h2>Keep this command. We change one part later.</h2>
   <div class="body">
     <div class="cols c2w mid">
@@ -1374,64 +1490,66 @@ Keep it logically awesome.</pre>
 <section class="slide breaks" data-sec="5" data-label="Sending messages">
   <h1>Break</h1>
   <div class="sub">Ten minutes. After this, we solve the problem.</div>
-  <div class="when">1:50 – 2:00</div>
+  <div class="when">1:52 – 2:02</div>
   <div class="say"><b>Where they are at halfway</b>They have: a working agent they understand, a terminal they can navigate, and the ability to send a message to any address on the internet.<br><br><b>What they do not have:</b> any way for the internet to send a message to <em>them</em>. That is the whole second half.<br><br>Open with: <em>"You can now send a message to anything out there. Nothing out there can send one to you. Let us fix that."</em></div>
 </section>
 
 <!-- ==================================================== 6 · WEB SERVICE -->
 <section class="slide opener" data-sec="6" data-label="What a web service is">
-  <div class="num">2:00 – 2:25 · 25 MINUTES</div>
+  <div class="num">2:02 – 2:27 · 25 MINUTES</div>
   <h1>What a web service<br>is, and why</h1>
-  <div class="sub">The most important twenty-five minutes of the day.</div>
-  <div class="goal">Everything after this is mechanics. If the room takes <b>one</b> idea home, make it this one — because somebody who does not understand <em>why</em> will treat the rest as a ritual for eight weeks.</div>
+  <div class="sub">The most important part of the day.</div>
+  <div class="goal">Everything after this is just steps to follow. If the room takes <b>one</b> idea home, make it this one — because if you do not know <em>why</em>, the rest just looks like magic words.</div>
 </section>
 
 <!-- =================================================================== 39 -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">Start from the problem<span class="t">2:00 – 2:25</span></div>
+  <div class="eyebrow">Start from the problem<span class="t">2:02 – 2:27</span></div>
   <h2>What would it take to share what you have?</h2>
   <div class="body">
     <div class="stack">
       <div class="card accent">
-        <h3>"Send them the files."</h3>
-        <p class="dim">They need Python 3.10+, the right libraries, the right folder layout — <b>everything you did at 0:37, which took thirteen minutes and still broke for somebody.</b> And they need your key, which means <b>you have given your key away.</b></p>
+        <h3><span style="color:var(--bad)">✗</span> &nbsp;"Send them the files."</h3>
+        <p class="dim">They need Python 3.10+, the right libraries, the right folder layout — <b>everything you did at 0:42, which took thirteen minutes and still broke for somebody.</b> And they need your key, which means <b>you have given your key away.</b></p>
         <p class="dim">And when you fix something tomorrow, <b>they are still running today's copy.</b></p>
       </div>
       <div class="card accent">
-        <h3>"Let them use my laptop."</h3>
+        <h3><span style="color:var(--bad)">✗</span> &nbsp;"Let them use my laptop."</h3>
         <p class="dim">Not a joke — it is exactly what "it works on my machine" offers. <b>One user at a time, and only when you are awake.</b></p>
       </div>
       <div class="card good">
-        <h3>"Put it in an app, or on a website."</h3>
+        <h3><span style="color:var(--ok)">✓</span> &nbsp;"Put it in an app, or on a website."</h3>
         <p class="dim">Close, and worth taking seriously. But a phone cannot run your Python, and it must not hold your key. <b>Something else has to do the work, and the app has to send it the question.</b></p>
         <p><b>That is the answer. They have just described a web service.</b></p>
       </div>
     </div>
   </div>
-  <div class="say"><b>Put the question to the room and take the answers seriously</b>Every wrong answer here teaches something, and the third is nearly right. Let them get there.<br><br><b>Use their own morning:</b> <em>"You downloaded this, waited for the install, and pasted in a key I emailed you separately. That is what you would be asking of every customer — except they never get a key at all."</em></div>
+  <div class="say"><b>Put the question to the room and take the answers seriously</b>Each wrong answer teaches something, and the third one is nearly right. Let them get there.<br><br><b>Use their own morning:</b> <em>"You downloaded this, waited for the install, and pasted in a key I emailed you separately. That is what you would be asking of every customer — except they never get a key at all."</em></div>
 </section>
 
 <!-- =================================================================== 40 -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The definition<span class="t">2:00 – 2:25</span></div>
+  <div class="eyebrow">The definition<span class="t">2:02 – 2:27</span></div>
   <h2>So: what is a web service?</h2>
   <div class="body center">
     <div class="def">
       <div class="term">Web service</div>
       <div class="txt">A program that <b>stays running</b>, <b>waits for questions to arrive over a network</b>, and <b>sends answers back</b>.</div>
     </div>
-    <div class="cols c3">
-      <div class="card good">
-        <h3>Stays running</h3>
-        <p class="dim">It does not finish and exit. It waits.</p>
+    <div class="fig">
+      <div class="box wide g" style="padding:16px">
+        <div class="t" style="font-size:18px">1 · Stays running</div>
+        <div class="s" style="margin-top:6px">It does not finish.<br>It waits.</div>
       </div>
-      <div class="card good">
-        <h3>Questions arrive over a network</h3>
-        <p class="dim">From any program, on any computer, anywhere.</p>
+      <div class="arr dim2" style="padding:0 10px"><div class="line">+</div></div>
+      <div class="box wide g" style="padding:16px">
+        <div class="t" style="font-size:18px">2 · Questions arrive</div>
+        <div class="s" style="margin-top:6px">Over a network,<br>from any program.</div>
       </div>
-      <div class="card good">
-        <h3>Answers go back</h3>
-        <p class="dim">As data. The asker never sees your code or your key.</p>
+      <div class="arr dim2" style="padding:0 10px"><div class="line">+</div></div>
+      <div class="box wide g" style="padding:16px">
+        <div class="t" style="font-size:18px">3 · Answers go back</div>
+        <div class="s" style="margin-top:6px">As data. They never<br>see your code or key.</div>
       </div>
     </div>
   </div>
@@ -1440,7 +1558,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 41 -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The shape of it<span class="t">2:00 – 2:25</span></div>
+  <div class="eyebrow">The shape of it<span class="t">2:02 – 2:27</span></div>
   <h2>One copy, in one place, that anything can reach.</h2>
   <div class="body">
     <div class="fig">
@@ -1470,12 +1588,12 @@ Keep it logically awesome.</pre>
       <div class="card accent"><h3>No agreement needed</h3><p class="dim">None of those four need to know what your agent is written in.</p></div>
     </div>
   </div>
-  <div class="say"><b>Note what is in the box on the right</b>That is <code>run_turn</code>, the function from 0:15. <em>"Everything we build today goes around it. It does not change."</em><br><br><b>Cheap proof of the third card, from an hour ago:</b> <em>"You asked GitHub a question before the break. You had never spoken to GitHub, you agreed nothing in advance, and it worked first try. That is the whole argument."</em></div>
+  <div class="say"><b>Note what is in the box on the right</b>That is <code>run_turn</code>, the function from 0:22. <em>"Everything we build today goes around it. It does not change."</em><br><br><b>Cheap proof of the third card, from an hour ago:</b> <em>"You asked GitHub a question before the break. You had never spoken to GitHub, you agreed nothing in advance, and it worked first try. That is the whole argument."</em></div>
 </section>
 
 <!-- =================================================================== 42 -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">Two words people mix up<span class="t">2:00 – 2:25</span></div>
+  <div class="eyebrow">Two words people mix up<span class="t">2:02 – 2:27</span></div>
   <h2>Web service, and web API.</h2>
   <div class="body">
     <div class="cols c2">
@@ -1512,7 +1630,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 43 -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The change happening today<span class="t">2:00 – 2:25</span></div>
+  <div class="eyebrow">The change happening today<span class="t">2:02 – 2:27</span></div>
   <h2>From a program you run, to a service that waits.</h2>
   <div class="body">
     <div class="ba">
@@ -1545,7 +1663,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 44 -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">And the tool that does it<span class="t">2:00 – 2:25</span></div>
+  <div class="eyebrow">And the tool that does it<span class="t">2:02 – 2:27</span></div>
   <h2>FastAPI translates between the network and your code.</h2>
   <div class="body">
     <div class="fig">
@@ -1568,14 +1686,14 @@ Keep it logically awesome.</pre>
       <div class="term">FastAPI</div>
       <div class="txt">A library that <b>turns arriving network requests into ordinary function calls</b>, and <b>turns what your function returns back into JSON.</b> That is all it does.</div>
     </div>
-    <p class="dim">Nothing in <code>agent.py</code> changes today. Not one line of the file we read at 0:15.</p>
+    <p class="dim">Nothing in <code>agent.py</code> changes today. Not one line of the file we read at 0:22.</p>
   </div>
   <div class="say"><b>Say the last part twice — it defuses real anxiety</b><em>"You are not rewriting your agent. The code we read this morning still does all the thinking. You are giving it a way to be reached."</em><br><br><b>And the honest size check:</b> <em>"What you write this afternoon is about forty lines. The reason it matters is not that it is hard — it is that everything else depends on it."</em></div>
 </section>
 
 <!-- =========================================== 7 · ADDRESSES & MESSAGES -->
 <section class="slide opener" data-sec="7" data-label="Addresses & messages">
-  <div class="num">2:25 – 2:52 · 27 MINUTES</div>
+  <div class="num">2:27 – 2:52 · 25 MINUTES</div>
   <h1>Addresses,<br>then messages</h1>
   <div class="sub">How a program finds your service — then what it actually sends.</div>
   <div class="goal">Two halves, in that order. You cannot send a message until you can address it, and <b>every part of both halves is something you already typed this morning.</b></div>
@@ -1583,7 +1701,7 @@ Keep it logically awesome.</pre>
 
 <!-- =================================================================== 46 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Addresses — names and numbers<span class="t">2:25 – 2:40</span></div>
+  <div class="eyebrow">Addresses — names and numbers<span class="t">2:27 – 2:40</span></div>
   <h2>Every computer has a number. Names are looked up.</h2>
   <div class="body">
     <div class="fig">
@@ -1617,7 +1735,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
 
 <!-- =================================================================== 47 -->
 <section class="slide" data-sec="7" data-label="Addresses & messages">
-  <div class="eyebrow">Addresses — the full address<span class="t">2:25 – 2:40</span></div>
+  <div class="eyebrow">Addresses — the full address<span class="t">2:27 – 2:40</span></div>
   <h2>Four parts, and you have seen three of them.</h2>
   <div class="body">
     <div class="stack">
@@ -1677,7 +1795,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
     </div>
     <div class="punch quiet">You typed all five of these before the break.</div>
   </div>
-  <div class="say"><b>Do not present this as new — the next slide proves it is not</b>They sent a method, a path, a body, and received a status and a body, at 1:45. The next slide puts their own command back on screen with these five labels written onto it.<br><br>That is the payoff for spending the first half on tools.</div>
+  <div class="say"><b>Do not present this as new — the next slide proves it is not</b>They sent a method, a path, a body, and received a status and a body, at 1:48. The next slide puts their own command back on screen with these five labels written onto it.<br><br>That is the payoff for spending the first half on tools.</div>
 </section>
 
 <!-- =================================================================== 49 -->
@@ -1781,7 +1899,7 @@ PING google.com <span class="hl">(172.217.24.206)</span>: 56 data bytes
       <div class="row">
         <div class="num">4</div>
         <div class="cell g"><div class="t">Service looks up a3f9, finds the earlier conversation, and continues it</div>
-          <div class="s">the four entries from 0:15, plus the new question</div></div>
+          <div class="s">the four entries from 0:22, plus the new question</div></div>
       </div>
     </div>
     <div class="def">
@@ -1935,7 +2053,7 @@ INFO: Uvicorn running on
  "session_id":<span class="hl">"a3f9..."</span>}</pre>
     </div>
   </div>
-  <div class="say"><b>This is the promise you wrote on the whiteboard at 1:45 — collect it now, out loud</b><em>"Two hours ago you sent that command to a practice service on the other side of the world. The only thing that changed is the address — and now the answer comes from the agent you deployed."</em><br><br>Then have them copy the <code>session_id</code> into a second question and watch it continue the conversation. <b>That is the session id working.</b></div>
+  <div class="say"><b>This is the promise you wrote on the whiteboard at 1:48 — collect it now, out loud</b><em>"Two hours ago you sent that command to a practice service on the other side of the world. The only thing that changed is the address — and now the answer comes from the agent you deployed."</em><br><br>Then have them copy the <code>session_id</code> into a second question and watch it continue the conversation. <b>That is the session id working.</b></div>
 </section>
 
 <!-- =================================================================== 59 -->
@@ -1960,11 +2078,11 @@ INFO: Uvicorn running on
         <h3>The fix — in the <em>same</em> window as <code>make run</code></h3>
         <pre><span class="pr">$</span> set -a && source .env && set +a</pre>
         <p class="dim">"Read my key file, and make its contents available to programs started in this window."</p>
-        <p class="dim">It has been on the whiteboard since 0:50. <b>This is why it works.</b></p>
+        <p class="dim">It has been on the whiteboard since 0:55. <b>This is why it works.</b></p>
       </div>
     </div>
   </div>
-  <div class="say"><b>The word "same" is the whole slide</b>These settings belong to <em>one window</em>. Load the key in window 2 and the service in window 1 still cannot see it — the single most common confusion of the afternoon.<br><br><b>Say it plainly:</b> <em>"Open a new window, and you have to load the key again. Windows do not share settings."</em><br><br><b>Why keys work this way:</b> a setting outside the code cannot be committed to Git by accident.</div>
+  <div class="say"><b>The word "same" is the whole slide</b>These settings belong to <em>one window</em>. Load the key in window 2 and the service in window 1 still cannot see it — the most common mix-up of the afternoon.<br><br><b>Say it plainly:</b> <em>"Open a new window, and you have to load the key again. Windows do not share settings."</em><br><br><b>Why keys work this way:</b> a setting outside the code cannot be committed to Git by accident.</div>
 </section>
 
 <!-- ========================================================= 9 · BUILD 2 -->
@@ -1972,7 +2090,7 @@ INFO: Uvicorn running on
   <div class="num">3:20 – 3:32 · 12 MINUTES</div>
   <h1>Build it:<br>make it feel fast</h1>
   <div class="sub">Same eight seconds. Very different experience.</div>
-  <div class="goal">Nothing here makes the agent quicker. It changes <b>when the person starts seeing something</b> — which is what "fast" means to a human being.</div>
+  <div class="goal">This does not make the agent quicker. It changes <b>when the person starts seeing something</b> — which is what people actually mean by "fast".</div>
 </section>
 
 <!-- =================================================================== 61 -->
@@ -2003,7 +2121,7 @@ INFO: Uvicorn running on
     </div>
     <div class="punch">Identical eight seconds. This is why every AI assistant does it.</div>
   </div>
-  <div class="say"><b>Open by asking, not telling</b><em>"How long did that last command take?"</em> Several seconds — and for every one of them they watched an empty screen.<br><br><b>Then be honest about what this is:</b> <em>"We are not making it faster. We are making it feel fast, which is a different engineering problem — and often the more valuable one."</em></div>
+  <div class="say"><b>Open by asking, not telling</b><em>"How long did that last command take?"</em> Several seconds — and for every one of them they watched an empty screen.<br><br><b>Then be honest about what this is:</b> <em>"We are not making it faster. We are making it feel fast, which is a different engineering problem — and often the more useful one."</em></div>
 </section>
 
 <!-- =================================================================== 62 -->
@@ -2094,7 +2212,7 @@ INFO: Uvicorn running on
       </div>
     </div>
   </div>
-  <div class="say"><b>Why this matters more than it looks</b>Miss it, and a broken agent shows somebody half an answer and records it as a success. Your dashboard reports a healthy service while users see sentences that stop mid-word.<br><br>It is a good first example of a whole category: <b>the failure that reports itself as fine.</b> Week 5 is largely about that category.</div>
+  <div class="say"><b>Why this matters more than it looks</b>Miss it, and a broken agent shows somebody half an answer and records it as a success. Your dashboard reports a healthy service while users see sentences that stop mid-word.<br><br>This is the first example of a problem that <b>looks fine but is not.</b> Week 5 is mostly about finding those.</div>
 </section>
 
 <!-- ======================================================== 10 · BUILD 3 -->
@@ -2126,7 +2244,7 @@ INFO: Uvicorn running on
       <div class="term">Container</div>
       <div class="txt">Your code <b>plus everything it needs to run</b>, packaged as a single unit. Give it to any computer and it behaves identically.</div>
     </div>
-    <p class="dim">The list on the left is exactly the setup checklist from 0:37 — the one that took thirteen minutes and still broke for somebody.</p>
+    <p class="dim">The list on the left is exactly the setup checklist from 0:42 — the one that took thirteen minutes and still broke for somebody.</p>
   </div>
   <div class="say"><b>Ask first, then show</b><em>"What would your colleague need, to run what you built?"</em> Let them list it, then point out that they are re-deriving this morning's checklist.<br><br><b>That connection is the whole motivation:</b> a container exists so nobody ever has to do that checklist again.</div>
 </section>
@@ -2140,7 +2258,7 @@ INFO: Uvicorn running on
       <div class="stack">
         <pre class="tight"><span class="pr">$</span> mkdir ~/box && cd ~/box
 <span class="pr">$</span> echo 'print("hello from inside the box")' &gt; hello.py</pre>
-        <p class="dim">Both of those you learned at 1:00.</p>
+        <p class="dim">Both of those you learned at 1:05.</p>
         <pre class="tight"><span class="cm"># a file named exactly: Dockerfile</span>
 <span class="warn">FROM</span> python:3.12-slim
 <span class="warn">WORKDIR</span> /app
@@ -2181,7 +2299,7 @@ INFO: Uvicorn running on
       </div>
     </div>
   </div>
-  <div class="say"><b>Do this live, in front of them</b>Delete the source file and run it again. The room goes quiet.<br><br>That single moment explains containers better than any diagram — and it pre-answers a question people carry for months: <em>"but where is the code actually running?"</em></div>
+  <div class="say"><b>Do this live, in front of them</b>Delete the source file and run it again. The room goes quiet.<br><br>This one moment explains containers better than any diagram — and it answers a question people wonder about for months: <em>"but where is the code actually running?"</em></div>
 </section>
 
 <!-- =================================================================== 69 -->
@@ -2266,7 +2384,7 @@ __pycache__/
       </div>
       <div class="stack">
         <div class="punch">That last line is the important one.</div>
-        <p class="dim">Without it, <b>the key you pasted in at 0:37 gets built into the container.</b> Containers get copied, stored, and uploaded to places other people can read.</p>
+        <p class="dim">Without it, <b>the key you pasted in at 0:42 gets built into the container.</b> Containers get copied, stored, and uploaded to places other people can read.</p>
         <pre class="mini"><span class="pr">$</span> make docker-build
 <span class="pr">$</span> make docker-run
 
@@ -2357,12 +2475,12 @@ the agent is a web service, and it streams
       <li><b>Your <code>/health</code> says "ok".</b> Suppose the AI provider is down and every question fails. What does <code>/health</code> say?
         <span class="dim">Still "ok". The program is running fine — it just cannot do its job. → <b>Week 5</b></span></li>
       <li><b>Where is that conversation actually kept?</b>
-        <span class="dim">In memory, inside the running process — the one you stopped with Ctrl+C at 1:15. So what happens when we release a new version? → <b>next week</b></span></li>
+        <span class="dim">In memory, inside the running process — the one you stopped with Ctrl+C at 1:20. So what happens when we release a new version? → <b>next week</b></span></li>
       <li><b>Anyone who knows the address can send questions.</b> What does that cost you?
         <span class="dim">Real money, at the AI provider, on the key you pasted in this morning. → <b>Week 3</b></span></li>
     </ol>
   </div>
-  <div class="say"><b>Ask each one, wait, then answer</b>Do not rush — the discomfort is the point, and it is what makes next week land.<br><br><b>Question 2 is the one to linger on.</b> Let somebody work out that a new version means a fresh process, and a fresh process means empty memory. When they get there themselves, next week writes itself.</div>
+  <div class="say"><b>Ask each one, wait, then answer</b>Do not rush — feeling stuck is the point — it is what makes next week work.<br><br><b>Question 2 is the one to linger on.</b> Let somebody work out that a new version means a fresh process, and a fresh process means empty memory. When they get there themselves, next week writes itself.</div>
 </section>
 
 <!-- =================================================================== 76 -->
@@ -2422,7 +2540,7 @@ the agent is a web service, and it streams
       </div>
     </div>
   </div>
-  <div class="say"><b>End here — do not answer it</b>Next week spends its first twenty-five minutes deploying, and then losing the memory, deliberately, on the projector.<br><br>Somebody who leaves mildly bothered by that question arrives next week ready.</div>
+  <div class="say"><b>End here — do not answer it</b>Next week spends its first twenty-five minutes deploying, and then losing the memory, deliberately, on the projector.<br><br>If they leave slightly bothered by that question, they arrive next week ready.</div>
 </section>
 
   </div><!-- /scaler -->

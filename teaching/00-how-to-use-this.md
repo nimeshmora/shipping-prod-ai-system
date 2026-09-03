@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 78-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is an 83-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,25 +290,25 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Sixty-seven of the slides carry a presenter
+**Press `S` before you start.** Seventy-two of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   15   What is an agent?          the settling question. No agenda yet.
-   0:15   22   Meet today's agent         our small teaching agent, read together
-   0:37   13   Get set up, and prove it   the checklist, and check-week-00
-   0:50   10   break
-   1:00   22   The terminal               practised on a throwaway folder
-   1:22   28   How machines talk          JSON and curl, on the open internet
-   1:50   10   break
-   2:00   22   Why it must become a web service
-   2:22   30   Finding it, and asking it  addresses, then messages
-   2:52   28   Build: the front door
+   0:00   22   Three questions to the room   settle the room, and read it
+   0:22   20   Meet today's agent            our small teaching agent
+   0:42   13   Get set up, and prove it      the checklist, and check-week-00
+   0:55   10   break
+   1:05   20   The terminal                  practised on a throwaway folder
+   1:25   27   Sending messages              JSON and curl, on public services
+   1:52   10   break
+   2:02   25   What a web service is         service, API, endpoint
+   2:27   25   Addresses, then messages
+   2:52   28   Build: the address
    3:20   12   Build: make it feel fast
-   3:32   18   Build: the box
+   3:32   18   Build: the container
    3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -316,17 +316,45 @@ yet — in a side panel the room never sees.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
 >
-> **It opens with a question, not a plan.** You need two or three minutes of
-> easy conversation before anyone — including you — can absorb a four-hour
-> agenda. The agenda appears on slide 5, once they have something to hang it
-> on, and never again.
+> **It opens with questions, not a plan.** Three of them, and they do different
+> jobs. The agenda appears once they have something to hang it on, and never
+> again — after that the clock in the corner of each slide is enough.
 >
 > **Today's agent is introduced before anything is installed.** You cannot
-> deploy what you cannot describe, and the trap question *"so who else could
-> use this?"* only bites if they have just seen real code doing real work.
+> share what you cannot describe, and the question *"so who else could use
+> this?"* only bites once they have seen real code doing real work.
 >
 > **Only the last hour is typing code.** Say that out loud when you show the
 > agenda. The three hours before it are the reason the last hour works.
+
+### The three opening questions
+
+They are ordered on purpose, and the third is the one people skip.
+
+| # | Question | What it is for |
+|---|---|---|
+| 1 | *What is an agent?* | teaches the loop — the idea the whole day sits on |
+| 2 | *Is that different from ChatGPT?* | uses the one example the whole room shares |
+| 3 | *Have you ever built a website, and put it somewhere so friends could see it?* | **tells you who is in the room** |
+
+Question 3 runs as **three shows of hands**: made something on your own
+computer · put it somewhere others could reach · had to keep it working
+afterwards. The deck says what each pattern of answers means for the rest of
+your day.
+
+> **INSTRUCTOR** · Question 3 is for *you*, not for them, and it changes how
+> you teach the next four hours:
+>
+> - **Mostly first hands only** — a genuine beginner room. Go slower at 1:05,
+>   and say *"no output means it worked"* twice.
+> - **Many second hands** — they have already felt the problem. At 2:02, ask
+>   *"what did you actually have to do?"* and let them tell it. That saves you
+>   ten minutes of explaining.
+> - **Any third hands** — you have allies. Ask those people to help their
+>   neighbours during the build sections, and call on them by name.
+>
+> Say *"there is no wrong answer, I am asking so I know where to start"* before
+> you ask it. Otherwise the quieter half of the room will not put a hand up.
 
 ### Why today's agent is the small one
 

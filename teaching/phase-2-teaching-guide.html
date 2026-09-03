@@ -736,7 +736,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 78-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is an 83-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -784,37 +784,83 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> Sixty-seven of the slides carry a presenter
+<p><strong>Press <code>S</code> before you start.</strong> Seventy-two of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
-<pre><code>   0:00   15   What is an agent?          the settling question. No agenda yet.
-   0:15   22   Meet today's agent         our small teaching agent, read together
-   0:37   13   Get set up, and prove it   the checklist, and check-week-00
-   0:50   10   break
-   1:00   22   The terminal               practised on a throwaway folder
-   1:22   28   How machines talk          JSON and curl, on the open internet
-   1:50   10   break
-   2:00   22   Why it must become a web service
-   2:22   30   Finding it, and asking it  addresses, then messages
-   2:52   28   Build: the front door
+<pre><code>   0:00   22   Three questions to the room   settle the room, and read it
+   0:22   20   Meet today's agent            our small teaching agent
+   0:42   13   Get set up, and prove it      the checklist, and check-week-00
+   0:55   10   break
+   1:05   20   The terminal                  practised on a throwaway folder
+   1:25   27   Sending messages              JSON and curl, on public services
+   1:52   10   break
+   2:02   25   What a web service is         service, API, endpoint
+   2:27   25   Addresses, then messages
+   2:52   28   Build: the address
    3:20   12   Build: make it feel fast
-   3:32   18   Build: the box
+   3:32   18   Build: the container
    3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Three things about this order, all deliberate.</p>
-<p><strong>It opens with a question, not a plan.</strong> You need two or three minutes of
-easy conversation before anyone — including you — can absorb a four-hour
-agenda. The agenda appears on slide 5, once they have something to hang it
-on, and never again.</p>
+<p><strong>It opens with questions, not a plan.</strong> Three of them, and they do different
+jobs. The agenda appears once they have something to hang it on, and never
+again — after that the clock in the corner of each slide is enough.</p>
 <p><strong>Today's agent is introduced before anything is installed.</strong> You cannot
-deploy what you cannot describe, and the trap question <em>"so who else could
-use this?"</em> only bites if they have just seen real code doing real work.</p>
+share what you cannot describe, and the question <em>"so who else could use
+this?"</em> only bites once they have seen real code doing real work.</p>
 <p><strong>Only the last hour is typing code.</strong> Say that out loud when you show the
 agenda. The three hours before it are the reason the last hour works.</p>
+</blockquote>
+<h3>The three opening questions</h3>
+<p>They are ordered on purpose, and the third is the one people skip.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Question</th>
+<th>What it is for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>What is an agent?</em></td>
+<td>teaches the loop — the idea the whole day sits on</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>Is that different from ChatGPT?</em></td>
+<td>uses the one example the whole room shares</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em>Have you ever built a website, and put it somewhere so friends could see it?</em></td>
+<td><strong>tells you who is in the room</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Question 3 runs as <strong>three shows of hands</strong>: made something on your own
+computer · put it somewhere others could reach · had to keep it working
+afterwards. The deck says what each pattern of answers means for the rest of
+your day.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Question 3 is for <em>you</em>, not for them, and it changes how
+you teach the next four hours:</p>
+<ul>
+<li><strong>Mostly first hands only</strong> — a genuine beginner room. Go slower at 1:05,
+  and say <em>"no output means it worked"</em> twice.</li>
+<li><strong>Many second hands</strong> — they have already felt the problem. At 2:02, ask
+  <em>"what did you actually have to do?"</em> and let them tell it. That saves you
+  ten minutes of explaining.</li>
+<li><strong>Any third hands</strong> — you have allies. Ask those people to help their
+  neighbours during the build sections, and call on them by name.</li>
+</ul>
+<p>Say <em>"there is no wrong answer, I am asking so I know where to start"</em> before
+you ask it. Otherwise the quieter half of the room will not put a hand up.</p>
 </blockquote>
 <h3>Why today's agent is the small one</h3>
 <p>The deck says this explicitly, on its own slide, because somebody in the room
