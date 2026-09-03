@@ -2013,7 +2013,7 @@ find that out now rather than in the build.</p>
 lessons. If somebody's terminal will not open, pair them with a neighbour and
 fix it at the break — do not hold twenty people for one laptop.</p>
 </blockquote>
-<h3>The terminal · the nine commands</h3>
+<h3>The terminal · the nine commands  <em>(reference)</em></h3>
 <p>The slides teach these <strong>one per slide</strong>, each with a plain-English reading.
 This is the summary; the slides are the lesson.</p>
 <table>
@@ -2091,7 +2091,7 @@ computer. Nothing we have learned can reach another machine — and your
 agent's whole problem is that nobody else can reach it. So next: how one
 computer sends a message to another."</em></p>
 </blockquote>
-<h3>The terminal · what it is</h3>
+<h3>The terminal · what it is (4 min)</h3>
 <p>A terminal is a window where you <strong>type commands instead of clicking</strong>. Nothing
 more mysterious than that.</p>
 <p>Open one:</p>
@@ -2140,7 +2140,7 @@ Type <code>cd Doc</code>, press Tab, watch it become <code>cd Documents/</code>.
 long paths character by character for weeks unless somebody shows them this
 in the first ten minutes.</p>
 </blockquote>
-<h3>The terminal · folders, built by hand</h3>
+<h3>The terminal · folders, built by hand (22 min)</h3>
 <p>They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.</p>
 <p><strong>This is the shape we are going to make:</strong></p>
@@ -2269,7 +2269,7 @@ story.</p>
 </tr>
 </tbody>
 </table>
-<h3>A word you need later · process</h3>
+<h3>A word you need later · process  <em>(taught in the build, at 2:52)</em></h3>
 <p>Two ideas that everything else sits on. Ninety seconds each, with something to
 run.</p>
 <p><strong>A process is a running program.</strong></p>
@@ -2316,7 +2316,7 @@ our case <code>8080</code>.</p>
 They need "numbered door" and "localhost means here", and they need it in
 ninety seconds. The rest is Week 2's problem and mostly never.</p>
 </blockquote>
-<h3>Sending messages · JSON first</h3>
+<h3>Sending messages · JSON first (6 min)</h3>
 <p>They are about to send and receive JSON all course. Four minutes now saves
 confusion in all eight weeks.</p>
 <p><strong>JSON is a way to write data as text</strong>, so it can travel over a network. That
@@ -2362,7 +2362,7 @@ seen and understood.</p>
 <p>If anyone knows Python: <em>"It looks exactly like a dict. The differences that
 bite are double quotes only, and no trailing comma."</em></p>
 </blockquote>
-<h3>Sending messages · curl, on public services</h3>
+<h3>Sending messages · curl, on public services (12 min)</h3>
 <p><strong><code>curl</code> sends a request over the network from the terminal, and prints what
 came back.</strong> It is a browser with no window.</p>
 <p>They will use it in every session from here. So learn it on something simple
@@ -3072,7 +3072,7 @@ you will spend your time on their code rather than on their typos.</p>
    endpoint 3   make it feel fast     the arrow
    the container section   make it run anywhere      the box     12 min
 </code></pre>
-<h3>Endpoints 1 and 2 · /health, then /chat</h3>
+<h3>Endpoints 1 and 2 · /health, then /chat (26 min)</h3>
 <p><strong>This is the front door from the concepts section, built.</strong> Point back at the diagram before
 anyone types: the agent already works, and they are wrapping it so that anything
 — a website, a phone, another company — can reach it.</p>
@@ -3320,7 +3320,7 @@ set -a &amp;&amp; source .env &amp;&amp; set +a</code></p>
 the terminal exercise — and exports every line in it. Write it on the board. Leave it there
 for eight weeks.</p>
 </blockquote>
-<h3>Endpoint 3 · /chat/stream, so it feels fast</h3>
+<h3>Endpoint 3 · /chat/stream, so it feels fast (14 min)</h3>
 <p>Ask: <em>"How long did that take?"</em></p>
 <p>Several seconds. And for all of it, they stared at nothing.</p>
 <pre><code>   WITHOUT STREAMING
@@ -3405,7 +3405,7 @@ the most satisfying moment of the session — use it.</p>
 <p>The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. <strong>"Works on my machine" is not a
 deployment.</strong></p>
-<h4>The shop story, one stage later</h4>
+<h4>The shop story, one stage later (4 min)</h4>
 <p>Go back to the sweets. The table works, the sweets sell, and now you want a
 second shop across town:</p>
 <blockquote>
@@ -3444,7 +3444,7 @@ recipe needs the other kitchen to already have the right oven, pans and
 ingredients. A food truck brings the whole kitchen with it and works in any
 car park.</p>
 </blockquote>
-<h4>Two words before anything else</h4>
+<h4>Two words before anything else — image and container (4 min)</h4>
 <p>Beginners conflate these for months, so name them once, plainly:</p>
 <table>
 <thead>
@@ -3476,7 +3476,50 @@ One image, three containers.</p>
 <pre><code>   Dockerfile  -&gt;  docker build  -&gt;  an image  -&gt;  docker run  -&gt;  a container
    (your steps)    (the doing)       (the result)                  (it runs)
 </code></pre>
-<h4>Three toy examples, before our agent (10 min)</h4>
+<h4>What Docker actually is (2 min)</h4>
+<p>Before building anything, name the tool.</p>
+<p><strong>Docker is a program on your laptop that builds these packages and runs
+them.</strong> They installed it this morning, which is why we checked it was
+<em>running</em> and not merely installed.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The framing that helps a non-technical room: Docker works
+like a <strong>background service</strong>, the way a printer service does. People keep
+looking for a Docker <em>window</em> — there isn't one that matters. It sits in the
+menu bar and answers commands.</p>
+<p>If it is not running, every <code>docker</code> command fails with <em>"cannot connect to
+the Docker daemon"</em> — which is the third of the four errors from setup.</p>
+</blockquote>
+<p>Four commands cover everything today:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker build</code></td>
+<td>make a package from your instructions</td>
+</tr>
+<tr>
+<td><code>docker run</code></td>
+<td>start one</td>
+</tr>
+<tr>
+<td><code>docker images</code></td>
+<td>list the packages you have built</td>
+</tr>
+<tr>
+<td><code>docker ps</code></td>
+<td>list what is running right now</td>
+</tr>
+</tbody>
+</table>
+<p>Have them confirm it is alive before you start:</p>
+<pre><code class="language-bash">docker --version
+</code></pre>
+<h4>Three toy examples, before our agent (11 min)</h4>
 <p>Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.</p>
 <p><strong>Example 1 — the smallest possible.</strong> Two lines.</p>
@@ -3556,6 +3599,44 @@ docker run --rm hello-box</code></p>
 single moment explains containers better than any diagram — the box is not
 pointing at their folder, it <em>contains</em> a copy.</p>
 </blockquote>
+<h4>See what you have made (3 min)</h4>
+<p>Two commands that turn "an image is a package" from a claim into something
+they can look at.</p>
+<pre><code class="language-bash">docker images
+</code></pre>
+<pre><code>REPOSITORY   TAG      SIZE
+demo2        latest   125MB
+demo1        latest   7MB
+</code></pre>
+<p><strong>These are files on disk now</strong>, not ideas — they can be copied, sent and
+deleted. The sizes tell the story: <code>demo1</code> started from a tiny system,
+<code>demo2</code> had to include Python. <code>latest</code> is just the default tag; <code>-t demo1</code>
+gave the name and the tag came free.</p>
+<p>Then open one and walk around inside it:</p>
+<pre><code class="language-bash">docker run --rm -it demo2 sh
+</code></pre>
+<pre><code># pwd
+/app
+# ls
+hello.py
+# exit
+</code></pre>
+<ul>
+<li><strong><code>-it</code></strong> means "let me type in it".</li>
+<li><strong><code>sh</code></strong> means "give me a prompt instead of running the program".</li>
+<li><code>/app</code> is the folder <code>WORKDIR</code> set. <code>hello.py</code> is the copy <code>COPY</code> made.</li>
+</ul>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Do this live — it is the most convincing moment of the
+section.</strong> They watch you get a prompt <em>inside a package</em>, run <code>ls</code>, and see
+their own file sitting in <code>/app</code>. Everything the Dockerfile claimed is
+suddenly visible.</p>
+<p>It also retires the terminal lesson properly: <em>"Those nine commands were not
+just for your laptop. That is a Linux computer, and you can already use
+it."</em></p>
+<p>Remind them to <code>exit</code>, or somebody stays inside the container and wonders
+why their next command behaves oddly.</p>
+</blockquote>
 <p><strong>Example 3 — one that waits to be asked, and the door you have to open.</strong></p>
 <pre><code class="language-bash">docker run --rm -p 9000:80 nginx
 </code></pre>
@@ -3580,7 +3661,7 @@ is the only place <code>-p</code> appears with two <em>different</em> numbers. O
 <p>Say it as a sentence every time, because people flip it: <strong>"outside number,
 then inside number."</strong></p>
 </blockquote>
-<h4>Now the real one</h4>
+<h4>Now the real one — line by line (14 min)</h4>
 <p>Their <code>Dockerfile</code> is the same four ideas plus three lines:</p>
 <pre><code class="language-dockerfile">FROM python:3.12-slim
 WORKDIR /app

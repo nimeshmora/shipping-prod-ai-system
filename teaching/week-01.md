@@ -568,7 +568,7 @@ Five tools, each on a toy. Nothing here touches our agent — that is deliberate
 > lessons. If somebody's terminal will not open, pair them with a neighbour and
 > fix it at the break — do not hold twenty people for one laptop.
 
-### The terminal · the nine commands
+### The terminal · the nine commands  *(reference)*
 
 The slides teach these **one per slide**, each with a plain-English reading.
 This is the summary; the slides are the lesson.
@@ -607,7 +607,7 @@ abrupt:
 > agent's whole problem is that nobody else can reach it. So next: how one
 > computer sends a message to another."*
 
-### The terminal · what it is
+### The terminal · what it is (4 min)
 
 A terminal is a window where you **type commands instead of clicking**. Nothing
 more mysterious than that.
@@ -669,7 +669,7 @@ Two more that save everybody's afternoon:
 > long paths character by character for weeks unless somebody shows them this
 > in the first ten minutes.
 
-### The terminal · folders, built by hand
+### The terminal · folders, built by hand (22 min)
 
 They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.
@@ -807,7 +807,7 @@ rm -r practice
 | `touch` | make an empty file |
 | `cat` | show me what is in this file |
 
-### A word you need later · process
+### A word you need later · process  *(taught in the build, at 2:52)*
 
 Two ideas that everything else sits on. Ninety seconds each, with something to
 run.
@@ -870,7 +870,7 @@ our case `8080`.
 > They need "numbered door" and "localhost means here", and they need it in
 > ninety seconds. The rest is Week 2's problem and mostly never.
 
-### Sending messages · JSON first
+### Sending messages · JSON first (6 min)
 
 They are about to send and receive JSON all course. Four minutes now saves
 confusion in all eight weeks.
@@ -932,7 +932,7 @@ Expecting property name enclosed in double quotes: line 1 column 2
 > If anyone knows Python: *"It looks exactly like a dict. The differences that
 > bite are double quotes only, and no trailing comma."*
 
-### Sending messages · curl, on public services
+### Sending messages · curl, on public services (12 min)
 
 **`curl` sends a request over the network from the terminal, and prints what
 came back.** It is a browser with no window.
@@ -1705,7 +1705,7 @@ Three parts, and they map exactly onto the picture from the concepts section:
    the container section   make it run anywhere      the box     12 min
 ```
 
-### Endpoints 1 and 2 · /health, then /chat
+### Endpoints 1 and 2 · /health, then /chat (26 min)
 
 **This is the front door from the concepts section, built.** Point back at the diagram before
 anyone types: the agent already works, and they are wrapping it so that anything
@@ -1983,7 +1983,7 @@ above, running.
 > the terminal exercise — and exports every line in it. Write it on the board. Leave it there
 > for eight weeks.
 
-### Endpoint 3 · /chat/stream, so it feels fast
+### Endpoint 3 · /chat/stream, so it feels fast (14 min)
 
 Ask: *"How long did that take?"*
 
@@ -2096,7 +2096,7 @@ The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. **"Works on my machine" is not a
 deployment.**
 
-#### The shop story, one stage later
+#### The shop story, one stage later (4 min)
 
 Go back to the sweets. The table works, the sweets sell, and now you want a
 second shop across town:
@@ -2141,7 +2141,7 @@ Hand the box to any computer and it behaves identically.
 > ingredients. A food truck brings the whole kitchen with it and works in any
 > car park.
 
-#### Two words before anything else
+#### Two words before anything else — image and container (4 min)
 
 Beginners conflate these for months, so name them once, plainly:
 
@@ -2165,7 +2165,38 @@ And the chain, written on the board as four words:
    (your steps)    (the doing)       (the result)                  (it runs)
 ```
 
-#### Three toy examples, before our agent (10 min)
+#### What Docker actually is (2 min)
+
+Before building anything, name the tool.
+
+**Docker is a program on your laptop that builds these packages and runs
+them.** They installed it this morning, which is why we checked it was
+*running* and not merely installed.
+
+> **INSTRUCTOR** · The framing that helps a non-technical room: Docker works
+> like a **background service**, the way a printer service does. People keep
+> looking for a Docker *window* — there isn't one that matters. It sits in the
+> menu bar and answers commands.
+>
+> If it is not running, every `docker` command fails with *"cannot connect to
+> the Docker daemon"* — which is the third of the four errors from setup.
+
+Four commands cover everything today:
+
+| Command | What it does |
+|---|---|
+| `docker build` | make a package from your instructions |
+| `docker run` | start one |
+| `docker images` | list the packages you have built |
+| `docker ps` | list what is running right now |
+
+Have them confirm it is alive before you start:
+
+```bash
+docker --version
+```
+
+#### Three toy examples, before our agent (11 min)
 
 Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.
@@ -2276,6 +2307,56 @@ hello from inside the box
 > single moment explains containers better than any diagram — the box is not
 > pointing at their folder, it *contains* a copy.
 
+#### See what you have made (3 min)
+
+Two commands that turn "an image is a package" from a claim into something
+they can look at.
+
+```bash
+docker images
+```
+
+```
+REPOSITORY   TAG      SIZE
+demo2        latest   125MB
+demo1        latest   7MB
+```
+
+**These are files on disk now**, not ideas — they can be copied, sent and
+deleted. The sizes tell the story: `demo1` started from a tiny system,
+`demo2` had to include Python. `latest` is just the default tag; `-t demo1`
+gave the name and the tag came free.
+
+Then open one and walk around inside it:
+
+```bash
+docker run --rm -it demo2 sh
+```
+
+```
+# pwd
+/app
+# ls
+hello.py
+# exit
+```
+
+- **`-it`** means "let me type in it".
+- **`sh`** means "give me a prompt instead of running the program".
+- `/app` is the folder `WORKDIR` set. `hello.py` is the copy `COPY` made.
+
+> **INSTRUCTOR** · **Do this live — it is the most convincing moment of the
+> section.** They watch you get a prompt *inside a package*, run `ls`, and see
+> their own file sitting in `/app`. Everything the Dockerfile claimed is
+> suddenly visible.
+>
+> It also retires the terminal lesson properly: *"Those nine commands were not
+> just for your laptop. That is a Linux computer, and you can already use
+> it."*
+>
+> Remind them to `exit`, or somebody stays inside the container and wonders
+> why their next command behaves oddly.
+
 **Example 3 — one that waits to be asked, and the door you have to open.**
 
 ```bash
@@ -2311,7 +2392,7 @@ deliberately connecting one number on your machine to one number inside.
 > Say it as a sentence every time, because people flip it: **"outside number,
 > then inside number."**
 
-#### Now the real one
+#### Now the real one — line by line (14 min)
 
 Their `Dockerfile` is the same four ideas plus three lines:
 
