@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 122-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 135-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,23 +786,23 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and eleven of the slides carry a
-presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
+<p><strong>Press <code>S</code> before you start.</strong> A hundred and twenty-four of the slides carry
+a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
-<pre><code>   0:00   16   Three questions to the room   settle the room, and read it
-   0:16   16   Meet today's agent            our small teaching agent
-   0:32   11   The project                   a tour BEFORE they download it
-   0:43   14   Set it up, and prove it       incl. the key, FINISHED here
-   0:57   10   break
-   1:07   12   The terminal                  practised on a throwaway folder
-   1:19   20   Sending messages              JSON and curl, on public services
-   1:39   10   break
-   1:49   22   What a web service is         the shop story, then the words
-   2:11   16   Addresses, then messages
-   2:27   45   Build the web service         3 endpoints, line by line, each tested
-   3:12   30   Build the container           the cart story, then line by line
-   3:42   18   Prove it, and what breaks next
+<pre><code>   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   15   Meet today's agent            our small teaching agent
+   0:29   10   The project                   a tour BEFORE they download it
+   0:39   12   Set it up, and prove it       incl. the key, finished here
+   0:51   10   break
+   1:01   26   The terminal                  a real lesson: 9 commands, 15 slides
+   1:27   18   Sending messages              JSON and curl, on public services
+   1:45   10   break
+   1:55   19   What a web service is         the shop story, then the words
+   2:14   14   Addresses, then messages
+   2:28   40   Build the web service         3 endpoints, line by line, tested
+   3:08   38   Build the container           5 examples, then line by line
+   3:46   14   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
@@ -1099,10 +1099,81 @@ last line.</p>
 run against the real agent: <code>/health</code> returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.</p>
-<h3>Containers get 30 minutes, and are taught from nothing</h3>
+<h3>The terminal gets a real lesson, not a warm-up</h3>
+<p>Twenty-six minutes and fifteen slides. It used to be five slides with four
+commands crammed onto each, which is unusable for anyone who has not used a
+terminal before.</p>
+<p><strong>One command per slide</strong>, each with a numbered plain-English reading:</p>
+<pre><code>   what it is, and why (no screen on a server)
+   the anatomy of a command      command · option · target
+   pwd, ls                       where am I, what is here
+   NO OUTPUT MEANS IT WORKED     the rule that prevents most panic
+   the exercise, drawn           what we are about to build
+   mkdir                         and run it twice, to see a useful error
+   cd, cd ..                     plus the &quot;cd then pwd&quot; habit
+   touch                         and that commands accept a list
+   PATHS                         a slash means &quot;go through&quot;
+   echo, and &gt;                   print, then redirect into a file
+   cat                           look inside · and it is read-only, so safe
+   ls -R                         check your work against the whiteboard
+   ls -la                        hidden files — in the REAL project folder
+   rm -r, and the reference table
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Three slides in there are worth protecting if you are short
+of time:</p>
+<p><strong>"No output means it worked."</strong> Say it twice. It costs four seconds and
+prevents a specific confusion five times over.</p>
+<p><strong>Paths.</strong> Beginners <code>cd</code> in and out of folders one step at a time for years.
+One slide fixes it: <em>"a slash means go through"</em>.</p>
+<p><strong><code>ls -la</code> in the real project folder.</strong> It is the first time the exercise
+touches something that matters, and it catches anyone whose editor saved
+<code>.env</code> as <code>.env.txt</code> — at 1:20 instead of at 2:40.</p>
+</blockquote>
+<p>The section ends with an explicit bridge, because the handover used to be
+abrupt:</p>
+<blockquote>
+<p><em>"Notice what all nine commands have in common: every one talks to THIS
+computer. Nothing we have learned can reach another machine — and your
+agent's whole problem is that nobody else can reach it. So next: how one
+computer sends a message to another."</em></p>
+</blockquote>
+<h3>Containers get five worked examples</h3>
+<p>Three more slides than before, all of them making the abstract concrete:</p>
+<table>
+<thead>
+<tr>
+<th>Added</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>What Docker is</strong>, and its four commands</td>
+<td>they kept looking for a Docker <em>window</em>; it is a background service</td>
+</tr>
+<tr>
+<td><strong><code>docker images</code></strong></td>
+<td>the packages appear as a real list, with sizes — more convincing than any definition</td>
+</tr>
+<tr>
+<td><strong><code>docker run -it demo2 sh</code></strong></td>
+<td>a prompt <em>inside</em> a package: <code>pwd</code> shows <code>/app</code>, <code>ls</code> shows their copied file</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · That last one is the most convincing moment of the section,
+and it retires the terminal lesson properly: <em>"Those nine commands were not
+just for your laptop. That is a Linux computer, and you can already use
+it."</em></p>
+<p>Remind them to <code>exit</code> — otherwise somebody stays inside the container and
+wonders why their next command behaves strangely.</p>
+</blockquote>
+<h3>Containers get 38 minutes, and are taught from nothing</h3>
 <p>The second-longest section of the day, after the web service build. It is the
 topic a non-technical room finds hardest and the one most courses rush.
-Nineteen slides, in this order:</p>
+Twenty-two slides, in this order:</p>
 <ol>
 <li><strong>The problem</strong> — they rebuild the setup list from 0:43 themselves</li>
 <li><strong>The idea, before the word "Docker"</strong> — send the set-up, not just the code</li>
@@ -1434,19 +1505,19 @@ and when it fails they cannot tell you which part broke.</p>
 shape the other weeks use — it is the only session that can assume nothing at
 all, so it spends its first two hours handing over tools and its last two
 building with them.</p>
-<pre><code>   0:00   16   Three questions to the room   settle the room, and read it
-   0:16   16   Meet today's agent            our small teaching agent
-   0:32   11   The project                   a tour BEFORE they download it
-   0:43   14   Set it up, and prove it       incl. the key, finished here
-   0:57   10   break
-   1:07   12   The terminal                  practised on a throwaway folder
-   1:19   20   Sending messages              JSON and curl, on public services
-   1:39   10   break
-   1:49   22   What a web service is         the shop story, then the words
-   2:11   16   Addresses, then messages
-   2:27   45   Build the web service         3 endpoints, line by line, tested
-   3:12   30   Build the container           the cart story, then line by line
-   3:42   18   Prove it, and what breaks next
+<pre><code>   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   15   Meet today's agent            our small teaching agent
+   0:29   10   The project                   a tour BEFORE they download it
+   0:39   12   Set it up, and prove it       incl. the key, finished here
+   0:51   10   break
+   1:01   26   The terminal                  a real lesson: 9 commands
+   1:27   18   Sending messages              JSON and curl, on public services
+   1:45   10   break
+   1:55   19   What a web service is         the shop story, then the words
+   2:14   14   Addresses, then messages
+   2:28   40   Build the web service         3 endpoints, line by line, tested
+   3:08   38   Build the container           5 examples, then line by line
+   3:46   14   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
@@ -1464,12 +1535,12 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 122 slides with a presenter note on 111 of them, and it carries material this
+is 135 slides with a presenter note on 124 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
 <hr />
-<h2>1 · Three questions to the room (0:00 – 0:16)</h2>
+<h2>1 · Three questions to the room (0:00 – 0:14)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Laptops closed. Slides off. Just talk. This is the only part
 of the session where nobody types anything, and it sets up everything else.</p>
@@ -1523,7 +1594,7 @@ beat does not feel like a detour:</p>
 you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></p>
 </blockquote>
 <hr />
-<h2>2 · Meet today's agent (0:16 – 0:32)</h2>
+<h2>2 · Meet today's agent (0:14 – 0:29)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <strong>This section is new and it is load-bearing.</strong> They are
 about to spend two hours deploying this thing. If they cannot say what it does
@@ -1715,7 +1786,7 @@ growing <code>history</code> list is:</p>
 nothing."</em></p>
 </blockquote>
 <hr />
-<h2>3 · The project (0:32 – 0:43)</h2>
+<h2>3 · The project (0:29 – 0:39)</h2>
 <p>They already cloned this in the setup section. Now that they can move around a folder,
 <strong>give the commands they ran a meaning</strong>, and give them the map.</p>
 <p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
@@ -1820,7 +1891,7 @@ the web yet.</p>
 break."</em></p>
 </blockquote>
 <hr />
-<h2>4 · Set it up, and prove it (0:43 – 0:57)</h2>
+<h2>4 · Set it up, and prove it (0:39 – 0:51)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Everyone sitting still, one command at a time, hands up on
 failure. You are hunting for broken machines now, while it costs the room ten
@@ -1920,7 +1991,7 @@ now. You will point at it four times today and every week after. Also watch
 for editors that helpfully save <code>.env</code> as <code>.env.txt</code> — <code>ls -la</code> catches it.</p>
 </blockquote>
 <hr />
-<h2>5–6 · The terminal, then sending messages (1:07 – 1:39)</h2>
+<h2>5–6 · The terminal, then sending messages (1:01 – 1:45)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
 window."</em> Then walk the room. Do not stay at the front for this beat; this is
@@ -1941,6 +2012,84 @@ find that out now rather than in the build.</p>
 <p><strong>INSTRUCTOR</strong> · Keep this beat moving. It is nine short things, not five
 lessons. If somebody's terminal will not open, pair them with a neighbour and
 fix it at the break — do not hold twenty people for one laptop.</p>
+</blockquote>
+<h3>The terminal · the nine commands</h3>
+<p>The slides teach these <strong>one per slide</strong>, each with a plain-English reading.
+This is the summary; the slides are the lesson.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it means</th>
+<th>Taught with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pwd</code></td>
+<td>which folder am I in?</td>
+<td>"a terminal is always standing somewhere"</td>
+</tr>
+<tr>
+<td><code>ls</code> / <code>ls -la</code></td>
+<td>what is in it? / with hidden files</td>
+<td>the <code>.env</code> check in the real project</td>
+</tr>
+<tr>
+<td><code>cd x</code> / <code>cd ..</code></td>
+<td>go into x / back out</td>
+<td>the <strong>"cd then pwd"</strong> habit</td>
+</tr>
+<tr>
+<td><code>mkdir</code></td>
+<td>make a folder</td>
+<td>run it twice, see a useful error</td>
+</tr>
+<tr>
+<td><code>touch</code></td>
+<td>make an empty file</td>
+<td>and that commands accept a <strong>list</strong></td>
+</tr>
+<tr>
+<td><code>echo</code></td>
+<td>print something</td>
+<td>on its own, then with <code>&gt;</code></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>send output into a file</td>
+<td>it <strong>replaces</strong>; <code>&gt;&gt;</code> appends</td>
+</tr>
+<tr>
+<td><code>cat</code></td>
+<td>print a file's contents</td>
+<td>and that it is <strong>read-only, so safe</strong></td>
+</tr>
+<tr>
+<td><code>rm -r</code></td>
+<td>delete it, no undo</td>
+<td>at the end, cleaning up</td>
+</tr>
+</tbody>
+</table>
+<p>Plus four things that are not commands: <strong>Tab</strong> completes, <strong>Up arrow</strong>
+repeats, <strong>Ctrl+C</strong> stops, and <strong>a slash means "go through"</strong>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Three of these are worth protecting if you run short:</p>
+<p><strong>"No output means it worked."</strong> Say it twice — four seconds, and it prevents
+a confusion that recurs five times.</p>
+<p><strong>Paths.</strong> Beginners <code>cd</code> in and out one step at a time for years. One slide
+fixes it.</p>
+<p><strong><code>ls -la</code> in the real project.</strong> Catches anyone whose editor saved
+<code>.env.txt</code>, at 1:20 rather than 2:40.</p>
+</blockquote>
+<p><strong>The section closes with a bridge</strong>, and it matters — the handover used to be
+abrupt:</p>
+<blockquote>
+<p><em>"Notice what all nine commands have in common: every one talks to THIS
+computer. Nothing we have learned can reach another machine — and your
+agent's whole problem is that nobody else can reach it. So next: how one
+computer sends a message to another."</em></p>
 </blockquote>
 <h3>The terminal · what it is</h3>
 <p>A terminal is a window where you <strong>type commands instead of clicking</strong>. Nothing
@@ -2314,7 +2463,7 @@ answer comes back from your agent instead of an echo service. Nothing else
 about the command changes."</em></p>
 <p>That single sentence is what stops FastAPI feeling like magic later.</p>
 </blockquote>
-<h2>Break (1:39 – 1:49)</h2>
+<h2>Break (1:45 – 1:55)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do this on the projector, not on their machines.</p>
 </blockquote>
@@ -2357,7 +2506,7 @@ runs in one place   only where Python is already set up just right
 <p><strong>Those four gaps are today.</strong> None of them are AI problems. All of them are why
 agents die in notebooks.</p>
 <hr />
-<h2>7–8 · What a web service is, then addresses and messages (1:49 – 2:27)</h2>
+<h2>7–8 · What a web service is, then addresses and messages (1:55 – 2:28)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Five ideas, and they are deliberately arranged as <strong>one
 story rather than five topics</strong>. Each answers a question the previous one
@@ -2912,7 +3061,7 @@ Week 2.</p>
 then hold it for a week."</em></p>
 </blockquote>
 <hr />
-<h2>9 · Build the web service (2:27 – 3:12)</h2>
+<h2>9 · Build the web service (2:28 – 3:08)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Back on keyboards."</em> Now walk the room continuously. This
 is the beat where you find out whether the tools section did its job — and if it did,
@@ -3251,7 +3400,7 @@ is how you tell a proxy not to do it.</p>
 <p><strong>INSTRUCTOR</strong> · Have someone shout when they see text appear in pieces. It is
 the most satisfying moment of the session — use it.</p>
 </blockquote>
-<h2>10 · Build the container (3:12 – 3:42)</h2>
+<h2>10 · Build the container (3:08 – 3:46)</h2>
 <p>Ask: <em>"What would my colleague need to run your agent?"</em></p>
 <p>The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. <strong>"Works on my machine" is not a
@@ -3499,7 +3648,7 @@ inside a box that could run anywhere.</strong></p>
 </ol>
 </blockquote>
 <hr />
-<h2>11 · Prove it, and what breaks next (3:42 – 4:00)</h2>
+<h2>11 · Prove it, and what breaks next (3:46 – 4:00)</h2>
 <pre><code class="language-bash">make check-week-01
 </code></pre>
 <p>Green, line by line. Read the output together — each line is a promise about the

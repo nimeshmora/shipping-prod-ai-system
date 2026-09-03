@@ -26,19 +26,19 @@ all, so it spends its first two hours handing over tools and its last two
 building with them.
 
 ```
-   0:00   16   Three questions to the room   settle the room, and read it
-   0:16   16   Meet today's agent            our small teaching agent
-   0:32   11   The project                   a tour BEFORE they download it
-   0:43   14   Set it up, and prove it       incl. the key, finished here
-   0:57   10   break
-   1:07   12   The terminal                  practised on a throwaway folder
-   1:19   20   Sending messages              JSON and curl, on public services
-   1:39   10   break
-   1:49   22   What a web service is         the shop story, then the words
-   2:11   16   Addresses, then messages
-   2:27   45   Build the web service         3 endpoints, line by line, tested
-   3:12   30   Build the container           the cart story, then line by line
-   3:42   18   Prove it, and what breaks next
+   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   15   Meet today's agent            our small teaching agent
+   0:29   10   The project                   a tour BEFORE they download it
+   0:39   12   Set it up, and prove it       incl. the key, finished here
+   0:51   10   break
+   1:01   26   The terminal                  a real lesson: 9 commands
+   1:27   18   Sending messages              JSON and curl, on public services
+   1:45   10   break
+   1:55   19   What a web service is         the shop story, then the words
+   2:14   14   Addresses, then messages
+   2:28   40   Build the web service         3 endpoints, line by line, tested
+   3:08   38   Build the container           5 examples, then line by line
+   3:46   14   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -59,14 +59,14 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 122 slides with a presenter note on 111 of them, and it carries material this
+is 135 slides with a presenter note on 124 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
 
 ---
 
-## 1 · Three questions to the room (0:00 – 0:16)
+## 1 · Three questions to the room (0:00 – 0:14)
 
 > **INSTRUCTOR** · Laptops closed. Slides off. Just talk. This is the only part
 > of the session where nobody types anything, and it sets up everything else.
@@ -137,7 +137,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:16 – 0:32)
+## 2 · Meet today's agent (0:14 – 0:29)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -313,7 +313,7 @@ of its own reply.
 
 ---
 
-## 3 · The project (0:32 – 0:43)
+## 3 · The project (0:29 – 0:39)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.
@@ -447,7 +447,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:43 – 0:57)
+## 4 · Set it up, and prove it (0:39 – 0:51)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -544,7 +544,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:07 – 1:39)
+## 5–6 · The terminal, then sending messages (1:01 – 1:45)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -567,6 +567,45 @@ Five tools, each on a toy. Nothing here touches our agent — that is deliberate
 > **INSTRUCTOR** · Keep this beat moving. It is nine short things, not five
 > lessons. If somebody's terminal will not open, pair them with a neighbour and
 > fix it at the break — do not hold twenty people for one laptop.
+
+### The terminal · the nine commands
+
+The slides teach these **one per slide**, each with a plain-English reading.
+This is the summary; the slides are the lesson.
+
+| Command | What it means | Taught with |
+|---|---|---|
+| `pwd` | which folder am I in? | "a terminal is always standing somewhere" |
+| `ls` / `ls -la` | what is in it? / with hidden files | the `.env` check in the real project |
+| `cd x` / `cd ..` | go into x / back out | the **"cd then pwd"** habit |
+| `mkdir` | make a folder | run it twice, see a useful error |
+| `touch` | make an empty file | and that commands accept a **list** |
+| `echo` | print something | on its own, then with `>` |
+| `>` | send output into a file | it **replaces**; `>>` appends |
+| `cat` | print a file's contents | and that it is **read-only, so safe** |
+| `rm -r` | delete it, no undo | at the end, cleaning up |
+
+Plus four things that are not commands: **Tab** completes, **Up arrow**
+repeats, **Ctrl+C** stops, and **a slash means "go through"**.
+
+> **INSTRUCTOR** · Three of these are worth protecting if you run short:
+>
+> **"No output means it worked."** Say it twice — four seconds, and it prevents
+> a confusion that recurs five times.
+>
+> **Paths.** Beginners `cd` in and out one step at a time for years. One slide
+> fixes it.
+>
+> **`ls -la` in the real project.** Catches anyone whose editor saved
+> `.env.txt`, at 1:20 rather than 2:40.
+
+**The section closes with a bridge**, and it matters — the handover used to be
+abrupt:
+
+> *"Notice what all nine commands have in common: every one talks to THIS
+> computer. Nothing we have learned can reach another machine — and your
+> agent's whole problem is that nobody else can reach it. So next: how one
+> computer sends a message to another."*
 
 ### The terminal · what it is
 
@@ -1032,7 +1071,7 @@ same method, the same header, the same body shape.
 > That single sentence is what stops FastAPI feeling like magic later.
 
 
-## Break (1:39 – 1:49)
+## Break (1:45 – 1:55)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1083,7 +1122,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (1:49 – 2:27)
+## 7–8 · What a web service is, then addresses and messages (1:55 – 2:28)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1652,7 +1691,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:27 – 3:12)
+## 9 · Build the web service (2:28 – 3:08)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -2049,7 +2088,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:12 – 3:42)
+## 10 · Build the container (3:08 – 3:46)
 
 Ask: *"What would my colleague need to run your agent?"*
 
@@ -2358,7 +2397,7 @@ inside a box that could run anywhere.**
 
 ---
 
-## 11 · Prove it, and what breaks next (3:42 – 4:00)
+## 11 · Prove it, and what breaks next (3:46 – 4:00)
 
 ```bash
 make check-week-01

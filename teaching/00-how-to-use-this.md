@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 122-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 135-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,26 +293,26 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and eleven of the slides carry a
-presenter cue — the callback to make, the question to ask, the thing *not* to explain
+**Press `S` before you start.** A hundred and twenty-four of the slides carry
+a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   16   Three questions to the room   settle the room, and read it
-   0:16   16   Meet today's agent            our small teaching agent
-   0:32   11   The project                   a tour BEFORE they download it
-   0:43   14   Set it up, and prove it       incl. the key, FINISHED here
-   0:57   10   break
-   1:07   12   The terminal                  practised on a throwaway folder
-   1:19   20   Sending messages              JSON and curl, on public services
-   1:39   10   break
-   1:49   22   What a web service is         the shop story, then the words
-   2:11   16   Addresses, then messages
-   2:27   45   Build the web service         3 endpoints, line by line, each tested
-   3:12   30   Build the container           the cart story, then line by line
-   3:42   18   Prove it, and what breaks next
+   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   15   Meet today's agent            our small teaching agent
+   0:29   10   The project                   a tour BEFORE they download it
+   0:39   12   Set it up, and prove it       incl. the key, finished here
+   0:51   10   break
+   1:01   26   The terminal                  a real lesson: 9 commands, 15 slides
+   1:27   18   Sending messages              JSON and curl, on public services
+   1:45   10   break
+   1:55   19   What a web service is         the shop story, then the words
+   2:14   14   Addresses, then messages
+   2:28   40   Build the web service         3 endpoints, line by line, tested
+   3:08   38   Build the container           5 examples, then line by line
+   3:46   14   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -544,11 +544,75 @@ run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
 
-### Containers get 30 minutes, and are taught from nothing
+### The terminal gets a real lesson, not a warm-up
+
+Twenty-six minutes and fifteen slides. It used to be five slides with four
+commands crammed onto each, which is unusable for anyone who has not used a
+terminal before.
+
+**One command per slide**, each with a numbered plain-English reading:
+
+```
+   what it is, and why (no screen on a server)
+   the anatomy of a command      command · option · target
+   pwd, ls                       where am I, what is here
+   NO OUTPUT MEANS IT WORKED     the rule that prevents most panic
+   the exercise, drawn           what we are about to build
+   mkdir                         and run it twice, to see a useful error
+   cd, cd ..                     plus the "cd then pwd" habit
+   touch                         and that commands accept a list
+   PATHS                         a slash means "go through"
+   echo, and >                   print, then redirect into a file
+   cat                           look inside · and it is read-only, so safe
+   ls -R                         check your work against the whiteboard
+   ls -la                        hidden files — in the REAL project folder
+   rm -r, and the reference table
+```
+
+> **INSTRUCTOR** · Three slides in there are worth protecting if you are short
+> of time:
+>
+> **"No output means it worked."** Say it twice. It costs four seconds and
+> prevents a specific confusion five times over.
+>
+> **Paths.** Beginners `cd` in and out of folders one step at a time for years.
+> One slide fixes it: *"a slash means go through"*.
+>
+> **`ls -la` in the real project folder.** It is the first time the exercise
+> touches something that matters, and it catches anyone whose editor saved
+> `.env` as `.env.txt` — at 1:20 instead of at 2:40.
+
+The section ends with an explicit bridge, because the handover used to be
+abrupt:
+
+> *"Notice what all nine commands have in common: every one talks to THIS
+> computer. Nothing we have learned can reach another machine — and your
+> agent's whole problem is that nobody else can reach it. So next: how one
+> computer sends a message to another."*
+
+### Containers get five worked examples
+
+Three more slides than before, all of them making the abstract concrete:
+
+| Added | Why |
+|---|---|
+| **What Docker is**, and its four commands | they kept looking for a Docker *window*; it is a background service |
+| **`docker images`** | the packages appear as a real list, with sizes — more convincing than any definition |
+| **`docker run -it demo2 sh`** | a prompt *inside* a package: `pwd` shows `/app`, `ls` shows their copied file |
+
+> **INSTRUCTOR** · That last one is the most convincing moment of the section,
+> and it retires the terminal lesson properly: *"Those nine commands were not
+> just for your laptop. That is a Linux computer, and you can already use
+> it."*
+>
+> Remind them to `exit` — otherwise somebody stays inside the container and
+> wonders why their next command behaves strangely.
+
+### Containers get 38 minutes, and are taught from nothing
 
 The second-longest section of the day, after the web service build. It is the
 topic a non-technical room finds hardest and the one most courses rush.
-Nineteen slides, in this order:
+Twenty-two slides, in this order:
 
 1. **The problem** — they rebuild the setup list from 0:43 themselves
 2. **The idea, before the word "Docker"** — send the set-up, not just the code
