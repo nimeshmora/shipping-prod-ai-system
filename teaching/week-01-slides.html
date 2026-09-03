@@ -255,6 +255,42 @@ tr.okrow td{background:rgba(95,191,127,.07);}
 .vs .mid2{padding:0 16px;font-family:var(--mono);font-size:15px;
   color:var(--ink-faint);text-align:center;}
 
+/* ---- the eight-week journey map ---------------------------------------
+   One picture of what gets added to the agent each week. The current week
+   is highlighted; later weeks are dimmed so the room sees where it is
+   heading without being asked to absorb it all. */
+.journey{display:flex;flex-direction:column;gap:12px;}
+.jrow{display:grid;grid-template-columns:60px 1fr;gap:14px;align-items:stretch;}
+.jw{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;
+  color:var(--ink-faint);display:flex;align-items:center;justify-content:flex-end;
+  padding-right:2px;}
+.jlayers{display:flex;align-items:stretch;gap:6px;flex:1;min-width:0;}
+.jl{border:1.5px solid var(--rule);border-radius:8px;padding:9px 11px;
+  background:#131316;display:flex;flex-direction:column;justify-content:center;
+  min-width:0;opacity:.34;transition:none;}
+.jl .n{font-size:15px;font-weight:700;line-height:1.2;white-space:nowrap;}
+.jl .d{font-size:12.5px;color:var(--ink-dim);line-height:1.2;margin-top:2px;}
+/* a layer already built in an earlier week */
+.jl.built{opacity:1;border-color:var(--rule);background:var(--panel);}
+.jl.built .n{color:var(--ink-dim);}
+/* the layer being added this week */
+.jl.now{opacity:1;border-color:var(--brand);background:var(--brand-glow);
+  box-shadow:0 0 0 1px var(--brand) inset;}
+.jl.now .n{color:var(--brand);}
+.jl.now .d{color:var(--ink);}
+/* the innermost thing: the agent itself */
+.jl.core{opacity:1;border-color:var(--ok);background:rgba(95,191,127,.09);}
+.jl.core .n{color:var(--ok);}
+.jrow.here .jw{color:var(--brand);}
+.jrow.later{opacity:.5;}
+.jrow.later .jw{color:var(--ink-faint);}
+
+/* compact variant for the recap slide at the end */
+.journey.mini .jl{padding:7px 9px;}
+.journey.mini .jl .n{font-size:13.5px;}
+.journey.mini .jl .d{display:none;}
+.journey.mini .jrow{grid-template-columns:52px 1fr;gap:11px;}
+
 /* progress rail */
 .rail{position:absolute;left:60px;right:60px;bottom:19px;
   display:flex;align-items:center;gap:6px;flex:none;}
@@ -581,6 +617,90 @@ body.help #help{display:grid;}
     </div>
   </div>
   <div class="say"><b>This is the frame for the whole day</b>If somebody in the room has published a website, they already know this feeling: the site worked fine on their laptop, and then getting it online was a completely separate struggle.<br><br><b>Say it plainly:</b> <em>"An agent that only runs on your laptop is like a website you never uploaded. It works, and nobody can see it."</em><br><br>That is the one comparison worth using today, because half the room has lived it.</div>
+</section>
+
+<!-- =================================================================== 11 -->
+<!-- The eight-week journey map. Shown once here so the room knows where it
+     is heading, then again as a one-line recap at the very end. -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">The whole course, in one picture<span class="t">where we are heading</span></div>
+  <h2>Each week wraps one more layer around the same agent.</h2>
+  <div class="body">
+    <div class="journey">
+      <div class="jrow here">
+        <div class="jw">TODAY</div>
+        <div class="jlayers">
+          <div class="jl core"><div class="n">the agent</div><div class="d">already works</div></div>
+          <div class="jl now"><div class="n">a web address</div><div class="d">others can ask it</div></div>
+          <div class="jl now"><div class="n">a container</div><div class="d">runs anywhere</div></div>
+        </div>
+      </div>
+      <div class="jrow">
+        <div class="jw">WEEK 2</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">the agent</div></div>
+          <div class="jl built"><div class="n">address</div></div>
+          <div class="jl built"><div class="n">container</div></div>
+          <div class="jl now"><div class="n">on the internet</div><div class="d">a real link</div></div>
+          <div class="jl now"><div class="n">memory that lasts</div><div class="d">survives restarts</div></div>
+        </div>
+      </div>
+      <div class="jrow later">
+        <div class="jw">WEEK 3</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">everything above</div></div>
+          <div class="jl now"><div class="n">a locked door</div><div class="d">strangers refused</div></div>
+          <div class="jl now"><div class="n">automatic deploy</div><div class="d">you push, it ships</div></div>
+        </div>
+      </div>
+      <div class="jrow later">
+        <div class="jw">WEEK 4</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">everything above</div></div>
+          <div class="jl now"><div class="n">spending limits</div><div class="d">it cannot run up a bill</div></div>
+        </div>
+      </div>
+      <div class="jrow later">
+        <div class="jw">WEEK 5</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">everything above</div></div>
+          <div class="jl now"><div class="n">a health dashboard</div><div class="d">is it working right now?</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="dim">Weeks 6, 7 and 8 add: <b>finding bugs from the dashboard</b> and surviving outages · <b>attacking your own agent</b> and fixing what you find · <b>a gate that blocks a bad release.</b></p>
+  </div>
+  <div class="say"><b>Spend two minutes here, no more</b>The point is not for them to remember all of it. The point is <b>the shape</b>: the agent in the middle never changes, and each week adds one more ring around it.<br><br><b>Say this:</b> <em>"The green box is what you already have. Everything we ever add goes around it, not inside it."</em><br><br>Then point at the orange boxes on the top row: <em>"Those two are today."</em></div>
+</section>
+
+<!-- =================================================================== 12 -->
+<section class="slide" data-sec="1" data-label="Three questions">
+  <div class="eyebrow">Today's part of that picture<span class="t">0:00 – 0:22</span></div>
+  <h2>Two layers. That is the whole day.</h2>
+  <div class="body">
+    <div class="fig">
+      <div class="box wide" style="padding:0;border:none;background:transparent">
+        <div class="box" style="border-color:var(--brand);background:var(--brand-glow);padding:20px">
+          <div class="t" style="color:var(--brand)">a container</div>
+          <div class="s" style="margin-bottom:14px">so it runs on any computer</div>
+          <div class="box" style="border-color:var(--brand);background:rgba(244,102,34,.09);padding:18px">
+            <div class="t" style="color:var(--brand)">a web address</div>
+            <div class="s" style="margin-bottom:14px">so other programs can ask it questions</div>
+            <div class="box g" style="padding:16px">
+              <div class="t">the agent</div>
+              <div class="s">already works · you will not change it</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arr"><div class="line">→</div><div class="cap">by 4pm</div></div>
+      <div class="box wide g" style="padding:20px">
+        <div class="t">Something you can hand to<br>another computer</div>
+        <div class="s" style="margin-top:10px">and it answers questions,<br>the same way, every time</div>
+      </div>
+    </div>
+  </div>
+  <div class="say"><b>This is the picture to keep coming back to</b>Three boxes, one inside the other. <b>Read it from the inside out:</b><br><br><em>"The agent works. We put an address on it so other programs can reach it. Then we put the whole thing in a box so it runs anywhere."</em><br><br>Point at the green box and say: <em>"You will not touch that all day."</em> That single sentence removes most of the anxiety in a non-technical room.</div>
 </section>
 
 <!-- =================================================================== 10 -->
@@ -1502,36 +1622,59 @@ Keep it logically awesome.</pre>
   <div class="goal">Everything after this is just steps to follow. If the room takes <b>one</b> idea home, make it this one — because if you do not know <em>why</em>, the rest just looks like magic words.</div>
 </section>
 
-<!-- =================================================================== 39 -->
+<!-- ==== 6.1 · the problem, felt ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
   <div class="eyebrow">Start from the problem<span class="t">2:02 – 2:27</span></div>
-  <h2>What would it take to share what you have?</h2>
+  <h2>You have something that works. How do you let someone else use it?</h2>
   <div class="body">
     <div class="stack">
       <div class="card accent">
         <h3><span style="color:var(--bad)">✗</span> &nbsp;"Send them the files."</h3>
-        <p class="dim">They need Python 3.10+, the right libraries, the right folder layout — <b>everything you did at 0:42, which took thirteen minutes and still broke for somebody.</b> And they need your key, which means <b>you have given your key away.</b></p>
+        <p class="dim">They need the right Python, the right libraries, the right folders — <b>everything you did at 0:42, which took thirteen minutes and still broke for somebody.</b> They also need your key, so now <b>you have given your key away.</b></p>
         <p class="dim">And when you fix something tomorrow, <b>they are still running today's copy.</b></p>
       </div>
       <div class="card accent">
         <h3><span style="color:var(--bad)">✗</span> &nbsp;"Let them use my laptop."</h3>
-        <p class="dim">Not a joke — it is exactly what "it works on my machine" offers. <b>One user at a time, and only when you are awake.</b></p>
+        <p class="dim">Not a joke — it is exactly what "it works on my machine" offers. <b>One person at a time, and only while you are awake.</b></p>
       </div>
       <div class="card good">
         <h3><span style="color:var(--ok)">✓</span> &nbsp;"Put it in an app, or on a website."</h3>
-        <p class="dim">Close, and worth taking seriously. But a phone cannot run your Python, and it must not hold your key. <b>Something else has to do the work, and the app has to send it the question.</b></p>
-        <p><b>That is the answer. They have just described a web service.</b></p>
+        <p class="dim">Close. But a phone cannot run your Python, and it must not hold your key. <b>Something else has to do the work, and the app has to send it the question.</b></p>
+        <p><b>That is the answer — and it already has a name.</b></p>
       </div>
     </div>
   </div>
-  <div class="say"><b>Put the question to the room and take the answers seriously</b>Each wrong answer teaches something, and the third one is nearly right. Let them get there.<br><br><b>Use their own morning:</b> <em>"You downloaded this, waited for the install, and pasted in a key I emailed you separately. That is what you would be asking of every customer — except they never get a key at all."</em></div>
+  <div class="say"><b>Ask the room and take the answers seriously</b>Each wrong answer teaches something, and the third one is nearly right. Let them get there.<br><br><b>Use their own morning:</b> <em>"You downloaded this, waited for the install, and pasted in a key I emailed you. That is what you would be asking of every customer — except they never get a key at all."</em><br><br>If anybody put a hand up for question 3 this morning, ask them: <em>"What did you actually have to do to get your site online?"</em></div>
 </section>
 
-<!-- =================================================================== 40 -->
+<!-- ==== 6.2 · the shift in thinking ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The definition<span class="t">2:02 – 2:27</span></div>
-  <h2>So: what is a web service?</h2>
-  <div class="body center">
+  <div class="eyebrow">The change you have to make<span class="t">2:02 – 2:27</span></div>
+  <h2>Stop shipping the code. Start answering questions.</h2>
+  <div class="body">
+    <div class="vs">
+      <div class="side r">
+        <div class="h">what does not work</div>
+        <div class="m">Give everyone<br>a copy</div>
+        <div class="s">Every person needs the setup,<br>the libraries, and your key.<br>Everyone ends up on<br>a different version.</div>
+      </div>
+      <div class="mid2">instead</div>
+      <div class="side g">
+        <div class="h">what does work</div>
+        <div class="m">Keep one copy.<br>Let people ask it.</div>
+        <div class="s">Nobody needs the setup.<br>Nobody sees your key.<br>Everyone always gets<br>the newest version.</div>
+      </div>
+    </div>
+    <div class="punch">You are not giving them the program. You are answering their questions.</div>
+  </div>
+  <div class="say"><b>This is the whole idea, one slide early</b>Say it before the definition, because it is easier to hold: <em>"You keep the only copy. They send you a question. You send back an answer."</em><br><br>People understand that instantly — it is how they already deal with a bank, or a booking site. The definition on the next slide is just that sentence made precise.</div>
+</section>
+
+<!-- ==== 6.3 · the definition ==== -->
+<section class="slide" data-sec="6" data-label="What a web service is">
+  <div class="eyebrow">So here is the definition<span class="t">2:02 – 2:27</span></div>
+  <h2>A web service is a program that waits to be asked.</h2>
+  <div class="body">
     <div class="def">
       <div class="term">Web service</div>
       <div class="txt">A program that <b>stays running</b>, <b>waits for questions to arrive over a network</b>, and <b>sends answers back</b>.</div>
@@ -1539,96 +1682,95 @@ Keep it logically awesome.</pre>
     <div class="fig">
       <div class="box wide g" style="padding:16px">
         <div class="t" style="font-size:18px">1 · Stays running</div>
-        <div class="s" style="margin-top:6px">It does not finish.<br>It waits.</div>
+        <div class="s" style="margin-top:6px">It does not finish and close.<br>It sits there, waiting.</div>
       </div>
       <div class="arr dim2" style="padding:0 10px"><div class="line">+</div></div>
       <div class="box wide g" style="padding:16px">
         <div class="t" style="font-size:18px">2 · Questions arrive</div>
-        <div class="s" style="margin-top:6px">Over a network,<br>from any program.</div>
+        <div class="s" style="margin-top:6px">Over a network, from any<br>program, on any computer.</div>
       </div>
       <div class="arr dim2" style="padding:0 10px"><div class="line">+</div></div>
       <div class="box wide g" style="padding:16px">
         <div class="t" style="font-size:18px">3 · Answers go back</div>
-        <div class="s" style="margin-top:6px">As data. They never<br>see your code or key.</div>
+        <div class="s" style="margin-top:6px">As data. They never see<br>your code or your key.</div>
       </div>
     </div>
+    <p class="dim">Nothing here is about AI. <b>This is how almost all software talks to other software</b> — your banking app, your bus timetable, the card machine in a shop.</p>
   </div>
-  <div class="say"><b>Say the definition, then check it against the three failed attempts</b>Each phrase fixes one of them:<br><br>• <b>"stays running"</b> — no longer one user at a time<br>• <b>"over a network"</b> — they do not need your Python or your laptop<br>• <b>"answers go back"</b> — they never see the code or the key<br><br>Nothing here is AI-specific. This is how almost all software talks to other software.</div>
+  <div class="say"><b>Check the definition against the three failed answers</b>Each phrase fixes one of them:<br><br>• <b>"stays running"</b> — no longer one person at a time<br>• <b>"over a network"</b> — they do not need your Python or your laptop<br>• <b>"answers go back"</b> — they never see the code or the key<br><br>That last line about banking apps matters for this room. It tells them <b>this is ordinary</b>, not an AI thing they have to be special to understand.</div>
 </section>
 
-<!-- =================================================================== 41 -->
+<!-- ==== 6.4 · what it looks like ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">The shape of it<span class="t">2:02 – 2:27</span></div>
-  <h2>One copy, in one place, that anything can reach.</h2>
+  <div class="eyebrow">What it looks like<span class="t">2:02 – 2:27</span></div>
+  <h2>One copy in one place, and anything can ask it.</h2>
   <div class="body">
     <div class="fig">
-      <div class="stack" style="flex:1">
-        <div class="box i"><div class="t">a website</div></div>
-        <div class="box i"><div class="t">a phone app</div></div>
-        <div class="box i"><div class="t">another company</div></div>
-        <div class="box i"><div class="t">a script</div></div>
+      <div class="stack" style="flex:.85">
+        <div class="box i" style="padding:11px 13px"><div class="t" style="font-size:17px">a website</div></div>
+        <div class="box i" style="padding:11px 13px"><div class="t" style="font-size:17px">a phone app</div></div>
+        <div class="box i" style="padding:11px 13px"><div class="t" style="font-size:17px">another company</div></div>
+        <div class="box i" style="padding:11px 13px"><div class="t" style="font-size:17px">a script</div></div>
       </div>
-      <div class="arr"><div class="line">→</div><div class="cap">a question,<br>over the network</div></div>
-      <div class="stack" style="flex:1.15">
-        <div class="box b" style="padding:20px">
+      <div class="arr"><div class="line">→</div><div class="cap">a question</div></div>
+      <div class="stack" style="flex:1.2">
+        <div class="box b" style="padding:18px">
           <div class="t">your web service</div>
-          <div class="s">one copy, always running</div>
+          <div class="s">one copy · always running</div>
         </div>
-        <div class="arr down dim2" style="padding:6px 0"><div class="line">↓</div></div>
-        <div class="box g" style="padding:20px">
-          <div class="t">run_turn()</div>
-          <div class="s">the agent from this morning,<br>completely unchanged</div>
+        <div class="arr down dim2" style="padding:5px 0"><div class="line">↓</div></div>
+        <div class="box g" style="padding:18px">
+          <div class="t">the agent</div>
+          <div class="s">from this morning · unchanged</div>
         </div>
       </div>
-      <div class="arr"><div class="line">←</div><div class="cap">an answer,<br>as data</div></div>
+      <div class="arr"><div class="line">←</div><div class="cap">an answer</div></div>
     </div>
     <div class="cols c3">
-      <div class="card accent"><h3>One copy</h3><p class="dim">Fix something once, and <b>everyone has the fix immediately.</b></p></div>
-      <div class="card accent"><h3>Your key stays put</h3><p class="dim">It lives only where the service runs. <b>Askers never see it.</b></p></div>
+      <div class="card accent"><h3>One copy</h3><p class="dim">Fix something once, and <b>everyone has the fix straight away.</b></p></div>
+      <div class="card accent"><h3>Your key stays put</h3><p class="dim">It only lives where the service runs. <b>Askers never see it.</b></p></div>
       <div class="card accent"><h3>No agreement needed</h3><p class="dim">None of those four need to know what your agent is written in.</p></div>
     </div>
   </div>
-  <div class="say"><b>Note what is in the box on the right</b>That is <code>run_turn</code>, the function from 0:22. <em>"Everything we build today goes around it. It does not change."</em><br><br><b>Cheap proof of the third card, from an hour ago:</b> <em>"You asked GitHub a question before the break. You had never spoken to GitHub, you agreed nothing in advance, and it worked first try. That is the whole argument."</em></div>
+  <div class="say"><b>Note what is in the green box</b>That is the agent from this morning. <em>"Everything we build today goes around it. It does not change."</em><br><br><b>Proof of the third card, from an hour ago:</b> <em>"You asked GitHub a question before the break. You had never spoken to GitHub, you agreed nothing with them beforehand, and it worked first try."</em></div>
 </section>
 
-<!-- =================================================================== 42 -->
+<!-- ==== 6.5 · service vs API vs endpoint ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
-  <div class="eyebrow">Two words people mix up<span class="t">2:02 – 2:27</span></div>
-  <h2>Web service, and web API.</h2>
+  <div class="eyebrow">Three words people mix up<span class="t">2:02 – 2:27</span></div>
+  <h2>Service, API, endpoint.</h2>
   <div class="body">
-    <div class="cols c2">
-      <div class="stack">
-        <div class="def">
-          <div class="term">Web service</div>
-          <div class="txt"><b>The running program.</b> The thing that is switched on, waiting.</div>
-        </div>
-        <div class="card"><p class="dim">"Our web service went down at 3am" — the <b>program</b> stopped.</p></div>
+    <div class="cols c3">
+      <div class="def" style="padding:15px 17px">
+        <div class="term">Web service</div>
+        <div class="txt" style="font-size:20px"><b>The running program.</b><br>The thing that is switched on.</div>
       </div>
-      <div class="stack">
-        <div class="def">
-          <div class="term">Web API</div>
-          <div class="txt"><b>The list of questions it accepts</b>, and what each one gives back.</div>
-        </div>
-        <div class="card"><p class="dim">"Their API has a new field" — the <b>agreement</b> changed.</p></div>
+      <div class="def" style="padding:15px 17px">
+        <div class="term">Web API</div>
+        <div class="txt" style="font-size:20px"><b>The list of questions</b> it will accept.</div>
+      </div>
+      <div class="def" style="padding:15px 17px">
+        <div class="term">Endpoint</div>
+        <div class="txt" style="font-size:20px"><b>One question</b> on that list.</div>
       </div>
     </div>
     <div class="fig">
-      <div class="box b wide" style="padding:18px">
-        <div class="t">your web service</div>
-        <div class="s" style="margin-top:10px">and its API — the three questions it accepts:</div>
-        <div class="fig" style="margin-top:12px;gap:10px">
-          <div class="box g" style="padding:11px 14px"><div class="t" style="font-size:17px;font-family:var(--mono)">/health</div><div class="s">are you running?</div></div>
-          <div class="box g" style="padding:11px 14px"><div class="t" style="font-size:17px;font-family:var(--mono)">/chat</div><div class="s">answer this question</div></div>
-          <div class="box g" style="padding:11px 14px"><div class="t" style="font-size:17px;font-family:var(--mono)">/chat/stream</div><div class="s">answer, bit by bit</div></div>
+      <div class="box b wide" style="padding:16px">
+        <div class="t">your web service <span style="font-size:15px;color:var(--ink-dim);font-weight:400">— the running program</span></div>
+        <div class="s" style="margin:9px 0 11px">its API — the three questions it accepts:</div>
+        <div class="fig" style="gap:9px">
+          <div class="box g" style="padding:10px 13px"><div class="t" style="font-size:16px;font-family:var(--mono)">/health</div><div class="s">are you running?</div></div>
+          <div class="box g" style="padding:10px 13px"><div class="t" style="font-size:16px;font-family:var(--mono)">/chat</div><div class="s">answer this question</div></div>
+          <div class="box g" style="padding:10px 13px"><div class="t" style="font-size:16px;font-family:var(--mono)">/chat/stream</div><div class="s">answer, bit by bit</div></div>
         </div>
+        <div class="s" style="margin-top:10px;color:var(--ok)">each green box is one endpoint · you build all three today</div>
       </div>
     </div>
-    <p class="dim">Each of those three is called an <b>endpoint</b>: one specific question the service accepts. <b>You build all three today.</b></p>
   </div>
-  <div class="say"><b>The short version, if somebody asks you to compress it</b><em>"The service is the program. The API is what you are allowed to ask it. An endpoint is one of those questions."</em><br><br><b>Why it matters practically:</b> you can restart the service without changing the API, and you can change the API without restarting — and those are different kinds of announcement to make to the people using you. That distinction becomes real in Week 8.</div>
+  <div class="say"><b>The one-line version, if you need to compress it</b><em>"The service is the program. The API is what you are allowed to ask it. An endpoint is one of those questions."</em><br><br><b>Why it matters practically:</b> you can restart the program without changing what it accepts, and you can change what it accepts without restarting. Those are two different announcements to make to people using you — which becomes real in Week 8.</div>
 </section>
 
-<!-- =================================================================== 43 -->
+<!-- ==== 6.6 · program vs service ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
   <div class="eyebrow">The change happening today<span class="t">2:02 – 2:27</span></div>
   <h2>From a program you run, to a service that waits.</h2>
@@ -1639,7 +1781,7 @@ Keep it logically awesome.</pre>
         <ul>
           <li>You start it when you need it</li>
           <li>It does its job</li>
-          <li>It finishes and exits</li>
+          <li>It finishes and closes</li>
           <li>One user: you</li>
           <li>If it crashes, you are annoyed</li>
         </ul>
@@ -1649,46 +1791,46 @@ Keep it logically awesome.</pre>
         <ul>
           <li><b>It is already running, waiting</b></li>
           <li>It does its job <b>when asked</b></li>
-          <li><b>It never exits</b></li>
-          <li><b>Many users at once, most unknown to you</b></li>
+          <li><b>It never closes</b></li>
+          <li><b>Many users at once, most of them strangers</b></li>
           <li>If it crashes, <b>everyone is affected</b></li>
         </ul>
       </div>
     </div>
     <div class="punch">Every hard thing in the next eight weeks comes from the right-hand column.</div>
-    <p class="dim">Memory that survives a restart — <b>next week.</b> Unknown users — <b>Week 3.</b> Costs that grow with usage you did not plan — <b>Week 4.</b> Knowing it is healthy at 3am — <b>Week 5.</b></p>
+    <p class="dim">Memory that survives a restart — <b>next week.</b> Strangers — <b>Week 3.</b> Costs that grow with use — <b>Week 4.</b> Knowing it is healthy at 3am — <b>Week 5.</b></p>
   </div>
-  <div class="say"><b>Point at the right column and say it plainly</b><em>"That column is the whole syllabus. Not one line of it is about AI."</em><br><br>This is the best moment in the course to answer <em>"why am I on this course?"</em> for anybody who came expecting more prompt engineering.<br><br><b>Row three, for free:</b> <em>"You ran <code>sleep 30</code> — a program that refused to finish — and it annoyed you. A service does that permanently, on purpose."</em></div>
+  <div class="say"><b>Point at the right column and say it plainly</b><em>"That column is the whole course. Not one line of it is about AI."</em><br><br>This is the best moment to answer <em>"why am I on this course?"</em> for anybody who came expecting more prompt engineering.<br><br><b>Row three, for free:</b> <em>"You ran <code>sleep 30</code> — a program that refused to finish — and it annoyed you. A service does that permanently, on purpose."</em></div>
 </section>
 
-<!-- =================================================================== 44 -->
+<!-- ==== 6.7 · the tool ==== -->
 <section class="slide" data-sec="6" data-label="What a web service is">
   <div class="eyebrow">And the tool that does it<span class="t">2:02 – 2:27</span></div>
-  <h2>FastAPI translates between the network and your code.</h2>
+  <h2>FastAPI sits between the network and your code.</h2>
   <div class="body">
     <div class="fig">
-      <div class="box wide i" style="padding:16px">
-        <div class="t" style="font-size:17px">arriving from the network</div>
-        <div class="s" style="font-family:var(--mono);margin-top:8px">POST /chat<br>{"message": "where is ORD-1002?"}</div>
+      <div class="box wide i" style="padding:15px">
+        <div class="t" style="font-size:16px">arriving from the network</div>
+        <div class="s" style="font-family:var(--mono);margin-top:7px">POST /chat<br>{"message": "where is ORD-1002?"}</div>
       </div>
-      <div class="arr"><div class="line">→</div><div class="cap">FastAPI reads it</div></div>
-      <div class="box wide b" style="padding:16px">
-        <div class="t" style="font-size:17px">your function runs</div>
-        <div class="s" style="margin-top:8px">with the question<br>as an ordinary argument</div>
+      <div class="arr"><div class="line">→</div><div class="cap">FastAPI<br>reads it</div></div>
+      <div class="box wide b" style="padding:15px">
+        <div class="t" style="font-size:16px">your function runs</div>
+        <div class="s" style="margin-top:7px">with the question handed to it<br>as an ordinary piece of text</div>
       </div>
-      <div class="arr"><div class="line">→</div><div class="cap">FastAPI converts it</div></div>
-      <div class="box wide g" style="padding:16px">
-        <div class="t" style="font-size:17px">going back out</div>
-        <div class="s" style="font-family:var(--mono);margin-top:8px">{"reply": "Thursday"}</div>
+      <div class="arr"><div class="line">→</div><div class="cap">FastAPI<br>converts it</div></div>
+      <div class="box wide g" style="padding:15px">
+        <div class="t" style="font-size:16px">going back out</div>
+        <div class="s" style="font-family:var(--mono);margin-top:7px">{"reply": "Thursday"}</div>
       </div>
     </div>
     <div class="def">
       <div class="term">FastAPI</div>
-      <div class="txt">A library that <b>turns arriving network requests into ordinary function calls</b>, and <b>turns what your function returns back into JSON.</b> That is all it does.</div>
+      <div class="txt">A library that <b>turns arriving network messages into ordinary function calls</b>, and <b>turns what your function returns back into data.</b> That is all it does.</div>
     </div>
-    <p class="dim">Nothing in <code>agent.py</code> changes today. Not one line of the file we read at 0:22.</p>
+    <p class="dim">Nothing in the agent changes today. <b>Not one line</b> of the file we read at 0:22.</p>
   </div>
-  <div class="say"><b>Say the last part twice — it defuses real anxiety</b><em>"You are not rewriting your agent. The code we read this morning still does all the thinking. You are giving it a way to be reached."</em><br><br><b>And the honest size check:</b> <em>"What you write this afternoon is about forty lines. The reason it matters is not that it is hard — it is that everything else depends on it."</em></div>
+  <div class="say"><b>Say the last line twice — it removes real worry</b><em>"You are not rewriting your agent. The code we read this morning still does all the thinking. You are giving it a way to be reached."</em><br><br><b>And the honest size check:</b> <em>"What you write this afternoon is about forty lines. It matters not because it is hard, but because everything else depends on it."</em></div>
 </section>
 
 <!-- =========================================== 7 · ADDRESSES & MESSAGES -->
@@ -2516,6 +2658,49 @@ the agent is a web service, and it streams
     <div class="punch quiet">Stuck on one file? Compare it with the answer key — <b>that is allowed.</b><br>Being stuck alone for forty minutes teaches nobody anything.</div>
   </div>
   <div class="say"><b>Chase item 3 mid-week</b>Next week deploys a container. One person whose build does not work becomes twenty minutes of everybody else waiting — and you will not find out until you are already teaching.<br><br>Send a reminder asking for a thumbs-up from everyone.</div>
+</section>
+
+<!-- ==== journey recap, before the closing slide ==== -->
+<section class="slide" data-sec="11" data-label="Prove it">
+  <div class="eyebrow">Back to the picture from this morning<span class="t">3:50 – 4:00</span></div>
+  <h2>You finished the first row.</h2>
+  <div class="body">
+    <div class="journey mini">
+      <div class="jrow here">
+        <div class="jw">TODAY</div>
+        <div class="jlayers">
+          <div class="jl core"><div class="n">the agent</div></div>
+          <div class="jl now"><div class="n">a web address &nbsp;✓</div></div>
+          <div class="jl now"><div class="n">a container &nbsp;✓</div></div>
+        </div>
+      </div>
+      <div class="jrow">
+        <div class="jw">NEXT</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">everything above</div></div>
+          <div class="jl now"><div class="n">on the internet</div></div>
+          <div class="jl now"><div class="n">memory that lasts</div></div>
+        </div>
+      </div>
+      <div class="jrow later">
+        <div class="jw">WK 3</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">everything above</div></div>
+          <div class="jl now"><div class="n">a locked door</div></div>
+          <div class="jl now"><div class="n">automatic deploy</div></div>
+        </div>
+      </div>
+      <div class="jrow later">
+        <div class="jw">4 – 8</div>
+        <div class="jlayers">
+          <div class="jl built"><div class="n">everything above</div></div>
+          <div class="jl now"><div class="n">spending limits · a health dashboard · bug hunting · attacks · a release gate</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="punch">Two layers down. The agent in the middle never changed.</div>
+  </div>
+  <div class="say"><b>Show the same picture you showed at 0:15</b>Nothing consolidates a long day better than the map they saw at the start, with two boxes now ticked.<br><br><b>Say this:</b> <em>"Four hours ago that middle box was all you had. It is still exactly the same code — and now anything can reach it, and it runs anywhere."</em><br><br>Then move to the last slide and leave them with next week's question.</div>
 </section>
 
 <!-- =================================================================== 78 -->

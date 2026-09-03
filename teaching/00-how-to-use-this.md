@@ -271,7 +271,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is an 83-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is an 87-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -290,7 +290,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Seventy-two of the slides carry a presenter
+**Press `S` before you start.** Seventy-six of the slides carry a presenter
 cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -368,6 +368,34 @@ is always wondering why they are not using the agent they are proud of:
 One new hard thing at a time. A simple agent plus a hard deployment today; a
 complex agent plus a known deployment later. Same skills, learned in an order
 where a student can always tell what went wrong.
+
+### The eight-week journey map
+
+Two slides carry a picture of the whole course: **what gets wrapped around the
+agent each week.** The agent sits in the middle in green and never changes;
+each week adds a ring around it. This week's additions are orange, later weeks
+are dimmed.
+
+```
+   TODAY    [ agent ][ a web address ][ a container ]
+   WEEK 2   [ agent ][ address ][ container ][ on the internet ][ memory that lasts ]
+   WEEK 3   [ everything above ][ a locked door ][ automatic deploy ]
+   WEEK 4   [ everything above ][ spending limits ]
+   WEEK 5   [ everything above ][ a health dashboard ]
+```
+
+It appears early — before the agenda — and again as a compact recap in the
+last ten minutes, with the day's two layers ticked.
+
+> **INSTRUCTOR** · Two minutes on this, no more. **They are not meant to
+> remember it.** They are meant to see the shape: the thing they built stays
+> in the middle, and everything we ever add goes around it.
+>
+> Say: *"The green box is what you already have. Everything we add goes around
+> it, not inside it."* Then point at this week's orange boxes.
+>
+> Showing the same picture again at 3:50, with two boxes ticked, does more to
+> consolidate the day than any summary slide.
 
 ### Two rules the deck follows
 
