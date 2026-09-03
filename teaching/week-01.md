@@ -26,18 +26,18 @@ all, so it spends its first two hours handing over tools and its last two
 building with them.
 
 ```
-   0:00   12   Three questions to the room   settle the room, and read it
-   0:12   25   Meet today's agent            described, then RUN step by step
-   0:37    8   The project                   a tour BEFORE they download it
-   0:45   19   Set it up, and prove it       .env, the key, then the demo
-   1:04   10   break
-   1:14   23   The terminal                  a real lesson: 9 commands
-   1:37   16   Sending messages              JSON and curl, on public services
+   0:00   11   Three questions to the room   settle the room, and read it
+   0:11   29   Meet today's agent            described, then RUN step by step
+   0:40    8   The project                   a tour BEFORE they download it
+   0:48   18   Set it up, and prove it       .env, the key, then the demo
+   1:06   10   break
+   1:16   22   The terminal                  a real lesson: 9 commands
+   1:38   15   Sending messages              JSON and curl, on public services
    1:53   10   break
-   2:03   17   What a web service is         the shop story, then the words
-   2:20   12   Addresses, then messages
-   2:32   38   Build the web service         3 endpoints, line by line, tested
-   3:10   33   Build the container           5 examples, then line by line
+   2:03   16   What a web service is         the shop story, then the words
+   2:19   12   Addresses, then messages
+   2:31   38   Build the web service         3 endpoints, line by line, tested
+   3:09   34   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -59,14 +59,14 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 145 slides with a presenter note on 134 of them, and it carries material this
+is 147 slides with a presenter note on 136 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
 
 ---
 
-## 1 · Three questions to the room (0:00 – 0:12)
+## 1 · Three questions to the room (0:00 – 0:11)
 
 > **INSTRUCTOR** · Laptops closed. Slides off. Just talk. This is the only part
 > of the session where nobody types anything, and it sets up everything else.
@@ -89,7 +89,7 @@ The answer you want to arrive at, in their words if possible:
 > runs whatever the model asks for. That is why budgets, traces and fences
 > exist.
 
-### "Is that different from ChatGPT?" (4 min)
+### "Is that different from ChatGPT?" (3 min)
 
 Pick a volunteer. Let them talk for two minutes.
 
@@ -187,7 +187,7 @@ its own thinking.
 > Say the punchline twice: **every new question re-sends this whole list, and
 > the model remembers nothing.**
 
-### "Have you ever built a website — and put it somewhere?" (6 min)
+### "Have you ever built a website — and put it somewhere?" (5 min)
 
 This is the trap question. The honest answer is **nobody**.
 
@@ -217,7 +217,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:12 – 0:37)
+## 2 · Meet today's agent (0:11 – 0:40)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -361,7 +361,7 @@ cost.
 > The model asks, and your code obeys. That inversion is what makes this an
 > agent rather than a chatbot with functions."*
 
-#### 5 · Watch it work, step by step (9 min)
+#### 5 · Watch it work, step by step (12 min)
 
 Describing the agent is not enough. **Run it**, on the projector, and let them
 watch the four steps happen one at a time.
@@ -370,9 +370,45 @@ watch the four steps happen one at a time.
 python -m checks.demo_turn
 ```
 
-No key, no internet - it uses a stand-in for the model, so it works on any
-laptop before anything is configured. It **pauses between steps** so the room
-can read each one as it appears.
+**It prints its mode first**, so nobody has to guess whether a real model
+answered:
+
+```
+  MODE: a stand-in for the model - no key, no internet, free
+        the LOOP below is the real one
+        only the model's choice is scripted
+
+  WHAT GETS SENT, every single question:
+     1. the standing rules       105 words, not sent - no model to send them to
+     2. the conversation so far  empty - this is question one
+     3. the list of tools        3 of them:
+           - lookup_order
+           - calculator
+           - word_count
+```
+
+That block answers three things a room always wants to know:
+
+| Question | Answer |
+|---|---|
+| Which model is underneath? | `claude-sonnet-5`, through the course gateway — and it is **a setting in `.env`**, not baked into the code. Week 6 swaps a second model in by changing it. |
+| Is a key used here? | **No.** Stand-in mode needs no key and no internet, which is why we run it first. |
+| Do the rules really go every time? | **Yes** — and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to, **and the line says so.** |
+
+With `--real` the first line reads `MODE: the real model - claude-sonnet-5`
+and item 1 reads *"sent with the question"*.
+
+> **INSTRUCTOR** · **The honesty matters here.** You said at the instructions
+> slide that the rules go with every question. The stand-in does not send
+> them — so the command says so, rather than letting the slide quietly
+> contradict itself. If you have a key, **run `--real` once** and show item 1
+> change. That is the cleanest proof available.
+>
+> Point at item 2 and plant Week 4: *"That one is empty now. Watch what it
+> costs when it is not."*
+
+Then the four steps. It **pauses between them** so the room can read each one
+as it appears.
 
 ```
   The agent can reach for 3 tools:
@@ -460,7 +496,7 @@ it has three tools instead of thirty.
 > Do not volunteer it to a non-technical room. Keep it for the person who asks.
 
 
-## 3 · The project (0:37 – 0:45)
+## 3 · The project (0:40 – 0:48)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.
@@ -594,7 +630,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:45 – 1:04)
+## 4 · Set it up, and prove it (0:48 – 1:06)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -743,7 +779,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:14 – 1:53)
+## 5–6 · The terminal, then sending messages (1:16 – 1:53)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -868,7 +904,7 @@ Two more that save everybody's afternoon:
 > long paths character by character for weeks unless somebody shows them this
 > in the first ten minutes.
 
-### The terminal · folders, built by hand (19 min)
+### The terminal · folders, built by hand (18 min)
 
 They are about to work inside a project with about forty files in it. So build a
 tiny one first, by hand, where they can see the whole thing.
@@ -1131,7 +1167,7 @@ Expecting property name enclosed in double quotes: line 1 column 2
 > If anyone knows Python: *"It looks exactly like a dict. The differences that
 > bite are double quotes only, and no trailing comma."*
 
-### Sending messages · curl, on public services (11 min)
+### Sending messages · curl, on public services (10 min)
 
 **`curl` sends a request over the network from the terminal, and prints what
 came back.** It is a browser with no window.
@@ -1321,7 +1357,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (2:03 – 2:32)
+## 7–8 · What a web service is, then addresses and messages (2:03 – 2:31)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1890,7 +1926,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:32 – 3:10)
+## 9 · Build the web service (2:31 – 3:09)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -2287,7 +2323,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:10 – 3:43)
+## 10 · Build the container (3:09 – 3:43)
 
 Ask: *"What would my colleague need to run your agent?"*
 

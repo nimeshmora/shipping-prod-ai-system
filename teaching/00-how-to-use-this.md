@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 145-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 147-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,25 +293,25 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and thirty-four of the slides carry
+**Press `S` before you start.** A hundred and thirty-six of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   12   Three questions to the room   settle the room, and read it
-   0:12   25   Meet today's agent            described, then RUN step by step
-   0:37    8   The project                   a tour BEFORE they download it
-   0:45   19   Set it up, and prove it       .env, the key, then the demo
-   1:04   10   break
-   1:14   23   The terminal                  a real lesson: 9 commands
-   1:37   16   Sending messages              JSON and curl, on public services
+   0:00   11   Three questions to the room   settle the room, and read it
+   0:11   29   Meet today's agent            described, then RUN step by step
+   0:40    8   The project                   a tour BEFORE they download it
+   0:48   18   Set it up, and prove it       .env, the key, then the demo
+   1:06   10   break
+   1:16   22   The terminal                  a real lesson: 9 commands
+   1:38   15   Sending messages              JSON and curl, on public services
    1:53   10   break
-   2:03   17   What a web service is         the shop story, then the words
-   2:20   12   Addresses, then messages
-   2:32   38   Build the web service         3 endpoints, line by line, tested
-   3:10   33   Build the container           5 examples, then line by line
+   2:03   16   What a web service is         the shop story, then the words
+   2:19   12   Addresses, then messages
+   2:31   38   Build the web service         3 endpoints, line by line, tested
+   3:09   34   Build the container           5 examples, then line by line
    3:43   17   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
@@ -543,6 +543,46 @@ The nineteen-line file taught across those slides was written out in full and
 run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
+
+### The demo states its model, its key use, and its payload
+
+Three questions the demo was silent about, all now answered on screen. The
+command prints them **before** step 1, so nobody has to guess:
+
+```
+  MODE: a stand-in for the model - no key, no internet, free
+        the LOOP below is the real one
+        only the model's choice is scripted
+
+  WHAT GETS SENT, every single question:
+     1. the standing rules       105 words, not sent - no model to send them to
+     2. the conversation so far  empty - this is question one
+     3. the list of tools        3 of them:
+           - lookup_order
+           - calculator
+           - word_count
+```
+
+With `--real` the first line reads **`MODE: the real model - claude-sonnet-5`**
+and item 1 reads **"sent with the question"**.
+
+| The question | The answer |
+|---|---|
+| Which model is underneath? | `claude-sonnet-5`, through the course gateway. **It is a setting in `.env`**, not baked into the code — Week 6 swaps in a second model by changing it. |
+| Is a key used in the demo? | **No.** The stand-in mode needs no key and no internet, which is why we run it first — every laptop sees the same thing. |
+| Do the rules really go with every question? | **Yes**, and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to — **and the line says so.** |
+
+Two slides at 0:11 cover this before the demo runs: the two run modes side by
+side, and what gets sent with every question.
+
+> **INSTRUCTOR** · **The honesty matters here.** You told them at the
+> instructions slide that the rules go with every question. The stand-in does
+> not send them — so the command says so rather than letting the slide quietly
+> contradict itself. **If you have a key, run `--real` once** and show item 1
+> change to "sent with the question". That is the cleanest proof available.
+>
+> Point at item 2 and plant Week 4: *"That one is empty now. Watch what it
+> costs when it is not."*
 
 ### The demo is the instructor's, and they run it later
 

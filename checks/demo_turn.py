@@ -7,12 +7,13 @@ Prints one labelled step at a time, pausing between them, so a room can follow
 what happens and when. This is a teaching aid, not part of the agent.
 """
 import json
+import os
 import re
 import sys
 import time
 from types import SimpleNamespace as NS
 
-from app.agent import TOOLS, run_turn
+from app.agent import MODEL, SYSTEM_PROMPT, TOOLS, run_turn
 
 QUESTION = "where is my order ORD-1002?"
 PAUSE = 1.2          # seconds between steps, so the room can read each one
@@ -83,9 +84,26 @@ def main(real=False, question=None):
     if question:
         QUESTION = question
 
-    print(f"\n  The agent can reach for {len(TOOLS)} tools:")
+    # Say up front which of the two modes this is. Without it the room cannot
+    # tell whether a real model answered or a scripted stand-in did.
+    if real:
+        print(f"\n  MODE: the real model - {MODEL}")
+        print(f"        reached through {os.environ.get('BASE_URL', 'the course gateway')}")
+        print("        uses your KODEKEY. Costs a fraction of a cent.")
+    else:
+        print("\n  MODE: a stand-in for the model - no key, no internet, free")
+        print("        the LOOP below is the real one")
+        print("        only the model's choice is scripted")
+    time.sleep(PAUSE)
+
+    print("\n  WHAT GETS SENT, every single question:")
+    rules = f"{len(SYSTEM_PROMPT.split())} words"
+    print(f"     1. the standing rules      {rules}, "
+          f"{'sent with the question' if real else 'not sent - no model to send them to'}")
+    print("     2. the conversation so far  empty - this is question one")
+    print(f"     3. the list of tools        {len(TOOLS)} of them:")
     for t in TOOLS:
-        print(f"     - {t['name']}")
+        print(f"           - {t['name']}")
     time.sleep(PAUSE)
 
     _step(1, "YOU ASK", QUESTION)
