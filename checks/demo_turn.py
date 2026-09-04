@@ -1,8 +1,8 @@
 """Show, step by step, what the agent does with one question.
 
-    python3 -m checks.demo_turn          # no API key needed
-    python3 -m checks.demo_turn --real   # uses your key, the real model decides
+    python3 -m checks.demo_turn          # uses your OPENROUTER_API_KEY
     python3 -m checks.demo_turn "what is 12 * 41?"   # watch it pick another tool
+    python3 -m checks.demo_turn --offline            # no key, scripted stand-in
 
 Prints one labelled step at a time, pausing between them, so a room can follow
 what happens and when. This is a teaching aid, not part of the agent.
@@ -14,7 +14,7 @@ import sys
 import time
 from types import SimpleNamespace as NS
 
-from app.agent import MODEL, SYSTEM_PROMPT, TOOLS, run_turn
+from app.agent import MODEL, TOOLS, run_turn
 
 QUESTION = "where is my order ORD-1002?"
 PAUSE = 1.2          # seconds between steps, so the room can read each one
@@ -85,32 +85,24 @@ def main(real=False, question=None):
     if question:
         QUESTION = question
 
-    # Say up front which of the two modes this is. Without it the room cannot
-    # tell whether a real model answered or a scripted stand-in did.
     if real:
-        print(f"\n  MODE: the real model - {MODEL}")
-        print(f"        reached through {os.environ.get('BASE_URL', 'OpenRouter')}")
-        print("        uses your OPENROUTER_API_KEY. Costs a fraction of a cent.")
+        print(f"\n  MODEL: {MODEL}")
+        print(f"         through {os.environ.get('BASE_URL', 'OpenRouter')}")
     else:
-        print("\n  MODE: a stand-in for the model - no key, no internet, free")
-        print("        the LOOP below is the real one")
-        print("        only the model's choice is scripted")
-    time.sleep(PAUSE)
-
-    print("\n  WHAT GETS SENT, every single question:")
-    rules = f"{len(SYSTEM_PROMPT.split())} words"
-    print(f"     1. the standing rules      {rules}, "
-          f"{'sent with the question' if real else 'not sent - no model to send them to'}")
-    print("     2. the conversation so far  empty - this is question one")
-    print(f"     3. the list of tools        {len(TOOLS)} of them:")
-    for t in TOOLS:
-        print(f"           - {t['name']}")
+        print("\n  MODEL: none - a scripted stand-in (--offline)")
+    print(f"  TOOLS: {len(TOOLS)} available - " + ", ".join(t['name'] for t in TOOLS))
     time.sleep(PAUSE)
 
     _step(1, "YOU ASK", QUESTION)
 
-    result = run_turn(QUESTION) if real else run_turn(QUESTION,
-                                                     model_fn=_fake_model(QUESTION))
+    try:
+        result = run_turn(QUESTION) if real else run_turn(
+            QUESTION, model_fn=_fake_model(QUESTION))
+    except Exception as exc:
+        # A missing key is the common one, and a traceback in front of a room
+        # is noise. Print the reason and what to do about it.
+        print(f"\n  STOPPED: {exc}\n")
+        raise SystemExit(1)
     reply, history = result[0], result[1]
 
     _step(4, "THE MODEL ANSWERS", "Now it has the facts, so now it can answer:",
@@ -139,5 +131,8 @@ def main(real=False, question=None):
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    main(real="--real" in sys.argv,
+    # The real model is the default: everyone has an OpenRouter key from the
+    # prerequisites. --offline exists only so the checkpoint can run the loop
+    # without a network call.
+    main(real="--offline" not in sys.argv,
          question=" ".join(args) or None)
