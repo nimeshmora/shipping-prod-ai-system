@@ -58,7 +58,7 @@ make run
 ```
 
 ```bash
-curl -s -X POST localhost:8080/chat \
+curl -s -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
@@ -67,12 +67,12 @@ Send the returned `session_id` back on the next call to continue the same
 conversation. To watch it stream:
 
 ```bash
-curl -N -X POST localhost:8080/chat/stream \
+curl -N -X POST localhost:7000/chat/stream \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
 
-> **The most common error in this course** is `KODEKEY is not set`. It means you
+> **The most common error in this course** is `OPENROUTER_API_KEY is not set`. It means you
 > edited `.env` but did not load it. That `set -a && source .env && set +a` line
 > must run in the **same terminal** as `make run`, **every time you open a new
 > one**.
@@ -83,7 +83,7 @@ curl -N -X POST localhost:8080/chat/stream \
 
 ```bash
 make install          # install dependencies
-make run              # start the agent on http://localhost:8080
+make run              # start the agent on http://localhost:7000
 make test             # unit tests (fake model, no key needed)
 
 make check-week-00    # the loop you started from
