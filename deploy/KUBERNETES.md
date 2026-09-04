@@ -41,12 +41,12 @@ Which means `/health` and `/metrics` map to *different* probes:
 
 ```yaml
 livenessProbe:                  # is the process alive?
-  httpGet: { path: /health, port: 8080 }
+  httpGet: { path: /health, port: 7000 }
   periodSeconds: 10
   failureThreshold: 3
 
 readinessProbe:                 # should it receive requests?
-  httpGet: { path: /health, port: 8080 }
+  httpGet: { path: /health, port: 7000 }
   periodSeconds: 5
 ```
 
@@ -72,11 +72,11 @@ spec:
       containers:
       - name: agent
         image: ghcr.io/you/ship-agent:a1b2c3d      # never :latest
-        ports: [{ containerPort: 8080 }]
+        ports: [{ containerPort: 7000 }]
         env:
         - name: REDIS_URL
           valueFrom: { configMapKeyRef: { name: agent-config, key: redis-url } }
-        - name: KODEKEY
+        - name: OPENROUTER_API_KEY
           valueFrom: { secretKeyRef: { name: agent-secrets, key: kodekey } }
         resources:
           # An agent is I/O bound: it spends its life waiting on a model.
@@ -86,9 +86,9 @@ spec:
           requests: { cpu: 100m, memory: 256Mi }
           limits:   { cpu: 1000m, memory: 512Mi }
         livenessProbe:
-          httpGet: { path: /health, port: 8080 }
+          httpGet: { path: /health, port: 7000 }
         readinessProbe:
-          httpGet: { path: /health, port: 8080 }
+          httpGet: { path: /health, port: 7000 }
 ```
 
 ## Three things that are harder in Kubernetes, and are honest reasons to wait

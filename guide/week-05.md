@@ -157,7 +157,7 @@ the course keeps working with no cloud and no internet.
 make run
 # make a few requests, then watch the JSON lines in the terminal
 
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 ```
 
 Then **break it on purpose** and watch `/metrics` notice:
@@ -166,7 +166,7 @@ Then **break it on purpose** and watch `/metrics` notice:
 export MODEL=this-model-does-not-exist
 make run
 # make a dozen requests
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 # status: degraded, and an alert saying turns are failing
 ```
 

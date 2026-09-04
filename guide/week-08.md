@@ -123,8 +123,8 @@ Prove it — same image, nothing but env vars:
 
 ```bash
 docker build -t ship-agent .
-docker run --rm -p 8080:8080 -e KODEKEY="$KODEKEY" ship-agent
-curl localhost:8080/health
+docker run --rm -p 7000:7000 -e OPENROUTER_API_KEY="$OPENROUTER_API_KEY" ship-agent
+curl localhost:7000/health
 ```
 
 Read **[`deploy/PORTABILITY.md`](../deploy/PORTABILITY.md)** for the full

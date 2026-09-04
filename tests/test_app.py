@@ -307,14 +307,14 @@ def test_a_missing_api_key_says_exactly_how_to_fix_it():
     """The most common error in this course. The message has to be the
     instructions, not just the diagnosis."""
     import os
-    saved = os.environ.pop("KODEKEY", None)
+    saved = os.environ.pop("OPENROUTER_API_KEY", None)
     try:
         with pytest.raises(AgentError) as e:
             agent._client()
         assert "source .env" in str(e.value)
     finally:
         if saved is not None:
-            os.environ["KODEKEY"] = saved
+            os.environ["OPENROUTER_API_KEY"] = saved
 
 
 # ---- Week 02: memory that survives a redeploy ------------------------------
@@ -1184,7 +1184,7 @@ def test_fetch_url_refuses_the_cloud_metadata_service():
 def test_fetch_url_refuses_other_schemes_and_private_hosts():
     cases = [
         ("file:///etc/passwd", "http and https"),
-        ("http://127.0.0.1:8080/admin", "internal addresses are blocked"),
+        ("http://127.0.0.1:7000/admin", "internal addresses are blocked"),
         ("http://10.0.0.5/", "internal addresses are blocked"),
         ("http://192.168.1.1/", "internal addresses are blocked"),
         ("https://evil.example.org/steal", "not on the allowlist"),

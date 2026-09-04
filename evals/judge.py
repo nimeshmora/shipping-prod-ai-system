@@ -55,17 +55,17 @@ phrased differently than you would phrase it, that is a pass."""
 
 def _client():
     from openai import OpenAI
-    key = os.environ.get("KODEKEY")
+    key = os.environ.get("OPENROUTER_API_KEY")
     if not key:
         return None
     return OpenAI(api_key=key,
                   base_url=os.environ.get("BASE_URL",
-                                          "https://api.ai.kodekloud.com/v1"))
+                                          "https://openrouter.ai/api/v1"))
 
 
 def available():
     """Can the judge tier run at all? False in CI with no key."""
-    return os.environ.get("KODEKEY") is not None
+    return os.environ.get("OPENROUTER_API_KEY") is not None
 
 
 def grade(message, reply, check, model=None):
@@ -76,9 +76,9 @@ def grade(message, reply, check, model=None):
     """
     client = _client()
     if client is None:
-        return True, "judge unavailable (no KODEKEY)"
+        return True, "judge unavailable (no OPENROUTER_API_KEY)"
 
-    model = model or os.environ.get("JUDGE_MODEL", "claude-sonnet-5")
+    model = model or os.environ.get("JUDGE_MODEL", "anthropic/claude-sonnet-4.5")
     prompt = (f"Customer said: {message}\n\n"
               f"Agent replied: {reply}\n\n"
               f"Check this specifically: {check}")

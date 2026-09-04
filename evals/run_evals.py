@@ -82,7 +82,7 @@ What to build
    have to open this file.
 
    THE JUDGE MUST NEVER BLOCK A BUILD BY BEING BROKEN:
-     - no KODEKEY -> skip the tier entirely, and say so
+     - no OPENROUTER_API_KEY -> skip the tier entirely, and say so
      - judge.grade already returns (True, reason) when it cannot answer
      - a case with only a `judge` key and no deterministic check should be
        skipped when the tier is off, not counted as a pass of something
