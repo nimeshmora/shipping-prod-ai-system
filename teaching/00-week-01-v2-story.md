@@ -133,6 +133,27 @@ vs container, all seven Dockerfile instructions, the build process and caching,
 ports, `.dockerignore`, `--env-file`, Docker Hub push and pull, the swap, the
 recap, homework, and the Week 2 hook.
 
+## The deck refers to itself by chapter, never by clock
+
+**Every callback names a chapter**, not a time and not "the break":
+
+| Never | Always |
+|---|---|
+| *"before the break"* | *"in chapter four"* |
+| *"you saw this at 0:20"* | *"you saw this in chapter two"* |
+| *"after the break you build..."* | *"next chapter you build..."* |
+
+Two reasons this matters. **There are two breaks**, so "the break" is ambiguous
+the moment you say it twice. And **clock times drift** every time a slide is
+added or the pacing is rebalanced, which turns a helpful callback into a wrong
+one that the room notices before you do.
+
+Chapter names cannot drift. If you add slides, the callbacks stay true.
+
+> **INSTRUCTOR** · The same rule applies out loud. Say *"remember chapter four,
+> when you asked GitHub a question"* rather than *"remember before lunch"* —
+> the room tracks the story, not the timetable.
+
 ## Verified, not assumed
 
 - **All 140 slides measured** in a headless browser at the deck's own

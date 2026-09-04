@@ -357,7 +357,7 @@ T3='0:40 &ndash; 1:02'
 chapter('3','Chapter three','Your turn.',
  'Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o\'clock.',
  'about twenty-two minutes &middot; everybody types',
- '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody still installing after the break will be lost all afternoon, and catching them up costs everyone else.''')
+ '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody who is still installing when chapter four starts will be lost for the rest of the day, and catching them up costs everyone else.''')
 
 sl('3','Before anything &middot; what you should already have',T3,
  'Six things, from the email.',
@@ -369,7 +369,7 @@ sl('3','Before anything &middot; what you should already have',T3,
       <div class="row"><div class="name">An OpenRouter key</div><div class="cmd">openrouter.ai</div><div class="box">sk-or-...</div></div>
       <div class="row"><div class="name">A Docker Hub account</div><div class="cmd">hub.docker.com</div><div class="box">username</div></div>
     </div>''',
- '''<b>Run the four commands together, right now, as a group</b>Read each one out and wait. <b>Hands up for anything that errors</b> — you want to know in the next two minutes, not at 3pm.<br><br><b>The two that catch people:</b> Docker <em>installed</em> is not Docker <em>running</em> — the whale has to be in the menu bar. And the last two are accounts, not software: they need them at 3:30 to swap containers with a neighbour.''')
+ '''<b>Run the four commands together, right now, as a group</b>Read each one out and wait. <b>Hands up for anything that errors</b> — you want to know in the next two minutes, not at 3pm.<br><br><b>The two that catch people:</b> Docker <em>installed</em> is not Docker <em>running</em> — the whale has to be in the menu bar. And the last two are accounts, not software: they need them in chapter six to swap containers with a neighbour.''')
 
 sl('3','What you are about to download',T3,
  'One project. You only ever write in one folder of it.',
@@ -453,12 +453,12 @@ the loop runs a tool then answers
  '''<b>This is your gate. Do not move on with hands up.</b>If somebody is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.<br><br><b>What this checks:</b> their Python, their install and the agent code — it runs the loop <b>without calling out</b>, so green means the project is sound. <b>They test the key itself on the next slide.</b><br><br>This is also the first time they see a test as <b>a promise about behaviour</b> rather than a chore.''')
 
 sl('3','Now run the demo yourself',T3,
- 'The command you watched me run at 0:20.',
+ 'The command you watched me run in chapter two.',
  '''    <div class="body center">
       <pre>$ python3 -m checks.demo_turn</pre>
       <div class="punch">Same four steps. Your machine, your key, and the model really deciding.</div>
     </div>''',
- '''<b>Collect the promise you made at 0:20</b><em>"Remember this from the start of the session? Now it is yours."</em><br><br><b>This is the first moment their own key does anything</b>, so it is the first place a key problem shows up. If it stops with <code>OPENROUTER_API_KEY is not set</code>, that is the best possible place to hit it — <b>the fix is two slides behind them, and the error prints it.</b>''')
+ '''<b>Collect the promise you made in chapter two</b><em>"Remember this from the start of the session? Now it is yours."</em><br><br><b>This is the first moment their own key does anything</b>, so it is the first place a key problem shows up. If it stops with <code>OPENROUTER_API_KEY is not set</code>, that is the best possible place to hit it — <b>the fix is two slides behind them, and the error prints it.</b>''')
 
 sl('3','Then change the question',T3,
  'Ask it a sum instead.',
@@ -683,7 +683,7 @@ sl('4','What those numbers mean',T4,
 
 spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can drive a computer, and reach one.',
- '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for after the break:</b> <em>"Everything you did with curl, you did to somebody else's service. After the break, you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
+ '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for what comes next:</b> <em>"Everything you did with curl, you did to somebody else's service. Next chapter you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
 
 T5='1:58 &ndash; 2:50'
 # =========================================================================
@@ -692,7 +692,7 @@ T5='1:58 &ndash; 2:50'
 chapter('5','Chapter five','Giving it a front door.',
  'You just sent a message to a stranger\'s computer. <b>Now build the thing that answers one.</b>',
  'about fifty-two minutes &middot; the first code you write',
- '''<b>Collect the curl moment first — it is the bridge into everything here</b><em>"Before the break you sent a question to GitHub's computer and got an answer. Somebody built the thing that answered you. Today you are that somebody."</em><br><br><b>The shape of this chapter:</b> ten minutes on why, then you type for thirty-five. And they test after every single endpoint.''')
+ '''<b>Collect the curl moment first — it is the bridge into everything here</b><em>"In the last chapter you sent a question to GitHub's computer and got an answer. Somebody built the thing that answered you. Today you are that somebody."</em><br><br><b>The shape of this chapter:</b> ten minutes on why, then you type for thirty-five. And they test after every single endpoint.''')
 
 tale('5','So how do you let somebody else use it?',T5,
  'Suppose a friend wants to use your agent. <span class="q">What do you actually do?</span>',
@@ -730,8 +730,8 @@ sl('5','So here is the name',T5,
       <div class="term">Web service</div>
       <div class="txt">A program that <b>stays running</b>, <b>has an address</b>, and <b>answers questions</b> sent to it over the network.</div>
     </div>
-    <div class="punch">You used four of them before the break. GitHub was one.</div>''',
- '''<b>They have already used one, so say so</b><em>"You sent a question to GitHub's address and it answered. That is all a web service is. You are about to build one that answers questions about orders instead of repositories."</em><br><br><b>Three properties, and each one is a problem to solve:</b> stays running (chapter six), has an address (next week), answers questions (the next thirty minutes).''')
+    <div class="punch">You sent questions to two of them in chapter four. GitHub was one.</div>''',
+ '''<b>They have already used one, so say so</b><em>"In chapter four you sent a question to GitHub's address and it answered. That is all a web service is. You are about to build one that answers questions about orders instead of repositories."</em><br><br><b>Three properties, and each one is a problem to solve:</b> stays running (chapter six), has an address (next week), answers questions (the next thirty minutes).''')
 
 sl('5','What changes, and what does not',T5,
  'The agent does not change. It gets a door.',
@@ -811,7 +811,7 @@ tale('5','Before you write anything',T5,
 sl('5','Follow one question &middot; 1 of 7',T5,
  'It starts outside. Somebody asks a question.',
  '''    <div class="spine"><div class="ring new2"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring soon"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring soon"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
- '''<b>Start outside the computer entirely</b>Nothing technical yet. <b>Somebody has an address and a question</b> — that is all.<br><br><em>"This is you, before the break, typing curl at GitHub. Now you are on the other side of it."</em>''')
+ '''<b>Start outside the computer entirely</b>Nothing technical yet. <b>Somebody has an address and a question</b> — that is all.<br><br><em>"This is you in chapter four, typing curl at GitHub. Now you are on the other side of it."</em>''')
 
 sl('5','Follow one question &middot; 2 of 7',T5,
  'The message arrives at one computer.',
@@ -897,10 +897,10 @@ sl('5','What just happened',T5,
       <div class="oneline">
         <div class="lbl">WHAT YOU JUST DID</div>
         <div class="say2">Something asked your computer a question <b>over a network</b>, and <b>your code answered.</b></div>
-        <div class="extra">Same command you sent GitHub before the break. <b>Only the address changed.</b></div>
+        <div class="extra">Same command you sent GitHub in chapter four. <b>Only the address changed.</b></div>
       </div>
     </div>''',
- '''<b>Collect the promise from chapter four, out loud</b><em>"An hour ago you sent that exact command to a machine on the other side of the world. The only thing different now is the address — and this time you wrote the thing that answered."</em><br><br>That is the payoff for spending the morning on tools.''')
+ '''<b>Collect the promise from chapter four, out loud</b><em>"In chapter four you sent that exact command to a machine on the other side of the world. The only thing different now is the address — and this time you wrote the thing that answered."</em><br><br>That is the payoff for spending the morning on tools.''')
 
 sl('5','Why that command never finished',T5,
  'Because it is not a task. It is a service.',
@@ -926,7 +926,7 @@ INFO:     127.0.0.1:52344 - "POST /chat HTTP/1.1" <span class="ok">200 OK</span>
 INFO:     127.0.0.1:52350 - "POST /chat HTTP/1.1" <span class="warn">422</span>
 INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found</span></pre>
     <div class="punch">Who asked, what for, and what number came back.</div>''',
- '''<b>Read one line out loud, left to right</b>They already know 200, 422 and 404 from the practice service before the break. <b>Same numbers, now their own service.</b><br><br><b>The habit worth an hour of their time:</b> when a curl misbehaves, look at window 1 <b>first</b>. A line with a red number means it arrived and your code refused it. <b>No line at all</b> means it never arrived — wrong address, wrong port, or the service is not running. <em>"Two completely different problems that look identical from window 2."</em>''')
+ '''<b>Read one line out loud, left to right</b>They already know 200, 422 and 404 from the practice service in chapter four. <b>Same numbers, now their own service.</b><br><br><b>The habit worth an hour of their time:</b> when a curl misbehaves, look at window 1 <b>first</b>. A line with a red number means it arrived and your code refused it. <b>No line at all</b> means it never arrived — wrong address, wrong port, or the service is not running. <em>"Two completely different problems that look identical from window 2."</em>''')
 
 sl('5','Why the boring door first',T5,
  '<code>/health</code> answers one question: is this thing on?',
@@ -1020,7 +1020,7 @@ sl('5','Test door two',T5,
 
 {"reply":<span class="ok">"Your standing desk is shipped and arrives Thursday."</span>,
  "session_id":<span class="hl">"a3f9c2..."</span>}</pre>''',
- '''<b>This is the moment of the day. Let it land.</b><em>"That is your agent, answering a question that arrived over a network, from a command you typed in a different window."</em><br><br><b>Same curl as GitHub before the break.</b> Only the address changed — and this time they built the thing that answered.<br><br>Do not move until everybody has a reply on screen.''')
+ '''<b>This is the moment of the day. Let it land.</b><em>"That is your agent, answering a question that arrived over a network, from a command you typed in a different window."</em><br><br><b>Same curl as GitHub in chapter four.</b> Only the address changed — and this time they built the thing that answered.<br><br>Do not move until everybody has a reply on screen.''')
 
 sl('5','Now use the ticket',T5,
  'Send the session id back, and the conversation continues.',
@@ -1281,7 +1281,7 @@ sl('6','Toy three &middot; one that waits',T6,
 <span class="pr">$</span> curl -s localhost:9000 | head -4
 <span class="ok">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span></pre>
     <div class="punch">You did not install nginx. Docker fetched it, ran it, and you asked it a question.</div>''',
- '''<b>Run it and let them see a real server appear from nothing</b>No install, no setup, no configuration. One command.<br><br><b>And they used their own curl on it</b> — the command from before the break, pointed at a container. Three chapters connecting.<br><br>The interesting part is <code>-p 9000:80</code>, and that gets the next slide.''')
+ '''<b>Run it and let them see a real server appear from nothing</b>No install, no setup, no configuration. One command.<br><br><b>And they used their own curl on it</b> — the command from chapter four, pointed at a container. Three chapters connecting.<br><br>The interesting part is <code>-p 9000:80</code>, and that gets the next slide.''')
 
 sl('6','What <code>-p</code> does',T6,
  'Connect a number outside to a number inside.',
