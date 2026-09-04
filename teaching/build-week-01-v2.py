@@ -491,19 +491,40 @@ T4='1:04 &ndash; 1:42'
 # =========================================================================
 # CHAPTER 4 — Two new skills  (terminal, then the browser and curl)
 # =========================================================================
-chapter('4','Chapter four','Two new skills.',
- 'How to type commands at a computer, and how to ask another computer a question. <b>We practise on things that do not matter.</b>',
+chapter('4','Chapter four','Where will it actually run?',
+ 'Not on your laptop &mdash; that goes home with you at six. <b>So on what?</b>',
  'about thirty-eight minutes &middot; everybody types',
- '''<b>Say why this comes before the interesting part</b><em>"For the next half hour we are not touching the agent. We are learning to type at a computer, and to send a message to one. Both on things it does not matter if you break."</em><br><br><b>The payoff, promised now:</b> every command they learn here works identically on the rented machine their agent will live on — <b>which has no screen, no mouse and no desktop.</b> Typing is the only way in.''')
+ '''<b>Open with the question, and wait for an answer</b><em>"Your agent has to be reachable whenever somebody asks it something. Your laptop shuts at six and comes home with you. So where does it actually live?"</em><br><br>Somebody will say "the cloud", or "a server", or "online". <b>All right, and all vague</b> &mdash; the next two slides make it concrete, and that is what earns this whole chapter.''')
 
-sl('4','The window',T4,
- 'A place to type commands instead of clicking.',
- '''    <div class="anchor">
-      <div class="tagx">why bother, when clicking works</div>
-      <div class="txt">The computer your agent will run on <b>has no screen, no mouse and no desktop.</b> It is a rented machine in a data centre. <b>Typing is the only way in.</b></div>
-    </div>
-    <div class="punch">Every command you learn now works identically on that machine.</div>''',
- '''<b>Open one together, and wait for every screen</b><b>Mac:</b> Cmd+Space, type <code>terminal</code>. <b>Windows:</b> Start, type <code>powershell</code>. <b>Linux:</b> Ctrl+Alt+T.<br><br>Walk the room — somebody's will open somewhere odd, or their laptop is locked down. <b>Fix it now.</b><br><br><b>Name the prompt</b> — the <code>$</code> or <code>%</code>. It means "ready for a command". A blank window with a symbol is intimidating until it has a name.''')
+sl('4','It runs on a rented computer',T4,
+ 'And here is what one of those is like.',
+ '''    <div class="body center">
+      <div class="oneline">
+        <div class="lbl">WHAT YOU GET WHEN YOU RENT ONE</div>
+        <div class="say2">No screen. No mouse. No desktop. <b>Nothing to click at all.</b></div>
+        <div class="extra">A machine in a building somewhere that you have <b>never seen and never will.</b></div>
+      </div>
+    </div>''',
+ '''<b>Let this be surprising, because for most of the room it is</b>People picture a computer like theirs. <em>"There is no screen attached to it. Nobody is sitting in front of it. There is no desktop, because there is nobody there to look at one."</em><br><br><b>Then the question they should now be asking themselves:</b> so how do you put anything on it?''')
+
+tale('4','So how do you use a computer',T4,
+ 'with <span class="q">nothing to click on?</span>',
+ '''<b>Ask it, let it sit, then answer in two words</b><b>Somebody will get there:</b> you type.<br><br><em>"You type. That is the whole answer. And that is why the next half hour exists &mdash; because everything you ever do on that machine, you do by typing."</em><br><br><b>Now the terminal is not arbitrary.</b> It is the only door into the place their agent is going to live.''')
+
+sl('4','So this is the window',T4,
+ 'You type commands in here.',
+ '''    <div class="cols c2 mid">
+      <table>
+        <tr><th>Mac</th><td class="mono">Cmd + Space</td><td>type <code>terminal</code></td></tr>
+        <tr><th>Windows</th><td class="mono">Start key</td><td>type <code>powershell</code></td></tr>
+        <tr><th>Linux</th><td class="mono">Ctrl+Alt+T</td><td></td></tr>
+      </table>
+      <div class="card info">
+        <p>You will see a <b>prompt</b> &mdash; usually ending in <code>$</code> or <code>%</code>.</p>
+        <p><b>That means "ready for a command".</b></p>
+      </div>
+    </div>''',
+ '''<b>Open one together and wait for every screen</b>Walk the room. Somebody&rsquo;s will open somewhere odd, or their laptop is locked down. <b>Fix it now, not in ten minutes.</b><br><br><b>Name the prompt.</b> People are unsettled by a blank window with a symbol in it. Once <code>$</code> means "ready for a command", it stops being intimidating.<br><br><b>The promise worth making here:</b> every command in the next half hour works <em>identically</em> on that rented machine. They are not learning a laptop trick.''')
 
 sl('4','The most reassuring rule of the day',T4,
  'No output means it worked.',

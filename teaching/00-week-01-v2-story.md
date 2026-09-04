@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **172 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **174 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -34,7 +34,7 @@ necessary rather than arbitrary.
    0:10   24   2  "Let me show you the thing"  the agent, then run it live
    0:34   20   3  "Your turn"                  prerequisites, clone, key, prove
    0:54   10      break
-   1:04   38   4  "Two new skills"             terminal, then the browser -> curl
+   1:04   38   4  "Where will it run?"         terminal, then the browser -> curl
    1:42   10      break
    1:52   56   5  "Giving it a front door"     why, then three endpoints
    2:48   62   6  "Giving it to somebody else" the problem, Docker, then GIVE IT AWAY
@@ -43,7 +43,7 @@ necessary rather than arbitrary.
    4:00        exactly four hours, both breaks included
 ```
 
-About **77 seconds a slide** — one idea, said once, then advance.
+About **76 seconds a slide** — one idea, said once, then advance.
 
 ## How the story is told
 
@@ -253,7 +253,7 @@ top of the rail.
 python3 teaching/check-slide-layout.py teaching/week-01-slides-v2.html
 ```
 
-It renders **all 172 slides** in a headless browser and reports any slide whose
+It renders **all 174 slides** in a headless browser and reports any slide whose
 content reaches the bottom rail, passes either side edge, or exceeds the stage.
 Exits non-zero, so it can gate a commit.
 
@@ -262,7 +262,41 @@ Exits non-zero, so it can gate a commit.
 > `slide 30: hits the bottom rail (gap -36px)`. A checker nobody has seen fail
 > is not a checker.
 
-**Both decks pass:** 172/172 here, 218/218 in the other one.
+**Both decks pass:** 174/174 here, 218/218 in the other one.
+
+## Every chapter earns its concept before naming it
+
+**The rule for the whole deck: the room feels the problem, then the word
+arrives.** A term introduced before there is a problem for it to solve is
+jargon; the same term two slides later is a relief.
+
+| Chapter | The pain, first | Then the name |
+|---|---|---|
+| 4 | *"Your laptop goes home with you at six. So where does it run?"* → a rented machine with **no screen, no mouse, nothing to click** → *so how do you use a computer with nothing to click on?* | **the terminal** |
+| 5 | *"Send them the files."* / *"Let them use my laptop."* / *"Put it in an app."* — three answers the room gives, all wrong | **a web service** |
+| 6 | the email you would have to send with the folder, read aloud in one breath | **a container** |
+
+And inside the chapters, the same shape holds for every smaller concept:
+
+| Concept | The problem slide before it |
+|---|---|
+| session id | *"Each request is completely separate. So how can it hold a conversation?"* |
+| streaming | *"How long did that answer take?"* — asked of the room |
+| `/health` | why the boring door has to come first |
+| hiding error text | what a raw error contains, before the fix |
+| layer caching | why a second build should not redo the slow step |
+| `.dockerignore` | that images travel, and travel where people can read them |
+
+**Chapter four used to assert its own value.** The reason to learn the terminal
+was buried in a small box on the first content slide — *"the computer your
+agent runs on has no screen"* — where it read as a justification rather than as
+something felt. It is now three slides: the question, the surprising answer, and
+the room working out for itself that typing is the only way in.
+
+> **INSTRUCTOR** · In all three chapter openings, **ask the question and wait.**
+> The answers the room gives are the next few slides, which means you are
+> confirming their thinking rather than delivering yours. That is the whole
+> difference between a lesson and a story.
 
 ## Chapter six starts with the problem, not with Docker
 
@@ -417,12 +451,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 172 slides measured** in a headless browser at the deck's own
+- **All 174 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 172 of 172.
+- **Every slide has a presenter note** — 174 of 174.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 
