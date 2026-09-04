@@ -350,13 +350,13 @@ spine(1,'2','Where we are &middot; end of chapter two',T2,
  'You know what it is. It still cannot be reached.',
  '''<b>Same picture, and deliberately unchanged</b>Nothing new is lit up, because <b>knowing what a thing is does not move it anywhere.</b> Say that out loud — it is the setup for the next three hours.<br><br><em>"You now know exactly what is in the green box. It still only runs on my laptop. Everything from here is about the dashed boxes."</em><br><br><b>Next: they get it running on their own machines.</b>''')
 
-T3='0:40 &ndash; 1:07'
+T3='0:40 &ndash; 1:02'
 # =========================================================================
 # CHAPTER 3 — Getting it running  (0:40 – 1:07)
 # =========================================================================
 chapter('3','Chapter three','Your turn.',
  'Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o\'clock.',
- 'about twenty-seven minutes &middot; everybody types',
+ 'about twenty-two minutes &middot; everybody types',
  '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody still installing after the break will be lost all afternoon, and catching them up costs everyone else.''')
 
 sl('3','Before anything &middot; what you should already have',T3,
@@ -412,7 +412,7 @@ sl('3','Read that last line again',T3,
     </div>''',
  '''<b>Name this, because it is the reason today is teachable</b><em>"You have not written a line yet and twelve tests already pass. That is your baseline. Everything you build today sits on top of something known to work."</em><br><br>That is exactly why we start on the small agent: <b>when something breaks this afternoon, there is only one place it can be.</b>''')
 
-tale('3','Now the key','0:40 &ndash; 1:07',
+tale('3','Now the key',T3,
  'The agent needs your OpenRouter key. And a key must <b>never</b> live in the code.',
  '''<b>Say the why before the how</b>The code is the same for everybody in the room. <b>The key is only yours, and it spends real money.</b> Those two facts cannot both live in the same file.<br><br><b>The rule, and mean it:</b> never paste your key into a chat, a screenshot, or a slide. Not once, not as an example.''')
 
@@ -475,7 +475,7 @@ spine(2,'3','Where we are &middot; end of chapter three',T3,
  '''<b>One more box lit up — but be precise about what changed</b><em>"Twenty-seven people now have it running. That is twenty-seven laptops, and still zero strangers."</em><br><br><b>The honest framing:</b> copying it to more laptops is not the same as making it reachable. Every one of those copies has the same problem the first one had.<br><br><b>Now the break.</b> Ten minutes. After it, they learn to drive a computer by typing.''')
 
 
-T4='1:17 &ndash; 1:53'
+T4='1:12 &ndash; 1:48'
 # =========================================================================
 # CHAPTER 4 — Learning to drive  (1:17 – 1:53)
 # =========================================================================
@@ -583,6 +583,17 @@ my first note</pre>
     </div>''',
  '''<b>The <code>&gt;</code> is the interesting one</b><em>"Normally output goes to your screen. The arrow points it into a file instead."</em><br><br>They will see this pattern for the rest of the course. <b>Careful:</b> a single <code>&gt;</code> replaces the file's contents. Two, <code>&gt;&gt;</code>, adds to the end.''')
 
+sl('4','The files you cannot see',T4,
+ 'A name starting with a dot is hidden.',
+ '''    <pre><span class="pr">$</span> ls
+notes.txt   src   data
+
+<span class="pr">$</span> ls <span class="hl">-la</span>
+.            ..
+<span class="ok">.hidden-note</span>   notes.txt   src   data</pre>
+    <div class="punch"><code>-la</code> shows everything, including the dot files.</div>''',
+ '''<b>They need this in ten minutes, so teach it now</b><em>"A file whose name starts with a dot does not show up in a normal listing. It is not secret &mdash; just kept out of the way."</em><br><br><b>Try it:</b> <code>touch .hidden-note</code> then <code>ls</code> (nothing) then <code>ls -la</code> (there it is).<br><br><b>Why it matters today:</b> their key lives in a file called <code>.env</code>. <b>When somebody swears they created it and the service says the key is not set, <code>ls -la</code> is how you find out the editor saved it as <code>.env.txt</code>.</b> That is a real ten-minute bug, caught in one command.''')
+
 sl('4','Clean up',T4,
  'Delete the practice folder.',
  '''    <pre class="mini"><span class="pr">$</span> cd ~
@@ -614,7 +625,7 @@ sl('4','That is the whole toolkit',T4,
     </div>''',
  '''<b>Leave this up as their reference card</b>It is also in <code>guide/week-01.md</code> — tell them where.<br><br><b>Then the bridge, and it matters:</b> <em>"Notice what all nine have in common. Every single one talks to THIS computer. Nothing we have learned can reach another machine.</em><br><br><em>And your agent's whole problem is that nobody else can reach it. So next: how one computer sends a message to another."</em>''')
 
-tale('4','Second tool','1:17 &ndash; 1:53',
+tale('4','Second tool',T4,
  'Now the other half: <b>sending a message to a computer that is not yours.</b>',
  '''<b>Frame it as the second half of driving</b>They can now move around one machine. This is how they reach a different one — <b>and it is the exact command they will use on their own service in an hour.</b><br><br>Still on toys: public practice services, nothing of theirs at stake.''')
 
@@ -674,16 +685,16 @@ spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can drive a computer, and reach one.',
  '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for after the break:</b> <em>"Everything you did with curl, you did to somebody else's service. After the break, you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
 
-T5='2:03 &ndash; 2:50'
+T5='1:58 &ndash; 2:50'
 # =========================================================================
 # CHAPTER 5 — Giving it a front door  (2:03 – 2:50)
 # =========================================================================
 chapter('5','Chapter five','Giving it a front door.',
  'You just sent a message to a stranger\'s computer. <b>Now build the thing that answers one.</b>',
- 'about forty-seven minutes &middot; the first code you write',
+ 'about fifty-two minutes &middot; the first code you write',
  '''<b>Collect the curl moment first — it is the bridge into everything here</b><em>"Before the break you sent a question to GitHub's computer and got an answer. Somebody built the thing that answered you. Today you are that somebody."</em><br><br><b>The shape of this chapter:</b> ten minutes on why, then you type for thirty-five. And they test after every single endpoint.''')
 
-tale('5','So how do you let somebody else use it?','2:03 &ndash; 2:50',
+tale('5','So how do you let somebody else use it?',T5,
  'Suppose a friend wants to use your agent. <span class="q">What do you actually do?</span>',
  '''<b>Ask it and take two or three answers before showing anything</b>They will suggest most of the next three slides themselves. When somebody says "put it on a website" or "make an app", say <em>"hold that — you are very close"</em> and save it.<br><br><b>Correct nobody.</b> Every wrong answer here is useful.''')
 
@@ -793,6 +804,45 @@ sl('5','Two tools do the network part',T5,
     <div class="punch">uvicorn listens. FastAPI decides who answers. You write the answering.</div>''',
  '''<b>The distinction that confuses everybody</b><b>uvicorn you start</b> — it is what <code>make run</code> runs, and it sits there waiting. <b>FastAPI you import</b> — you never start it; uvicorn calls into it.<br><br><em>"uvicorn is the person standing at the counter waiting for customers. FastAPI is the order pad — it works out what was asked and passes it to the kitchen. You are the kitchen."</em><br><br><b>Say the punchline:</b> neither of them knows anything about orders. That is your job, and it is four lines.''')
 
+tale('5','Before you write anything',T5,
+ 'Let us follow <b>one question</b> from outside your computer all the way in &mdash; <span class="q">so you know where your four lines sit.</span>',
+ '''<b>Seven slides, one new layer each. Do not skip ahead.</b>The value is entirely in the layers accumulating &mdash; they can see the previous ones stay on screen.<br><br><b>This is the single best sequence in the deck for the non-technical half of the room.</b> Ninety seconds a slide. By the end they know exactly which part is theirs, which is the thing beginners never get told.''')
+
+sl('5','Follow one question &middot; 1 of 7',T5,
+ 'It starts outside. Somebody asks a question.',
+ '''    <div class="spine"><div class="ring new2"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring soon"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring soon"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>Start outside the computer entirely</b>Nothing technical yet. <b>Somebody has an address and a question</b> — that is all.<br><br><em>"This is you, before the break, typing curl at GitHub. Now you are on the other side of it."</em>''')
+
+sl('5','Follow one question &middot; 2 of 7',T5,
+ 'The message arrives at one computer.',
+ '''    <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring new2"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring soon"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>One layer in: the message has arrived somewhere</b>It found the right machine. <b>But a machine is not a program.</b><br><br><em>"Your laptop right now is running a browser, a terminal, probably twenty other things. Which one is this message for?"</em> That question is the next layer.''')
+
+sl('5','Follow one question &middot; 3 of 7',T5,
+ 'One computer, many programs. Which one?',
+ '''    <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring new2"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>This is what a port actually is, and it is worth the thirty seconds</b><em>"A computer has one address but many programs. The port number is which program."</em><br><br><b>The picture that works:</b> one building, many numbered doors. The address gets you to the building; the number gets you to the right door.<br><br>Theirs is 7000. They chose that in <code>.env</code> this morning.''')
+
+sl('5','Follow one question &middot; 4 of 7',T5,
+ 'A program was waiting on that number.',
+ '''    <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring new2"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>Now uvicorn has a job the room can see</b>It was sitting on 7000 doing nothing else, waiting.<br><br><em>"It takes the message off the network and hands it inwards. It has no idea what an order is."</em><br><br><b>That separation is the point:</b> the network part knows nothing about your business, and your business knows nothing about the network.''')
+
+sl('5','Follow one question &middot; 5 of 7',T5,
+ 'Something has to pick your function.',
+ '''    <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring was"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring new2"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>One layer more, and this is the one that picks your function</b><em>"FastAPI reads the address — <code>/chat</code> — and looks for whoever said they handle that address."</em><br><br><b>That is what the label above a function is for.</b> They are about to write <code>@app.get("/health")</code>, and this is why: it is how FastAPI knows.''')
+
+sl('5','Follow one question &middot; 6 of 7',T5,
+ 'Now your code runs.',
+ '''    <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring was"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring was"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring new2"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>Point at this ring and say: this is the only one you write</b>Everything above it is given. Everything below it is given. <b>One ring in the middle is theirs, and it is four lines.</b><br><br><em>"All of that machinery exists so that your four lines can be ordinary Python that does not know a network exists."</em>''')
+
+sl('5','Follow one question &middot; 7 of 7',T5,
+ 'And at the centre, the agent from this morning.',
+ '''    <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring was"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring was"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring was"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring core3"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>''',
+ '''<b>At the centre, the thing from this morning &mdash; unchanged</b>Point at the green ring. <em>"That is <code>run_turn</code>. You watched it work at twenty past nine. Not one line of it changes today."</em><br><br><b>Then the hook for chapter six:</b> <em>"Seven layers. At ten to three we put a box around all of them."</em><br><br>The container chapter refers straight back to this picture.''')
+
 sl('5','Open the file',T5,
  'Everything you type today goes in here.',
  '''    <div class="body center">
@@ -815,7 +865,7 @@ sl('5','The first two lines',T5,None,
  '''<b>Two lines, and they are the whole shape of the day</b><em>"One import is the plumbing. One is the thing that thinks. Your file is where they meet."</em><br><br><b>Point at the second one:</b> that is <code>run_turn</code> from 0:26. They have already watched what it does.''')
 
 sl('5','Create the application',T5,None,
- '''    <pre class="tight">app = <span class="hl">FastAPI</span>(title=<span class="ok">"Support Agent"</span>)</pre>
+ '''    <pre class="tight">app = <span class="hl">FastAPI</span>(title=<span class="ok">"Ship Production AI agent"</span>)</pre>
     <div class="punch">One object. Every door you add gets attached to it.</div>''',
  '''<b>Say what <code>app</code> is, because uvicorn needs it by name</b><em>"This is the thing uvicorn goes looking for when it starts. That is why the name matters — <code>make run</code> literally says 'find the thing called app in main.py'."</em><br><br>Show them <code>cat Makefile</code> if anybody doubts it. <b>No magic anywhere today.</b>''')
 
@@ -944,21 +994,23 @@ sl('5','Describe what arrives',T5,None,
 sl('5','Door two: the real one',T5,None,
  '''    <pre class="tight"><span class="hl">@app.post("/chat")</span>
 <span class="hl">def chat(req: ChatRequest):</span>
-    <span class="hl">sid = req.session_id or str(uuid.uuid4())</span>
-    <span class="hl">history = memory.load(sid)</span>
+    <span class="hl">session_id = req.session_id or uuid.uuid4().hex</span>
+    <span class="hl">history = memory.load(session_id)</span>
     <span class="hl">reply, new_history = run_turn(req.message, history)</span>
-    <span class="hl">memory.save(sid, new_history)</span>
-    <span class="hl">return {"reply": reply, "session_id": sid}</span></pre>''',
- '''<b>Read it as a sentence, in order</b><em>"Use the ticket they sent, or make a new one. Load whatever was said before. Ask the agent. Save what came back. Return the answer and the ticket."</em><br><br><b>Six lines, and only one of them is AI.</b> Point at <code>run_turn</code>. Everything around it is bookkeeping — which is exactly the point of the whole course.<br><br><b>POST not GET</b>, because they are sending data rather than fetching.''')
+    <span class="hl">memory.save(session_id, new_history)</span>
+    <span class="hl">return {"reply": reply, "session_id": session_id}</span></pre>''',
+ '''<b>Read it as a sentence, in order</b><em>"Use the ticket they sent, or make a new one. Load whatever was said before. Ask the agent. Save what came back. Return the answer and the ticket."</em><br><br><b>Five lines, and only one of them is AI.</b> Point at <code>run_turn</code> &mdash; everything around it is bookkeeping, which is exactly the point of the whole course.<br><br><b>POST not GET</b>, because they are sending data rather than fetching. And <code>uuid4().hex</code> is just "invent a long random label nobody will guess".''')
 
 sl('5','Make it safe when things break',T5,None,
- '''    <pre class="tight"><span class="cm">    # wrap the agent call:</span>
+ '''    <pre class="tight"><span class="cm">    # wrap those four lines:</span>
     <span class="hl">try:</span>
-        <span class="hl">reply, new_history = run_turn(req.message, history)</span>
-    <span class="hl">except Exception:</span>
-        <span class="hl">raise HTTPException(500, "internal error")</span></pre>
+        <span class="cm">... load, run_turn, save, return ...</span>
+    <span class="hl">except AgentError as e:</span>
+        <span class="hl">raise HTTPException(e.status, str(e))</span>
+    <span class="hl">except Exception as e:</span>
+        <span class="hl">raise HTTPException(500, "internal error") from e</span></pre>
     <div class="punch">Never let the real error text reach a stranger.</div>''',
- '''<b>This is a security slide disguised as an error-handling slide</b><em>"A real error message contains file paths, internal addresses, sometimes a password. Somebody probing your service would like to read those."</em><br><br><b>So the caller gets five words</b>, and the details go to your log where you can read them. <b>That is the habit:</b> useful to you, useless to an attacker.<br><br>Week 7 attacks a service that got this wrong.''')
+ '''<b>This is a security slide disguised as an error-handling slide</b><b>Two kinds of failure, handled differently.</b> An <code>AgentError</code> is something the caller can understand and act on &mdash; "no such order" &mdash; so they get told. <b>Anything else gets five words.</b><br><br><em>"A real error message contains file paths, internal addresses, sometimes a password. Somebody probing your service would love to read those."</em><br><br><b>So the details go to your log, where you can read them, and the caller gets nothing useful.</b> Useful to you, useless to an attacker. Week 7 attacks a service that got this wrong.''')
 
 sl('5','Test door two',T5,
  'Only the address changed.',
@@ -1038,6 +1090,27 @@ event: <span class="ok">done</span>
 <span class="cm">&uarr; arriving one after another</span></pre>
     </div>''',
  '''<b>Run this one slowly and let them watch the screen</b><b><code>-N</code> matters</b> — it tells curl not to buffer. Without it you wait three seconds and see everything at once, which hides the entire point.<br><br><b>And no <code>| jq</code> here</b> — jq would buffer too, for the same reason.<br><br><em>"That is the same answer as door two. It just arrived in a way a person can watch."</em>''')
+
+sl('5','The whole file, assembled',T5,
+ 'Twenty lines. You wrote every one of them.',
+ '''    <pre class="tight" style="font-size:14.5px;line-height:1.5"><span class="cm">import</span> os, uuid
+<span class="cm">from</span> fastapi <span class="cm">import</span> FastAPI, HTTPException
+<span class="cm">from</span> fastapi.responses <span class="cm">import</span> StreamingResponse
+<span class="cm">from</span> pydantic <span class="cm">import</span> BaseModel
+<span class="cm">from</span> app <span class="cm">import</span> memory, stream
+<span class="cm">from</span> app.agent <span class="cm">import</span> AgentError, run_turn
+
+app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
+
+<span class="cm">class</span> ChatRequest(BaseModel):
+    message: str
+    session_id: str | <span class="cm">None</span> = <span class="cm">None</span>
+
+<span class="hl">@app.get("/health")</span>          <span class="cm"># door 1</span>
+<span class="hl">@app.post("/chat")</span>           <span class="cm"># door 2</span>
+<span class="hl">@app.post("/chat/stream")</span>    <span class="cm"># door 3</span></pre>
+    <div class="punch">Three doors, one shape each: a label, a function, a return.</div>''',
+ '''<b>Show them the finished thing &mdash; they have only seen fragments</b>Scroll their own file next to this. <em>"That is everything. Twenty lines, and six of them are imports."</em><br><br><b>Point at the three labels.</b> Every door is the same shape: a label saying which address, a function, and something returned. <b>Learn that once and you can add a fourth door in two minutes</b> &mdash; which is exactly what they do after the container is built.<br><br><b>Worth naming:</b> not one line of this is about AI. The AI is one function call, imported from a file they did not touch.''')
 
 sl('5','All three doors',T5,
  'Your service is finished.',
@@ -1148,6 +1221,29 @@ sl('6','Build it and run it',T6,
     </div>''',
  '''<b>The point to make, and it is a good one</b><em>"That word 'hello' was printed by a small Linux computer that Docker created, used for one second, and threw away. You did not install Linux."</em><br><br><b>The dot confuses people every time.</b> It means "the instructions are in this folder". Say it as a sentence, not as punctuation.''')
 
+sl('6','What just happened when you pressed build',T6,
+ 'Docker read your file top to bottom, one step at a time.',
+ '''    <pre class="tight"><span class="pr">$</span> docker build -t demo1 .
+
+<span class="cm">[+] Building 2.1s (5/5) FINISHED</span>
+ =&gt; [internal] load build definition from Dockerfile   <span class="cm">read your file</span>
+ =&gt; [internal] load .dockerignore                      <span class="cm">what to leave out</span>
+ =&gt; [1/1] FROM docker.io/library/alpine                 <span class="cm">fetch the base</span>
+ =&gt; exporting to image                                  <span class="cm">save the result</span>
+ =&gt; =&gt; naming to docker.io/library/<span class="ok">demo1</span></pre>
+    <div class="punch">One line of output per instruction in your file.</div>''',
+ '''<b>Read it top to bottom with them &mdash; it is a receipt, not noise</b>People scroll past this output for years without realising <b>it is a numbered list of exactly what they asked for.</b><br><br><em>"Every arrow is one step. It read your file, checked what to ignore, fetched alpine, and saved the result under the name you gave it."</em><br><br><b>Point at the last line:</b> that name is what <code>docker run demo1</code> looks for. <b>Point at <code>2.1s</code>:</b> remember that number, because the next build of the same thing is faster and the slide after next says why.''')
+
+sl('6','Build it again',T6,
+ 'The second time takes no time at all.',
+ '''    <pre class="tight"><span class="pr">$</span> docker build -t demo1 .
+
+<span class="cm">[+] Building 0.1s (5/5) FINISHED</span>
+ =&gt; [1/1] FROM docker.io/library/alpine    <span class="ok">CACHED</span>
+ =&gt; exporting to image</pre>
+    <div class="punch"><span class="ok">CACHED</span>. It did not do the work again, because nothing changed.</div>''',
+ '''<b>Run it twice, live. This is the fastest way to teach caching.</b>2.1 seconds became 0.1. <b>The word <code>CACHED</code> appeared.</b><br><br><em>"Docker keeps the result of every step. If a step's inputs have not changed, it reuses the answer instead of redoing the work."</em><br><br><b>That one behaviour is why the order of lines in a Dockerfile matters</b>, which is the slide after the agent's own file. Plant it here and collect it there.''')
+
 sl('6','Toy two &middot; put your own file in',T6,
  'Now the image contains something you wrote.',
  '''    <pre class="mini"><span class="pr">$</span> mkdir ~/demo2 && cd ~/demo2
@@ -1206,10 +1302,45 @@ sl('6','What <code>-p</code> does',T6,
     </div>''',
  '''<b>A container is sealed by default — this is you opening one door</b>Nothing outside can reach in unless you say so.<br><br><b>The order matters and people flip it.</b> Say it as a sentence every time: <em>"outside number, then inside number."</em><br><br>Their agent uses <code>-p 7000:7000</code> — same on both sides, convenient, but it hides the rule. <b>That is exactly why we teach it here, where the numbers differ.</b>''')
 
-sl('6','Now your own agent',T6,
- 'The same four ideas, on your service.',
- '''    <div class="build" style="font-size:15.5px"><div class="l2 new"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2 new"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 new"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 new"><span class="k">RUN</span> <span class="v">pip install -r requirements.txt</span></div><div class="l2 new"><span class="k">COPY</span> <span class="v">app/ app/</span></div><div class="l2 new"><span class="k">CMD</span> <span class="v">["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7000"]</span></div></div>''',
- '''<b>Only two things here are new, so name just those</b>1. <b>The requirements are copied and installed before the code.</b> That order is deliberate, and the next slide says why.<br>2. <b><code>--host 0.0.0.0</code></b> — inside a container, "only listen to myself" means nothing gets in. This says "listen to anything that reaches me".<br><br>Everything else they saw on the toys.''')
+sl('6','Line 1 &middot; what to start from',T6,
+ 'Start from a computer that already has Python.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2 new"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2 ghost"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 ghost"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>They met FROM on both toys, so this is a callback not a lesson</b><em>"Same first line as demo2. Somebody else built an image with Python in it, published it, and we build on top."</em><br><br><b>Why <code>slim</code>:</b> a smaller image downloads faster every time a machine starts one, and carries fewer extra packages that could turn out to have a security hole. <b>Two reasons, both practical.</b>''')
+
+sl('6','Line 2 &middot; where to work',T6,
+ 'Work in a folder called <code>/app</code>, inside the image.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2 new"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 ghost"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>The word "inside" is the whole slide</b><code>/app</code> does not exist on their laptop. <b>It is a folder in the image being built.</b><br><br><em>"From here on, every path in this file is a path inside the box."</em> That sentence prevents a specific confusion that costs people twenty minutes.''')
+
+sl('6','Line 3 &middot; the shopping list first',T6,
+ 'Copy in <b>only</b> the list of libraries.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 new"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 ghost"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>Ask why we copy one file instead of everything</b>Let them guess. Somebody usually says "so it's faster" — close enough.<br><br><b>The real answer comes in two slides.</b> For now: <em>"We are about to do the slow step, and we want it to be skippable."</em>''')
+
+sl('6','Line 4 &middot; the slow step',T6,
+ 'Install them. <b>This is the part that takes minutes.</b>',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 new"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>Name what is actually happening</b><em>"This reaches out to the internet and downloads every library the service needs. First time, that is a few minutes."</em><br><br><b><code>--no-cache-dir</code></b> — pip normally keeps a copy of everything it downloads, in case you install it again. Inside an image that copy is <b>never used again</b> and just makes the file bigger. So we tell it not to bother.''')
+
+sl('6','Line 5 &middot; now the code',T6,
+ '<b>Now</b> copy everything else in.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 new"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>This is the payoff for line 3, and the next slide draws it</b>The code comes <b>last</b>, deliberately.<br><br><em>"Your requirements barely ever change. Your code changes every few minutes. Guess which order makes rebuilds fast."</em><br><br><b>And this is the line <code>.dockerignore</code> protects you from</b> — <code>COPY . .</code> means <em>everything</em>, including the key, unless you say otherwise. Two slides away.''')
+
+sl('6','Line 6 &middot; a setting with a default',T6,
+ 'Tell the image which door number to use.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 new"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>ENV sets a setting that lives inside the image</b>Same idea as their <code>.env</code> file, except this one has a sensible default baked in.<br><br><b>Why a setting and not just the number 7000:</b> when they deploy next week, <b>the platform decides the port and tells the service through exactly this.</b> Hardcode it and you have a service that works on your laptop and fails on deploy. <em>"This one line is next week's problem, solved today."</em>''')
+
+sl('6','Line 7 &middot; the sign on the door',T6,
+ 'Say out loud which port this image listens on.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 new"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>Be honest: this line does not actually open anything</b><code>EXPOSE</code> is <b>documentation.</b> It tells anybody reading the file — and some tools — which port matters. <b><code>-p</code> is what actually opens it</b>, and that is a run-time decision, not a build-time one.<br><br><em>"Think of it as a label on the box saying which side is the front."</em> If somebody asks why bother: because six months later, you will not remember.''')
+
+sl('6','Line 8 &middot; what to run',T6,
+ 'Start the service when the container starts.',
+ '''    <div class="build" style="font-size:16.5px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 new"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>''',
+ '''<b>Three details in one line, and all three matter</b><b><code>--host 0.0.0.0</code></b> — the default means "only accept connections from inside this container", so <b>nothing from outside could ever reach it.</b> This says "accept anything that arrives".<br><br><b><code>${PORT}</code></b> — use the setting from line 6, not a hardcoded number.<br><br><b><code>exec</code></b> — makes uvicorn <em>the</em> program in the container rather than a program started by a shell. <b>Without it, "please shut down" reaches the shell, which ignores it</b>, and the platform waits then kills you — a slow, ugly restart every single time.''')
 
 sl('6','Why that order matters',T6,
  'Docker remembers each step.',
@@ -1258,12 +1389,16 @@ tale('6','And now the bit that matters','2:50 &ndash; 3:50',
 
 sl('6','Step one &middot; make it yours',T6,
  'Add a door nobody else has.',
- '''    <pre class="tight"><span class="cm"># in app/main.py, add your own endpoint:</span>
+ '''    <pre class="tight"><span class="cm"># app/main.py &mdash; add these four lines</span>
+<span class="hl">from app.orders import all_ids</span>
+
 <span class="hl">@app.get("/orders")</span>
 <span class="hl">def orders():</span>
-    <span class="hl">return {"orders": list_all_orders()}</span></pre>
-    <div class="punch">Now your image does something your neighbour's does not.</div>''',
- '''<b>Small change, and it makes the swap meaningful</b>If everybody's image were identical, running a neighbour's would prove nothing. <b>One extra door and the difference is visible.</b><br><br><b>Let them pick their own</b> if they want — anything that returns something. Encourage it; five minutes of ownership pays for itself.''')
+    <span class="hl">return {"order_ids": all_ids()}</span></pre>
+    <pre class="mini"><span class="pr">$</span> curl -s localhost:7000/orders | jq
+{ "order_ids": [<span class="ok">"ORD-1001"</span>, <span class="ok">"ORD-1002"</span>,
+                <span class="ok">"ORD-1043"</span>, <span class="ok">"ORD-1077"</span>] }</pre>''',
+ '''<b>Four lines, and it uses the same pattern as <code>/health</code></b>A label, a function, a return. <b>They have written this shape twice already today.</b><br><br><code>all_ids()</code> is already in <code>app/orders.py</code> &mdash; it returns the four order ids. <em>"You are not writing new logic. You are opening a new door onto something that already exists."</em><br><br><b>Restart the service</b> (Ctrl+C in window 1, then <code>make run</code>) and curl it. <b>Then rebuild the image</b>, because <code>COPY</code> took a copy &mdash; the running container still has the old code.<br><br><b>Let them pick their own</b> if they want. Anything that returns something. Five minutes of ownership pays for itself &mdash; and it makes the swap in two slides actually mean something.''')
 
 sl('6','Step two &middot; send it up',T6,
  'Three commands, and it is on the internet.',
