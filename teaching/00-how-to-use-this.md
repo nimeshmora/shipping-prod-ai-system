@@ -308,9 +308,9 @@ yet — in a side panel the room never sees.
    1:17   22   The terminal                  a real lesson: 9 commands
    1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   15   What a web service is         the shop story, then the words
-   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
-   2:36   38   Build the web service         3 endpoints, line by line, tested
+   2:03   13   What a web service is         the shop story, then the words
+   2:16   17   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   41   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
    ────────────
@@ -682,6 +682,61 @@ unchanged against both shapes of `run_turn` (this branch returns
 > machine and nowhere else. Weeks 7 and 8 list four tools, not three, because
 > `fetch_url` is added there for the attack exercise. That is correct, and it
 > does not affect Week 1.
+
+### Each idea now arrives where it is used
+
+The deck had a **come-and-go problem** in the run-up to the build. Three things
+were taught in the web-service section, then thirteen slides of addresses,
+zooms and messages intervened, and then the build re-introduced the same three
+things. Students met each idea twice, twenty minutes apart, and had to hold it
+in the gap.
+
+| Idea | Was taught | Now taught |
+|---|---|---|
+| service / API / endpoint | 2:09, before addresses | **2:33, one slide before the first line of code** |
+| the three endpoints, drawn | 2:10 | **2:34, as the build plan** |
+| FastAPI | 2:14 | **2:34, beside uvicorn, which it works with** |
+| stateless requests, and the session id | 2:31, abstract | **2:47, immediately before `/chat` needs one** |
+
+Nothing was cut. Each piece moved to the slide before the one that uses it, so
+the layering is: **words → tools → plan → open the file → type it → test it.**
+
+```
+   2:03  the shop story, the wrong ways, the definition     the WHY
+   2:16  addresses, six zooms, request and reply            the HOW it travels
+   2:33  service/API/endpoint, uvicorn+FastAPI, the plan    the vocabulary
+   2:36  line 1, line 2, /health ... test it                the TYPING
+   2:47  stateless -> session id -> /chat ... test it       one problem, one fix
+   2:58  /chat/stream ... test it
+```
+
+> **INSTRUCTOR** · The two bridges that carry this are in the notes, and they
+> are worth saying close to verbatim:
+>
+> **Into addresses (2:16):** *"So we need a service that waits to be asked. But
+> asked at WHAT? Something has to have an address first."*
+>
+> **Into the build (2:33):** *"You now know the address, the message, and the
+> number that comes back. That is everything a caller needs. So let us build
+> the thing that answers."*
+
+### The zoom slides were unreadable, and it was a real bug
+
+The six zoom levels nest **inside** one another, and each finished level had
+`opacity:.6`. Opacity compounds through nesting, so:
+
+```
+   level 1   100%      level 4    22%     <- "a program was waiting on that number"
+   level 2    60%      level 5    13%
+   level 3    36%      level 6     8%
+```
+
+By level 4 the slide was at 22% and by level 6 at 8% — dark and unreadable on a
+projector, exactly as reported. **Fixed by setting the colours directly instead
+of using opacity**, with `>` child selectors so a level never inherits its
+parent's dimming. Verified by reading the computed style of all six levels in a
+headless browser: **every level now renders at opacity 1.00**, and the current
+level is full-strength white at any depth.
 
 ### The key story had a contradiction, and it is fixed
 

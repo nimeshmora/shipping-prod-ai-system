@@ -34,9 +34,9 @@ building with them.
    1:17   22   The terminal                  a real lesson: 9 commands
    1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   15   What a web service is         the shop story, then the words
-   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
-   2:36   38   Build the web service         3 endpoints, line by line, tested
+   2:03   13   What a web service is         the shop story, then the words
+   2:16   17   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   41   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
    ────────────
@@ -1443,7 +1443,17 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (2:03 – 2:36)
+## 7–8 · What a web service is, then addresses and messages (2:03 – 2:33)
+
+> **INSTRUCTOR** · **The order here was reflowed, and the reason matters.**
+> Service/API/endpoint, FastAPI, and the session id used to be taught in this
+> block. They are now taught **at the top of the build**, one slide before the
+> code that uses each of them — so nothing has to be remembered across a
+> twenty-minute gap.
+>
+> What stays here is only what a caller needs to know: **why** a web service,
+> **where** it lives (an address), and **what** a message looks like. Then the
+> build supplies its own vocabulary as it goes.
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -2047,7 +2057,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:36 – 3:14)
+## 9 · Build the web service (2:33 – 3:14)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,

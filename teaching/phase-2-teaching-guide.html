@@ -798,9 +798,9 @@ yet — in a side panel the room never sees.</p>
    1:17   22   The terminal                  a real lesson: 9 commands
    1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   15   What a web service is         the shop story, then the words
-   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
-   2:36   38   Build the web service         3 endpoints, line by line, tested
+   2:03   13   What a web service is         the shop story, then the words
+   2:16   17   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   41   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
    ────────────
@@ -1329,6 +1329,74 @@ machine and nowhere else. Weeks 7 and 8 list four tools, not three, because
 <code>fetch_url</code> is added there for the attack exercise. That is correct, and it
 does not affect Week 1.</p>
 </blockquote>
+<h3>Each idea now arrives where it is used</h3>
+<p>The deck had a <strong>come-and-go problem</strong> in the run-up to the build. Three things
+were taught in the web-service section, then thirteen slides of addresses,
+zooms and messages intervened, and then the build re-introduced the same three
+things. Students met each idea twice, twenty minutes apart, and had to hold it
+in the gap.</p>
+<table>
+<thead>
+<tr>
+<th>Idea</th>
+<th>Was taught</th>
+<th>Now taught</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>service / API / endpoint</td>
+<td>2:09, before addresses</td>
+<td><strong>2:33, one slide before the first line of code</strong></td>
+</tr>
+<tr>
+<td>the three endpoints, drawn</td>
+<td>2:10</td>
+<td><strong>2:34, as the build plan</strong></td>
+</tr>
+<tr>
+<td>FastAPI</td>
+<td>2:14</td>
+<td><strong>2:34, beside uvicorn, which it works with</strong></td>
+</tr>
+<tr>
+<td>stateless requests, and the session id</td>
+<td>2:31, abstract</td>
+<td><strong>2:47, immediately before <code>/chat</code> needs one</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Nothing was cut. Each piece moved to the slide before the one that uses it, so
+the layering is: <strong>words → tools → plan → open the file → type it → test it.</strong></p>
+<pre><code>   2:03  the shop story, the wrong ways, the definition     the WHY
+   2:16  addresses, six zooms, request and reply            the HOW it travels
+   2:33  service/API/endpoint, uvicorn+FastAPI, the plan    the vocabulary
+   2:36  line 1, line 2, /health ... test it                the TYPING
+   2:47  stateless -&gt; session id -&gt; /chat ... test it       one problem, one fix
+   2:58  /chat/stream ... test it
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The two bridges that carry this are in the notes, and they
+are worth saying close to verbatim:</p>
+<p><strong>Into addresses (2:16):</strong> <em>"So we need a service that waits to be asked. But
+asked at WHAT? Something has to have an address first."</em></p>
+<p><strong>Into the build (2:33):</strong> <em>"You now know the address, the message, and the
+number that comes back. That is everything a caller needs. So let us build
+the thing that answers."</em></p>
+</blockquote>
+<h3>The zoom slides were unreadable, and it was a real bug</h3>
+<p>The six zoom levels nest <strong>inside</strong> one another, and each finished level had
+<code>opacity:.6</code>. Opacity compounds through nesting, so:</p>
+<pre><code>   level 1   100%      level 4    22%     &lt;- &quot;a program was waiting on that number&quot;
+   level 2    60%      level 5    13%
+   level 3    36%      level 6     8%
+</code></pre>
+<p>By level 4 the slide was at 22% and by level 6 at 8% — dark and unreadable on a
+projector, exactly as reported. <strong>Fixed by setting the colours directly instead
+of using opacity</strong>, with <code>&gt;</code> child selectors so a level never inherits its
+parent's dimming. Verified by reading the computed style of all six levels in a
+headless browser: <strong>every level now renders at opacity 1.00</strong>, and the current
+level is full-strength white at any depth.</p>
 <h3>The key story had a contradiction, and it is fixed</h3>
 <p>At 0:14 the deck says the demo needs <strong>no key</strong> — true and reassuring, because
 nobody has one yet. But the slide at 1:02, <em>after</em> they have spent five minutes
@@ -2032,9 +2100,9 @@ building with them.</p>
    1:17   22   The terminal                  a real lesson: 9 commands
    1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   15   What a web service is         the shop story, then the words
-   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
-   2:36   38   Build the web service         3 endpoints, line by line, tested
+   2:03   13   What a web service is         the shop story, then the words
+   2:16   17   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   41   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
    ────────────
@@ -3350,8 +3418,16 @@ runs in one place   only where Python is already set up just right
 <p><strong>Those four gaps are today.</strong> None of them are AI problems. All of them are why
 agents die in notebooks.</p>
 <hr />
-<h2>7–8 · What a web service is, then addresses and messages (2:03 – 2:36)</h2>
+<h2>7–8 · What a web service is, then addresses and messages (2:03 – 2:33)</h2>
 <blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>The order here was reflowed, and the reason matters.</strong>
+Service/API/endpoint, FastAPI, and the session id used to be taught in this
+block. They are now taught <strong>at the top of the build</strong>, one slide before the
+code that uses each of them — so nothing has to be remembered across a
+twenty-minute gap.</p>
+<p>What stays here is only what a caller needs to know: <strong>why</strong> a web service,
+<strong>where</strong> it lives (an address), and <strong>what</strong> a message looks like. Then the
+build supplies its own vocabulary as it goes.</p>
 <p><strong>INSTRUCTOR</strong> · Five ideas, and they are deliberately arranged as <strong>one
 story rather than five topics</strong>. Each answers a question the previous one
 raises:</p>
@@ -3932,7 +4008,7 @@ Week 2.</p>
 then hold it for a week."</em></p>
 </blockquote>
 <hr />
-<h2>9 · Build the web service (2:36 – 3:14)</h2>
+<h2>9 · Build the web service (2:33 – 3:14)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Back on keyboards."</em> Now walk the room continuously. This
 is the beat where you find out whether the tools section did its job — and if it did,
