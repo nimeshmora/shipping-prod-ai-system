@@ -25,7 +25,7 @@ from app.guardrails import Budget, GuardrailError
 from app.orders import lookup_order
 from app import otel
 
-MODEL = os.environ.get("MODEL", "claude-sonnet-5")
+MODEL = os.environ.get("MODEL", "anthropic/claude-sonnet-4.5")
 
 # How long to wait for the model before giving up on this attempt.
 # Without this, one hung connection holds a worker open until the platform's
@@ -150,14 +150,14 @@ class AgentError(Exception):
 
 def _client():
     from openai import OpenAI
-    key = os.environ.get("KODEKEY")
+    key = os.environ.get("OPENROUTER_API_KEY")
     if not key:
         raise AgentError(
-            "KODEKEY is not set. Copy .env.example to .env, paste your key, "
+            "OPENROUTER_API_KEY is not set. Copy .env.example to .env, paste your key, "
             "then run: set -a && source .env && set +a", status=500)
     return OpenAI(
         api_key=key,
-        base_url=os.environ.get("BASE_URL", "https://api.ai.kodekloud.com/v1"),
+        base_url=os.environ.get("BASE_URL", "https://openrouter.ai/api/v1"),
     )
 
 
