@@ -65,16 +65,17 @@ they have ever put something online; this answers *"so where is all this
 going?"* before any technical content starts.
 
 ```
-   TODAY          TODAY             TODAY          WEEK 2         WEEK 3          WEEKS 4-8
-   Your agent  →  + a web service → + a container → + a real   →  + automatic  →  + the hard
-   a loop that    anything can      it runs         address       deploy          parts
-   can use tools  ask it            anywhere        on Cloud      CI/CD - push    limits ·
-                                                    Run           and it ships    monitoring ·
-                                                                                  attacks ·
-                                                                                  rollback
+  TODAY        TODAY         TODAY       WEEK 2      WEEK 3     WEEK 4     WEEK 5     WK 6-8
+  Your      -> + a web    -> + a      -> + a real -> + auto- -> + spend -> + moni- -> + sur-
+  agent        service       container   address     deploy     limits     toring     vival
+  a loop       anything      it runs     live on     CI/CD,     it cannot  is it      debug,
+  that uses    can ask it    anywhere    Cloud Run   and a      bankrupt   healthy    attack,
+  tools                                              locked     you        right      roll
+                                                     door                  now?       back
 ```
 
-The first three boxes are green — **today's work.** The rest are dashed.
+The first three boxes are green — **today's work.** The other five name a week
+each, so nobody has to wonder what "the hard parts" means.
 
 > **INSTRUCTOR** · Walk it left to right, **one sentence per box, ten seconds
 > each.** Do not explain any of them properly; the point is the shape.
@@ -83,10 +84,17 @@ The first three boxes are green — **today's work.** The rest are dashed.
 > Then every week after adds one more layer, and the agent in the middle never
 > changes."*
 >
-> **Then be honest about what the dashed boxes are:** *"None of that is about
-> AI. It is a real address, automatic deployment, spending limits, knowing
-> whether it is healthy at 3am, and somebody trying to break it. That is what
-> shipping actually means."*
+> **Three worth naming as you pass them:**
+>
+> - **Week 4, spend limits** — *"every question costs a fraction of a cent.
+>   Anyone who finds your address can ask it a million times."*
+> - **Week 5, monitoring** — *"your service can say it is healthy while
+>   answering nobody. This is how you find out which."*
+> - **Weeks 6 to 8** — *"find a bug from the logs alone, attack your own agent,
+>   and watch a bad change get refused before it ships."*
+>
+> **Then the honest line:** *"Not one of the dashed boxes is about AI. That is
+> what shipping actually means."*
 >
 > **And the reassurance a non-technical room needs:** *"You do not need to
 > understand any of the dashed boxes today. You just need to know they are
