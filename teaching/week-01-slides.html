@@ -1184,7 +1184,7 @@ Note: signature required on delivery</pre>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
   <div class="eyebrow">The instructions · what it always gets<span class="t">0:14 &ndash; 0:41</span></div>
-  <h2>Rules sent with every single question.</h2>
+  <h2>The real agent re-sends these with every question.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># app/agent.py — the standing rules</span>
 
@@ -1197,9 +1197,9 @@ Note: signature required on delivery</pre>
 - <span class="ok">Never promise a refund</span>, cancellation or credit.
   Say a human will confirm.
 - Be brief and friendly.</pre>
-    <div class="punch">The model remembers nothing. So these go again with every question.</div>
+    <div class="punch">The model remembers nothing between questions — so the rules go again, every time.</div>
   </div>
-  <div class="say"><b>One point only: the rules are re-sent every time</b>The model keeps no memory between questions. Every question carries the whole instruction sheet with it.<br><br><b>Worth naming:</b> <em>"Never promise a refund" is not politeness — that is a company deciding an AI cannot commit money on its behalf.</em><br><br>The next slide has the one rule that is a defence against an attack.</div>
+  <div class="say"><b>One point only: the model has no memory, so the rules are re-sent</b>A fresh question means a model that knows nothing — not your rules, not the last answer. So <code>app/agent.py</code> attaches this whole sheet to every single call.<br><br><b>Where it happens, if anybody asks:</b> inside <code>call_model</code>, one line. Nothing in the loop does it.<br><br><b>Worth naming:</b> <em>"Never promise a refund" is not politeness — that is a company deciding an AI cannot commit money on its behalf.</em><br><br><b>Careful with the wording here.</b> This is what the <b>real</b> agent does. The stand-in you are about to run never reaches a model at all, so it sends no rules — and it prints that fact. <b>Six slides from now you will point at that line.</b></div>
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
@@ -1309,12 +1309,13 @@ while True:
   <div class="body">
     <pre class="tight">  WHAT GETS SENT, every single question:
 
-     1. the standing rules       <span class="warn">105 words</span>
+     1. the standing rules      105 words, <span class="warn">not sent - no model
+                                to send them to</span>
      2. the conversation so far  <span class="cm">empty - this is question one</span>
      3. the list of tools        <span class="ok">3 of them</span></pre>
-    <div class="punch">Item 2 is empty now. It grows all day, and all of it goes every time.</div>
+    <div class="punch">Read line 1 again. The stand-in has no model, so there are no rules to send.</div>
   </div>
-  <div class="say"><b>This is the proof of the claim you made two slides ago</b>You said the rules go with every question. <b>Here it is, printed by the command itself.</b> Point at line 1.<br><br><b>Then point at line 2 and plant Week 4:</b> <em>"That one is empty right now. Watch what it costs when it is not."</em><br><br><b>The honest caveat:</b> in stand-in mode the rules are not really sent — there is no model to send them to. The command says so itself. With <code>--real</code>, that line changes.</div>
+  <div class="say"><b>Be straight about this line — the command is, so you should be</b>The slide two back said the rules go with every question. <b>That is true of the real agent.</b> It is not true of what you just ran, and the output says so.<br><br><b>Say it plainly:</b> <em>"The stand-in never contacts a model. There is nothing to send the rules TO. When we run the real one in a moment, this line changes to 'sent with the question'."</em><br><br><b>Why this matters more than it looks:</b> if you gloss over it, somebody will run <code>--real</code>, see the line change, and quietly stop trusting the slides. <b>Naming the gap costs you fifteen seconds and buys the whole afternoon.</b><br><br><b>Then point at line 2 and plant Week 4:</b> <em>"That one is empty right now. Watch what it costs when it is not."</em></div>
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
@@ -3667,7 +3668,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 
 <section class="slide" data-sec="8" data-label="Build the service">
   <div class="eyebrow">Test endpoint 2 · now use the ticket<span class="t">2:33 &ndash; 3:14</span></div>
-  <h2>Send the session id back and it remembers.</h2>
+  <h2>Send the session id back, and the conversation continues.</h2>
   <div class="body">
     <pre class="mini"><span class="pr">$</span> curl -s -X POST http://localhost:7000/chat \
     -H 'Content-Type: application/json' \
@@ -3676,7 +3677,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 
 {"reply":<span class="ok">"That order was $340.00."</span>, ...}</pre>
     <div class="card good">
-      <p><b>It remembered.</b> The second question never mentioned the order — the ticket found the history, and the agent read it.</p>
+      <p><b>Nothing in the agent remembered this.</b> The second question never mentioned the order — <b>your service</b> looked the history up by its id and re-sent all of it.</p>
     </div>
   </div>
   <div class="say"><b>Ask the room what should happen before they run it</b>Then run it. <b>That is the session id working</b> — three lines of code.<br><br><b>The honest limit, which sets up Week 2:</b> that history lives in the process's memory. <em>"Restart the service and it forgets everything. That is next week's problem."</em><br><br><b>Then set up endpoint 3 with a question:</b> <em>"It works. But how long did that take — and what were you looking at while you waited?"</em></div>

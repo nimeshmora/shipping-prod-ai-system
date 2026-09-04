@@ -738,6 +738,47 @@ parent's dimming. Verified by reading the computed style of all six levels in a
 headless browser: **every level now renders at opacity 1.00**, and the current
 level is full-strength white at any depth.
 
+### The rules slide claimed something the demo does not do
+
+Two slides said the standing rules go with every question. **True of the real
+agent, false of the demo** — and the slide showed a trimmed version of the
+command's own output, dropping the clause that admitted it.
+
+```
+   the slide showed      1. the standing rules       105 words
+   the command prints    1. the standing rules       105 words, not sent -
+                                                     no model to send them to
+```
+
+`SYSTEM_PROMPT` is attached in exactly one place: inside `call_model`. The demo
+passes its own `model_fn`, so `call_model` is **never reached** — verified by
+spying on it during a run, which recorded **0 calls**. No model, so no rules.
+
+Both slides now match reality: the instructions slide says *"the real agent
+re-sends these with every question"*, and the payload slide prints the honest
+line in full and points at it.
+
+> **INSTRUCTOR** · Spend fifteen seconds naming the gap. If you gloss over it,
+> somebody runs `--real`, watches that line change to *"sent with the
+> question"*, and quietly stops trusting the slides for the rest of the day.
+
+### Three things, and only one of them remembers
+
+Worth keeping straight, because a room mixes these up immediately:
+
+| | Holds the conversation? |
+|---|---|
+| the **model** | never — every call starts blank |
+| the **agent** (`run_turn`) | no — history goes in, a longer history comes out |
+| your **service** (`app/memory.py`) | **yes** — the only thing that stores anything |
+
+So *"our agent remembers"* is wrong and is not said anywhere in the deck. The
+`/chat` test slide now reads **"nothing in the agent remembered this — your
+service looked the history up by its id and re-sent all of it."**
+
+That precision is what makes next week land: a redeploy replaces the process,
+the dict in `memory.py` goes with it, and the conversations are gone.
+
 ### The key story had a contradiction, and it is fixed
 
 At 0:14 the deck says the demo needs **no key** — true and reassuring, because

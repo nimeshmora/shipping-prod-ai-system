@@ -451,12 +451,26 @@ That block answers three things a room always wants to know:
 |---|---|
 | Which model is underneath? | `anthropic/claude-sonnet-4.5`, through the course gateway — and it is **a setting in `.env`**, not baked into the code. Week 6 swaps a second model in by changing it. |
 | Is a key used here? | **No.** Stand-in mode needs no key and no internet, which is why we run it first. |
-| Do the rules really go every time? | **Yes** — and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to, **and the line says so.** |
+| Do the rules really go every time? | **In the real agent, yes** — `call_model` attaches them to every single call. **In the stand-in, no**: it never reaches a model, so there is nothing to send them to — **and the printed line says exactly that.** |
 
 With `--real` the first line reads `MODE: the real model - anthropic/claude-sonnet-4.5`
 and item 1 reads *"sent with the question"*.
 
-> **INSTRUCTOR** · **The honesty matters here.** You said at the instructions
+> **INSTRUCTOR** · **Two words to keep straight all day, because the room will
+> mix them up.**
+>
+> | | Holds the conversation? |
+> |---|---|
+> | the **model** | never — every call starts blank |
+> | the **agent** (`run_turn`) | no — it *takes* a history in and hands a new one back |
+> | your **service** (`app/memory.py`) | **yes** — this is the only thing that stores anything |
+>
+> So "our agent remembers" is wrong, and it is worth not saying. The agent is a
+> function: history goes in, a longer history comes out. **The storing happens
+> in the web service they build after the break** — which is exactly why the
+> session id exists, and why next week's redeploy wipes it.
+>
+> **The honesty matters here.** You said at the instructions
 > slide that the rules go with every question. The stand-in does not send
 > them — so the command says so, rather than letting the slide quietly
 > contradict itself. If you have a key, **run `--real` once** and show item 1

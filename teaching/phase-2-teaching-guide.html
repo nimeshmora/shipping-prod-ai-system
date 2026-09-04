@@ -1397,6 +1397,54 @@ of using opacity</strong>, with <code>&gt;</code> child selectors so a level nev
 parent's dimming. Verified by reading the computed style of all six levels in a
 headless browser: <strong>every level now renders at opacity 1.00</strong>, and the current
 level is full-strength white at any depth.</p>
+<h3>The rules slide claimed something the demo does not do</h3>
+<p>Two slides said the standing rules go with every question. <strong>True of the real
+agent, false of the demo</strong> — and the slide showed a trimmed version of the
+command's own output, dropping the clause that admitted it.</p>
+<pre><code>   the slide showed      1. the standing rules       105 words
+   the command prints    1. the standing rules       105 words, not sent -
+                                                     no model to send them to
+</code></pre>
+<p><code>SYSTEM_PROMPT</code> is attached in exactly one place: inside <code>call_model</code>. The demo
+passes its own <code>model_fn</code>, so <code>call_model</code> is <strong>never reached</strong> — verified by
+spying on it during a run, which recorded <strong>0 calls</strong>. No model, so no rules.</p>
+<p>Both slides now match reality: the instructions slide says <em>"the real agent
+re-sends these with every question"</em>, and the payload slide prints the honest
+line in full and points at it.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Spend fifteen seconds naming the gap. If you gloss over it,
+somebody runs <code>--real</code>, watches that line change to <em>"sent with the
+question"</em>, and quietly stops trusting the slides for the rest of the day.</p>
+</blockquote>
+<h3>Three things, and only one of them remembers</h3>
+<p>Worth keeping straight, because a room mixes these up immediately:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Holds the conversation?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the <strong>model</strong></td>
+<td>never — every call starts blank</td>
+</tr>
+<tr>
+<td>the <strong>agent</strong> (<code>run_turn</code>)</td>
+<td>no — history goes in, a longer history comes out</td>
+</tr>
+<tr>
+<td>your <strong>service</strong> (<code>app/memory.py</code>)</td>
+<td><strong>yes</strong> — the only thing that stores anything</td>
+</tr>
+</tbody>
+</table>
+<p>So <em>"our agent remembers"</em> is wrong and is not said anywhere in the deck. The
+<code>/chat</code> test slide now reads <strong>"nothing in the agent remembered this — your
+service looked the history up by its id and re-sent all of it."</strong></p>
+<p>That precision is what makes next week land: a redeploy replaces the process,
+the dict in <code>memory.py</code> goes with it, and the conversations are gone.</p>
 <h3>The key story had a contradiction, and it is fixed</h3>
 <p>At 0:14 the deck says the demo needs <strong>no key</strong> — true and reassuring, because
 nobody has one yet. But the slide at 1:02, <em>after</em> they have spent five minutes
@@ -2494,14 +2542,42 @@ answered:</p>
 </tr>
 <tr>
 <td>Do the rules really go every time?</td>
-<td><strong>Yes</strong> — and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to, <strong>and the line says so.</strong></td>
+<td><strong>In the real agent, yes</strong> — <code>call_model</code> attaches them to every single call. <strong>In the stand-in, no</strong>: it never reaches a model, so there is nothing to send them to — <strong>and the printed line says exactly that.</strong></td>
 </tr>
 </tbody>
 </table>
 <p>With <code>--real</code> the first line reads <code>MODE: the real model - anthropic/claude-sonnet-4.5</code>
 and item 1 reads <em>"sent with the question"</em>.</p>
 <blockquote>
-<p><strong>INSTRUCTOR</strong> · <strong>The honesty matters here.</strong> You said at the instructions
+<p><strong>INSTRUCTOR</strong> · <strong>Two words to keep straight all day, because the room will
+mix them up.</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Holds the conversation?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the <strong>model</strong></td>
+<td>never — every call starts blank</td>
+</tr>
+<tr>
+<td>the <strong>agent</strong> (<code>run_turn</code>)</td>
+<td>no — it <em>takes</em> a history in and hands a new one back</td>
+</tr>
+<tr>
+<td>your <strong>service</strong> (<code>app/memory.py</code>)</td>
+<td><strong>yes</strong> — this is the only thing that stores anything</td>
+</tr>
+</tbody>
+</table>
+<p>So "our agent remembers" is wrong, and it is worth not saying. The agent is a
+function: history goes in, a longer history comes out. <strong>The storing happens
+in the web service they build after the break</strong> — which is exactly why the
+session id exists, and why next week's redeploy wipes it.</p>
+<p><strong>The honesty matters here.</strong> You said at the instructions
 slide that the rules go with every question. The stand-in does not send
 them — so the command says so, rather than letting the slide quietly
 contradict itself. If you have a key, <strong>run <code>--real</code> once</strong> and show item 1
