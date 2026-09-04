@@ -27,18 +27,18 @@ building with them.
 
 ```
    0:00   11   Three questions to the room   settle the room, and read it
-   0:11   29   Meet today's agent            described, then RUN step by step
-   0:40    8   The project                   a tour BEFORE they download it
-   0:48   18   Set it up, and prove it       .env, the key, then the demo
-   1:06   10   break
-   1:16   22   The terminal                  a real lesson: 9 commands
-   1:38   15   Sending messages              JSON and curl, on public services
-   1:53   10   break
-   2:03   16   What a web service is         the shop story, then the words
-   2:19   12   Addresses, then messages
-   2:31   38   Build the web service         3 endpoints, line by line, tested
-   3:09   34   Build the container           5 examples, then line by line
-   3:43   17   Prove it, and what breaks next
+   0:11   27   Meet today's agent            described, then RUN step by step
+   0:38    8   The project                   a tour BEFORE they download it
+   0:46   16   Set it up, and prove it       .env, the key, then the demo
+   1:02   10   break
+   1:12   21   The terminal                  a real lesson: 9 commands
+   1:33   15   Sending messages              JSON and curl, on public services
+   1:48   10   break
+   1:58   15   What a web service is         the shop story, then the words
+   2:13   20   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   39   Build the web service         3 endpoints, line by line, tested
+   3:12   32   Build the container           5 examples, then line by line
+   3:44   16   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 147 slides with a presenter note on 136 of them, and it carries material this
+is 168 slides with a presenter note on 157 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -217,7 +217,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:11 – 0:40)
+## 2 · Meet today's agent (0:11 – 0:38)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -303,7 +303,7 @@ goes and gets it.
 > A student who notices something odd in Week 1 and gets the answer in Week 7
 > remembers it permanently. Explaining it now spends that for nothing.
 
-#### 3 · The instructions it carries (4 min)
+#### 3 · The instructions it carries (3 min)
 
 The **system prompt** is the agent's standing orders, re-sent with every single
 turn because the model has no memory:
@@ -361,7 +361,7 @@ cost.
 > The model asks, and your code obeys. That inversion is what makes this an
 > agent rather than a chatbot with functions."*
 
-#### 5 · Watch it work, step by step (12 min)
+#### 5 · Watch it work, step by step (11 min)
 
 Describing the agent is not enough. **Run it**, on the projector, and let them
 watch the four steps happen one at a time.
@@ -496,7 +496,7 @@ it has three tools instead of thirty.
 > Do not volunteer it to a non-technical room. Keep it for the person who asks.
 
 
-## 3 · The project (0:40 – 0:48)
+## 3 · The project (0:38 – 0:46)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.
@@ -630,7 +630,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:48 – 1:06)
+## 4 · Set it up, and prove it (0:46 – 1:02)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -660,7 +660,7 @@ docker --version       # and the app must actually be running
 > traceback at import time that never mentions versions at all. A student can
 > lose twenty minutes to it.
 
-### What a settings file is, before we ask for a key (5 min)
+### What a settings file is, before we ask for a key (4 min)
 
 Telling a non-technical room to "put your key in `.env`" means nothing. Build
 it up first — three short ideas.
@@ -712,7 +712,7 @@ different port, and *nothing in the code changes*.
 > the settings instead of a file, and the container at 3:10 must not have the
 > key baked in.
 
-### Three steps (6 min)
+### Three steps (5 min)
 
 ```bash
 git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
@@ -740,7 +740,7 @@ cp .env.example .env
 git will never send it anywhere. It is also a hidden file — plain `ls` will not
 show it, which is the first reason they need `ls -la` in the terminal exercise.
 
-### Prove it, then run the demo yourself (5 min)
+### Prove it, then run the demo yourself (4 min)
 
 ```bash
 make check-week-00
@@ -779,7 +779,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:16 – 1:53)
+## 5–6 · The terminal, then sending messages (1:12 – 1:48)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -1306,7 +1306,7 @@ same method, the same header, the same body shape.
 > That single sentence is what stops FastAPI feeling like magic later.
 
 
-## Break (1:53 – 2:03)
+## Break (1:48 – 1:58)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1357,7 +1357,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (2:03 – 2:31)
+## 7–8 · What a web service is, then addresses and messages (1:58 – 2:33)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1384,7 +1384,7 @@ agents die in notebooks.
 > this"* out loud each time — it is the difference between five new facts and
 > five labels.
 
-### One picture for the whole session
+### One picture for the whole session (2 min)
 
 Draw this once, before anything else, and leave it up:
 
@@ -1427,7 +1427,7 @@ They are anything at all. That is the point of the next fifteen minutes.
 
 ---
 
-### 1 · What "deploying" means
+### 1 · What "deploying" means (3 min)
 
 Start with the ordinary version of the word, because they already know it.
 
@@ -1461,7 +1461,7 @@ about what goes wrong once that is true.
 
 ---
 
-### 2 · Why the agent has to become a web service
+### 2 · Why the agent has to become a web service (13 min)
 
 #### Start with the shop, not with HTTP
 
@@ -1671,7 +1671,7 @@ So they do not think it is magic. It is a **translator**, and it is small:
 
 ---
 
-### 3 · How one computer finds another
+### 3 · How one computer finds another (4 min)
 
 They just heard "a computer with an address". So: **what is an address, for a
 computer?**
@@ -1761,7 +1761,7 @@ it can receive calls from anyone."*
 
 ---
 
-### 4 · What a URL is
+### 4 · What a URL is (3 min)
 
 They now have a name that finds a computer. But a computer does many things, so
 the address needs one more part.
@@ -1818,7 +1818,42 @@ Ours will have four rooms by the end of the course:
 
 ---
 
-### 5 · What an HTTP request is
+### One request, traced from the internet inwards (7 min)
+
+Six slides that follow **one question** from a stranger down to the code,
+adding exactly one layer at a time. This is the best thing in the deck for a
+non-technical room — do not rush it.
+
+```
+   1  the internet   someone, somewhere, has your address and a question
+   2  one computer   the message arrives at the machine
+   3  a port         which of the running programs is it for?  (8080)
+   4  a program      uvicorn was waiting there; it takes it off the network
+   5  your code      FastAPI hands it to your function
+   6  the agent      run_turn(), and the answer travels back out
+```
+
+Each level nests inside the one above it, with an arrow and a caption for the
+hop. **The earlier layers stay on screen**, so by slide 6 the whole path is
+visible at once.
+
+> **INSTRUCTOR** · Ninety seconds a slide, and **do not skip ahead** — the
+> value is in the layers accumulating.
+>
+> **Slide 2 sets up slide 3 with a question:** *"It is at the right computer.
+> But this computer is also running a database and a dashboard. How does it
+> know which one?"* Pause; somebody will say "the port".
+>
+> **Slide 5 is the one to land:** *"Of the six layers on screen, this is the
+> only one you write."* Point above it, point below it.
+>
+> **On slide 6, trace it backwards with your finger** — answer, function,
+> FastAPI, uvicorn, network, stranger. *"Same path, in reverse."*
+>
+> **Then the hook:** *"Six layers. At 3:12 we put a box around all of them."*
+> The container section refers back to this picture rather than starting again.
+
+### 5 · What an HTTP request is (3 min)
 
 They can now find the room. **What do they say when they get there?**
 
@@ -1926,7 +1961,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:31 – 3:09)
+## 9 · Build the web service (2:33 – 3:12)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -2323,7 +2358,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:09 – 3:43)
+## 10 · Build the container (3:12 – 3:44)
 
 Ask: *"What would my colleague need to run your agent?"*
 
@@ -2627,7 +2662,7 @@ deliberately connecting one number on your machine to one number inside.
 > Say it as a sentence every time, because people flip it: **"outside number,
 > then inside number."**
 
-#### Now the real one — line by line (12 min)
+#### Now the real one — line by line (10 min)
 
 Their `Dockerfile` is the same four ideas plus three lines:
 
@@ -2713,7 +2748,7 @@ inside a box that could run anywhere.**
 
 ---
 
-## 11 · Prove it, and what breaks next (3:43 – 4:00)
+## 11 · Prove it, and what breaks next (3:44 – 4:00)
 
 ```bash
 make check-week-01

@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 147-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 168-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,26 +786,28 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and thirty-six of the slides carry
+<p><strong>Press <code>S</code> before you start.</strong> A hundred and fifty-seven of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
 <pre><code>   0:00   11   Three questions to the room   settle the room, and read it
-   0:11   29   Meet today's agent            described, then RUN step by step
-   0:40    8   The project                   a tour BEFORE they download it
-   0:48   18   Set it up, and prove it       .env, the key, then the demo
-   1:06   10   break
-   1:16   22   The terminal                  a real lesson: 9 commands
-   1:38   15   Sending messages              JSON and curl, on public services
-   1:53   10   break
-   2:03   16   What a web service is         the shop story, then the words
-   2:19   12   Addresses, then messages
-   2:31   38   Build the web service         3 endpoints, line by line, tested
-   3:09   34   Build the container           5 examples, then line by line
-   3:43   17   Prove it, and what breaks next
+   0:11   27   Meet today's agent            described, then RUN step by step
+   0:38    8   The project                   a tour BEFORE they download it
+   0:46   16   Set it up, and prove it       .env, the key, then the demo
+   1:02   10   break
+   1:12   21   The terminal                  a real lesson: 9 commands
+   1:33   15   Sending messages              JSON and curl, on public services
+   1:48   10   break
+   1:58   15   What a web service is         the shop story, then the words
+   2:13   20   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   39   Build the web service         3 endpoints, line by line, tested
+   3:12   32   Build the container           5 examples, then line by line
+   3:44   16   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
+<p><strong>168 slides over 220 minutes of content is about 75 seconds each.</strong> That is
+the intended pace: one idea, one sentence, take a question, advance.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Three things about this order, all deliberate.</p>
 <p><strong>It opens with questions, not a plan.</strong> Three of them, and they do different
@@ -1099,6 +1101,76 @@ last line.</p>
 run against the real agent: <code>/health</code> returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.</p>
+<h3>One idea per slide</h3>
+<p>The deck was audited for crowding and rebuilt. <strong>Twelve slides carried five or
+more separate blocks</strong> — a definition and an example and a caveat and a
+punchline, all at once — which makes it hard to know where to start and where
+to stop. Each was split.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Before</th>
+<th>Now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>slides</td>
+<td>147</td>
+<td><strong>168</strong></td>
+</tr>
+<tr>
+<td>median blocks per slide</td>
+<td>2</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>slides with 5+ blocks</td>
+<td><strong>12</strong></td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>median on-screen words</td>
+<td>96</td>
+<td><strong>88</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The rule applied: <strong>at most one code block or one figure, plus at most two
+supporting cards.</strong> If a slide had a definition <em>and</em> an example <em>and</em> a
+caveat, it became two slides.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This is what makes the deck teachable rather than just
+correct. <strong>Each slide is now one thing you can open, say, and close</strong> — then
+advance and the next one builds on it.</p>
+<p>At ~75 seconds a slide you will feel like you are advancing quickly. That is
+right. <strong>The notes are cues, not scripts</strong> — do not read them aloud.</p>
+</blockquote>
+<h3>A request, traced from the internet inwards</h3>
+<p>Six slides at 2:13 follow <strong>one question</strong> from a stranger down to the code,
+<strong>adding exactly one layer per slide</strong> and keeping the earlier ones on screen:</p>
+<pre><code>   1  the internet   someone, somewhere, has your address and a question
+   2  one computer   the message arrives at the machine
+   3  a port         which of the running programs is it for?  (8080)
+   4  a program      uvicorn was waiting there; it takes it off the network
+   5  your code      FastAPI hands it to your function - the only layer
+                     they write
+   6  the agent      run_turn(), and the answer travels back out
+</code></pre>
+<p>Each slide nests inside the previous one, with an arrow and a caption for the
+hop, plus a breadcrumb strip showing how deep you are.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · This sequence exists for the non-technical half of the room,
+and it is the single best thing in the deck for them. <strong>Ninety seconds a
+slide, and do not skip ahead</strong> — the value is in the layers accumulating.</p>
+<p><strong>Slide 5 is the one to land:</strong> <em>"Of the six layers on screen, this is the
+only one you write."</em> Point above it, point below it.</p>
+<p><strong>On slide 6, trace it backwards with your finger</strong> — answer, function,
+FastAPI, uvicorn, network, stranger. <em>"Same path, in reverse."</em></p>
+<p>Then the hook: <em>"Six layers. At 3:12 we put a box around all of them."</em> The
+container section refers back to this picture rather than starting fresh.</p>
+</blockquote>
 <h3>The demo states its model, its key use, and its payload</h3>
 <p>Three questions the demo was silent about, all now answered on screen. The
 command prints them <strong>before</strong> step 1, so nobody has to guess:</p>
@@ -1689,18 +1761,18 @@ shape the other weeks use — it is the only session that can assume nothing at
 all, so it spends its first two hours handing over tools and its last two
 building with them.</p>
 <pre><code>   0:00   11   Three questions to the room   settle the room, and read it
-   0:11   29   Meet today's agent            described, then RUN step by step
-   0:40    8   The project                   a tour BEFORE they download it
-   0:48   18   Set it up, and prove it       .env, the key, then the demo
-   1:06   10   break
-   1:16   22   The terminal                  a real lesson: 9 commands
-   1:38   15   Sending messages              JSON and curl, on public services
-   1:53   10   break
-   2:03   16   What a web service is         the shop story, then the words
-   2:19   12   Addresses, then messages
-   2:31   38   Build the web service         3 endpoints, line by line, tested
-   3:09   34   Build the container           5 examples, then line by line
-   3:43   17   Prove it, and what breaks next
+   0:11   27   Meet today's agent            described, then RUN step by step
+   0:38    8   The project                   a tour BEFORE they download it
+   0:46   16   Set it up, and prove it       .env, the key, then the demo
+   1:02   10   break
+   1:12   21   The terminal                  a real lesson: 9 commands
+   1:33   15   Sending messages              JSON and curl, on public services
+   1:48   10   break
+   1:58   15   What a web service is         the shop story, then the words
+   2:13   20   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   39   Build the web service         3 endpoints, line by line, tested
+   3:12   32   Build the container           5 examples, then line by line
+   3:44   16   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
@@ -1718,7 +1790,7 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 147 slides with a presenter note on 136 of them, and it carries material this
+is 168 slides with a presenter note on 157 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
@@ -1838,7 +1910,7 @@ beat does not feel like a detour:</p>
 you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></p>
 </blockquote>
 <hr />
-<h2>2 · Meet today's agent (0:11 – 0:40)</h2>
+<h2>2 · Meet today's agent (0:11 – 0:38)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <strong>This section is new and it is load-bearing.</strong> They are
 about to spend two hours deploying this thing. If they cannot say what it does
@@ -1957,7 +2029,7 @@ come back to it in Week 7."</em></p>
 <p>A student who notices something odd in Week 1 and gets the answer in Week 7
 remembers it permanently. Explaining it now spends that for nothing.</p>
 </blockquote>
-<h4>3 · The instructions it carries (4 min)</h4>
+<h4>3 · The instructions it carries (3 min)</h4>
 <p>The <strong>system prompt</strong> is the agent's standing orders, re-sent with every single
 turn because the model has no memory:</p>
 <pre><code>You are a customer support assistant for an online shop.
@@ -2004,7 +2076,7 @@ cost.</p>
 The model asks, and your code obeys. That inversion is what makes this an
 agent rather than a chatbot with functions."</em></p>
 </blockquote>
-<h4>5 · Watch it work, step by step (12 min)</h4>
+<h4>5 · Watch it work, step by step (11 min)</h4>
 <p>Describing the agent is not enough. <strong>Run it</strong>, on the projector, and let them
 watch the four steps happen one at a time.</p>
 <pre><code class="language-bash">python -m checks.demo_turn
@@ -2159,7 +2231,7 @@ deliberate production pattern — provider portability — and <strong>Week 6 us
 exactly that seam to add a fallback model.</strong></p>
 <p>Do not volunteer it to a non-technical room. Keep it for the person who asks.</p>
 </blockquote>
-<h2>3 · The project (0:40 – 0:48)</h2>
+<h2>3 · The project (0:38 – 0:46)</h2>
 <p>They already cloned this in the setup section. Now that they can move around a folder,
 <strong>give the commands they ran a meaning</strong>, and give them the map.</p>
 <p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and
@@ -2264,7 +2336,7 @@ the web yet.</p>
 break."</em></p>
 </blockquote>
 <hr />
-<h2>4 · Set it up, and prove it (0:48 – 1:06)</h2>
+<h2>4 · Set it up, and prove it (0:46 – 1:02)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Everyone sitting still, one command at a time, hands up on
 failure. You are hunting for broken machines now, while it costs the room ten
@@ -2289,7 +2361,7 @@ which is a <em>syntax</em> error before 3.10 — so the failure is an unreadable
 traceback at import time that never mentions versions at all. A student can
 lose twenty minutes to it.</p>
 </blockquote>
-<h3>What a settings file is, before we ask for a key (5 min)</h3>
+<h3>What a settings file is, before we ask for a key (4 min)</h3>
 <p>Telling a non-technical room to "put your key in <code>.env</code>" means nothing. Build
 it up first — three short ideas.</p>
 <p><strong>1 · Some things must not live in the code.</strong></p>
@@ -2349,7 +2421,7 @@ manageable; three copies is not.</strong></p>
 the settings instead of a file, and the container at 3:10 must not have the
 key baked in.</p>
 </blockquote>
-<h3>Three steps (6 min)</h3>
+<h3>Three steps (5 min)</h3>
 <pre><code class="language-bash">git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
 cd agentic-ai-cohort-01-phase-02
 git checkout week-01-package
@@ -2367,7 +2439,7 @@ Phase 1 did that.</p>
 <p><strong>The key lives outside the code, on purpose.</strong> <code>.env</code> is in <code>.gitignore</code>, so
 git will never send it anywhere. It is also a hidden file — plain <code>ls</code> will not
 show it, which is the first reason they need <code>ls -la</code> in the terminal exercise.</p>
-<h3>Prove it, then run the demo yourself (5 min)</h3>
+<h3>Prove it, then run the demo yourself (4 min)</h3>
 <pre><code class="language-bash">make check-week-00
 </code></pre>
 <pre><code>Week 00: the loop runs a tool then answers
@@ -2424,7 +2496,7 @@ now. You will point at it four times today and every week after. Also watch
 for editors that helpfully save <code>.env</code> as <code>.env.txt</code> — <code>ls -la</code> catches it.</p>
 </blockquote>
 <hr />
-<h2>5–6 · The terminal, then sending messages (1:16 – 1:53)</h2>
+<h2>5–6 · The terminal, then sending messages (1:12 – 1:48)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Hands on keyboards. Everyone open a terminal — the black
 window."</em> Then walk the room. Do not stay at the front for this beat; this is
@@ -2896,7 +2968,7 @@ answer comes back from your agent instead of an echo service. Nothing else
 about the command changes."</em></p>
 <p>That single sentence is what stops FastAPI feeling like magic later.</p>
 </blockquote>
-<h2>Break (1:53 – 2:03)</h2>
+<h2>Break (1:48 – 1:58)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Do this on the projector, not on their machines.</p>
 </blockquote>
@@ -2939,7 +3011,7 @@ runs in one place   only where Python is already set up just right
 <p><strong>Those four gaps are today.</strong> None of them are AI problems. All of them are why
 agents die in notebooks.</p>
 <hr />
-<h2>7–8 · What a web service is, then addresses and messages (2:03 – 2:31)</h2>
+<h2>7–8 · What a web service is, then addresses and messages (1:58 – 2:33)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Five ideas, and they are deliberately arranged as <strong>one
 story rather than five topics</strong>. Each answers a question the previous one
@@ -2960,7 +3032,7 @@ name for something they have already run.</strong> Say <em>"you have already don
 this"</em> out loud each time — it is the difference between five new facts and
 five labels.</p>
 </blockquote>
-<h3>One picture for the whole session</h3>
+<h3>One picture for the whole session (2 min)</h3>
 <p>Draw this once, before anything else, and leave it up:</p>
 <pre><code>    ANYONE, ANYWHERE                   A COMPUTER THAT IS ALWAYS ON
    ┌─────────────────┐                  ┌──────────────────────────┐
@@ -2995,7 +3067,7 @@ ago, <code>curl</code> was one of those. You were the website. You already know 
 be the left-hand side of this picture — today you build the right."</em></p>
 </blockquote>
 <hr />
-<h3>1 · What "deploying" means</h3>
+<h3>1 · What "deploying" means (3 min)</h3>
 <p>Start with the ordinary version of the word, because they already know it.</p>
 <p><strong>Deploying just means putting something where other people can use it.</strong></p>
 <p>A shop that only opens when the owner is standing in it is not really a shop.
@@ -3041,7 +3113,7 @@ completely accurate.</p>
 Nothing about today changes if you pick a different one."</em></p>
 </blockquote>
 <hr />
-<h3>2 · Why the agent has to become a web service</h3>
+<h3>2 · Why the agent has to become a web service (13 min)</h3>
 <h4>Start with the shop, not with HTTP</h4>
 <p>Before any technical word, put this to the room and let them answer it:</p>
 <blockquote>
@@ -3243,7 +3315,7 @@ You are giving it a front door."</em></p>
 The reason it matters is not that it is hard."</em></p>
 </blockquote>
 <hr />
-<h3>3 · How one computer finds another</h3>
+<h3>3 · How one computer finds another (4 min)</h3>
 <p>They just heard "a computer with an address". So: <strong>what is an address, for a
 computer?</strong></p>
 <p>Use the phone system, all the way through. It maps almost perfectly, and
@@ -3304,7 +3376,7 @@ spending your model budget) and Week 7 (a stranger attacking you). Let it feel
 slightly uncomfortable now — you are going to spend two entire weeks on it.</p>
 </blockquote>
 <hr />
-<h3>4 · What a URL is</h3>
+<h3>4 · What a URL is (3 min)</h3>
 <p>They now have a name that finds a computer. But a computer does many things, so
 the address needs one more part.</p>
 <p><strong>Think of a big office building.</strong></p>
@@ -3374,7 +3446,34 @@ chose, the way a building might be called "North Wing". <code>https</code> is th
 that matters, and it is not part of the name at all.</p>
 </blockquote>
 <hr />
-<h3>5 · What an HTTP request is</h3>
+<h3>One request, traced from the internet inwards (7 min)</h3>
+<p>Six slides that follow <strong>one question</strong> from a stranger down to the code,
+adding exactly one layer at a time. This is the best thing in the deck for a
+non-technical room — do not rush it.</p>
+<pre><code>   1  the internet   someone, somewhere, has your address and a question
+   2  one computer   the message arrives at the machine
+   3  a port         which of the running programs is it for?  (8080)
+   4  a program      uvicorn was waiting there; it takes it off the network
+   5  your code      FastAPI hands it to your function
+   6  the agent      run_turn(), and the answer travels back out
+</code></pre>
+<p>Each level nests inside the one above it, with an arrow and a caption for the
+hop. <strong>The earlier layers stay on screen</strong>, so by slide 6 the whole path is
+visible at once.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Ninety seconds a slide, and <strong>do not skip ahead</strong> — the
+value is in the layers accumulating.</p>
+<p><strong>Slide 2 sets up slide 3 with a question:</strong> <em>"It is at the right computer.
+But this computer is also running a database and a dashboard. How does it
+know which one?"</em> Pause; somebody will say "the port".</p>
+<p><strong>Slide 5 is the one to land:</strong> <em>"Of the six layers on screen, this is the
+only one you write."</em> Point above it, point below it.</p>
+<p><strong>On slide 6, trace it backwards with your finger</strong> — answer, function,
+FastAPI, uvicorn, network, stranger. <em>"Same path, in reverse."</em></p>
+<p><strong>Then the hook:</strong> <em>"Six layers. At 3:12 we put a box around all of them."</em>
+The container section refers back to this picture rather than starting again.</p>
+</blockquote>
+<h3>5 · What an HTTP request is (3 min)</h3>
 <p>They can now find the room. <strong>What do they say when they get there?</strong></p>
 <p><strong>A question and an answer. That is all.</strong></p>
 <p>It is a counter at an office, not a conversation:</p>
@@ -3494,7 +3593,7 @@ Week 2.</p>
 then hold it for a week."</em></p>
 </blockquote>
 <hr />
-<h2>9 · Build the web service (2:31 – 3:09)</h2>
+<h2>9 · Build the web service (2:33 – 3:12)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <em>"Back on keyboards."</em> Now walk the room continuously. This
 is the beat where you find out whether the tools section did its job — and if it did,
@@ -3833,7 +3932,7 @@ is how you tell a proxy not to do it.</p>
 <p><strong>INSTRUCTOR</strong> · Have someone shout when they see text appear in pieces. It is
 the most satisfying moment of the session — use it.</p>
 </blockquote>
-<h2>10 · Build the container (3:09 – 3:43)</h2>
+<h2>10 · Build the container (3:12 – 3:44)</h2>
 <p>Ask: <em>"What would my colleague need to run your agent?"</em></p>
 <p>The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. <strong>"Works on my machine" is not a
@@ -4094,7 +4193,7 @@ is the only place <code>-p</code> appears with two <em>different</em> numbers. O
 <p>Say it as a sentence every time, because people flip it: <strong>"outside number,
 then inside number."</strong></p>
 </blockquote>
-<h4>Now the real one — line by line (12 min)</h4>
+<h4>Now the real one — line by line (10 min)</h4>
 <p>Their <code>Dockerfile</code> is the same four ideas plus three lines:</p>
 <pre><code class="language-dockerfile">FROM python:3.12-slim
 WORKDIR /app
@@ -4162,7 +4261,7 @@ inside a box that could run anywhere.</strong></p>
 </ol>
 </blockquote>
 <hr />
-<h2>11 · Prove it, and what breaks next (3:43 – 4:00)</h2>
+<h2>11 · Prove it, and what breaks next (3:44 – 4:00)</h2>
 <pre><code class="language-bash">make check-week-01
 </code></pre>
 <p>Green, line by line. Read the output together — each line is a promise about the

@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 147-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 168-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and thirty-six of the slides carry
+**Press `S` before you start.** A hundred and fifty-seven of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -301,21 +301,24 @@ yet — in a side panel the room never sees.
 
 ```
    0:00   11   Three questions to the room   settle the room, and read it
-   0:11   29   Meet today's agent            described, then RUN step by step
-   0:40    8   The project                   a tour BEFORE they download it
-   0:48   18   Set it up, and prove it       .env, the key, then the demo
-   1:06   10   break
-   1:16   22   The terminal                  a real lesson: 9 commands
-   1:38   15   Sending messages              JSON and curl, on public services
-   1:53   10   break
-   2:03   16   What a web service is         the shop story, then the words
-   2:19   12   Addresses, then messages
-   2:31   38   Build the web service         3 endpoints, line by line, tested
-   3:09   34   Build the container           5 examples, then line by line
-   3:43   17   Prove it, and what breaks next
+   0:11   27   Meet today's agent            described, then RUN step by step
+   0:38    8   The project                   a tour BEFORE they download it
+   0:46   16   Set it up, and prove it       .env, the key, then the demo
+   1:02   10   break
+   1:12   21   The terminal                  a real lesson: 9 commands
+   1:33   15   Sending messages              JSON and curl, on public services
+   1:48   10   break
+   1:58   15   What a web service is         the shop story, then the words
+   2:13   20   Addresses, then SIX ZOOMS     one request, internet to code
+   2:33   39   Build the web service         3 endpoints, line by line, tested
+   3:12   32   Build the container           5 examples, then line by line
+   3:44   16   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
+
+**168 slides over 220 minutes of content is about 75 seconds each.** That is
+the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
 >
@@ -543,6 +546,62 @@ The nineteen-line file taught across those slides was written out in full and
 run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
+
+### One idea per slide
+
+The deck was audited for crowding and rebuilt. **Twelve slides carried five or
+more separate blocks** — a definition and an example and a caveat and a
+punchline, all at once — which makes it hard to know where to start and where
+to stop. Each was split.
+
+| | Before | Now |
+|---|---|---|
+| slides | 147 | **168** |
+| median blocks per slide | 2 | **2** |
+| slides with 5+ blocks | **12** | **0** |
+| median on-screen words | 96 | **88** |
+
+The rule applied: **at most one code block or one figure, plus at most two
+supporting cards.** If a slide had a definition *and* an example *and* a
+caveat, it became two slides.
+
+> **INSTRUCTOR** · This is what makes the deck teachable rather than just
+> correct. **Each slide is now one thing you can open, say, and close** — then
+> advance and the next one builds on it.
+>
+> At ~75 seconds a slide you will feel like you are advancing quickly. That is
+> right. **The notes are cues, not scripts** — do not read them aloud.
+
+### A request, traced from the internet inwards
+
+Six slides at 2:13 follow **one question** from a stranger down to the code,
+**adding exactly one layer per slide** and keeping the earlier ones on screen:
+
+```
+   1  the internet   someone, somewhere, has your address and a question
+   2  one computer   the message arrives at the machine
+   3  a port         which of the running programs is it for?  (8080)
+   4  a program      uvicorn was waiting there; it takes it off the network
+   5  your code      FastAPI hands it to your function - the only layer
+                     they write
+   6  the agent      run_turn(), and the answer travels back out
+```
+
+Each slide nests inside the previous one, with an arrow and a caption for the
+hop, plus a breadcrumb strip showing how deep you are.
+
+> **INSTRUCTOR** · This sequence exists for the non-technical half of the room,
+> and it is the single best thing in the deck for them. **Ninety seconds a
+> slide, and do not skip ahead** — the value is in the layers accumulating.
+>
+> **Slide 5 is the one to land:** *"Of the six layers on screen, this is the
+> only one you write."* Point above it, point below it.
+>
+> **On slide 6, trace it backwards with your finger** — answer, function,
+> FastAPI, uvicorn, network, stranger. *"Same path, in reverse."*
+>
+> Then the hook: *"Six layers. At 3:12 we put a box around all of them."* The
+> container section refers back to this picture rather than starting fresh.
 
 ### The demo states its model, its key use, and its payload
 
