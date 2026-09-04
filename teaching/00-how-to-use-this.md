@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 217-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 218-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Two hundred and five of the slides carry
+**Press `S` before you start.** Two hundred and six of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -317,7 +317,7 @@ yet — in a side panel the room never sees.
    4:00        exactly four hours, including both breaks
 ```
 
-**217 slides over 220 minutes of content is about 61 seconds each.** That is
+**218 slides over 220 minutes of content is about 61 seconds each.** That is
 the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
@@ -610,7 +610,7 @@ screen you cannot tell where to start or where to stop.
 
 | | First pass | Second pass | Now |
 |---|---|---|---|
-| slides | 147 | 211 | **217** |
+| slides | 147 | 211 | **218** |
 | slides with 4+ blocks | 24 | 0 | **0** |
 | slides teaching two things at once | — | 6 | **0** |
 | slides that overflow the stage | — | 0 | **0** |
@@ -620,7 +620,7 @@ an example and a caveat are three slides, not one. Two commands are two slides.
 A code block plus a numbered reading *of that same code* is still one idea, and
 stays on one slide.
 
-**Verified by rendering, not by eye.** All 217 slides were measured in a
+**Verified by rendering, not by eye.** All 218 slides were measured in a
 headless browser at the deck's own 1280×720 stage; none overflow.
 
 ### The demo is the demo, not a description of the demo
@@ -653,6 +653,35 @@ What is left is the demo itself, one slide per thing that happens:
 > notes on the command slide: *"this is my laptop, you will run it at 0:46"*
 > and *"nothing in the question names a tool — watch step 2"*. **Say both
 > before you press Enter.**
+
+**One slide before the command says what the command actually is** — a narrator
+wrapped around the same `run_turn` they will call from their web service later.
+It adds a label and a one-second pause per step and nothing else. Without that
+slide, people reasonably assume `demo_turn.py` *is* the agent.
+
+### `checks/demo_turn.py` had to be added to every branch
+
+**The file existed only on `main`.** Students check out `week-01-package`, so
+the command on the slide — and in this guide — failed for the whole room with
+`No module named checks.demo_turn`.
+
+It is now on all sixteen week branches and was run on each one. It works
+unchanged against both shapes of `run_turn` (this branch returns
+`(reply, history)`; `main` returns `(reply, history, trace)`) because it indexes
+`result[0]` and `result[1]` instead of unpacking.
+
+| Check | Week 1 branches |
+|---|---|
+| tools listed | **3** — matches the slide |
+| standing rules | **105 words** — matches the slide |
+| steps printed | **4** |
+| needs a key | no |
+
+> **INSTRUCTOR** · Run it once from a **fresh clone** before you teach, not from
+> your working copy — that is the only way to catch a file that exists on your
+> machine and nowhere else. Weeks 7 and 8 list four tools, not three, because
+> `fetch_url` is added there for the attack exercise. That is correct, and it
+> does not affect Week 1.
 
 > **INSTRUCTOR** · This is what makes the deck teachable rather than just
 > correct. **Each slide is now one thing you can open, say, and close** — then

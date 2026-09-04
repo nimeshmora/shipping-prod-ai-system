@@ -1304,6 +1304,26 @@ while True:
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
+  <div class="eyebrow">What that command is<span class="t">0:14 &ndash; 0:41</span></div>
+  <h2>A narrator around the same agent.</h2>
+  <div class="body">
+    <div class="fig">
+      <div class="box wide" style="padding:18px">
+        <div class="t">demo_turn.py</div>
+        <div class="s" style="margin-top:6px">prints a label<br>before each step,<br>then waits a second</div>
+      </div>
+      <div class="arr"><div class="line">&rarr;</div><div class="cap">calls</div></div>
+      <div class="box wide g" style="padding:18px">
+        <div class="t">run_turn()</div>
+        <div class="s" style="margin-top:6px"><b>the real agent</b><br>unchanged</div>
+      </div>
+    </div>
+    <div class="punch">It adds no cleverness. It only makes the four steps visible.</div>
+  </div>
+  <div class="say"><b>Say what it is, so nobody thinks it is the agent</b><em>"This file is a teaching aid I wrote. It calls the same <code>run_turn</code> you will call from your web service in two hours. All it adds is a label before each step and a one-second pause, so you can read one before the next appears."</em><br><br><b>Two things worth pointing out:</b><br><br>&bull; it runs with <b>no key and no internet</b>, so every laptop can run it<br>&bull; it prints its <b>mode</b> on the first line, so nobody has to guess whether a real model answered<br><br><b>If somebody asks whether the stand-in is cheating:</b> the loop is real, the tools are real, and the conversation it keeps is real. The only scripted part is <em>which tool the model picks</em> — and with <code>--real</code> even that is genuine.</div>
+</section>
+
+<section class="slide" data-sec="2" data-label="Today's agent">
   <div class="eyebrow">Let us watch it work<span class="t">0:14 &ndash; 0:41</span></div>
   <h2>One command.</h2>
   <div class="body">
