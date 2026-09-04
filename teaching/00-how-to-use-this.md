@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 217-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 218-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Two hundred and five of the slides carry
+**Press `S` before you start.** Two hundred and six of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -317,7 +317,7 @@ yet — in a side panel the room never sees.
    4:00        exactly four hours, including both breaks
 ```
 
-**217 slides over 220 minutes of content is about 61 seconds each.** That is
+**218 slides over 220 minutes of content is about 61 seconds each.** That is
 the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
@@ -610,7 +610,7 @@ screen you cannot tell where to start or where to stop.
 
 | | First pass | Second pass | Now |
 |---|---|---|---|
-| slides | 147 | 211 | **217** |
+| slides | 147 | 211 | **218** |
 | slides with 4+ blocks | 24 | 0 | **0** |
 | slides teaching two things at once | — | 6 | **0** |
 | slides that overflow the stage | — | 0 | **0** |
@@ -620,7 +620,7 @@ an example and a caveat are three slides, not one. Two commands are two slides.
 A code block plus a numbered reading *of that same code* is still one idea, and
 stays on one slide.
 
-**Verified by rendering, not by eye.** All 217 slides were measured in a
+**Verified by rendering, not by eye.** All 218 slides were measured in a
 headless browser at the deck's own 1280×720 stage; none overflow.
 
 ### The demo is the demo, not a description of the demo
@@ -770,6 +770,31 @@ give an agent a job description"* — which is the part that matters for Week 7.
 > **It needs the network.** Run it once before class. If OpenRouter or the wifi
 > is down, `python3 -m checks.demo_turn --offline` falls back to the scripted
 > stand-in and still shows all four steps.
+
+### "Why not just let it remember?" has its own slide
+
+The deck states that the model remembers nothing, and then explains **why that
+is deliberate** — because a room hears "no memory" as a missing feature and
+starts wondering whether they picked a bad tool.
+
+The slide sits immediately after the fact, before "is this how real agents
+work?", so the sequence is: **what happens → why it is built that way → yes,
+this is standard.**
+
+| If the model remembered | Because it does not |
+|---|---|
+| every conversation of every user, forever, somewhere you cannot see, edit or delete | **you** decide what it is told, and what it may forget |
+
+> **INSTRUCTOR** · Three consequences, all of them things a real product needs:
+> you can **delete** a conversation when a customer asks; you can **fix** a bad
+> one by editing the list and continuing; and two users **never leak into each
+> other**, because every request starts blank.
+>
+> The line that lands: *"The model is a very good stateless function.
+> Everything that remembers anything, in any product you have ever used, is
+> code somebody wrote around it."*
+>
+> **This is the justification for the whole afternoon**, not a digression.
 
 ### Three things, and only one of them remembers
 

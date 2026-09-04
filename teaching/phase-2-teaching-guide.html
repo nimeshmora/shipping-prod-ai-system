@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 217-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 218-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,7 +786,7 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> Two hundred and five of the slides carry
+<p><strong>Press <code>S</code> before you start.</strong> Two hundred and six of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
@@ -806,7 +806,7 @@ yet — in a side panel the room never sees.</p>
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
-<p><strong>217 slides over 220 minutes of content is about 61 seconds each.</strong> That is
+<p><strong>218 slides over 220 minutes of content is about 61 seconds each.</strong> That is
 the intended pace: one idea, one sentence, take a question, advance.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Three things about this order, all deliberate.</p>
@@ -1214,7 +1214,7 @@ screen you cannot tell where to start or where to stop.</p>
 <td>slides</td>
 <td>147</td>
 <td>211</td>
-<td><strong>217</strong></td>
+<td><strong>218</strong></td>
 </tr>
 <tr>
 <td>slides with 4+ blocks</td>
@@ -1240,7 +1240,7 @@ screen you cannot tell where to start or where to stop.</p>
 an example and a caveat are three slides, not one. Two commands are two slides.
 A code block plus a numbered reading <em>of that same code</em> is still one idea, and
 stays on one slide.</p>
-<p><strong>Verified by rendering, not by eye.</strong> All 217 slides were measured in a
+<p><strong>Verified by rendering, not by eye.</strong> All 218 slides were measured in a
 headless browser at the deck's own 1280×720 stage; none overflow.</p>
 <h3>The demo is the demo, not a description of the demo</h3>
 <p>The third pass removed the scaffolding around the live demo. Three slides had
@@ -1440,6 +1440,37 @@ from the room.</p>
 <p><strong>It needs the network.</strong> Run it once before class. If OpenRouter or the wifi
 is down, <code>python3 -m checks.demo_turn --offline</code> falls back to the scripted
 stand-in and still shows all four steps.</p>
+</blockquote>
+<h3>"Why not just let it remember?" has its own slide</h3>
+<p>The deck states that the model remembers nothing, and then explains <strong>why that
+is deliberate</strong> — because a room hears "no memory" as a missing feature and
+starts wondering whether they picked a bad tool.</p>
+<p>The slide sits immediately after the fact, before "is this how real agents
+work?", so the sequence is: <strong>what happens → why it is built that way → yes,
+this is standard.</strong></p>
+<table>
+<thead>
+<tr>
+<th>If the model remembered</th>
+<th>Because it does not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>every conversation of every user, forever, somewhere you cannot see, edit or delete</td>
+<td><strong>you</strong> decide what it is told, and what it may forget</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Three consequences, all of them things a real product needs:
+you can <strong>delete</strong> a conversation when a customer asks; you can <strong>fix</strong> a bad
+one by editing the list and continuing; and two users <strong>never leak into each
+other</strong>, because every request starts blank.</p>
+<p>The line that lands: <em>"The model is a very good stateless function.
+Everything that remembers anything, in any product you have ever used, is
+code somebody wrote around it."</em></p>
+<p><strong>This is the justification for the whole afternoon</strong>, not a digression.</p>
 </blockquote>
 <h3>Three things, and only one of them remembers</h3>
 <p>Worth keeping straight, because a room mixes these up immediately:</p>
@@ -2144,7 +2175,7 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 217 slides with a presenter note on 205 of them, and it carries material this
+is 218 slides with a presenter note on 206 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
@@ -2521,6 +2552,39 @@ mix it up.</strong></p>
 function: history goes in, a longer history comes out. <strong>The storing happens
 in the web service they build after the break</strong> — which is why the session id
 exists, and why next week's redeploy wipes it.</p>
+</blockquote>
+<h4>"Why not just let it remember?" (1 min)</h4>
+<p><strong>Somebody asks this every time</strong>, and it sounds like you are describing a
+limitation. There is a slide for it, because the answer is the opposite:</p>
+<table>
+<thead>
+<tr>
+<th>If the model remembered</th>
+<th>Because it does not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>it would keep every conversation of every user, forever, somewhere you cannot see, edit or delete</td>
+<td><strong>you</strong> decide what it is told, and what it is allowed to forget</td>
+</tr>
+</tbody>
+</table>
+<p>Three things depend on it, and all three are things a real product needs:</p>
+<ul>
+<li><strong>You can delete a conversation.</strong> A customer asks you to forget them and you
+  can actually do it — the record is yours, in your storage.</li>
+<li><strong>You can fix a bad conversation.</strong> If it went wrong, edit the list and
+  continue. Nothing is baked in.</li>
+<li><strong>Two users never leak into each other.</strong> Every request starts blank, so
+  there is no shared state to leak.</li>
+</ul>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The line that lands: <em>"The model is a very good stateless
+function. Everything that remembers anything, in any product you have ever
+used, is code somebody wrote around it."</em></p>
+<p><strong>That is what they are building this afternoon</strong> — so this slide is not a
+digression, it is the justification for the next two hours.</p>
 </blockquote>
 <p>Then the four steps. It <strong>pauses between them</strong> so the room can read each one
 as it appears.</p>

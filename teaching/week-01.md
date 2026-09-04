@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 217 slides with a presenter note on 205 of them, and it carries material this
+is 218 slides with a presenter note on 206 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -455,6 +455,31 @@ and item 1 reads *"sent with the question"*.
 > function: history goes in, a longer history comes out. **The storing happens
 > in the web service they build after the break** — which is why the session id
 > exists, and why next week's redeploy wipes it.
+
+#### "Why not just let it remember?" (1 min)
+
+**Somebody asks this every time**, and it sounds like you are describing a
+limitation. There is a slide for it, because the answer is the opposite:
+
+| If the model remembered | Because it does not |
+|---|---|
+| it would keep every conversation of every user, forever, somewhere you cannot see, edit or delete | **you** decide what it is told, and what it is allowed to forget |
+
+Three things depend on it, and all three are things a real product needs:
+
+- **You can delete a conversation.** A customer asks you to forget them and you
+  can actually do it — the record is yours, in your storage.
+- **You can fix a bad conversation.** If it went wrong, edit the list and
+  continue. Nothing is baked in.
+- **Two users never leak into each other.** Every request starts blank, so
+  there is no shared state to leak.
+
+> **INSTRUCTOR** · The line that lands: *"The model is a very good stateless
+> function. Everything that remembers anything, in any product you have ever
+> used, is code somebody wrote around it."*
+>
+> **That is what they are building this afternoon** — so this slide is not a
+> digression, it is the justification for the next two hours.
 
 Then the four steps. It **pauses between them** so the room can read each one
 as it appears.

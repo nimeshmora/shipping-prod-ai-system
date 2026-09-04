@@ -1403,6 +1403,25 @@ while True:
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
+  <div class="eyebrow">The question people always ask<span class="t">0:14 &ndash; 0:41</span></div>
+  <h2>Why not just let it remember?</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="card warnb">
+        <h3>If the model remembered</h3>
+        <p class="dim">It would have to keep <b>every conversation of every user</b>, forever, somewhere you cannot see, edit or delete.</p>
+      </div>
+      <div class="card good">
+        <h3>Because it does not</h3>
+        <p class="dim">You decide <b>what it is told</b>, and <b>what it is allowed to forget.</b></p>
+      </div>
+    </div>
+    <div class="punch">Forgetting is not a missing feature. It is the design.</div>
+  </div>
+  <div class="say"><b>Somebody always asks this, so have the answer ready</b>It sounds like a limitation. <b>It is the opposite</b> — and three things depend on it:<br><br>&bull; <b>You can delete a conversation.</b> A customer asks you to forget them, and you can actually do it — the record is yours, in your storage.<br>&bull; <b>You can fix a bad conversation.</b> If it went wrong, you edit the list and continue. Nothing is baked in.<br>&bull; <b>Two users never leak into each other.</b> Every request starts blank, so there is no shared state to leak.<br><br><b>The line that lands:</b> <em>"The model is a very good stateless function. Everything that remembers anything, in any product you have ever used, is code somebody wrote around it."</em><br><br>That is what they are building this afternoon.</div>
+</section>
+
+<section class="slide" data-sec="2" data-label="Today's agent">
   <div class="eyebrow">Is this how real agents work?<span class="t">0:14 &ndash; 0:41</span></div>
   <h2>Yes. This is the standard pattern, not a teaching toy.</h2>
   <div class="body">
@@ -3501,7 +3520,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
       <div class="row">
         <div class="num">4</div>
         <div class="cell g"><div class="t">Service looks up a3f9, finds the earlier conversation, and continues it</div>
-          <div class="s">the four entries from 0:12, plus the new question</div></div>
+          <div class="s">the four entries from 0:30, plus the new question</div></div>
       </div>
     </div>
     <div class="def">
