@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **174 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **175 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -253,7 +253,7 @@ top of the rail.
 python3 teaching/check-slide-layout.py teaching/week-01-slides-v2.html
 ```
 
-It renders **all 174 slides** in a headless browser and reports any slide whose
+It renders **all 175 slides** in a headless browser and reports any slide whose
 content reaches the bottom rail, passes either side edge, or exceeds the stage.
 Exits non-zero, so it can gate a commit.
 
@@ -262,7 +262,55 @@ Exits non-zero, so it can gate a commit.
 > `slide 30: hits the bottom rail (gap -36px)`. A checker nobody has seen fail
 > is not a checker.
 
-**Both decks pass:** 174/174 here, 218/218 in the other one.
+**Both decks pass:** 175/175 here, 218/218 in the other one.
+
+## Windows students use WSL, so the deck has one set of commands
+
+**A third of a cohort is usually on Windows**, and eight of the commands in
+this deck genuinely do not work in PowerShell:
+
+```
+   touch          does not exist          make       not installed
+   ls -la         not a PowerShell flag   jq         not installed
+   rm -r          different name          head       does not exist
+   /dev/null      does not exist          set -a     bash only
+```
+
+**Two ways to handle that, and only one of them is teachable.**
+
+Printing a PowerShell column beside every command doubles the width of every
+code slide and teaches two dialects to a room learning its first. So instead:
+**Windows students turn on WSL**, which ships with Windows and gives them a
+real Linux terminal. After that every command in the course works **exactly as
+written** — no substitutions, nothing to translate, and no second column.
+
+| | What they do |
+|---|---|
+| **prerequisites** | one more row: `wsl --install`, expect Ubuntu |
+| **chapter 4** | a slide before the terminal: the problem, the fix, how, and "from then on everything works" |
+| **opening a terminal** | Windows row now says type `wsl`, not `powershell` |
+| **student README** | a "On Windows: do this first" section, on all sixteen branches |
+
+> **INSTRUCTOR** · **Say it without apology.** WSL is made by Microsoft, ships
+> with Windows, and is what Windows developers actually use. It is not a
+> workaround.
+>
+> **And the argument that lands:** the machine their agent will run on is
+> Linux. Mac and Linux students are already close to it; **WSL puts Windows
+> students in exactly the same place** — arguably closer than macOS.
+>
+> **If somebody has not installed it:** `wsl --install` then restart takes a
+> few minutes. **Pair them with a neighbour and let it run in the background**
+> rather than holding the room.
+>
+> **One warning worth giving:** inside WSL their Windows files are under
+> `/mnt/c/`. Tell them to work in the WSL home folder (`cd ~`) instead — much
+> faster, and it avoids a whole class of permission confusion.
+
+**Two Windows-unfriendly lines also went.** The container chapter used to end
+its awful-email slide with *"Oh, and are you on Windows?"* and list *"Windows,
+and half your commands do not exist there"* as a problem. Both are now
+OS-neutral — the point survives without a third of the room being the punchline.
 
 ## Every chapter earns its concept before naming it
 
@@ -451,12 +499,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 174 slides measured** in a headless browser at the deck's own
+- **All 175 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 174 of 174.
+- **Every slide has a presenter note** — 175 of 175.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 

@@ -367,6 +367,7 @@ sl('3','Before anything &middot; what you should already have',T3,
       <div class="r2"><div class="n3">Git</div><div class="c3">git --version</div><div class="e3">any</div></div>
       <div class="r2"><div class="n3">Docker Desktop</div><div class="c3">docker --version</div><div class="e3">running</div></div>
       <div class="r2"><div class="n3">An editor</div><div class="c3">VS Code, or any</div><div class="e3">&mdash;</div></div>
+      <div class="r2"><div class="n3">On Windows: WSL</div><div class="c3">wsl --install</div><div class="e3">Ubuntu</div></div>
       <div class="r2"><div class="n3">An OpenRouter key</div><div class="c3">openrouter.ai</div><div class="e3">sk-or-&hellip;</div></div>
       <div class="r2"><div class="n3">A Docker Hub account</div><div class="c3">hub.docker.com</div><div class="e3">a username</div></div>
     </div>''',
@@ -511,12 +512,22 @@ tale('4','So how do you use a computer',T4,
  'with <span class="q">nothing to click on?</span>',
  '''<b>Ask it, let it sit, then answer in two words</b><b>Somebody will get there:</b> you type.<br><br><em>"You type. That is the whole answer. And that is why the next half hour exists &mdash; because everything you ever do on that machine, you do by typing."</em><br><br><b>Now the terminal is not arbitrary.</b> It is the only door into the place their agent is going to live.''')
 
+sl('4','If you are on Windows, read this first',T4,
+ 'You will use WSL, and then everything here works.',
+ r'''    <div class="parts2">
+      <div class="p2"><div class="k2">the problem</div><div class="v2">Windows commands have <b>different names</b>. There is no <code>touch</code>, no <code>make</code>.</div></div>
+      <div class="p2"><div class="k2">the fix</div><div class="v2"><b>WSL</b> gives you a real Linux terminal <b>inside Windows</b>. Same machine, same files.</div></div>
+      <div class="p2"><div class="k2">how</div><div class="v2">In PowerShell, once: <code>wsl --install</code>. Then type <code>wsl</code> to enter it.</div></div>
+      <div class="p2"><div class="k2">from then on</div><div class="v2"><b>Every command in this course works, exactly as written.</b></div></div>
+    </div>''',
+ r'''<b>Say this without apology &mdash; WSL is what Windows developers actually use</b>It is made by Microsoft, it ships with Windows, and it is not a workaround or a lesser option. <em>"Windows has a built-in Linux. We are going to use it, because the machine your agent will run on is Linux too."</em><br><br><b>That last part is the real argument.</b> Mac and Linux people are already close to the server. WSL puts Windows people <b>in exactly the same place</b> &mdash; arguably closer than macOS.<br><br><b>If somebody has not installed it:</b> <code>wsl --install</code> then restart. It takes a few minutes, so <b>pair them with a neighbour</b> and let it run in the background rather than holding the room.<br><br><b>One thing to warn them about:</b> inside WSL, their Windows files are under <code>/mnt/c/</code>. <b>Tell them to work in the WSL home folder instead</b> (<code>cd ~</code>) &mdash; it is much faster, and it avoids a whole class of permission confusion.''')
+
 sl('4','So this is the window',T4,
  'You type commands in here.',
  '''    <div class="cols c2 mid">
       <table>
         <tr><th>Mac</th><td class="mono">Cmd + Space</td><td>type <code>terminal</code></td></tr>
-        <tr><th>Windows</th><td class="mono">Start key</td><td>type <code>powershell</code></td></tr>
+        <tr><th>Windows</th><td class="mono">Start key</td><td>type <code>wsl</code></td></tr>
         <tr><th>Linux</th><td class="mono">Ctrl+Alt+T</td><td></td></tr>
       </table>
       <div class="card info">
@@ -1317,7 +1328,7 @@ sl('6','So you send them the folder',T6,
  r'''    <div class="body center">
       <div class="oneline">
         <div class="lbl">THE EMAIL NOBODY WANTS TO RECEIVE</div>
-        <div class="say2">"Install Python 3.12 &mdash; not 3.11, that breaks. Then <code>pip install</code> these six libraries. Keep the folders exactly as they are. Make a file called <code>.env</code>, put your own key in it, then run <code>set -a && source .env && set +a</code> in the same window. Oh, and are you on Windows?"</div>
+        <div class="say2">"Install Python 3.12 &mdash; not 3.11, that breaks. Then <code>pip install</code> these six libraries. Keep the folders exactly as they are. Make a file called <code>.env</code>, put your own key in it, then run <code>set -a && source .env && set +a</code> in the same window. Oh, and is your machine set up like mine?"</div>
       </div>
     </div>''',
  r'''<b>Read that out loud, in full, in one breath</b>It gets a laugh, and the laugh IS the lesson. <b>Every clause in it is something they personally did this morning.</b><br><br><b>Then land it:</b> <em>"That took you twenty minutes, with me in the room, on a laptop you chose. Now send it to a customer."</em><br><br>Do not explain further. The next three slides take the message apart.''')
@@ -1328,7 +1339,7 @@ sl('6','What can go wrong with that',T6,
       <div class="p2"><div class="k2">Python 3.12</div><div class="v2">They have <b>3.11</b>, or none, or three versions and the wrong one is first.</div></div>
       <div class="p2"><div class="k2">the libraries</div><div class="v2">A newer version of one of them <b>changed something</b>, and now your code breaks.</div></div>
       <div class="p2"><div class="k2">the folders</div><div class="v2">They unzipped it one level deeper. <b>Nothing can find anything.</b></div></div>
-      <div class="p2"><div class="k2">their operating system</div><div class="v2">Windows, and half your commands <b>do not exist there.</b></div></div>
+      <div class="p2"><div class="k2">their operating system</div><div class="v2">A different one from yours, where <b>some of your commands have other names.</b></div></div>
     </div>''',
  r'''<b>Point at each row and ask: did that happen this morning?</b>For most rooms, at least two of them did. <b>Use the actual people</b> &mdash; <em>"remember when yours said command not found?"</em><br><br><b>The honest summary:</b> you are not sending software. <b>You are sending instructions and hoping their machine matches yours.</b><br><br>That sentence is the whole reason this chapter exists.''')
 
