@@ -120,10 +120,10 @@ make run
 
 # the outage
 export MODEL=this-model-does-not-exist
-export FALLBACK_MODEL=claude-sonnet-5
+export FALLBACK_MODEL=anthropic/claude-sonnet-4.5
 make run
 
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' -d '{"message":"where is ORD-1002?"}'
 ```
 
@@ -131,7 +131,7 @@ You still get an answer. Look at the trace: `model_calls` shows the primary
 failing, the retries, and then `"provider": "fallback"` answering.
 
 ```bash
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 # fallback_rate: 1.0, and an alert saying the primary is struggling
 ```
 

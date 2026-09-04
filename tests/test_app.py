@@ -307,14 +307,14 @@ def test_a_missing_api_key_says_exactly_how_to_fix_it():
     """The most common error in this course. The message has to be the
     instructions, not just the diagnosis."""
     import os
-    saved = os.environ.pop("KODEKEY", None)
+    saved = os.environ.pop("OPENROUTER_API_KEY", None)
     try:
         with pytest.raises(AgentError) as e:
             agent._client()
         assert "source .env" in str(e.value)
     finally:
         if saved is not None:
-            os.environ["KODEKEY"] = saved
+            os.environ["OPENROUTER_API_KEY"] = saved
 
 
 # ---- Week 02: memory that survives a redeploy ------------------------------
@@ -1184,7 +1184,7 @@ def test_fetch_url_refuses_the_cloud_metadata_service():
 def test_fetch_url_refuses_other_schemes_and_private_hosts():
     cases = [
         ("file:///etc/passwd", "http and https"),
-        ("http://127.0.0.1:8080/admin", "internal addresses are blocked"),
+        ("http://127.0.0.1:7000/admin", "internal addresses are blocked"),
         ("http://10.0.0.5/", "internal addresses are blocked"),
         ("http://192.168.1.1/", "internal addresses are blocked"),
         ("https://evil.example.org/steal", "not on the allowlist"),
@@ -1373,7 +1373,7 @@ def test_the_judge_never_blocks_a_build_by_failing(monkeypatch):
     """A non-deterministic grader wired to a blocking gate teaches the team to
     ignore the gate."""
     from evals import judge
-    monkeypatch.delenv("KODEKEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     passed, why = judge.grade("q", "a", "check")
     assert passed is True
     assert "unavailable" in why
@@ -1392,7 +1392,7 @@ def test_the_judge_reads_a_verdict_out_of_fenced_json():
 
 def test_judge_cases_are_skipped_cleanly_with_no_key(monkeypatch):
     """CI has no key, so the deterministic tier must still gate on its own."""
-    monkeypatch.delenv("KODEKEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     from evals import run_evals
     assert run_evals.run(real=False, use_judge=True) == 0
 

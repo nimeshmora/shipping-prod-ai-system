@@ -38,7 +38,7 @@ Four things, all of them *outside* the application:
 | Thing | Where it lives | On another platform |
 |---|---|---|
 | `gcloud run deploy` | `.github/workflows/deploy.yml` | `docker push` + that platform's deploy |
-| `--set-secrets KODEKEY=...` | same file | AWS Secrets Manager, Vault, sealed secrets |
+| `--set-secrets OPENROUTER_API_KEY=...` | same file | AWS Secrets Manager, Vault, sealed secrets |
 | Revisions + `update-traffic` | rollback step | ECS task definitions, k8s ReplicaSets |
 | Scale-to-zero, `--min-instances` | deploy flags | k8s HPA (does not scale to zero without KEDA) |
 
@@ -55,13 +55,13 @@ with your own hands that the boundary is where you think it is.
 docker build -t ship-agent .
 
 # run it with nothing but env vars - this is what every platform does
-docker run --rm -p 8080:8080 \
-  -e KODEKEY="$KODEKEY" \
-  -e MODEL=claude-sonnet-5 \
+docker run --rm -p 7000:7000 \
+  -e OPENROUTER_API_KEY="$OPENROUTER_API_KEY" \
+  -e MODEL=anthropic/claude-sonnet-4.5 \
   -e RATE_LIMIT_PER_MIN=20 \
   ship-agent
 
-curl localhost:8080/health
+curl localhost:7000/health
 ```
 
 If that works, the image is portable. Deploying it to Fly (`fly launch`) or
