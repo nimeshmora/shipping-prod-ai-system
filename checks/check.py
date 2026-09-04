@@ -401,7 +401,7 @@ def check_03():
         for match in re.finditer(r'--set-env-vars[ =]+"([^"]*)"', text):
             for pair in match.group(1).split(","):
                 key = pair.split("=")[0].strip()
-                if key in ("KODEKEY", "API_KEYS") or "SECRET" in key.upper():
+                if key in ("OPENROUTER_API_KEY", "API_KEYS") or "SECRET" in key.upper():
                     _no(f"{name} passes {key} through --set-env-vars. Env vars "
                         "are visible in the console and in `gcloud describe` "
                         "output - use --set-secrets.")
