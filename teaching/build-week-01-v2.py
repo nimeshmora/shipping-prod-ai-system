@@ -90,13 +90,13 @@ S.append('''<section class="slide title-slide" data-sec="0" data-label="Week 1">
   <div class="say"><b>Read the subtitle out loud before you do anything else</b>That single sentence is the whole day, and it is the promise you are making. <em>"Right now this thing only runs where I am sitting. By four o'clock, a stranger runs it in two commands."</em><br><br><b>Then say what today is not:</b> almost none of it is about AI. It is about everything that has to be true before an AI is useful to anybody but you.<br><br>Laptops closed for the first twelve minutes.</div>
 </section>''')
 
-T1='0:00 &ndash; 0:12'
+T1='0:00 &ndash; 0:10'
 # =========================================================================
 # CHAPTER 1 — It works on my laptop  (0:00 – 0:12)
 # =========================================================================
 chapter('1','Chapter one','It works on my laptop.',
  'Which is another way of saying <b>nobody else can use it.</b>',
- 'about twelve minutes &middot; laptops closed',
+ 'about ten minutes &middot; laptops closed',
  '''<b>Laptops closed. This is the only part of the day where nobody types.</b>You are doing two things here: settling the room, and finding out who is in it.<br><br>Three questions, in order. <b>Take answers, correct nobody.</b> Every wrong answer is useful — it tells you where to pitch the next four hours.''')
 
 tale('1','First question',T1,
@@ -189,13 +189,13 @@ spine(1,'1','Where we are &middot; end of chapter one',T1,
  'Your agent works. Nobody else can use it.',
  '''<b>The picture you will grow all day</b>Right now there is one green box, and four dashed ones waiting. <b>Every chapter fills one in.</b><br><br><em>"That green box already works. Twelve tests prove it. Everything we do today wraps around it without changing a line of it."</em><br><br>Open the laptops now.''')
 
-T2='0:12 &ndash; 0:40'
+T2='0:10 &ndash; 0:36'
 # =========================================================================
 # CHAPTER 2 — Watch it think  (0:12 – 0:40)
 # =========================================================================
 chapter('2','Chapter two','Let me show you the thing.',
  'Before we move it anywhere, you should know <b>what it actually is</b> — and watch it work once.',
- 'about twenty-eight minutes &middot; you watch, I type',
+ 'about twenty-six minutes &middot; you watch, I type',
  '''<b>You do this chapter; they watch</b>Nothing for them to install yet — that is chapter three. This is you on the projector, and it is worth taking your time over.<br><br><b>The order is deliberate:</b> what it does &rarr; what it can reach for &rarr; what it is told &rarr; then run it. By the time it runs, every label on screen is one they have already met.''')
 
 tale('2','The agent for the next two weeks',T2,
@@ -350,13 +350,13 @@ spine(1,'2','Where we are &middot; end of chapter two',T2,
  'Now you know what it does. Still only you can use it.',
  '''<b>Same picture, and deliberately unchanged</b>Nothing new is lit up, because <b>knowing what a thing is does not move it anywhere.</b> Say that out loud — it is the setup for the next three hours.<br><br><em>"You now know exactly what is in the green box. It still only runs on my laptop. Everything from here is about the dashed boxes."</em><br><br><b>Next: they get it running on their own machines.</b>''')
 
-T3='0:40 &ndash; 0:58'
+T3='0:36 &ndash; 0:58'
 # =========================================================================
 # CHAPTER 3 — Getting it running  (0:40 – 1:07)
 # =========================================================================
 chapter('3','Chapter three','Your turn.',
  'Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o\'clock.',
- 'about eighteen minutes &middot; everybody types',
+ 'about twenty-two minutes &middot; everybody types',
  '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody who is still installing when chapter four starts will be lost for the rest of the day, and catching them up costs everyone else.''')
 
 sl('3','Before anything &middot; what you should already have',T3,
@@ -402,6 +402,11 @@ sl('3','Get it &middot; three commands',T3,
 <span class="ok">............ 12 passed</span></pre>''',
  '''<b>Two things trip people, every cohort</b>1. <b>Forgetting <code>cd</code></b> — every later command must run inside the project folder. Have them run <code>pwd</code> and read the path aloud.<br>2. <b>The branch.</b> Each week is its own branch, which is why there are three lines rather than one. Somebody joining at Week 5 still gets a working Weeks 1&ndash;4 agent.<br><br><b>What <code>make install</code> is:</b> <code>requirements.txt</code> is a shopping list; <code>pip3</code> fetches everything on it. A library is code somebody else wrote and shared.''')
 
+sl('3','Those five commands, piece by piece',T3,
+ 'Nothing here is mysterious.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">git clone &lt;url&gt;</div><div class="v2"><b>Download a copy</b> of somebody&rsquo;s project folder, from the internet.</div></div><div class="p2"><div class="k2">cd &lt;folder&gt;</div><div class="v2"><b>Go into it.</b> Every later command runs from in here.</div></div><div class="p2"><div class="k2">git checkout &lt;name&gt;</div><div class="v2">Switch to <b>this week&rsquo;s version</b> of the project.</div></div><div class="p2"><div class="k2">make install</div><div class="v2"><b>Fetch the libraries</b> the project needs.</div></div><div class="p2"><div class="k2">make test</div><div class="v2"><b>Run the checks</b> that came with the project.</div></div></div>''',
+ r'''<b>Five commands, five plain sentences. Read them out.</b><b>The one people get wrong is <code>cd</code></b> &mdash; forget it and every later command runs in the wrong place. Have them run <code>pwd</code> and read the path aloud.<br><br><b>On <code>make</code>:</b> it is a shortcut runner. <code>make install</code> runs whatever the project defined as "install". <b>Show them <code>cat Makefile</code></b> if anybody thinks it is magic &mdash; it is a list of shortcuts in a file they can read.<br><br><b>Why <code>git checkout</code>:</b> each week is a separate version, so somebody joining at Week 5 still gets a working Weeks 1&ndash;4 agent.''')
+
 sl('3','Read that last line again',T3,
  'Twelve tests passed before you wrote anything.',
  '''    <div class="body center">
@@ -431,13 +436,19 @@ PORT=7000</pre>
 
 sl('3','Making the file is not enough',T3,
  'You have to load it.',
- '''    <div class="body center">
+ r'''    <div class="body center">
       <pre>$ cp .env.example .env
 <span class="cm"># paste your key into .env, then:</span>
-$ set -a && source .env && set +a</pre>
-      <div class="punch">If you ever see <code>OPENROUTER_API_KEY is not set</code> — this is the fix.</div>
+$ set -a &amp;&amp; source .env &amp;&amp; set +a</pre>
+      <div class="punch">If you ever see <code>OPENROUTER_API_KEY is not set</code> &mdash; this is the fix.</div>
     </div>''',
- '''<b>Take the line apart, because it looks like nonsense</b><b><code>set -a</code></b> — "share everything I set next with programs I start".<br><b><code>source .env</code></b> — "read that file".<br><b><code>set +a</code></b> — "stop sharing".<br><br>And <b><code>&&</code></b> just means "and then".<br><br><b>The mix-up that costs the most time today:</b> settings live in <b>one terminal window.</b> Open a new window and you load it again. Somebody will load the key in one window and start the service in another — expect it, and recognise it instantly.''')
+ r'''<b>Type it with them, then take it apart on the next slide</b>It looks like nonsense, and pretending otherwise loses the room. <em>"That second line is four separate things stuck together. Let me show you each one."</em><br><br><b><code>cp</code></b> is copy &mdash; copy the example file to a real one, which they then edit.''')
+
+sl('3','That second line, piece by piece',T3,
+ 'Four things stuck together.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">set -a</div><div class="v2">From now on, <b>share every setting I make</b> with programs I start.</div></div><div class="p2 glue"><div class="k2">&amp;&amp;</div><div class="v2">and then</div></div><div class="p2"><div class="k2">source .env</div><div class="v2"><b>Read that file</b> and set everything listed in it.</div></div><div class="p2 glue"><div class="k2">&amp;&amp;</div><div class="v2">and then</div></div><div class="p2"><div class="k2">set +a</div><div class="v2"><b>Stop sharing.</b> Back to normal.</div></div></div>''',
+ r'''<b>Read the four glosses out loud, in order, as one sentence</b><em>"Start sharing &mdash; read the file &mdash; stop sharing."</em> That is the whole line.<br><br><b>Why the sharing has to be turned on at all:</b> normally a setting stays inside your terminal. <code>set -a</code> is you saying <em>"pass these on to anything I run"</em>, which is how the service gets your key.<br><br><b>The mix-up that costs the most time today:</b> settings live in <b>one terminal window.</b> Open a new window and you do this again. Somebody will load the key in one window and start the service in another &mdash; expect it, and recognise it instantly.''')
+
 
 sl('3','Prove you are ready',T3,
  'One command. Green means go.',
@@ -701,6 +712,11 @@ sl('4','The same thing, as a command',T4,
     <div class="punch">Identical answer. It just arrived in your terminal instead of a window.</div>''',
  '''<b>Run it and say the one sentence that matters</b><em>"Same address. Same answer. The only difference is where it landed."</em><br><br><b>That is the whole introduction to curl.</b> Not a new concept &mdash; a different door onto something they did four slides ago.<br><br><b><code>-s</code></b> just means "do not show me a progress bar". Say it once and move on.''')
 
+sl('4','That command, piece by piece',T4,
+ 'Three pieces. You know the third already.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">curl</div><div class="v2">Fetch whatever is at an address, and <b>print it here</b>.</div></div><div class="p2"><div class="k2">-s</div><div class="v2"><b>Quietly.</b> Without it you also get a progress bar you do not want.</div></div><div class="p2"><div class="k2">https://api.github&hellip;</div><div class="v2">The address &mdash; <b>the same one you typed in the browser</b>.</div></div></div>''',
+ r'''<b>The third piece is one they already know</b><em>"You typed that address once today already. Only the first two pieces are new."</em><br><br><b>On <code>-s</code>:</b> a dash followed by a letter is how you give a command an option. They will see plenty of these, and now the shape is familiar.''')
+
 sl('4','Pick out just the bit you want',T4,
  '<code>| jq</code> reaches into the answer for you.',
  '''    <pre class="tight"><span class="cm"># the whole thing is a lot. ask for one line of it:</span>
@@ -724,6 +740,11 @@ sl('4','Now the thing the browser could not do',T4,
     <div class="punch">Remember 404 from the browser? Here it is on its own.</div>''',
  '''<b>Collect the number they met three slides ago</b>In the browser they saw <code>"status": "404"</code> buried in the text. <b>Now they can get just the number</b>, which is what a program needs.<br><br><b>The two new options:</b> <code>-o /dev/null</code> throws the reply text away, <code>-w</code> prints only the status. <code>/dev/null</code> is the computer's bin.<br><br><b>Have them try a few:</b> a real username, a nonsense one. <b>Same command, different number.</b> That is the habit &mdash; the number tells you what happened before you read a word.''')
 
+sl('4','That longer command, piece by piece',T4,
+ 'Two extra options, and one bit of punctuation.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">curl -s</div><div class="v2">Same as before &mdash; fetch it, quietly.</div></div><div class="p2"><div class="k2">-o /dev/null</div><div class="v2"><b>Throw the reply text away.</b> <code>/dev/null</code> is the computer&rsquo;s bin.</div></div><div class="p2"><div class="k2">-w "%{http_code}"</div><div class="v2"><b>Print only the status number</b> instead.</div></div><div class="p2 glue"><div class="k2">\\</div><div class="v2">not part of the command &mdash; it means "carries on next line"</div></div></div>''',
+ r'''<b>The backslash confuses people, so name it</b>It is not part of the command. <b>It only means the command continues on the next line</b>, so a long one fits on screen. They can type it all on one line if they prefer.<br><br><b>Why throw the text away:</b> here they only want the number. <em>"A program checking whether a service is healthy does not care what it said &mdash; only whether it worked."</em> That is next week&rsquo;s deploy check, in one sentence.''')
+
 sl('4','What those numbers mean',T4,
  'Three numbers you will see today.',
  '''    <div class="cols c3">
@@ -742,6 +763,11 @@ sl('4','And one thing you will need later',T4,
 <span class="cm">... it echoes back what you sent:</span>
   <span class="hl">"json"</span>: { <span class="hl">"message"</span>: <span class="ok">"hello"</span> }</pre>''',
  '''<b>This is the exact command they will point at their own agent</b>A practice service that repeats whatever you send it, so they can see their own data arrive.<br><br><b>Three new pieces, one sentence each:</b> <code>-X POST</code> means "I am sending, not fetching". <code>-H</code> says "what I am sending is JSON". <code>-d</code> is the data itself.<br><br><em>"A browser cannot do this. That is why we needed a command."</em><br><br><b>Keep this on screen for a moment.</b> In the next chapter they change the address and it talks to their own service.''')
+
+sl('4','And the sending command, piece by piece',T4,
+ 'Three new pieces.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">-X POST</div><div class="v2"><b>I am sending something</b>, not just asking.</div></div><div class="p2"><div class="k2">-H &lsquo;Content-Type&hellip;&rsquo;</div><div class="v2">A note on the message: <b>"what I am sending is JSON"</b>.</div></div><div class="p2"><div class="k2">-d &lsquo;{&hellip;}&rsquo;</div><div class="v2"><b>The data itself.</b> <code>-d</code> is for "data".</div></div></div>''',
+ r'''<b>This is the exact command they will point at their own agent</b>Every piece here comes back in the next chapter with a different address.<br><br><b>On <code>-H</code>:</b> it stands for header &mdash; a label on the outside of the message. <em>"The service reads it to know how to unpack what you sent."</em> One sentence is enough today.<br><br><b>Then the bridge:</b> <em>"You now know how to ask a computer a question, and how to send it something. Next chapter you build the thing that answers."</em>''')
 
 spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can type commands, and ask other computers questions.',
@@ -963,14 +989,14 @@ sl('5','Follow one question &middot; 7 of 7',T5,
 
 sl('5','Open the file',T5,
  'Everything you type today goes in here.',
- '''    <div class="body center">
-      <pre class="tight"><span class="pr">$</span> code app/main.py     <span class="cm"># or nano, or vim</span></pre>
-      <div class="card accent">
-        <p>Right now it holds <b>eight numbered TODOs</b> and no working code — which is why <code>make check-week-01</code> fails.</p>
-        <p class="dim">Work down them in order. <b>Each one is a few lines.</b></p>
+ r'''    <div class="body center">
+      <pre class="tight"><span class="pr">$</span> code app/main.py</pre>
+      <div class="parts2">
+        <div class="p2"><div class="k2">code</div><div class="v2">Open VS Code. <b>Use whatever editor you like</b> &mdash; <code>nano app/main.py</code> works too.</div></div>
+        <div class="p2"><div class="k2">app/main.py</div><div class="v2">The file, <b>inside the app folder</b>. That slash again.</div></div>
       </div>
     </div>''',
- '''<b>Have them run <code>make check-week-01</code> now, and watch it fail</b>That failure is the target. <em>"Everything we do for the next half hour is turning that red into green."</em><br><br><b>Failing first is deliberate</b> — they see the checkpoint tell them exactly what is missing, which is a habit worth more than today's code.''')
+ r'''<b>Two rows, and the second is a callback</b>That slash is the path idea from chapter four. <em>"Through app, then main.py."</em> They have met it once already, which is why it needs one line and not a slide.<br><br><b>Have them run <code>make check-week-01</code> now, and watch it fail.</b> That failure is the target: <em>"Everything we do for the next half hour turns that red into green."</em><br><br>Failing first is deliberate &mdash; they see the checkpoint tell them exactly what is missing, which is a habit worth more than today's code.''')
 
 sl('5','The first two lines',T5,None,
  '''    <pre class="tight"><span class="cm"># app/main.py</span>
@@ -1008,6 +1034,11 @@ INFO: Uvicorn running on http://0.0.0.0:7000
 <span class="pr">$</span> curl -s http://localhost:7000/health <span class="hl">| jq</span>
 { "status": <span class="ok">"ok"</span> }</pre>''',
  '''<b>Celebrate this. Do not rush past it.</b>Thirty minutes ago most of them had never written a line of this.<br><br><b>Two windows, and write it on the board:</b> <em>"One window runs the service, the other talks to it. That is the arrangement for the rest of the course."</em> Otherwise people press Ctrl+C to get their prompt back, stop the service, and wonder why nothing answers.<br><br><b>Do not go on until everybody sees <code>ok</code>.</b> If this works, uvicorn and FastAPI both work — so anything that breaks later is in the new code.''')
+
+sl('5','Those two commands, piece by piece',T5,
+ 'One starts it. One asks it a question.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">make run</div><div class="v2">Start the service. <b>It does not finish</b> &mdash; it sits there waiting.</div></div><div class="p2"><div class="k2">curl -s &hellip;/health</div><div class="v2">From the <b>other</b> window, ask it one question.</div></div><div class="p2"><div class="k2">localhost</div><div class="v2"><b>This computer.</b> Not the internet &mdash; you are talking to yourself.</div></div><div class="p2"><div class="k2">:7000</div><div class="v2">Which program on this computer. <b>The port from your <code>.env</code>.</b></div></div><div class="p2"><div class="k2">/health</div><div class="v2">Which door. <b>The one you just wrote.</b></div></div></div>''',
+ r'''<b><code>localhost</code> is the row worth pausing on</b><em>"That address means this very computer. You are sending a message from one window to another window on your own laptop."</em><br><br>For a non-technical room that is genuinely surprising, and it is the thing that makes the next chapter make sense: <b>change <code>localhost</code> to a real address and somebody else can reach it.</b><br><br><b>The two windows matter:</b> window 1 holds the service open, window 2 asks the questions. Write it on the board.''')
 
 sl('5','What just happened',T5,
  'Your code answered a question that came over a network.',
@@ -1361,6 +1392,11 @@ sl('6','Build it and run it',T6,
     </div>''',
  '''<b>The point to make, and it is a good one</b><em>"That word 'hello' was printed by a small Linux computer that Docker created, used for one second, and threw away. You did not install Linux."</em><br><br><b>The dot confuses people every time.</b> It means "the instructions are in this folder". Say it as a sentence, not as punctuation.''')
 
+sl('6','Those two commands, piece by piece',T6,
+ 'Build, then run.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">docker build</div><div class="v2"><b>Follow my Dockerfile</b> and make an image out of it.</div></div><div class="p2"><div class="k2">-t demo1</div><div class="v2"><b>Call it demo1</b>, so I can refer to it later.</div></div><div class="p2"><div class="k2">.</div><div class="v2">The instructions are <b>in this folder</b>. That is what the dot means.</div></div><div class="p2"><div class="k2">docker run</div><div class="v2"><b>Start a container</b> from an image.</div></div><div class="p2"><div class="k2">--rm</div><div class="v2">When it stops, <b>throw the running copy away.</b></div></div></div>''',
+ r'''<b>The dot catches everybody, so say it as a sentence</b><em>"Build, name it demo1, and the instructions are here."</em> The dot is not punctuation &mdash; it is <b>the folder to look in</b>.<br><br><b>On <code>-t</code>:</b> t is for tag, which is just a name. Without it the image gets a random id and you cannot easily run it.<br><br><b>On <code>--rm</code>:</b> two dashes for a longer option name, one dash for a single letter. <b>That is the whole convention</b>, and it holds for nearly every command they will ever type.''')
+
 sl('6','What just happened when you pressed build',T6,
  'Docker read your file top to bottom, one step at a time.',
  '''    <pre class="tight"><span class="pr">$</span> docker build -t demo1 .
@@ -1448,6 +1484,11 @@ sl('6','What happens when you run one',T6,
     </div>
     <div class="punch"><code>--rm</code> means "delete the copy when it stops".</div>''',
  '''<b>The word "copy" is doing the work here</b><em>"Running an image never touches it. Docker takes a copy and runs that. Stop it, and the copy is gone &mdash; the image is exactly as it was."</em><br><br><b>Which is why anything a container writes disappears when it stops.</b> Plant it now: <em>"So where would your conversations go, if you kept them inside the container?"</em> <b>That is next week's problem, and they are about to feel it.</b><br><br><code>docker ps</code> shows what is running. Worth demonstrating once.''')
+
+sl('6','That nginx command, piece by piece',T6,
+ 'One option is the interesting one.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">docker run --rm</div><div class="v2">Start a container, and throw it away afterwards.</div></div><div class="p2"><div class="k2">-p 9000:80</div><div class="v2"><b>Open a door.</b> Number 9000 out here, number 80 inside.</div></div><div class="p2"><div class="k2">nginx</div><div class="v2">The image to run &mdash; <b>and you never downloaded it.</b> Docker fetched it.</div></div></div>''',
+ r'''<b>Point at the third row first &mdash; it is the surprising one</b>They did not install nginx, did not configure it, did not even download it deliberately. <em>"Docker saw you did not have it, went and got it, and ran it."</em><br><br><b>Then the middle row, which gets its own slide next.</b> A container is sealed by default. <code>-p</code> is you deliberately opening one door.''')
 
 sl('6','What <code>-p</code> does',T6,
  'Connect a number outside to a number inside.',
@@ -1619,6 +1660,11 @@ sl('6','Step 5 of 6 &middot; send it up',T6,
       <p><b>Docker Hub</b> is a place images live so other machines can fetch them. Like GitHub, but for containers.</p>
     </div>''',
  '''<b>Have them write their Docker Hub username on a sticky note</b>Their neighbour needs it, and shouting it across the room wastes five minutes.<br><br><b>The tag step confuses people:</b> <code>docker tag</code> is renaming, not copying. <em>"Docker Hub needs the image to be called yourname/something, so it knows whose it is."</em><br><br>The push takes a minute or two. <b>Fill it by asking what they think is being uploaded</b> — the answer is the code and Python, and <b>not the key.</b>''')
+
+sl('6','Those sharing commands, piece by piece',T6,
+ 'Log in, rename, upload.',
+ r'''    <div class="parts2"><div class="p2"><div class="k2">docker login</div><div class="v2">Sign in to Docker Hub, once.</div></div><div class="p2"><div class="k2">docker tag A B</div><div class="v2"><b>Give the image a second name.</b> Not a copy &mdash; the same image, two names.</div></div><div class="p2"><div class="k2">YOURNAME/&hellip;</div><div class="v2">Docker Hub needs your username in the name, <b>so it knows whose it is.</b></div></div><div class="p2"><div class="k2">docker push</div><div class="v2"><b>Upload it</b>, so other machines can fetch it.</div></div><div class="p2"><div class="k2">docker pull</div><div class="v2"><b>Download somebody else&rsquo;s</b>, by their name.</div></div></div>''',
+ r'''<b>The <code>tag</code> step is the confusing one</b>People expect it to copy something. <b>It does not</b> &mdash; it gives the same image an extra name. <em>"Like a nickname. Same person, two things you can call them."</em><br><br><b>Why the username has to be in the name:</b> Docker Hub holds images from millions of people, so <code>support-agent</code> alone is ambiguous. <code>yourname/support-agent</code> is not.<br><br><b>Have them write their Docker Hub username on a sticky note.</b> Their neighbour needs it, and shouting it across the room wastes five minutes.''')
 
 sl('6','Step 6 of 6 &middot; run a stranger\'s',T6,
  'Two commands. No Python, no setup, no folder.',

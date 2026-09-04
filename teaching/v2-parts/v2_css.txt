@@ -105,3 +105,19 @@
 .spine .ring.was > .rw{color:var(--ink-dim);}
 .spine .ring.was > .rw b{color:var(--ink);}
 .spine .ring.was > .rt{color:var(--ink-faint);}
+
+/* --- taking a command apart, piece by piece -------------------------------
+   For a room that has never used a terminal, a command is one intimidating
+   string. This shows the pieces stacked, each with a plain-English gloss, so
+   nothing is a mystery. Deliberately no numbers: the pieces are not steps. */
+.parts2{display:flex;flex-direction:column;gap:6px;}
+.parts2 .p2{display:grid;grid-template-columns:200px 1fr;gap:18px;
+  align-items:baseline;background:var(--panel);border:1px solid var(--rule);
+  border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:9px 14px;}
+.parts2 .k2{font-family:var(--mono);font-size:16px;color:var(--ok);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.parts2 .v2{font-size:17px;line-height:1.34;color:var(--ink-dim);}
+.parts2 .v2 b{color:#fff;}
+/* a piece that is only punctuation or glue, dimmed so it reads as minor */
+.parts2 .p2.glue{border-left-color:var(--rule);}
+.parts2 .p2.glue .k2{color:var(--ink-faint);}

@@ -796,6 +796,22 @@ body.help #help{display:grid;}
 .spine .ring.was > .rw b{color:var(--ink);}
 .spine .ring.was > .rt{color:var(--ink-faint);}
 
+/* --- taking a command apart, piece by piece -------------------------------
+   For a room that has never used a terminal, a command is one intimidating
+   string. This shows the pieces stacked, each with a plain-English gloss, so
+   nothing is a mystery. Deliberately no numbers: the pieces are not steps. */
+.parts2{display:flex;flex-direction:column;gap:6px;}
+.parts2 .p2{display:grid;grid-template-columns:200px 1fr;gap:18px;
+  align-items:baseline;background:var(--panel);border:1px solid var(--rule);
+  border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:9px 14px;}
+.parts2 .k2{font-family:var(--mono);font-size:16px;color:var(--ok);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.parts2 .v2{font-size:17px;line-height:1.34;color:var(--ink-dim);}
+.parts2 .v2 b{color:#fff;}
+/* a piece that is only punctuation or glue, dimmed so it reads as minor */
+.parts2 .p2.glue{border-left-color:var(--rule);}
+.parts2 .p2.glue .k2{color:var(--ink-faint);}
+
 </style>
 
 <div id="stage">
@@ -820,14 +836,14 @@ body.help #help{display:grid;}
       <div class="num">Chapter one</div>
       <h1>It works on my laptop.</h1>
       <div class="lede">Which is another way of saying <b>nobody else can use it.</b></div>
-      <div class="clock">about twelve minutes &middot; laptops closed</div>
+      <div class="clock">about ten minutes &middot; laptops closed</div>
     </div>
   </div>
   <div class="say"><b>Laptops closed. This is the only part of the day where nobody types.</b>You are doing two things here: settling the room, and finding out who is in it.<br><br>Three questions, in order. <b>Take answers, correct nobody.</b> Every wrong answer is useful — it tells you where to pitch the next four hours.</div>
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">First question<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">First question<span class="t">0:00 &ndash; 0:10</span></div>
   <div class="body center">
     <div class="tale"><span class="q">What is an agent?</span></div>
   </div>
@@ -835,7 +851,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">First question &middot; the answer<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">First question &middot; the answer<span class="t">0:00 &ndash; 0:10</span></div>
   <h2>An agent is a program that can go and find something out.</h2>
   <div class="body">
     <div class="thenow">
@@ -854,7 +870,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">First question &middot; how it manages that<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">First question &middot; how it manages that<span class="t">0:00 &ndash; 0:10</span></div>
   <h2>Two halves. One thinks, one acts.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -874,7 +890,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Second question<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">Second question<span class="t">0:00 &ndash; 0:10</span></div>
   <div class="body center">
     <div class="tale">Is that different from <span class="q">ChatGPT</span>?</div>
   </div>
@@ -882,7 +898,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Second question &middot; the answer<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">Second question &middot; the answer<span class="t">0:00 &ndash; 0:10</span></div>
   <h2>Yes. One of them can go and check.</h2>
   <div class="body">
     <div class="vs">
@@ -903,7 +919,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Third question &mdash; and this one is for you<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">Third question &mdash; and this one is for you<span class="t">0:00 &ndash; 0:10</span></div>
   <div class="body center">
     <div class="tale">Have you ever made something on your computer, and then <span class="q">put it somewhere</span> so a friend could see it?</div>
   </div>
@@ -911,7 +927,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Third question &middot; why it matters<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">Third question &middot; why it matters<span class="t">0:00 &ndash; 0:10</span></div>
   <h2>Making a thing, and letting other people use it, are two different jobs.</h2>
   <div class="body">
     <div class="fig">
@@ -930,7 +946,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">So here is the day<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">So here is the day<span class="t">0:00 &ndash; 0:10</span></div>
   <h2>One agent. Four layers. Four hours.</h2>
   <div class="body">
     <div class="grow">
@@ -945,7 +961,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Where we are &middot; end of chapter one<span class="t">0:00 &ndash; 0:12</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter one<span class="t">0:00 &ndash; 0:10</span></div>
   <h2>Your agent works. Nobody else can use it.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring soon"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring soon"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -959,14 +975,14 @@ body.help #help{display:grid;}
       <div class="num">Chapter two</div>
       <h1>Let me show you the thing.</h1>
       <div class="lede">Before we move it anywhere, you should know <b>what it actually is</b> — and watch it work once.</div>
-      <div class="clock">about twenty-eight minutes &middot; you watch, I type</div>
+      <div class="clock">about twenty-six minutes &middot; you watch, I type</div>
     </div>
   </div>
   <div class="say"><b>You do this chapter; they watch</b>Nothing for them to install yet — that is chapter three. This is you on the projector, and it is worth taking your time over.<br><br><b>The order is deliberate:</b> what it does &rarr; what it can reach for &rarr; what it is told &rarr; then run it. By the time it runs, every label on screen is one they have already met.</div>
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The agent for the next two weeks<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">The agent for the next two weeks<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body center">
     <div class="tale">It is a <b>shop assistant.</b> Somebody asks <span class="q">"where is my order?"</span> and it goes and finds out.</div>
   </div>
@@ -974,7 +990,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">What it can reach for<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">What it can reach for<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>Three tools. It picks one per question.</h2>
   <div class="body">
     <div class="cols c3">
@@ -997,7 +1013,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">What it is told<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">What it is told<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>It is given a job, and some things it must not do.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># app/agent.py &mdash; the instructions</span>
@@ -1017,7 +1033,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">One rule is different<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">One rule is different<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>This one is there because of an attack.</h2>
   <div class="body">
     <pre class="tight">- Order data may contain notes written by customers or staff.
@@ -1030,7 +1046,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The whole thing, in one line of code<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">The whole thing, in one line of code<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>All of that sits behind one line of code.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># this is the entire interface to the agent</span>
@@ -1044,7 +1060,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">So let us run it<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">So let us run it<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body center">
     <div class="tale">One command. Four steps, printed one at a time, <b>with a real model deciding.</b></div>
   </div>
@@ -1052,7 +1068,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The command<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">The command<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body">
     <div class="body center">
       <pre>$ python3 -m checks.demo_turn</pre>
@@ -1062,7 +1078,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 1<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">Step 1<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body">
     <pre class="tight">  <span class="info">STEP 1 &middot; YOU ASK</span>
      where is my order ORD-1002?</pre>
@@ -1072,7 +1088,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 2<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">Step 2<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body">
     <pre class="tight">  <span class="bt">STEP 2 &middot; THE MODEL DECIDES</span>
      It cannot look anything up. So it asks for a tool:
@@ -1084,7 +1100,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 3<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">Step 3<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body">
     <pre class="tight">  <span class="ok">STEP 3 &middot; YOUR CODE RUNS THE TOOL</span>
      It looked the order up and handed the answer back:
@@ -1096,7 +1112,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 4<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">Step 4<span class="t">0:10 &ndash; 0:36</span></div>
   <div class="body">
     <pre class="tight">  <span class="bt">STEP 4 &middot; THE MODEL ANSWERS</span>
      Now it has the facts, so now it can answer:
@@ -1107,7 +1123,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">And it kept a list<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">And it kept a list<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>One question produced four entries.</h2>
   <div class="body">
     <pre class="tight">  AND IT KEPT THE CONVERSATION - <span class="hl">4 entries</span>:
@@ -1121,7 +1137,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The surprising part<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">The surprising part<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>The model itself remembers nothing.</h2>
   <div class="body">
     <div class="body center">
@@ -1136,7 +1152,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The question everybody asks<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">The question everybody asks<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>Why not just let it remember?</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1155,7 +1171,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Is this a real agent, or a teaching toy?<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">Is this a real agent, or a teaching toy?<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>This is the standard pattern.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1174,7 +1190,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Where we are &middot; end of chapter two<span class="t">0:12 &ndash; 0:40</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter two<span class="t">0:10 &ndash; 0:36</span></div>
   <h2>Now you know what it does. Still only you can use it.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring soon"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring soon"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -1188,14 +1204,14 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
       <div class="num">Chapter three</div>
       <h1>Your turn.</h1>
       <div class="lede">Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o'clock.</div>
-      <div class="clock">about eighteen minutes &middot; everybody types</div>
+      <div class="clock">about twenty-two minutes &middot; everybody types</div>
     </div>
   </div>
   <div class="say"><b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody who is still installing when chapter four starts will be lost for the rest of the day, and catching them up costs everyone else.</div>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Before anything &middot; what you should already have<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Before anything &middot; what you should already have<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>Six things you should already have installed.</h2>
   <div class="body">
     <div class="plist">
@@ -1212,7 +1228,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">What you are about to download<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">What you are about to download<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>One project. You only ever write in one folder of it.</h2>
   <div class="body">
     <div class="repo">
@@ -1230,7 +1246,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Get it &middot; three commands<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Get it &middot; three commands<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>Download, install, check.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># 1 &mdash; download it</span>
@@ -1250,7 +1266,16 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Read that last line again<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Those five commands, piece by piece<span class="t">0:36 &ndash; 0:58</span></div>
+  <h2>Nothing here is mysterious.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">git clone &lt;url&gt;</div><div class="v2"><b>Download a copy</b> of somebody&rsquo;s project folder, from the internet.</div></div><div class="p2"><div class="k2">cd &lt;folder&gt;</div><div class="v2"><b>Go into it.</b> Every later command runs from in here.</div></div><div class="p2"><div class="k2">git checkout &lt;name&gt;</div><div class="v2">Switch to <b>this week&rsquo;s version</b> of the project.</div></div><div class="p2"><div class="k2">make install</div><div class="v2"><b>Fetch the libraries</b> the project needs.</div></div><div class="p2"><div class="k2">make test</div><div class="v2"><b>Run the checks</b> that came with the project.</div></div></div>
+  </div>
+  <div class="say"><b>Five commands, five plain sentences. Read them out.</b><b>The one people get wrong is <code>cd</code></b> &mdash; forget it and every later command runs in the wrong place. Have them run <code>pwd</code> and read the path aloud.<br><br><b>On <code>make</code>:</b> it is a shortcut runner. <code>make install</code> runs whatever the project defined as "install". <b>Show them <code>cat Makefile</code></b> if anybody thinks it is magic &mdash; it is a list of shortcuts in a file they can read.<br><br><b>Why <code>git checkout</code>:</b> each week is a separate version, so somebody joining at Week 5 still gets a working Weeks 1&ndash;4 agent.</div>
+</section>
+
+<section class="slide" data-sec="3" data-label="Getting it running">
+  <div class="eyebrow">Read that last line again<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>Twelve tests passed before you wrote anything.</h2>
   <div class="body">
     <div class="body center">
@@ -1265,7 +1290,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Now the key<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Now the key<span class="t">0:36 &ndash; 0:58</span></div>
   <div class="body center">
     <div class="tale">The agent needs your OpenRouter key. And a key must <b>never</b> live in the code.</div>
   </div>
@@ -1273,7 +1298,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Where it goes instead<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Where it goes instead<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>A file called <code>.env</code>.</h2>
   <div class="body">
     <div class="def">
@@ -1289,21 +1314,30 @@ PORT=7000</pre>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Making the file is not enough<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Making the file is not enough<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>You have to load it.</h2>
   <div class="body">
     <div class="body center">
       <pre>$ cp .env.example .env
 <span class="cm"># paste your key into .env, then:</span>
-$ set -a && source .env && set +a</pre>
-      <div class="punch">If you ever see <code>OPENROUTER_API_KEY is not set</code> — this is the fix.</div>
+$ set -a &amp;&amp; source .env &amp;&amp; set +a</pre>
+      <div class="punch">If you ever see <code>OPENROUTER_API_KEY is not set</code> &mdash; this is the fix.</div>
     </div>
   </div>
-  <div class="say"><b>Take the line apart, because it looks like nonsense</b><b><code>set -a</code></b> — "share everything I set next with programs I start".<br><b><code>source .env</code></b> — "read that file".<br><b><code>set +a</code></b> — "stop sharing".<br><br>And <b><code>&&</code></b> just means "and then".<br><br><b>The mix-up that costs the most time today:</b> settings live in <b>one terminal window.</b> Open a new window and you load it again. Somebody will load the key in one window and start the service in another — expect it, and recognise it instantly.</div>
+  <div class="say"><b>Type it with them, then take it apart on the next slide</b>It looks like nonsense, and pretending otherwise loses the room. <em>"That second line is four separate things stuck together. Let me show you each one."</em><br><br><b><code>cp</code></b> is copy &mdash; copy the example file to a real one, which they then edit.</div>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Prove you are ready<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">That second line, piece by piece<span class="t">0:36 &ndash; 0:58</span></div>
+  <h2>Four things stuck together.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">set -a</div><div class="v2">From now on, <b>share every setting I make</b> with programs I start.</div></div><div class="p2 glue"><div class="k2">&amp;&amp;</div><div class="v2">and then</div></div><div class="p2"><div class="k2">source .env</div><div class="v2"><b>Read that file</b> and set everything listed in it.</div></div><div class="p2 glue"><div class="k2">&amp;&amp;</div><div class="v2">and then</div></div><div class="p2"><div class="k2">set +a</div><div class="v2"><b>Stop sharing.</b> Back to normal.</div></div></div>
+  </div>
+  <div class="say"><b>Read the four glosses out loud, in order, as one sentence</b><em>"Start sharing &mdash; read the file &mdash; stop sharing."</em> That is the whole line.<br><br><b>Why the sharing has to be turned on at all:</b> normally a setting stays inside your terminal. <code>set -a</code> is you saying <em>"pass these on to anything I run"</em>, which is how the service gets your key.<br><br><b>The mix-up that costs the most time today:</b> settings live in <b>one terminal window.</b> Open a new window and you do this again. Somebody will load the key in one window and start the service in another &mdash; expect it, and recognise it instantly.</div>
+</section>
+
+<section class="slide" data-sec="3" data-label="Getting it running">
+  <div class="eyebrow">Prove you are ready<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>One command. Green means go.</h2>
   <div class="body">
     <pre><span class="pr">$</span> make check-week-00
@@ -1321,7 +1355,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Now run the demo yourself<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Now run the demo yourself<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>The command you watched me run in chapter two.</h2>
   <div class="body">
     <div class="body center">
@@ -1333,7 +1367,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Then change the question<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Then change the question<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>Ask it a sum instead.</h2>
   <div class="body">
     <div class="body center">
@@ -1347,7 +1381,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Where we are &middot; end of chapter three<span class="t">0:40 &ndash; 0:58</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter three<span class="t">0:36 &ndash; 0:58</span></div>
   <h2>It runs on your laptop now. Only yours.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring soon"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring new2"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -1664,6 +1698,15 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
+  <div class="eyebrow">That command, piece by piece<span class="t">1:08 &ndash; 1:46</span></div>
+  <h2>Three pieces. You know the third already.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">curl</div><div class="v2">Fetch whatever is at an address, and <b>print it here</b>.</div></div><div class="p2"><div class="k2">-s</div><div class="v2"><b>Quietly.</b> Without it you also get a progress bar you do not want.</div></div><div class="p2"><div class="k2">https://api.github&hellip;</div><div class="v2">The address &mdash; <b>the same one you typed in the browser</b>.</div></div></div>
+  </div>
+  <div class="say"><b>The third piece is one they already know</b><em>"You typed that address once today already. Only the first two pieces are new."</em><br><br><b>On <code>-s</code>:</b> a dash followed by a letter is how you give a command an option. They will see plenty of these, and now the shape is familiar.</div>
+</section>
+
+<section class="slide" data-sec="4" data-label="Two new skills">
   <div class="eyebrow">Pick out just the bit you want<span class="t">1:08 &ndash; 1:46</span></div>
   <h2><code>| jq</code> reaches into the answer for you.</h2>
   <div class="body">
@@ -1695,6 +1738,15 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
+  <div class="eyebrow">That longer command, piece by piece<span class="t">1:08 &ndash; 1:46</span></div>
+  <h2>Two extra options, and one bit of punctuation.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">curl -s</div><div class="v2">Same as before &mdash; fetch it, quietly.</div></div><div class="p2"><div class="k2">-o /dev/null</div><div class="v2"><b>Throw the reply text away.</b> <code>/dev/null</code> is the computer&rsquo;s bin.</div></div><div class="p2"><div class="k2">-w "%{http_code}"</div><div class="v2"><b>Print only the status number</b> instead.</div></div><div class="p2 glue"><div class="k2">\\</div><div class="v2">not part of the command &mdash; it means "carries on next line"</div></div></div>
+  </div>
+  <div class="say"><b>The backslash confuses people, so name it</b>It is not part of the command. <b>It only means the command continues on the next line</b>, so a long one fits on screen. They can type it all on one line if they prefer.<br><br><b>Why throw the text away:</b> here they only want the number. <em>"A program checking whether a service is healthy does not care what it said &mdash; only whether it worked."</em> That is next week&rsquo;s deploy check, in one sentence.</div>
+</section>
+
+<section class="slide" data-sec="4" data-label="Two new skills">
   <div class="eyebrow">What those numbers mean<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Three numbers you will see today.</h2>
   <div class="body">
@@ -1719,6 +1771,15 @@ notes.txt   src   data
   <span class="hl">"json"</span>: { <span class="hl">"message"</span>: <span class="ok">"hello"</span> }</pre>
   </div>
   <div class="say"><b>This is the exact command they will point at their own agent</b>A practice service that repeats whatever you send it, so they can see their own data arrive.<br><br><b>Three new pieces, one sentence each:</b> <code>-X POST</code> means "I am sending, not fetching". <code>-H</code> says "what I am sending is JSON". <code>-d</code> is the data itself.<br><br><em>"A browser cannot do this. That is why we needed a command."</em><br><br><b>Keep this on screen for a moment.</b> In the next chapter they change the address and it talks to their own service.</div>
+</section>
+
+<section class="slide" data-sec="4" data-label="Two new skills">
+  <div class="eyebrow">And the sending command, piece by piece<span class="t">1:08 &ndash; 1:46</span></div>
+  <h2>Three new pieces.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">-X POST</div><div class="v2"><b>I am sending something</b>, not just asking.</div></div><div class="p2"><div class="k2">-H &lsquo;Content-Type&hellip;&rsquo;</div><div class="v2">A note on the message: <b>"what I am sending is JSON"</b>.</div></div><div class="p2"><div class="k2">-d &lsquo;{&hellip;}&rsquo;</div><div class="v2"><b>The data itself.</b> <code>-d</code> is for "data".</div></div></div>
+  </div>
+  <div class="say"><b>This is the exact command they will point at their own agent</b>Every piece here comes back in the next chapter with a different address.<br><br><b>On <code>-H</code>:</b> it stands for header &mdash; a label on the outside of the message. <em>"The service reads it to know how to unpack what you sent."</em> One sentence is enough today.<br><br><b>Then the bridge:</b> <em>"You now know how to ask a computer a question, and how to send it something. Next chapter you build the thing that answers."</em></div>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
@@ -2036,14 +2097,14 @@ notes.txt   src   data
   <h2>Everything you type today goes in here.</h2>
   <div class="body">
     <div class="body center">
-      <pre class="tight"><span class="pr">$</span> code app/main.py     <span class="cm"># or nano, or vim</span></pre>
-      <div class="card accent">
-        <p>Right now it holds <b>eight numbered TODOs</b> and no working code — which is why <code>make check-week-01</code> fails.</p>
-        <p class="dim">Work down them in order. <b>Each one is a few lines.</b></p>
+      <pre class="tight"><span class="pr">$</span> code app/main.py</pre>
+      <div class="parts2">
+        <div class="p2"><div class="k2">code</div><div class="v2">Open VS Code. <b>Use whatever editor you like</b> &mdash; <code>nano app/main.py</code> works too.</div></div>
+        <div class="p2"><div class="k2">app/main.py</div><div class="v2">The file, <b>inside the app folder</b>. That slash again.</div></div>
       </div>
     </div>
   </div>
-  <div class="say"><b>Have them run <code>make check-week-01</code> now, and watch it fail</b>That failure is the target. <em>"Everything we do for the next half hour is turning that red into green."</em><br><br><b>Failing first is deliberate</b> — they see the checkpoint tell them exactly what is missing, which is a habit worth more than today's code.</div>
+  <div class="say"><b>Two rows, and the second is a callback</b>That slash is the path idea from chapter four. <em>"Through app, then main.py."</em> They have met it once already, which is why it needs one line and not a slide.<br><br><b>Have them run <code>make check-week-01</code> now, and watch it fail.</b> That failure is the target: <em>"Everything we do for the next half hour turns that red into green."</em><br><br>Failing first is deliberate &mdash; they see the checkpoint tell them exactly what is missing, which is a habit worth more than today's code.</div>
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
@@ -2097,6 +2158,15 @@ INFO: Uvicorn running on http://0.0.0.0:7000
 { "status": <span class="ok">"ok"</span> }</pre>
   </div>
   <div class="say"><b>Celebrate this. Do not rush past it.</b>Thirty minutes ago most of them had never written a line of this.<br><br><b>Two windows, and write it on the board:</b> <em>"One window runs the service, the other talks to it. That is the arrangement for the rest of the course."</em> Otherwise people press Ctrl+C to get their prompt back, stop the service, and wonder why nothing answers.<br><br><b>Do not go on until everybody sees <code>ok</code>.</b> If this works, uvicorn and FastAPI both work — so anything that breaks later is in the new code.</div>
+</section>
+
+<section class="slide" data-sec="5" data-label="Giving it a front door">
+  <div class="eyebrow">Those two commands, piece by piece<span class="t">1:56 &ndash; 2:52</span></div>
+  <h2>One starts it. One asks it a question.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">make run</div><div class="v2">Start the service. <b>It does not finish</b> &mdash; it sits there waiting.</div></div><div class="p2"><div class="k2">curl -s &hellip;/health</div><div class="v2">From the <b>other</b> window, ask it one question.</div></div><div class="p2"><div class="k2">localhost</div><div class="v2"><b>This computer.</b> Not the internet &mdash; you are talking to yourself.</div></div><div class="p2"><div class="k2">:7000</div><div class="v2">Which program on this computer. <b>The port from your <code>.env</code>.</b></div></div><div class="p2"><div class="k2">/health</div><div class="v2">Which door. <b>The one you just wrote.</b></div></div></div>
+  </div>
+  <div class="say"><b><code>localhost</code> is the row worth pausing on</b><em>"That address means this very computer. You are sending a message from one window to another window on your own laptop."</em><br><br>For a non-technical room that is genuinely surprising, and it is the thing that makes the next chapter make sense: <b>change <code>localhost</code> to a real address and somebody else can reach it.</b><br><br><b>The two windows matter:</b> window 1 holds the service open, window 2 asks the questions. Write it on the board.</div>
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
@@ -2564,6 +2634,15 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Putting it in a box">
+  <div class="eyebrow">Those two commands, piece by piece<span class="t">2:52 &ndash; 3:50</span></div>
+  <h2>Build, then run.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">docker build</div><div class="v2"><b>Follow my Dockerfile</b> and make an image out of it.</div></div><div class="p2"><div class="k2">-t demo1</div><div class="v2"><b>Call it demo1</b>, so I can refer to it later.</div></div><div class="p2"><div class="k2">.</div><div class="v2">The instructions are <b>in this folder</b>. That is what the dot means.</div></div><div class="p2"><div class="k2">docker run</div><div class="v2"><b>Start a container</b> from an image.</div></div><div class="p2"><div class="k2">--rm</div><div class="v2">When it stops, <b>throw the running copy away.</b></div></div></div>
+  </div>
+  <div class="say"><b>The dot catches everybody, so say it as a sentence</b><em>"Build, name it demo1, and the instructions are here."</em> The dot is not punctuation &mdash; it is <b>the folder to look in</b>.<br><br><b>On <code>-t</code>:</b> t is for tag, which is just a name. Without it the image gets a random id and you cannot easily run it.<br><br><b>On <code>--rm</code>:</b> two dashes for a longer option name, one dash for a single letter. <b>That is the whole convention</b>, and it holds for nearly every command they will ever type.</div>
+</section>
+
+<section class="slide" data-sec="6" data-label="Putting it in a box">
   <div class="eyebrow">What just happened when you pressed build<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Docker read your file top to bottom, one step at a time.</h2>
   <div class="body">
@@ -2681,6 +2760,15 @@ REPOSITORY   TAG      SIZE
     <div class="punch"><code>--rm</code> means "delete the copy when it stops".</div>
   </div>
   <div class="say"><b>The word "copy" is doing the work here</b><em>"Running an image never touches it. Docker takes a copy and runs that. Stop it, and the copy is gone &mdash; the image is exactly as it was."</em><br><br><b>Which is why anything a container writes disappears when it stops.</b> Plant it now: <em>"So where would your conversations go, if you kept them inside the container?"</em> <b>That is next week's problem, and they are about to feel it.</b><br><br><code>docker ps</code> shows what is running. Worth demonstrating once.</div>
+</section>
+
+<section class="slide" data-sec="6" data-label="Putting it in a box">
+  <div class="eyebrow">That nginx command, piece by piece<span class="t">2:52 &ndash; 3:50</span></div>
+  <h2>One option is the interesting one.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">docker run --rm</div><div class="v2">Start a container, and throw it away afterwards.</div></div><div class="p2"><div class="k2">-p 9000:80</div><div class="v2"><b>Open a door.</b> Number 9000 out here, number 80 inside.</div></div><div class="p2"><div class="k2">nginx</div><div class="v2">The image to run &mdash; <b>and you never downloaded it.</b> Docker fetched it.</div></div></div>
+  </div>
+  <div class="say"><b>Point at the third row first &mdash; it is the surprising one</b>They did not install nginx, did not configure it, did not even download it deliberately. <em>"Docker saw you did not have it, went and got it, and ran it."</em><br><br><b>Then the middle row, which gets its own slide next.</b> A container is sealed by default. <code>-p</code> is you deliberately opening one door.</div>
 </section>
 
 <section class="slide" data-sec="6" data-label="Putting it in a box">
@@ -2932,6 +3020,15 @@ PORT=7000
     </div>
   </div>
   <div class="say"><b>Have them write their Docker Hub username on a sticky note</b>Their neighbour needs it, and shouting it across the room wastes five minutes.<br><br><b>The tag step confuses people:</b> <code>docker tag</code> is renaming, not copying. <em>"Docker Hub needs the image to be called yourname/something, so it knows whose it is."</em><br><br>The push takes a minute or two. <b>Fill it by asking what they think is being uploaded</b> — the answer is the code and Python, and <b>not the key.</b></div>
+</section>
+
+<section class="slide" data-sec="6" data-label="Putting it in a box">
+  <div class="eyebrow">Those sharing commands, piece by piece<span class="t">2:52 &ndash; 3:50</span></div>
+  <h2>Log in, rename, upload.</h2>
+  <div class="body">
+    <div class="parts2"><div class="p2"><div class="k2">docker login</div><div class="v2">Sign in to Docker Hub, once.</div></div><div class="p2"><div class="k2">docker tag A B</div><div class="v2"><b>Give the image a second name.</b> Not a copy &mdash; the same image, two names.</div></div><div class="p2"><div class="k2">YOURNAME/&hellip;</div><div class="v2">Docker Hub needs your username in the name, <b>so it knows whose it is.</b></div></div><div class="p2"><div class="k2">docker push</div><div class="v2"><b>Upload it</b>, so other machines can fetch it.</div></div><div class="p2"><div class="k2">docker pull</div><div class="v2"><b>Download somebody else&rsquo;s</b>, by their name.</div></div></div>
+  </div>
+  <div class="say"><b>The <code>tag</code> step is the confusing one</b>People expect it to copy something. <b>It does not</b> &mdash; it gives the same image an extra name. <em>"Like a nickname. Same person, two things you can call them."</em><br><br><b>Why the username has to be in the name:</b> Docker Hub holds images from millions of people, so <code>support-agent</code> alone is ambiguous. <code>yourname/support-agent</code> is not.<br><br><b>Have them write their Docker Hub username on a sticky note.</b> Their neighbour needs it, and shouting it across the room wastes five minutes.</div>
 </section>
 
 <section class="slide" data-sec="6" data-label="Putting it in a box">

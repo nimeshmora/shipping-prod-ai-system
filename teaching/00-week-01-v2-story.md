@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **158 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **167 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -30,9 +30,9 @@ necessary rather than arbitrary.
 ## The seven chapters
 
 ```
-   0:00   12   1  "It works on my laptop"      three questions, laptops closed
-   0:12   28   2  "Let me show you the thing"  the agent, then run it live
-   0:40   18   3  "Your turn"                  prerequisites, clone, key, prove
+   0:00   10   1  "It works on my laptop"      three questions, laptops closed
+   0:10   26   2  "Let me show you the thing"  the agent, then run it live
+   0:36   22   3  "Your turn"                  prerequisites, clone, key, prove
    0:58   10      break
    1:08   38   4  "Two new skills"             terminal, then the browser -> curl
    1:46   10      break
@@ -43,7 +43,7 @@ necessary rather than arbitrary.
    4:00        exactly four hours, both breaks included
 ```
 
-About **84 seconds a slide** — one idea, said once, then advance.
+About **79 seconds a slide** — one idea, said once, then advance.
 
 ## How the story is told
 
@@ -253,7 +253,7 @@ top of the rail.
 python3 teaching/check-slide-layout.py teaching/week-01-slides-v2.html
 ```
 
-It renders **all 158 slides** in a headless browser and reports any slide whose
+It renders **all 167 slides** in a headless browser and reports any slide whose
 content reaches the bottom rail, passes either side edge, or exceeds the stage.
 Exits non-zero, so it can gate a commit.
 
@@ -262,7 +262,55 @@ Exits non-zero, so it can gate a commit.
 > `slide 30: hits the bottom rail (gap -36px)`. A checker nobody has seen fail
 > is not a checker.
 
-**Both decks pass:** 158/158 here, 218/218 in the other one.
+**Both decks pass:** 167/167 here, 218/218 in the other one.
+
+## Every command is taken apart on screen
+
+**A command is one intimidating string to somebody who has never used a
+terminal.** Ten slides now break the important ones into pieces, each with a
+plain-English line beside it — and crucially **on the slide**, not only in the
+presenter notes, where the room never saw them.
+
+The one that needed it most:
+
+```
+   set -a         From now on, share every setting I make with programs I start.
+   &&             and then
+   source .env    Read that file and set everything listed in it.
+   &&             and then
+   set +a         Stop sharing. Back to normal.
+```
+
+Read the four glosses aloud as one sentence — *"start sharing, read the file,
+stop sharing"* — and the line stops being nonsense.
+
+**What gets broken down, and the one thing each slide fixes:**
+
+| Command | The piece people trip on |
+|---|---|
+| `set -a && source .env && set +a` | all of it — this is the worst offender in the day |
+| `git clone` / `cd` / `git checkout` / `make` | **`cd`** — forget it and every later command runs in the wrong place |
+| `curl -s <url>` | that a dash-letter is *an option*, a shape they will see all day |
+| `curl -o /dev/null -w "%{http_code}"` | the **backslash**, which is not part of the command |
+| `curl -X POST -H … -d …` | that `-H` is a label on the outside of the message |
+| `docker build -t demo1 .` | **the dot** — it is the folder to look in, not punctuation |
+| `docker run --rm -p 9000:80 nginx` | that nginx was **never downloaded deliberately** |
+| `make run` + `curl localhost:7000/health` | **`localhost`** means *this very computer* |
+| `docker login` / `tag` / `push` / `pull` | **`tag`** does not copy — it adds a second name |
+| `code app/main.py` | the slash, a callback to the path idea from chapter four |
+
+The glue — `&&`, the trailing backslash, the pipe — is styled **dimmer than the
+real pieces**, so it reads as minor rather than as another thing to learn.
+
+> **INSTRUCTOR** · The pattern is always: **show the command, then take it
+> apart on the next slide.** Do not do both on one slide — the point of the
+> breakdown is that nothing on it is a mystery, and that only works if it has
+> the screen to itself.
+>
+> Two conventions worth saying once, early: **one dash is a single letter, two
+> dashes is a word** (`-s`, `--rm`), and **a trailing backslash just means the
+> command carries on next line.** Say those at the first `curl` and you save
+> yourself twenty small questions.
 
 ## Plain English on screen, always
 
@@ -323,12 +371,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 158 slides measured** in a headless browser at the deck's own
+- **All 167 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 158 of 158.
+- **Every slide has a presenter note** — 167 of 167.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 
