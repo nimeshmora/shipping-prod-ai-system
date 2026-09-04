@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 219 slides with a presenter note on 207 of them, and it carries material this
+is 217 slides with a presenter note on 205 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -202,9 +202,10 @@ python3 -m checks.demo_turn
 > **The line that lands:** *"Look at step 2 again. It did not fetch anything.
 > It said 'use lookup_order with ORD-1002' — and then waited for us."*
 >
-> With a key configured, `python3 -m checks.demo_turn --real` shows the same
-> four steps with the real model deciding for itself. Only the wording of the
-> final answer changes, which is itself worth pointing out.
+> **The model really is deciding this**, live, on your key. So the wording of
+> the final answer will differ slightly from run to run — worth pointing out
+> rather than hiding, because it is the clearest sign that nothing here is
+> scripted.
 
 **Demo 3 — what it remembered.**
 
@@ -428,56 +429,32 @@ watch the four steps happen one at a time.
 python3 -m checks.demo_turn
 ```
 
-**It prints its mode first**, so nobody has to guess whether a real model
-answered:
+**It prints what it is using, then gets on with it:**
 
 ```
-  MODE: a stand-in for the model - no key, no internet, free
-        the LOOP below is the real one
-        only the model's choice is scripted
-
-  WHAT GETS SENT, every single question:
-     1. the standing rules       105 words, not sent - no model to send them to
-     2. the conversation so far  empty - this is question one
-     3. the list of tools        3 of them:
-           - lookup_order
-           - calculator
-           - word_count
+  MODEL: anthropic/claude-sonnet-4.5
+         through https://openrouter.ai/api/v1
+  TOOLS: 3 available - lookup_order, calculator, word_count
 ```
 
-That block answers three things a room always wants to know:
+That is the whole preamble. Two lines, and both are facts somebody will ask
+about anyway: **which model**, and **what it is allowed to reach for.**
 
-| Question | Answer |
-|---|---|
-| Which model is underneath? | `anthropic/claude-sonnet-4.5`, through the course gateway — and it is **a setting in `.env`**, not baked into the code. Week 6 swaps a second model in by changing it. |
-| Is a key used here? | **No.** Stand-in mode needs no key and no internet, which is why we run it first. |
-| Do the rules really go every time? | **In the real agent, yes** — `call_model` attaches them to every single call. **In the stand-in, no**: it never reaches a model, so there is nothing to send them to — **and the printed line says exactly that.** |
-
-With `--real` the first line reads `MODE: the real model - anthropic/claude-sonnet-4.5`
 and item 1 reads *"sent with the question"*.
 
-> **INSTRUCTOR** · **Two words to keep straight all day, because the room will
-> mix them up.**
+> **INSTRUCTOR** · **One word to keep straight all day, because the room will
+> mix it up.**
 >
 > | | Holds the conversation? |
 > |---|---|
 > | the **model** | never — every call starts blank |
 > | the **agent** (`run_turn`) | no — it *takes* a history in and hands a new one back |
-> | your **service** (`app/memory.py`) | **yes** — this is the only thing that stores anything |
+> | your **service** (`app/memory.py`) | **yes** — the only thing that stores anything |
 >
 > So "our agent remembers" is wrong, and it is worth not saying. The agent is a
 > function: history goes in, a longer history comes out. **The storing happens
-> in the web service they build after the break** — which is exactly why the
-> session id exists, and why next week's redeploy wipes it.
->
-> **The honesty matters here.** You said at the instructions
-> slide that the rules go with every question. The stand-in does not send
-> them — so the command says so, rather than letting the slide quietly
-> contradict itself. If you have a key, **run `--real` once** and show item 1
-> change. That is the cleanest proof available.
->
-> Point at item 2 and plant Week 4: *"That one is empty now. Watch what it
-> costs when it is not."*
+> in the web service they build after the break** — which is why the session id
+> exists, and why next week's redeploy wipes it.
 
 Then the four steps. It **pauses between them** so the room can read each one
 as it appears.
@@ -552,8 +529,9 @@ as it appears.
 > **If you have time**, ask it `what is 12 * 41?` and watch step 2 pick
 > `calculator` instead. That is tool choice, visible.
 >
-> With a key configured, `python3 -m checks.demo_turn --real` runs the same four
-> steps with the real model deciding for itself.
+> Try a question of your own from the room, too. **It will handle anything
+> plausible**, and decline anything off-topic — because of the instructions
+> slide, not because of code.
 
 #### 6 · Is this a real agent? (2 min)
 
@@ -829,18 +807,18 @@ show it, which is the first reason they need `ls -la` in the terminal exercise.
 
 ### Prove it, then run the demo yourself (4 min)
 
-> **INSTRUCTOR** · **Do not say "no key needed" at this point in the session.**
-> They have just spent five minutes creating `.env` and loading it, so that
-> sentence lands as *"was that a waste of time?"*
+> **INSTRUCTOR** · **The checkpoint and the demo test different things, and it
+> is worth knowing which is which.**
 >
-> Say this instead: *"The stand-in answers this one, so it works whether or not
-> your key is loaded yet. Your key is what makes the **real** model choose —
-> that is `--real`, and we run it next."*
+> `make check-week-00` runs the loop **without calling out**, so it checks their
+> Python, their install and the agent code. Green means the project is sound.
 >
-> Then have them run `--real` once. It costs a fraction of a cent, and it is
-> the first time their own key does anything. **If it errors with
-> `OPENROUTER_API_KEY is not set`, this is the best possible moment to hit
-> that** — the `set -a && source .env && set +a` fix is two slides behind them.
+> `python3 -m checks.demo_turn` **uses their key.** So this is the first moment
+> their own key does anything, and the first place a key problem shows up.
+>
+> **If it stops with `OPENROUTER_API_KEY is not set`, that is the best possible
+> place to hit it** — the `set -a && source .env && set +a` fix is two slides
+> behind them, and the demo prints the fix in the error itself.
 
 ```bash
 make check-week-00

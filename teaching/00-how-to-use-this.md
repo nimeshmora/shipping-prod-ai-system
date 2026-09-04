@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 219-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 217-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Two hundred and seven of the slides carry
+**Press `S` before you start.** Two hundred and five of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -317,7 +317,7 @@ yet — in a side panel the room never sees.
    4:00        exactly four hours, including both breaks
 ```
 
-**219 slides over 220 minutes of content is about 61 seconds each.** That is
+**217 slides over 220 minutes of content is about 61 seconds each.** That is
 the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
@@ -610,7 +610,7 @@ screen you cannot tell where to start or where to stop.
 
 | | First pass | Second pass | Now |
 |---|---|---|---|
-| slides | 147 | 211 | **219** |
+| slides | 147 | 211 | **217** |
 | slides with 4+ blocks | 24 | 0 | **0** |
 | slides teaching two things at once | — | 6 | **0** |
 | slides that overflow the stage | — | 0 | **0** |
@@ -620,7 +620,7 @@ an example and a caveat are three slides, not one. Two commands are two slides.
 A code block plus a numbered reading *of that same code* is still one idea, and
 stays on one slide.
 
-**Verified by rendering, not by eye.** All 219 slides were measured in a
+**Verified by rendering, not by eye.** All 217 slides were measured in a
 headless browser at the deck's own 1280×720 stage; none overflow.
 
 ### The demo is the demo, not a description of the demo
@@ -738,29 +738,38 @@ parent's dimming. Verified by reading the computed style of all six levels in a
 headless browser: **every level now renders at opacity 1.00**, and the current
 level is full-strength white at any depth.
 
-### The rules slide claimed something the demo does not do
+### The demo uses the real model, and the stand-in is gone from the slides
 
-Two slides said the standing rules go with every question. **True of the real
-agent, false of the demo** — and the slide showed a trimmed version of the
-command's own output, dropping the clause that admitted it.
+**Every student has an OpenRouter key from the prerequisites**, so the demo runs
+the real model by default. The scripted stand-in still exists — the checkpoint
+uses it to run the loop without a network call — but **it is not mentioned on
+any slide.**
 
-```
-   the slide showed      1. the standing rules       105 words
-   the command prints    1. the standing rules       105 words, not sent -
-                                                     no model to send them to
-```
+This removed three explanations that were confusing the room and, on review,
+buying nothing:
 
-`SYSTEM_PROMPT` is attached in exactly one place: inside `call_model`. The demo
-passes its own `model_fn`, so `call_model` is **never reached** — verified by
-spying on it during a run, which recorded **0 calls**. No model, so no rules.
+| Cut | Why |
+|---|---|
+| the "two ways to run this" comparison | there is one way now |
+| the payload block (`WHAT GETS SENT`) | existed only to explain why the rules were *not* sent |
+| "so what was the key for?" | only needed because the demo had not used the key |
 
-Both slides now match reality: the instructions slide says *"the real agent
-re-sends these with every question"*, and the payload slide prints the honest
-line in full and points at it.
+**The rules-are-re-sent-every-time explanation is out entirely.** It was
+accurate about the real agent but produced a contradiction the moment the
+stand-in ran, and it is not something a Week 1 room needs. The instructions
+slide now simply shows the rules and says what they are for — *"this is how you
+give an agent a job description"* — which is the part that matters for Week 7.
 
-> **INSTRUCTOR** · Spend fifteen seconds naming the gap. If you gloss over it,
-> somebody runs `--real`, watches that line change to *"sent with the
-> question"*, and quietly stops trusting the slides for the rest of the day.
+> **INSTRUCTOR** · Two consequences worth knowing.
+>
+> **The demo is now genuinely live.** The model really picks the tool, so the
+> wording of the final answer differs slightly run to run. **Point that out** —
+> it is the clearest proof nothing is scripted. You can also take a question
+> from the room.
+>
+> **It needs the network.** Run it once before class. If OpenRouter or the wifi
+> is down, `python3 -m checks.demo_turn --offline` falls back to the scripted
+> stand-in and still shows all four steps.
 
 ### Three things, and only one of them remembers
 
@@ -773,35 +782,11 @@ Worth keeping straight, because a room mixes these up immediately:
 | your **service** (`app/memory.py`) | **yes** — the only thing that stores anything |
 
 So *"our agent remembers"* is wrong and is not said anywhere in the deck. The
-`/chat` test slide now reads **"nothing in the agent remembered this — your
-service looked the history up by its id and re-sent all of it."**
+`/chat` test slide reads **"nothing in the agent remembered this — your service
+looked the history up by its id and re-sent all of it."**
 
 That precision is what makes next week land: a redeploy replaces the process,
 the dict in `memory.py` goes with it, and the conversations are gone.
-
-### The key story had a contradiction, and it is fixed
-
-At 0:14 the deck says the demo needs **no key** — true and reassuring, because
-nobody has one yet. But the slide at 1:02, *after* they have spent five minutes
-creating `.env` and loading it, used to say *"and it still needs no key"*.
-
-That reads as **"so was the key pointless?"** It is the worst possible moment to
-plant that doubt, because the next hour depends on their key working.
-
-| Where | What it says now |
-|---|---|
-| 0:14, before they have a key | "No key. No internet. Free." — unchanged, and helpful |
-| 1:02, after they set one up | "You have the project now, so this runs on your own laptop." |
-| 1:03, its own slide | **"So what was the key for?"** — the stand-in answers this one; your key is for the real model |
-
-The checkpoint slide's note changed the same way: it now says the checkpoint
-uses the stand-in **so it passes whether or not the key is loaded yet**, and
-that the key itself is tested two slides later with `--real`.
-
-> **INSTRUCTOR** · **Have them run `--real` once at 1:03.** A fraction of a
-> cent, and it is the first time their own key does anything. If it fails with
-> `OPENROUTER_API_KEY is not set`, that is the ideal place to hit the error —
-> the `set -a` fix is two slides behind them and still fresh.
 
 > **INSTRUCTOR** · This is what makes the deck teachable rather than just
 > correct. **Each slide is now one thing you can open, say, and close** — then
@@ -868,45 +853,30 @@ hop, plus a breadcrumb strip showing how deep you are.
 > Then the hook: *"Six layers. At 3:12 we put a box around all of them."* The
 > container section refers back to this picture rather than starting fresh.
 
-### The demo states its model, its key use, and its payload
+### The demo states which model and which tools, and nothing else
 
-Three questions the demo was silent about, all now answered on screen. The
-command prints them **before** step 1, so nobody has to guess:
+Two facts the room always wants, printed **before** step 1 so nobody has to
+guess:
 
 ```
-  MODE: a stand-in for the model - no key, no internet, free
-        the LOOP below is the real one
-        only the model's choice is scripted
-
-  WHAT GETS SENT, every single question:
-     1. the standing rules       105 words, not sent - no model to send them to
-     2. the conversation so far  empty - this is question one
-     3. the list of tools        3 of them:
-           - lookup_order
-           - calculator
-           - word_count
+  MODEL: anthropic/claude-sonnet-4.5
+         through https://openrouter.ai/api/v1
+  TOOLS: 3 available - lookup_order, calculator, word_count
 ```
 
-With `--real` the first line reads **`MODE: the real model - anthropic/claude-sonnet-4.5`**
-and item 1 reads **"sent with the question"**.
+That is the whole preamble. It used to also print a payload block explaining
+which parts of the request were and were not sent — that came out with the
+stand-in, because with a real model the answer is simply "all of it", and the
+explanation was costing more confusion than it bought.
 
 | The question | The answer |
 |---|---|
-| Which model is underneath? | `anthropic/claude-sonnet-4.5`, through the course gateway. **It is a setting in `.env`**, not baked into the code — Week 6 swaps in a second model by changing it. |
-| Is a key used in the demo? | **No.** The stand-in mode needs no key and no internet, which is why we run it first — every laptop sees the same thing. |
-| Do the rules really go with every question? | **Yes**, and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to — **and the line says so.** |
+| Which model is underneath? | `anthropic/claude-sonnet-4.5`, through OpenRouter. **It is one line in `.env`**, not baked into the code — Week 6 adds a fallback by changing it. |
+| Whose key does it use? | **Theirs**, from the prerequisites. This is the first place a key problem surfaces, and the error names the fix. |
+| What can it reach for? | The three tools, listed. **It picks one** — nobody tells it which. |
 
-Two slides at 0:11 cover this before the demo runs: the two run modes side by
-side, and what gets sent with every question.
-
-> **INSTRUCTOR** · **The honesty matters here.** You told them at the
-> instructions slide that the rules go with every question. The stand-in does
-> not send them — so the command says so rather than letting the slide quietly
-> contradict itself. **If you have a key, run `--real` once** and show item 1
-> change to "sent with the question". That is the cleanest proof available.
->
-> Point at item 2 and plant Week 4: *"That one is empty now. Watch what it
-> costs when it is not."*
+One slide at 0:14 names the model before the demo runs, and one says what the
+command is. Then it runs.
 
 ### The demo is the instructor's, and they run it later
 
@@ -936,10 +906,9 @@ python3 -m checks.demo_turn                        # picks lookup_order
 python3 -m checks.demo_turn "what is 12 * 41?"     # picks calculator -> 492
 ```
 
-That was a false claim on the slide until now — the stand-in model hardcoded
-`lookup_order`, so changing the question changed nothing. `checks/demo_turn.py`
-now chooses a tool from the question, and both variations are verified on the
-`week-01-package` branch.
+**The model really chooses**, so any sensible question works — take one from
+the room. Ask it something off-topic and it declines, which is the instructions
+slide proving itself rather than any code doing it.
 
 ### `.env` gets three slides, in plain English
 

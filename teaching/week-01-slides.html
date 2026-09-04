@@ -1183,10 +1183,10 @@ Note: signature required on delivery</pre>
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">The instructions · what it always gets<span class="t">0:14 &ndash; 0:41</span></div>
-  <h2>The real agent re-sends these with every question.</h2>
+  <div class="eyebrow">The instructions &middot; what it is told<span class="t">0:14 &ndash; 0:41</span></div>
+  <h2>It is given a job, and some things it must not do.</h2>
   <div class="body">
-    <pre class="tight"><span class="cm"># app/agent.py — the standing rules</span>
+    <pre class="tight"><span class="cm"># app/agent.py — the instructions</span>
 
 <span class="hl">You are a customer support assistant for an online shop.</span>
 
@@ -1197,9 +1197,9 @@ Note: signature required on delivery</pre>
 - <span class="ok">Never promise a refund</span>, cancellation or credit.
   Say a human will confirm.
 - Be brief and friendly.</pre>
-    <div class="punch">The model remembers nothing between questions — so the rules go again, every time.</div>
+    <div class="punch">This is how you give an agent a job description.</div>
   </div>
-  <div class="say"><b>One point only: the model has no memory, so the rules are re-sent</b>A fresh question means a model that knows nothing — not your rules, not the last answer. So <code>app/agent.py</code> attaches this whole sheet to every single call.<br><br><b>Where it happens, if anybody asks:</b> inside <code>call_model</code>, one line. Nothing in the loop does it.<br><br><b>Worth naming:</b> <em>"Never promise a refund" is not politeness — that is a company deciding an AI cannot commit money on its behalf.</em><br><br><b>Careful with the wording here.</b> This is what the <b>real</b> agent does. The stand-in you are about to run never reaches a model at all, so it sends no rules — and it prints that fact. <b>Six slides from now you will point at that line.</b></div>
+  <div class="say"><b>Read two or three of the rules out, and say why each exists</b><em>"Never promise a refund" is not politeness — that is a company deciding an AI cannot commit money on its behalf.</em><br><br><em>"Never guess an order's status" is the whole reason the tool exists.</em><br><br><b>Keep it to a minute.</b> These are instructions in plain English, written in a file — not code, not configuration. That is genuinely all they need to know here.<br><br>The next slide has the one rule that is a defence against an attack.</div>
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
@@ -1284,38 +1284,17 @@ while True:
 
 <section class="slide" data-sec="2" data-label="Today's agent">
   <div class="eyebrow">Before we run it &middot; which model<span class="t">0:14 &ndash; 0:41</span></div>
-  <h2>One of two models answers. Same four steps either way.</h2>
+  <h2>One model answers, through OpenRouter.</h2>
   <div class="body">
-    <div class="vs">
-      <div class="side g">
-        <div class="h">what we run now</div>
-        <div class="m">A stand-in<br>for the model</div>
-        <div class="s"><b>No key. No internet. Free.</b><br>The loop is the real one.</div>
-      </div>
-      <div class="mid2">or</div>
-      <div class="side">
-        <div class="h">once you have a key</div>
-        <div class="m">The real model<br><span style="font-family:var(--mono);font-size:15px;color:var(--brand)">anthropic/claude-sonnet-4.5</span></div>
-        <div class="s">It decides for itself.<br>A fraction of a cent<br>per question.</div>
+    <div class="body center">
+      <div class="oneline">
+        <div class="lbl">THE MODEL UNDERNEATH</div>
+        <div class="say2"><b>anthropic/claude-sonnet-4.5</b>, reached through OpenRouter with your key.</div>
+        <div class="extra">One line in <code>.env</code> — <b>not baked into the code.</b> A fraction of a cent per question.</div>
       </div>
     </div>
   </div>
-  <div class="say"><b>Answer the model question before somebody asks it</b>People want to know what is underneath. <b>It is <code>anthropic/claude-sonnet-4.5</code>, reached through OpenRouter</b> — and that is one line in <code>.env</code>, not something baked into the code. Week 6 swaps in a fallback model by changing exactly that line.<br><br><b>Why the stand-in first:</b> it needs no key and no internet, so the whole room sees the same thing at the same time. <em>"The loop you are about to watch is the real loop. The only thing pretending is the model's choice."</em><br><br>The command prints which mode it is in, so you cannot mislead anyone by accident.</div>
-</section>
-
-<section class="slide" data-sec="2" data-label="Today's agent">
-  <div class="eyebrow">What the command prints first<span class="t">0:14 &ndash; 0:41</span></div>
-  <h2>What the real agent sends &mdash; and what the stand-in skips.</h2>
-  <div class="body">
-    <pre class="tight">  WHAT GETS SENT, every single question:
-
-     1. the standing rules      105 words, <span class="warn">not sent - no model
-                                to send them to</span>
-     2. the conversation so far  <span class="cm">empty - this is question one</span>
-     3. the list of tools        <span class="ok">3 of them</span></pre>
-    <div class="punch">Read line 1 again. The stand-in has no model, so there are no rules to send.</div>
-  </div>
-  <div class="say"><b>Be straight about this line — the command is, so you should be</b>The slide two back said the rules go with every question. <b>That is true of the real agent.</b> It is not true of what you just ran, and the output says so.<br><br><b>Say it plainly:</b> <em>"The stand-in never contacts a model. There is nothing to send the rules TO. When we run the real one in a moment, this line changes to 'sent with the question'."</em><br><br><b>Why this matters more than it looks:</b> if you gloss over it, somebody will run <code>--real</code>, see the line change, and quietly stop trusting the slides. <b>Naming the gap costs you fifteen seconds and buys the whole afternoon.</b><br><br><b>Then point at line 2 and plant Week 4:</b> <em>"That one is empty right now. Watch what it costs when it is not."</em></div>
+  <div class="say"><b>Answer the model question before somebody asks it</b>People want to know what is underneath. <b>It is <code>anthropic/claude-sonnet-4.5</code>, through OpenRouter.</b><br><br><b>The part that matters:</b> the model name is <em>a setting</em>, not code. Week 6 adds a fallback model by changing that one line. <em>"Nothing in the agent knows or cares which model it is talking to."</em><br><br>Everyone has an OpenRouter key from the prerequisites, so <b>this is what everybody runs</b> — you now, them at 1:02.</div>
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
@@ -1335,7 +1314,7 @@ while True:
     </div>
     <div class="punch">It adds no cleverness. It only makes the four steps visible.</div>
   </div>
-  <div class="say"><b>Say what it is, so nobody thinks it is the agent</b><em>"This file is a teaching aid I wrote. It calls the same <code>run_turn</code> you will call from your web service in two hours. All it adds is a label before each step and a one-second pause, so you can read one before the next appears."</em><br><br><b>Two things worth pointing out:</b><br><br>&bull; it runs with <b>no key and no internet</b>, so every laptop can run it<br>&bull; it prints its <b>mode</b> on the first line, so nobody has to guess whether a real model answered<br><br><b>If somebody asks whether the stand-in is cheating:</b> the loop is real, the tools are real, and the conversation it keeps is real. The only scripted part is <em>which tool the model picks</em> — and with <code>--real</code> even that is genuine.</div>
+  <div class="say"><b>Say what it is, so nobody thinks it is the agent</b><em>"This file is a teaching aid. It calls the same <code>run_turn</code> you will call from your own web service in two hours. All it adds is a label before each step and a one-second pause, so you can read one before the next appears."</em><br><br><b>Everything you are about to see is real</b> — a real model deciding, our real code running the tool, the real conversation being kept. Nothing here is simulated.</div>
 </section>
 
 <section class="slide" data-sec="2" data-label="Today's agent">
@@ -1916,7 +1895,7 @@ the loop runs a tool then answers
 <span class="ok">Checkpoint passed.</span></pre>
     <div class="punch">Green here means you are ready.</div>
   </div>
-  <div class="say"><b>This is your gate — do not move on with hands still up</b>Somebody still installing later will be lost all afternoon, and catching them up costs everybody else.<br><br>If someone is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.<br><br><b>Worth saying:</b> this checkpoint uses the <b>stand-in</b> model, so it passes whether or not the key is loaded yet — it is checking your Python and your install, not your key. <b>You test the key itself two slides from now</b>, with <code>--real</code>.</div>
+  <div class="say"><b>This is your gate — do not move on with hands still up</b>Somebody still installing later will be lost all afternoon, and catching them up costs everybody else.<br><br>If someone is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.<br><br><b>Worth saying:</b> this is checking their Python, their install and the agent code — <b>not the network.</b> It runs the loop without calling out, so a green here means the project is sound. <b>They test the key itself on the next slide</b>, by running the demo.</div>
 </section>
 
 <section class="slide" data-sec="3b" data-label="Setup">
@@ -1944,26 +1923,6 @@ the loop runs a tool then answers
     </div>
   </div>
   <div class="say"><b>This closes the loop you opened at 0:14</b>They watched you run it and were told they would run it themselves. <b>This is that moment.</b> Collect it out loud: <em>"Remember this from the start of the session? Now it is yours."</em><br><br><b>Do not say "no key needed" here.</b> They have just spent five minutes setting a key up, so that sentence only makes them wonder whether they wasted the effort. The next slide answers the key question properly.</div>
-</section>
-
-<section class="slide" data-sec="3b" data-label="Setup">
-  <div class="eyebrow">So what was the key for?<span class="t">0:46 &ndash; 1:07</span></div>
-  <h2>The stand-in answers this one. Your key is for the real model.</h2>
-  <div class="body">
-    <div class="cols c2 mid">
-      <div class="card good">
-        <h3>Without <code>--real</code></h3>
-        <p class="dim">A <b>stand-in</b> answers. Free, offline, and the same on every laptop.</p>
-        <p><b>Your key sits unused.</b></p>
-      </div>
-      <div class="card accent">
-        <h3>With <code>--real</code></h3>
-        <p class="dim">Your key is used, and <b>the actual model decides</b> which tool to reach for.</p>
-      </div>
-    </div>
-    <pre class="tight"><span class="pr">$</span> python3 -m checks.demo_turn <span class="hl">--real</span></pre>
-  </div>
-  <div class="say"><b>Answer the question they are now holding: "so did I need the key or not?"</b><em>"Yes — but not for this command. The stand-in exists so the whole room sees the same four steps whether or not your key is working yet. Your key is what makes the real model choose."</em><br><br><b>Have them run <code>--real</code> once, now.</b> It costs a fraction of a cent and it is the first time their own key does anything. <b>If it errors with "not set", that is the <code>set -a</code> line from two slides ago</b> — and this is the best possible moment to hit that error, because the fix is still on screen behind them.<br><br><b>Then point at the first line of the output:</b> the mode changes from stand-in to <code>anthropic/claude-sonnet-4.5</code>. The command tells you which one answered, so you never have to guess.</div>
 </section>
 
 <section class="slide" data-sec="3b" data-label="Setup">
