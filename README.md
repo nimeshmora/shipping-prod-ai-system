@@ -40,6 +40,25 @@ what an agent is actually *for*.
 
 ---
 
+## On Windows: do this first
+
+Every command in this course is written for a Linux-style terminal. Windows
+has one built in — you just have to turn it on. **In PowerShell, once:**
+
+```powershell
+wsl --install
+```
+
+Restart, then type `wsl` to enter it. From then on **every command here
+works exactly as written** — no substitutions, nothing to translate.
+
+Work inside the WSL home folder (`cd ~`), not under `/mnt/c/`. It is much
+faster and avoids a class of permission problems.
+
+Mac and Linux: nothing to do, your terminal is already right.
+
+---
+
 ## See what it does, step by step
 
 Before building anything, watch one question go round the loop. This uses
