@@ -43,8 +43,8 @@ what an agent is actually *for*.
 
 ## See what it does, step by step
 
-Before building anything, watch one question go round the loop. No API
-key, no internet, free:
+Before building anything, watch one question go round the loop. This uses
+your key, and the model really decides:
 
 ```bash
 python3 -m checks.demo_turn
@@ -61,12 +61,13 @@ Change the question and watch it reach for a different tool:
 python3 -m checks.demo_turn "what is 12 * 41?"
 ```
 
-With a key in `.env`, `--real` lets the actual model choose:
+Load your key first, in the same terminal:
 
 ```bash
 set -a && source .env && set +a
-python3 -m checks.demo_turn --real
 ```
+
+No network? `--offline` runs the same four steps with a scripted stand-in.
 
 ---
 
