@@ -121,6 +121,18 @@ an image layer.** Layers are cached, shared, and pushed to registries.
 
 ---
 
+## First, watch it work
+
+One question, four labelled steps, no key needed:
+
+```bash
+python3 -m checks.demo_turn
+```
+
+This is a teaching aid, not part of the agent. It calls the same
+`run_turn()` you are about to wrap in a web service, and only adds a label
+and a pause before each step so you can read them.
+
 ## Do this
 
 ```bash
