@@ -1901,7 +1901,7 @@ the loop runs a tool then answers
 <span class="ok">Checkpoint passed.</span></pre>
     <div class="punch">Green here means you are ready.</div>
   </div>
-  <div class="say"><b>This is your gate — do not move on with hands still up</b>Somebody still installing later will be lost all afternoon, and catching them up costs everybody else.<br><br>If someone is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.<br><br><b>Worth saying:</b> this needs no key and no internet — it runs the loop with a stand-in model, so it checks your Python and your install without spending anything.</div>
+  <div class="say"><b>This is your gate — do not move on with hands still up</b>Somebody still installing later will be lost all afternoon, and catching them up costs everybody else.<br><br>If someone is genuinely stuck, <b>pair them with a working neighbour</b> and carry on. Sharing a screen beats being stuck alone.<br><br><b>Worth saying:</b> this checkpoint uses the <b>stand-in</b> model, so it passes whether or not the key is loaded yet — it is checking your Python and your install, not your key. <b>You test the key itself two slides from now</b>, with <code>--real</code>.</div>
 </section>
 
 <section class="slide" data-sec="3b" data-label="Setup">
@@ -1922,14 +1922,33 @@ the loop runs a tool then answers
 <section class="slide" data-sec="3b" data-label="Setup">
   <div class="eyebrow">Now run the demo yourself<span class="t">0:46 &ndash; 1:07</span></div>
   <h2>The command you watched me run at 0:14.</h2>
-  <div class="body center">
-    <pre>$ python3 -m checks.demo_turn</pre>
-    <div class="card good">
-      <p>You have the project now, so <b>this works on your own laptop</b> — and it still needs no key.</p>
+  <div class="body">
+    <div class="body center">
+      <pre>$ python3 -m checks.demo_turn</pre>
+      <div class="punch">You have the project now, so this runs on your own laptop.</div>
     </div>
-    <div class="punch quiet">Four labelled steps, with a pause between each. Exactly what you saw earlier.</div>
   </div>
-  <div class="say"><b>This closes the loop you opened at 0:14</b>They watched you run it and were told they would run it themselves. <b>This is that moment.</b> Collect it out loud: <em>"Remember this from the start of the session? Now it is yours."</em><br><br>Two minutes. Then the next slide gives them something to poke at.</div>
+  <div class="say"><b>This closes the loop you opened at 0:14</b>They watched you run it and were told they would run it themselves. <b>This is that moment.</b> Collect it out loud: <em>"Remember this from the start of the session? Now it is yours."</em><br><br><b>Do not say "no key needed" here.</b> They have just spent five minutes setting a key up, so that sentence only makes them wonder whether they wasted the effort. The next slide answers the key question properly.</div>
+</section>
+
+<section class="slide" data-sec="3b" data-label="Setup">
+  <div class="eyebrow">So what was the key for?<span class="t">0:46 &ndash; 1:07</span></div>
+  <h2>The stand-in answers this one. Your key is for the real model.</h2>
+  <div class="body">
+    <div class="cols c2 mid">
+      <div class="card good">
+        <h3>Without <code>--real</code></h3>
+        <p class="dim">A <b>stand-in</b> answers. Free, offline, and the same on every laptop.</p>
+        <p><b>Your key sits unused.</b></p>
+      </div>
+      <div class="card accent">
+        <h3>With <code>--real</code></h3>
+        <p class="dim">Your key is used, and <b>the actual model decides</b> which tool to reach for.</p>
+      </div>
+    </div>
+    <pre class="tight"><span class="pr">$</span> python3 -m checks.demo_turn <span class="hl">--real</span></pre>
+  </div>
+  <div class="say"><b>Answer the question they are now holding: "so did I need the key or not?"</b><em>"Yes — but not for this command. The stand-in exists so the whole room sees the same four steps whether or not your key is working yet. Your key is what makes the real model choose."</em><br><br><b>Have them run <code>--real</code> once, now.</b> It costs a fraction of a cent and it is the first time their own key does anything. <b>If it errors with "not set", that is the <code>set -a</code> line from two slides ago</b> — and this is the best possible moment to hit that error, because the fix is still on screen behind them.<br><br><b>Then point at the first line of the output:</b> the mode changes from stand-in to <code>anthropic/claude-sonnet-4.5</code>. The command tells you which one answered, so you never have to guess.</div>
 </section>
 
 <section class="slide" data-sec="3b" data-label="Setup">

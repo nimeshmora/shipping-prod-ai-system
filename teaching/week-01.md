@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 218 slides with a presenter note on 206 of them, and it carries material this
+is 219 slides with a presenter note on 207 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -814,6 +814,19 @@ git will never send it anywhere. It is also a hidden file — plain `ls` will no
 show it, which is the first reason they need `ls -la` in the terminal exercise.
 
 ### Prove it, then run the demo yourself (4 min)
+
+> **INSTRUCTOR** · **Do not say "no key needed" at this point in the session.**
+> They have just spent five minutes creating `.env` and loading it, so that
+> sentence lands as *"was that a waste of time?"*
+>
+> Say this instead: *"The stand-in answers this one, so it works whether or not
+> your key is loaded yet. Your key is what makes the **real** model choose —
+> that is `--real`, and we run it next."*
+>
+> Then have them run `--real` once. It costs a fraction of a cent, and it is
+> the first time their own key does anything. **If it errors with
+> `OPENROUTER_API_KEY is not set`, this is the best possible moment to hit
+> that** — the `set -a && source .env && set +a` fix is two slides behind them.
 
 ```bash
 make check-week-00

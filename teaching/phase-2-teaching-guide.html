@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 217-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 219-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,7 +786,7 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> Two hundred and five of the slides carry
+<p><strong>Press <code>S</code> before you start.</strong> Two hundred and seven of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
@@ -806,7 +806,7 @@ yet — in a side panel the room never sees.</p>
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
-<p><strong>217 slides over 220 minutes of content is about 61 seconds each.</strong> That is
+<p><strong>219 slides over 220 minutes of content is about 61 seconds each.</strong> That is
 the intended pace: one idea, one sentence, take a question, advance.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Three things about this order, all deliberate.</p>
@@ -1214,7 +1214,7 @@ screen you cannot tell where to start or where to stop.</p>
 <td>slides</td>
 <td>147</td>
 <td>211</td>
-<td><strong>217</strong></td>
+<td><strong>219</strong></td>
 </tr>
 <tr>
 <td>slides with 4+ blocks</td>
@@ -1240,7 +1240,7 @@ screen you cannot tell where to start or where to stop.</p>
 an example and a caveat are three slides, not one. Two commands are two slides.
 A code block plus a numbered reading <em>of that same code</em> is still one idea, and
 stays on one slide.</p>
-<p><strong>Verified by rendering, not by eye.</strong> All 217 slides were measured in a
+<p><strong>Verified by rendering, not by eye.</strong> All 219 slides were measured in a
 headless browser at the deck's own 1280×720 stage; none overflow.</p>
 <h3>The demo is the demo, not a description of the demo</h3>
 <p>The third pass removed the scaffolding around the live demo. Three slides had
@@ -1283,6 +1283,88 @@ steps land. Then advance through steps 1 to 4 and talk over each one.</p>
 notes on the command slide: <em>"this is my laptop, you will run it at 0:46"</em>
 and <em>"nothing in the question names a tool — watch step 2"</em>. <strong>Say both
 before you press Enter.</strong></p>
+</blockquote>
+<p><strong>One slide before the command says what the command actually is</strong> — a narrator
+wrapped around the same <code>run_turn</code> they will call from their web service later.
+It adds a label and a one-second pause per step and nothing else. Without that
+slide, people reasonably assume <code>demo_turn.py</code> <em>is</em> the agent.</p>
+<h3><code>checks/demo_turn.py</code> had to be added to every branch</h3>
+<p><strong>The file existed only on <code>main</code>.</strong> Students check out <code>week-01-package</code>, so
+the command on the slide — and in this guide — failed for the whole room with
+<code>No module named checks.demo_turn</code>.</p>
+<p>It is now on all sixteen week branches and was run on each one. It works
+unchanged against both shapes of <code>run_turn</code> (this branch returns
+<code>(reply, history)</code>; <code>main</code> returns <code>(reply, history, trace)</code>) because it indexes
+<code>result[0]</code> and <code>result[1]</code> instead of unpacking.</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Week 1 branches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tools listed</td>
+<td><strong>3</strong> — matches the slide</td>
+</tr>
+<tr>
+<td>standing rules</td>
+<td><strong>105 words</strong> — matches the slide</td>
+</tr>
+<tr>
+<td>steps printed</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>needs a key</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · Run it once from a <strong>fresh clone</strong> before you teach, not from
+your working copy — that is the only way to catch a file that exists on your
+machine and nowhere else. Weeks 7 and 8 list four tools, not three, because
+<code>fetch_url</code> is added there for the attack exercise. That is correct, and it
+does not affect Week 1.</p>
+</blockquote>
+<h3>The key story had a contradiction, and it is fixed</h3>
+<p>At 0:14 the deck says the demo needs <strong>no key</strong> — true and reassuring, because
+nobody has one yet. But the slide at 1:02, <em>after</em> they have spent five minutes
+creating <code>.env</code> and loading it, used to say <em>"and it still needs no key"</em>.</p>
+<p>That reads as <strong>"so was the key pointless?"</strong> It is the worst possible moment to
+plant that doubt, because the next hour depends on their key working.</p>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>What it says now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:14, before they have a key</td>
+<td>"No key. No internet. Free." — unchanged, and helpful</td>
+</tr>
+<tr>
+<td>1:02, after they set one up</td>
+<td>"You have the project now, so this runs on your own laptop."</td>
+</tr>
+<tr>
+<td>1:03, its own slide</td>
+<td><strong>"So what was the key for?"</strong> — the stand-in answers this one; your key is for the real model</td>
+</tr>
+</tbody>
+</table>
+<p>The checkpoint slide's note changed the same way: it now says the checkpoint
+uses the stand-in <strong>so it passes whether or not the key is loaded yet</strong>, and
+that the key itself is tested two slides later with <code>--real</code>.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Have them run <code>--real</code> once at 1:03.</strong> A fraction of a
+cent, and it is the first time their own key does anything. If it fails with
+<code>OPENROUTER_API_KEY is not set</code>, that is the ideal place to hit the error —
+the <code>set -a</code> fix is two slides behind them and still fresh.</p>
 <p><strong>INSTRUCTOR</strong> · This is what makes the deck teachable rather than just
 correct. <strong>Each slide is now one thing you can open, say, and close</strong> — then
 advance and the next one builds on it.</p>
@@ -1972,7 +2054,7 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 217 slides with a presenter note on 205 of them, and it carries material this
+is 219 slides with a presenter note on 207 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
@@ -2685,6 +2767,18 @@ Phase 1 did that.</p>
 git will never send it anywhere. It is also a hidden file — plain <code>ls</code> will not
 show it, which is the first reason they need <code>ls -la</code> in the terminal exercise.</p>
 <h3>Prove it, then run the demo yourself (4 min)</h3>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Do not say "no key needed" at this point in the session.</strong>
+They have just spent five minutes creating <code>.env</code> and loading it, so that
+sentence lands as <em>"was that a waste of time?"</em></p>
+<p>Say this instead: <em>"The stand-in answers this one, so it works whether or not
+your key is loaded yet. Your key is what makes the </em><em>real</em><em> model choose —
+that is <code>--real</code>, and we run it next."</em></p>
+<p>Then have them run <code>--real</code> once. It costs a fraction of a cent, and it is
+the first time their own key does anything. <strong>If it errors with
+<code>OPENROUTER_API_KEY is not set</code>, this is the best possible moment to hit
+that</strong> — the <code>set -a &amp;&amp; source .env &amp;&amp; set +a</code> fix is two slides behind them.</p>
+</blockquote>
 <pre><code class="language-bash">make check-week-00
 </code></pre>
 <pre><code>Week 00: the loop runs a tool then answers

@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 218-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 219-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** Two hundred and six of the slides carry
+**Press `S` before you start.** Two hundred and seven of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -317,7 +317,7 @@ yet — in a side panel the room never sees.
    4:00        exactly four hours, including both breaks
 ```
 
-**218 slides over 220 minutes of content is about 61 seconds each.** That is
+**219 slides over 220 minutes of content is about 61 seconds each.** That is
 the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
@@ -610,7 +610,7 @@ screen you cannot tell where to start or where to stop.
 
 | | First pass | Second pass | Now |
 |---|---|---|---|
-| slides | 147 | 211 | **218** |
+| slides | 147 | 211 | **219** |
 | slides with 4+ blocks | 24 | 0 | **0** |
 | slides teaching two things at once | — | 6 | **0** |
 | slides that overflow the stage | — | 0 | **0** |
@@ -620,7 +620,7 @@ an example and a caveat are three slides, not one. Two commands are two slides.
 A code block plus a numbered reading *of that same code* is still one idea, and
 stays on one slide.
 
-**Verified by rendering, not by eye.** All 218 slides were measured in a
+**Verified by rendering, not by eye.** All 219 slides were measured in a
 headless browser at the deck's own 1280×720 stage; none overflow.
 
 ### The demo is the demo, not a description of the demo
@@ -682,6 +682,30 @@ unchanged against both shapes of `run_turn` (this branch returns
 > machine and nowhere else. Weeks 7 and 8 list four tools, not three, because
 > `fetch_url` is added there for the attack exercise. That is correct, and it
 > does not affect Week 1.
+
+### The key story had a contradiction, and it is fixed
+
+At 0:14 the deck says the demo needs **no key** — true and reassuring, because
+nobody has one yet. But the slide at 1:02, *after* they have spent five minutes
+creating `.env` and loading it, used to say *"and it still needs no key"*.
+
+That reads as **"so was the key pointless?"** It is the worst possible moment to
+plant that doubt, because the next hour depends on their key working.
+
+| Where | What it says now |
+|---|---|
+| 0:14, before they have a key | "No key. No internet. Free." — unchanged, and helpful |
+| 1:02, after they set one up | "You have the project now, so this runs on your own laptop." |
+| 1:03, its own slide | **"So what was the key for?"** — the stand-in answers this one; your key is for the real model |
+
+The checkpoint slide's note changed the same way: it now says the checkpoint
+uses the stand-in **so it passes whether or not the key is loaded yet**, and
+that the key itself is tested two slides later with `--real`.
+
+> **INSTRUCTOR** · **Have them run `--real` once at 1:03.** A fraction of a
+> cent, and it is the first time their own key does anything. If it fails with
+> `OPENROUTER_API_KEY is not set`, that is the ideal place to hit the error —
+> the `set -a` fix is two slides behind them and still fresh.
 
 > **INSTRUCTOR** · This is what makes the deck teachable rather than just
 > correct. **Each slide is now one thing you can open, say, and close** — then
