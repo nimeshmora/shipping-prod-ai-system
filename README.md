@@ -52,11 +52,40 @@ Try `ORD-1043`. Its note is more interesting than it looks.
 
 ---
 
+## See what it does, step by step
+
+Before building anything, watch one question go round the loop. No API
+key, no internet, free:
+
+```bash
+python3 -m checks.demo_turn
+```
+
+It prints four labelled steps with a pause between them: the question, the
+model asking for a tool, your code running it, and the answer. Then it shows
+the conversation it kept, which is the point — **the model remembers nothing,
+so the whole list is re-sent every time.**
+
+Change the question and watch it reach for a different tool:
+
+```bash
+python3 -m checks.demo_turn "what is 12 * 41?"
+```
+
+With a key in `.env`, `--real` lets the actual model choose:
+
+```bash
+set -a && source .env && set +a
+python3 -m checks.demo_turn --real
+```
+
+---
+
 ## Start here
 
 ```bash
-cp .env.example .env          # paste your KodeKey into .env
-python -m venv .venv && source .venv/bin/activate
+cp .env.example .env          # paste your OpenRouter key into .env
+python3 -m venv .venv && source .venv/bin/activate
 make install
 make test                     # proves the loop works, no API key needed
 ```
