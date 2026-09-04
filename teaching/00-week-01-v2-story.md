@@ -34,7 +34,7 @@ necessary rather than arbitrary.
    0:12   28   2  "Let me show you the thing"  the agent, then run it live
    0:40   18   3  "Your turn"                  prerequisites, clone, key, prove
    0:58   10      break
-   1:08   38   4  "Learning to drive"          terminal, then the browser -> curl
+   1:08   38   4  "Two new skills"             terminal, then the browser -> curl
    1:46   10      break
    1:56   56   5  "Giving it a front door"     why, then three endpoints
    2:52   58   6  "Putting it in a box"        containers, then GIVE IT AWAY
@@ -233,6 +233,42 @@ seven-layer zoom, all three endpoints, session ids, error hiding, logs, image
 vs container, all seven Dockerfile instructions, the build process and caching,
 ports, `.dockerignore`, `--env-file`, Docker Hub push and pull, the swap, the
 recap, homework, and the Week 2 hook.
+
+## Plain English on screen, always
+
+The words the room reads are **statements of fact**, not gestures at one. A
+headline says the thing; it does not hint at it and leave you to explain.
+
+| Never | Always |
+|---|---|
+| *"You can drive a computer, and reach one."* | *"You can type commands, and ask other computers questions."* |
+| *"One thing exists. Nothing can reach it."* | *"Your agent works. Nobody else can use it."* |
+| *"Which is the point."* | *"Next week and Weeks 3 and 5 answer these."* |
+| *"Six things."* | *"Six things you could not do this morning."* |
+| *"In plain English."* | *"What each of those four lines means."* |
+| *"The most satisfying thirty seconds of the day."* | *"Watch the answer arrive in pieces."* |
+
+**Metaphors are out unless the plain version is genuinely longer.** Chapter four
+was called *"Learning to drive"* — a metaphor a non-native speaker has to
+decode before they can start learning. It is now **"Two new skills"**, and the
+lede says which two.
+
+The six spine slides now read as one plain sentence each, and together they are
+the story of the day:
+
+```
+   ch 1   Your agent works. Nobody else can use it.
+   ch 2   Now you know what it does. Still only you can use it.
+   ch 3   It runs on your laptop now. Only yours.
+   ch 4   You can type commands, and ask other computers questions.
+   ch 5   Anything can ask it a question now. But only while your laptop is on.
+   ch 6   Somebody else ran your agent. That was the whole day.
+```
+
+> **INSTRUCTOR** · Read those six aloud in order before you teach, as a check on
+> yourself. **If a slide's headline needs you to explain what it means, it is
+> the wrong headline** — the explanation belongs in the presenter note, and the
+> screen should carry the fact.
 
 ## The deck refers to itself by chapter, never by clock
 
