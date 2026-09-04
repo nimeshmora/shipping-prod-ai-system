@@ -67,21 +67,53 @@ make run
 ```
 
 ```bash
-curl -s -X POST localhost:8080/chat \
+curl -s -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' \
-  -d '{"message":"where is my order ORD-1002?"}'
+  -d '{"message":"where is my order ORD-1002?"}' | jq
 ```
 
-Send the returned `session_id` back on the next call to continue the same
-conversation. To watch it stream:
+`| jq` lays the JSON reply out so you can read it. Send the returned
+`session_id` back on the next call to continue the same conversation:
 
 ```bash
-curl -N -X POST localhost:8080/chat/stream \
+curl -s -X POST localhost:7000/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"message":"how much was it?","session_id":"PASTE_ID_HERE"}' | jq
+```
+
+To watch the answer arrive in pieces (no `jq` here - it would buffer the
+stream, which is the one thing we are trying to see):
+
+```bash
+curl -N -X POST localhost:7000/chat/stream \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
 
-> **The most common error in this course** is `KODEKEY is not set`. It means you
+## Share your container
+
+Once `make docker-build` works, the image is a file on your machine. Push it
+to Docker Hub and anyone can run your exact version.
+
+```bash
+docker login                                    # once, with your Docker Hub account
+docker tag ship-agent <your-username>/ship-agent:v1
+docker push <your-username>/ship-agent:v1
+```
+
+Then, on any other machine with Docker:
+
+```bash
+docker pull <your-username>/ship-agent:v1
+docker run --rm -p 7000:7000 --env-file .env <your-username>/ship-agent:v1
+curl -s localhost:7000/health | jq
+```
+
+Note what did **not** travel with it: your `.env`. The image carries the code
+and its dependencies; **the key is supplied separately at run time**, which is
+why `--env-file` is on that last command.
+
+> **The most common error in this course** is `OPENROUTER_API_KEY is not set`. It means you
 > edited `.env` but did not load it. That `set -a && source .env && set +a` line
 > must run in the **same terminal** as `make run`, **every time you open a new
 > one**.
@@ -92,7 +124,7 @@ curl -N -X POST localhost:8080/chat/stream \
 
 ```bash
 make install          # install dependencies
-make run              # start the agent on http://localhost:8080
+make run              # start the agent on http://localhost:7000
 make test             # unit tests (fake model, no key needed)
 
 make check-week-00    # the loop you started from

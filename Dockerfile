@@ -20,7 +20,7 @@
 #      a 3-second rebuild into a 3-minute one. Use --no-cache-dir while you are
 #      at it; a pip cache inside an image is dead weight.
 #
-#   4. ENV PORT=8080  and  EXPOSE 8080
+#   4. ENV PORT=7000  and  EXPOSE 7000
 #
 #   5. CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
 #
