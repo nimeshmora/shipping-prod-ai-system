@@ -26,16 +26,16 @@ all, so it spends its first two hours handing over tools and its last two
 building with them.
 
 ```
-   0:00   11   Three questions to the room   settle the room, and read it
-   0:11   27   Meet today's agent            described, then RUN step by step
-   0:38    8   The project                   a tour BEFORE they download it
+   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   27   Meet today's agent            described, then RUN step by step
+   0:41    5   The project                   a tour BEFORE they download it
    0:46   21   Set it up, and prove it       .env, the key, make install, demo
    1:07   10   break
-   1:17   20   The terminal                  a real lesson: 9 commands
-   1:37   16   Sending messages              JSON, curl and jq
+   1:17   22   The terminal                  a real lesson: 9 commands
+   1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   14   What a web service is         the shop story, then the words
-   2:17   19   Addresses, then SIX ZOOMS     one request, internet to code
+   2:03   15   What a web service is         the shop story, then the words
+   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
    2:36   38   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
@@ -59,37 +59,84 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 179 slides with a presenter note on 167 of them, and it carries material this
+is 211 slides with a presenter note on 199 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
 
 ---
 
-## 1 · Three questions to the room (0:00 – 0:11)
+## 1 · Three questions to the room (0:00 – 0:14)
 
 > **INSTRUCTOR** · Laptops closed. Slides off. Just talk. This is the only part
 > of the session where nobody types anything, and it sets up everything else.
 
 Three questions to the room, in this order.
 
-### "What is an agent?" (3 min)
+### "What is an agent?" (4 min)
 
-Let them answer. You are listening for **a loop**.
+Let them answer. Take two or three answers and **do not correct anybody.**
 
-The answer you want to arrive at, in their words if possible:
+**Answer it generally — do not use our agent here.** They have not met it yet,
+so naming its tools or its order ids at this point explains one unfamiliar
+thing with another. Three slides carry the answer, in this order:
 
-> An agent is a loop. You send a question to the model along with a list of
-> tools it may use. The model either answers, or it asks for a tool. Your code
-> runs the tool, hands back the result, and goes round again.
+**1. The plain-English definition.**
 
-> **INSTRUCTOR** · If you get "it's an AI that does things", push once: *"Does
-> the model run the tool, or does your code?"* That distinction is the whole
-> lesson of Phase 1 and the foundation of every Phase 2 guardrail. Your code
-> runs whatever the model asks for. That is why budgets, traces and fences
-> exist.
+> An agent is a program that can **go and find something out** before it
+> answers. An ordinary program does exactly what it was told. An agent works
+> out what it needs, then goes and gets it.
 
-### "Is that different from ChatGPT?" (3 min)
+**2. The two halves.** This is the distinction the whole day rests on.
+
+> One half **thinks** — it reads the question and works out what is needed. It
+> cannot actually do anything. The other half **acts** — it opens the file,
+> checks the list, sends the email. That half is ordinary code, and **you write
+> it.**
+
+**3. The loop, as four boxes.** Still no product names, no code:
+
+```
+   1  somebody asks           a question, in plain words
+   2  the thinking half       "I need to look something up first"
+   3  your code               goes and gets it, hands the result back
+   4  the thinking half       now it has the facts, so now it answers
+```
+
+> **INSTRUCTOR** · **Draw those four boxes on the whiteboard and leave them up
+> all day.** You point at them four separate times, and again during the demo,
+> where each printed step carries these same numbers.
+>
+> If you get "it's an AI that does things", push once: *"Does the clever half
+> run the tool, or does your code?"* Your code runs whatever the thinking half
+> asks for — which is why budgets, traces and fences exist at all. Say it in
+> those words now, and the technical names land in the second half.
+
+### "Is that different from ChatGPT?" (4 min)
+
+**Everyone in the room has used the "answers from memory" kind**, so use it —
+it is the one example they all share. Two slides:
+
+**The comparison**, with no product names and no order ids:
+
+```
+   answers from memory          looks it up first
+   "usually about 3 to 5 days"  "yours was sent on Tuesday"
+   a guess                      a fact
+```
+
+**Then the test they can take away:**
+
+> *"Tell me something that **only became true this morning.**"*
+> It can only answer that if something went and looked.
+
+> **INSTRUCTOR** · Listen for *"it looks things up"* — that is the right answer
+> in their own words. Take it and move; keep this to a minute. They will
+> **feel** the difference twenty minutes later when the real thing runs in
+> front of them.
+>
+> If somebody asks about cost: going round that loop six times costs six times
+> as much as going round once. That is Week 4. Plant it, do not explain it.
 
 Pick a volunteer. Let them talk for two minutes.
 
@@ -217,7 +264,7 @@ with *their* Python installed. That is not a product. It is a demo.
 
 ---
 
-## 2 · Meet today's agent (0:11 – 0:38)
+## 2 · Meet today's agent (0:14 – 0:41)
 
 > **INSTRUCTOR** · **This section is new and it is load-bearing.** They are
 > about to spend two hours deploying this thing. If they cannot say what it does
@@ -226,6 +273,17 @@ with *their* Python installed. That is not a product. It is a demo.
 >
 > Ask a Phase 1 volunteer to answer first. Then walk the five points below on
 > the projector, reading the real files. Twelve minutes, no typing.
+
+**Introduce it as the agent for the next two weeks, not a throwaway.** The
+slides open the section with this, before any code:
+
+> *"This is the agent for the next two weeks. It is small on purpose — small
+> enough that you can hold all of it in your head while we learn everything
+> that wraps around it. Once the wrapping is second nature, we point it at
+> bigger things, and later in the course at more than one agent at a time."*
+
+That framing answers a question people are too polite to ask — *why are we not
+using the agent I built with Isuru?* — before it becomes a distraction.
 
 **Our agent is a customer support assistant for an online shop.**
 
@@ -496,7 +554,7 @@ it has three tools instead of thirty.
 > Do not volunteer it to a non-technical room. Keep it for the person who asks.
 
 
-## 3 · The project (0:38 – 0:46)
+## 3 · The project (0:41 – 0:46)
 
 They already cloned this in the setup section. Now that they can move around a folder,
 **give the commands they ran a meaning**, and give them the map.

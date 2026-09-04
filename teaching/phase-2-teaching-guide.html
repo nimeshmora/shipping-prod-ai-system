@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 179-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 211-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,27 +786,27 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and sixty-seven of the slides carry
+<p><strong>Press <code>S</code> before you start.</strong> A hundred and ninety-nine of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
-<pre><code>   0:00   11   Three questions to the room   settle the room, and read it
-   0:11   27   Meet today's agent            described, then RUN step by step
-   0:38    8   The project                   a tour BEFORE they download it
+<pre><code>   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   27   Meet today's agent            described, then RUN step by step
+   0:41    5   The project                   a tour BEFORE they download it
    0:46   21   Set it up, and prove it       .env, the key, make install, demo
    1:07   10   break
-   1:17   20   The terminal                  a real lesson: 9 commands
-   1:37   16   Sending messages              JSON, curl and jq
+   1:17   22   The terminal                  a real lesson: 9 commands
+   1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   14   What a web service is         the shop story, then the words
-   2:17   19   Addresses, then SIX ZOOMS     one request, internet to code
+   2:03   15   What a web service is         the shop story, then the words
+   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
    2:36   38   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
-<p><strong>168 slides over 220 minutes of content is about 75 seconds each.</strong> That is
+<p><strong>211 slides over 220 minutes of content is about 63 seconds each.</strong> That is
 the intended pace: one idea, one sentence, take a question, advance.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Three things about this order, all deliberate.</p>
@@ -1196,50 +1196,94 @@ designed — and it is worth naming, because it is the thing people get wrong
 when they first publish an image.</p>
 </blockquote>
 <h3>One idea per slide</h3>
-<p>The deck was audited for crowding and rebuilt. <strong>Twelve slides carried five or
-more separate blocks</strong> — a definition and an example and a caveat and a
-punchline, all at once — which makes it hard to know where to start and where
-to stop. Each was split.</p>
+<p>The deck has been audited for crowding twice. The second pass was stricter: any
+slide carrying <strong>four or more separate blocks</strong> — a definition and an example
+and a caveat and a punchline at once — was split, because with four things on
+screen you cannot tell where to start or where to stop.</p>
 <table>
 <thead>
 <tr>
 <th></th>
-<th>Before</th>
+<th>First pass</th>
 <th>Now</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>slides</td>
-<td>147</td>
-<td><strong>168</strong></td>
+<td>168</td>
+<td><strong>211</strong></td>
 </tr>
 <tr>
-<td>median blocks per slide</td>
-<td>2</td>
-<td><strong>2</strong></td>
-</tr>
-<tr>
-<td>slides with 5+ blocks</td>
-<td><strong>12</strong></td>
+<td>slides with 4+ blocks</td>
+<td>24</td>
 <td><strong>0</strong></td>
 </tr>
 <tr>
-<td>median on-screen words</td>
-<td>96</td>
-<td><strong>88</strong></td>
+<td>slides with 5+ blocks</td>
+<td>0</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>slides that overflow the stage</td>
+<td>3</td>
+<td><strong>0</strong></td>
 </tr>
 </tbody>
 </table>
-<p>The rule applied: <strong>at most one code block or one figure, plus at most two
-supporting cards.</strong> If a slide had a definition <em>and</em> an example <em>and</em> a
-caveat, it became two slides.</p>
+<p>The rule now applied: <strong>at most three blocks, and only one of them may be a
+code block or a figure.</strong> A definition, an example and a caveat are three
+slides, not one.</p>
+<p><strong>Verified by rendering, not by eye.</strong> All 211 slides were measured in a
+headless browser at the deck's own 1280×720 stage; none overflow. The two
+deepest zoom slides used to run 774px and 899px tall — those now collapse the
+levels you have already passed, so the current level always fits.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · This is what makes the deck teachable rather than just
 correct. <strong>Each slide is now one thing you can open, say, and close</strong> — then
 advance and the next one builds on it.</p>
-<p>At ~75 seconds a slide you will feel like you are advancing quickly. That is
-right. <strong>The notes are cues, not scripts</strong> — do not read them aloud.</p>
+<p>At about a minute a slide you will feel like you are advancing quickly. That
+is right. <strong>The notes are cues, not scripts</strong> — do not read them aloud.</p>
+</blockquote>
+<h3>The opening questions are answered generically</h3>
+<p><strong>The three opening questions do not mention our agent, and that is
+deliberate.</strong> They come before the agent is introduced, so naming its tools or
+its order ids there would explain one unfamiliar thing with another.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answered with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>"What is an agent?"</em></td>
+<td>a plain definition, then two halves, then four boxes</td>
+</tr>
+<tr>
+<td><em>"Is that different from ChatGPT?"</em></td>
+<td>memory vs. looking it up — no product names</td>
+</tr>
+<tr>
+<td><em>"Have you ever put a website somewhere?"</em></td>
+<td>three shows of hands, to read the room</td>
+</tr>
+</tbody>
+</table>
+<p>The first question now takes <strong>three slides</strong> instead of one: the definition
+(<em>"a program that can go and find something out"</em>), the two halves (<em>one
+thinks, one acts</em>), and only then the four-box loop. No code, no tool names,
+no order ids.</p>
+<p><strong>Our agent arrives afterwards</strong>, in its own section, and it is introduced as
+<strong>the agent for the next two weeks</strong> — small on purpose, with the bigger one
+coming later in the course. That answers <em>"why are we not using what I built
+with Isuru?"</em> before it becomes a distraction.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · The payoff is that every technical name in the second half
+of the day is a <strong>label for something they have already seen or done</strong>,
+rather than a new fact. Keep the openers vague and conversational — the
+precision arrives later, and it arrives easily.</p>
 </blockquote>
 <h3>A request, traced from the internet inwards</h3>
 <p>Six slides at 2:13 follow <strong>one question</strong> from a stranger down to the code,
@@ -1854,16 +1898,16 @@ and when it fails they cannot tell you which part broke.</p>
 shape the other weeks use — it is the only session that can assume nothing at
 all, so it spends its first two hours handing over tools and its last two
 building with them.</p>
-<pre><code>   0:00   11   Three questions to the room   settle the room, and read it
-   0:11   27   Meet today's agent            described, then RUN step by step
-   0:38    8   The project                   a tour BEFORE they download it
+<pre><code>   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   27   Meet today's agent            described, then RUN step by step
+   0:41    5   The project                   a tour BEFORE they download it
    0:46   21   Set it up, and prove it       .env, the key, make install, demo
    1:07   10   break
-   1:17   20   The terminal                  a real lesson: 9 commands
-   1:37   16   Sending messages              JSON, curl and jq
+   1:17   22   The terminal                  a real lesson: 9 commands
+   1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   14   What a web service is         the shop story, then the words
-   2:17   19   Addresses, then SIX ZOOMS     one request, internet to code
+   2:03   15   What a web service is         the shop story, then the words
+   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
    2:36   38   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
@@ -1884,31 +1928,69 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 179 slides with a presenter note on 167 of them, and it carries material this
+is 211 slides with a presenter note on 199 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
 <hr />
-<h2>1 · Three questions to the room (0:00 – 0:11)</h2>
+<h2>1 · Three questions to the room (0:00 – 0:14)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Laptops closed. Slides off. Just talk. This is the only part
 of the session where nobody types anything, and it sets up everything else.</p>
 </blockquote>
 <p>Three questions to the room, in this order.</p>
-<h3>"What is an agent?" (3 min)</h3>
-<p>Let them answer. You are listening for <strong>a loop</strong>.</p>
-<p>The answer you want to arrive at, in their words if possible:</p>
+<h3>"What is an agent?" (4 min)</h3>
+<p>Let them answer. Take two or three answers and <strong>do not correct anybody.</strong></p>
+<p><strong>Answer it generally — do not use our agent here.</strong> They have not met it yet,
+so naming its tools or its order ids at this point explains one unfamiliar
+thing with another. Three slides carry the answer, in this order:</p>
+<p><strong>1. The plain-English definition.</strong></p>
 <blockquote>
-<p>An agent is a loop. You send a question to the model along with a list of
-tools it may use. The model either answers, or it asks for a tool. Your code
-runs the tool, hands back the result, and goes round again.</p>
-<p><strong>INSTRUCTOR</strong> · If you get "it's an AI that does things", push once: <em>"Does
-the model run the tool, or does your code?"</em> That distinction is the whole
-lesson of Phase 1 and the foundation of every Phase 2 guardrail. Your code
-runs whatever the model asks for. That is why budgets, traces and fences
-exist.</p>
+<p>An agent is a program that can <strong>go and find something out</strong> before it
+answers. An ordinary program does exactly what it was told. An agent works
+out what it needs, then goes and gets it.</p>
 </blockquote>
-<h3>"Is that different from ChatGPT?" (3 min)</h3>
+<p><strong>2. The two halves.</strong> This is the distinction the whole day rests on.</p>
+<blockquote>
+<p>One half <strong>thinks</strong> — it reads the question and works out what is needed. It
+cannot actually do anything. The other half <strong>acts</strong> — it opens the file,
+checks the list, sends the email. That half is ordinary code, and <strong>you write
+it.</strong></p>
+</blockquote>
+<p><strong>3. The loop, as four boxes.</strong> Still no product names, no code:</p>
+<pre><code>   1  somebody asks           a question, in plain words
+   2  the thinking half       &quot;I need to look something up first&quot;
+   3  your code               goes and gets it, hands the result back
+   4  the thinking half       now it has the facts, so now it answers
+</code></pre>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Draw those four boxes on the whiteboard and leave them up
+all day.</strong> You point at them four separate times, and again during the demo,
+where each printed step carries these same numbers.</p>
+<p>If you get "it's an AI that does things", push once: <em>"Does the clever half
+run the tool, or does your code?"</em> Your code runs whatever the thinking half
+asks for — which is why budgets, traces and fences exist at all. Say it in
+those words now, and the technical names land in the second half.</p>
+</blockquote>
+<h3>"Is that different from ChatGPT?" (4 min)</h3>
+<p><strong>Everyone in the room has used the "answers from memory" kind</strong>, so use it —
+it is the one example they all share. Two slides:</p>
+<p><strong>The comparison</strong>, with no product names and no order ids:</p>
+<pre><code>   answers from memory          looks it up first
+   &quot;usually about 3 to 5 days&quot;  &quot;yours was sent on Tuesday&quot;
+   a guess                      a fact
+</code></pre>
+<p><strong>Then the test they can take away:</strong></p>
+<blockquote>
+<p><em>"Tell me something that </em><em>only became true this morning.</em><em>"</em>
+It can only answer that if something went and looked.</p>
+<p><strong>INSTRUCTOR</strong> · Listen for <em>"it looks things up"</em> — that is the right answer
+in their own words. Take it and move; keep this to a minute. They will
+<strong>feel</strong> the difference twenty minutes later when the real thing runs in
+front of them.</p>
+<p>If somebody asks about cost: going round that loop six times costs six times
+as much as going round once. That is Week 4. Plant it, do not explain it.</p>
+</blockquote>
 <p>Pick a volunteer. Let them talk for two minutes.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Pick someone who is <em>not</em> the most confident person in the
@@ -2004,7 +2086,7 @@ beat does not feel like a detour:</p>
 you five tools, because you cannot fix it bare-handed. Twenty-five minutes."</em></p>
 </blockquote>
 <hr />
-<h2>2 · Meet today's agent (0:11 – 0:38)</h2>
+<h2>2 · Meet today's agent (0:14 – 0:41)</h2>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · <strong>This section is new and it is load-bearing.</strong> They are
 about to spend two hours deploying this thing. If they cannot say what it does
@@ -2013,6 +2095,16 @@ protect — is guesswork.</p>
 <p>Ask a Phase 1 volunteer to answer first. Then walk the five points below on
 the projector, reading the real files. Twelve minutes, no typing.</p>
 </blockquote>
+<p><strong>Introduce it as the agent for the next two weeks, not a throwaway.</strong> The
+slides open the section with this, before any code:</p>
+<blockquote>
+<p><em>"This is the agent for the next two weeks. It is small on purpose — small
+enough that you can hold all of it in your head while we learn everything
+that wraps around it. Once the wrapping is second nature, we point it at
+bigger things, and later in the course at more than one agent at a time."</em></p>
+</blockquote>
+<p>That framing answers a question people are too polite to ask — <em>why are we not
+using the agent I built with Isuru?</em> — before it becomes a distraction.</p>
 <p><strong>Our agent is a customer support assistant for an online shop.</strong></p>
 <ul>
 <li>It answers questions about orders — <em>"where is ORD-1002?"</em></li>
@@ -2325,7 +2417,7 @@ deliberate production pattern — provider portability — and <strong>Week 6 us
 exactly that seam to add a fallback model.</strong></p>
 <p>Do not volunteer it to a non-technical room. Keep it for the person who asks.</p>
 </blockquote>
-<h2>3 · The project (0:38 – 0:46)</h2>
+<h2>3 · The project (0:41 – 0:46)</h2>
 <p>They already cloned this in the setup section. Now that they can move around a folder,
 <strong>give the commands they ran a meaning</strong>, and give them the map.</p>
 <p><strong>Git is a time machine for a folder of code.</strong> It remembers every version, and

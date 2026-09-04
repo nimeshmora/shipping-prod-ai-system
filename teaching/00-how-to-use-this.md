@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 179-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 211-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,23 +293,23 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and sixty-seven of the slides carry
+**Press `S` before you start.** A hundred and ninety-nine of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
 ### The four-hour shape
 
 ```
-   0:00   11   Three questions to the room   settle the room, and read it
-   0:11   27   Meet today's agent            described, then RUN step by step
-   0:38    8   The project                   a tour BEFORE they download it
+   0:00   14   Three questions to the room   settle the room, and read it
+   0:14   27   Meet today's agent            described, then RUN step by step
+   0:41    5   The project                   a tour BEFORE they download it
    0:46   21   Set it up, and prove it       .env, the key, make install, demo
    1:07   10   break
-   1:17   20   The terminal                  a real lesson: 9 commands
-   1:37   16   Sending messages              JSON, curl and jq
+   1:17   22   The terminal                  a real lesson: 9 commands
+   1:39   14   Sending messages              JSON, curl and jq
    1:53   10   break
-   2:03   14   What a web service is         the shop story, then the words
-   2:17   19   Addresses, then SIX ZOOMS     one request, internet to code
+   2:03   15   What a web service is         the shop story, then the words
+   2:18   18   Addresses, then SIX ZOOMS     one request, internet to code
    2:36   38   Build the web service         3 endpoints, line by line, tested
    3:14   36   Packing it up                 containers, then Docker Hub
    3:50   10   Prove it, and what breaks next
@@ -317,7 +317,7 @@ yet — in a side panel the room never sees.
    4:00        exactly four hours, including both breaks
 ```
 
-**168 slides over 220 minutes of content is about 75 seconds each.** That is
+**211 slides over 220 minutes of content is about 63 seconds each.** That is
 the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
@@ -603,28 +603,60 @@ Then one slide comparing it with their own morning:
 
 ### One idea per slide
 
-The deck was audited for crowding and rebuilt. **Twelve slides carried five or
-more separate blocks** — a definition and an example and a caveat and a
-punchline, all at once — which makes it hard to know where to start and where
-to stop. Each was split.
+The deck has been audited for crowding twice. The second pass was stricter: any
+slide carrying **four or more separate blocks** — a definition and an example
+and a caveat and a punchline at once — was split, because with four things on
+screen you cannot tell where to start or where to stop.
 
-| | Before | Now |
+| | First pass | Now |
 |---|---|---|
-| slides | 147 | **168** |
-| median blocks per slide | 2 | **2** |
-| slides with 5+ blocks | **12** | **0** |
-| median on-screen words | 96 | **88** |
+| slides | 168 | **211** |
+| slides with 4+ blocks | 24 | **0** |
+| slides with 5+ blocks | 0 | **0** |
+| slides that overflow the stage | 3 | **0** |
 
-The rule applied: **at most one code block or one figure, plus at most two
-supporting cards.** If a slide had a definition *and* an example *and* a
-caveat, it became two slides.
+The rule now applied: **at most three blocks, and only one of them may be a
+code block or a figure.** A definition, an example and a caveat are three
+slides, not one.
+
+**Verified by rendering, not by eye.** All 211 slides were measured in a
+headless browser at the deck's own 1280×720 stage; none overflow. The two
+deepest zoom slides used to run 774px and 899px tall — those now collapse the
+levels you have already passed, so the current level always fits.
 
 > **INSTRUCTOR** · This is what makes the deck teachable rather than just
 > correct. **Each slide is now one thing you can open, say, and close** — then
 > advance and the next one builds on it.
 >
-> At ~75 seconds a slide you will feel like you are advancing quickly. That is
-> right. **The notes are cues, not scripts** — do not read them aloud.
+> At about a minute a slide you will feel like you are advancing quickly. That
+> is right. **The notes are cues, not scripts** — do not read them aloud.
+
+### The opening questions are answered generically
+
+**The three opening questions do not mention our agent, and that is
+deliberate.** They come before the agent is introduced, so naming its tools or
+its order ids there would explain one unfamiliar thing with another.
+
+| Question | Answered with |
+|---|---|
+| *"What is an agent?"* | a plain definition, then two halves, then four boxes |
+| *"Is that different from ChatGPT?"* | memory vs. looking it up — no product names |
+| *"Have you ever put a website somewhere?"* | three shows of hands, to read the room |
+
+The first question now takes **three slides** instead of one: the definition
+(*"a program that can go and find something out"*), the two halves (*one
+thinks, one acts*), and only then the four-box loop. No code, no tool names,
+no order ids.
+
+**Our agent arrives afterwards**, in its own section, and it is introduced as
+**the agent for the next two weeks** — small on purpose, with the bigger one
+coming later in the course. That answers *"why are we not using what I built
+with Isuru?"* before it becomes a distraction.
+
+> **INSTRUCTOR** · The payoff is that every technical name in the second half
+> of the day is a **label for something they have already seen or done**,
+> rather than a new fact. Keep the openers vague and conversational — the
+> precision arrives later, and it arrives easily.
 
 ### A request, traced from the internet inwards
 
