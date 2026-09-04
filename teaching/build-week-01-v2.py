@@ -71,7 +71,7 @@ def spine(upto, ch, eyebrow, clock, title, say):
 
 CHAP = {'0':'Week 1','1':'It works on my laptop','2':'Watch it think',
         '3':'Getting it running','4':'Two new skills',
-        '5':'Giving it a front door','6':'Putting it in a box',
+        '5':'Giving it a front door','6':'Giving it to somebody else',
         '7':'Look what you did'}
 
 # =========================================================================
@@ -189,13 +189,13 @@ spine(1,'1','Where we are &middot; end of chapter one',T1,
  'Your agent works. Nobody else can use it.',
  '''<b>The picture you will grow all day</b>Right now there is one green box, and four dashed ones waiting. <b>Every chapter fills one in.</b><br><br><em>"That green box already works. Twelve tests prove it. Everything we do today wraps around it without changing a line of it."</em><br><br>Open the laptops now.''')
 
-T2='0:10 &ndash; 0:36'
+T2='0:10 &ndash; 0:34'
 # =========================================================================
 # CHAPTER 2 — Watch it think  (0:12 – 0:40)
 # =========================================================================
 chapter('2','Chapter two','Let me show you the thing.',
  'Before we move it anywhere, you should know <b>what it actually is</b> — and watch it work once.',
- 'about twenty-six minutes &middot; you watch, I type',
+ 'about twenty-four minutes &middot; you watch, I type',
  '''<b>You do this chapter; they watch</b>Nothing for them to install yet — that is chapter three. This is you on the projector, and it is worth taking your time over.<br><br><b>The order is deliberate:</b> what it does &rarr; what it can reach for &rarr; what it is told &rarr; then run it. By the time it runs, every label on screen is one they have already met.''')
 
 tale('2','The agent for the next two weeks',T2,
@@ -350,13 +350,13 @@ spine(1,'2','Where we are &middot; end of chapter two',T2,
  'Now you know what it does. Still only you can use it.',
  '''<b>Same picture, and deliberately unchanged</b>Nothing new is lit up, because <b>knowing what a thing is does not move it anywhere.</b> Say that out loud — it is the setup for the next three hours.<br><br><em>"You now know exactly what is in the green box. It still only runs on my laptop. Everything from here is about the dashed boxes."</em><br><br><b>Next: they get it running on their own machines.</b>''')
 
-T3='0:36 &ndash; 0:58'
+T3='0:34 &ndash; 0:54'
 # =========================================================================
 # CHAPTER 3 — Getting it running  (0:40 – 1:07)
 # =========================================================================
 chapter('3','Chapter three','Your turn.',
  'Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o\'clock.',
- 'about twenty-two minutes &middot; everybody types',
+ 'about twenty minutes &middot; everybody types',
  '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody who is still installing when chapter four starts will be lost for the rest of the day, and catching them up costs everyone else.''')
 
 sl('3','Before anything &middot; what you should already have',T3,
@@ -487,7 +487,7 @@ spine(2,'3','Where we are &middot; end of chapter three',T3,
  '''<b>One more box lit up — but be precise about what changed</b><em>"Twenty-seven people now have it running. That is twenty-seven laptops, and still zero strangers."</em><br><br><b>The honest framing:</b> copying it to more laptops is not the same as making it reachable. Every one of those copies has the same problem the first one had.<br><br><b>Now the break.</b> Ten minutes. After it, they learn to type commands at a computer.''')
 
 
-T4='1:08 &ndash; 1:46'
+T4='1:04 &ndash; 1:42'
 # =========================================================================
 # CHAPTER 4 — Two new skills  (terminal, then the browser and curl)
 # =========================================================================
@@ -773,7 +773,7 @@ spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can type commands, and ask other computers questions.',
  '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for what comes next:</b> <em>"Everything you did with curl, you did to somebody else's service. Next chapter you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
 
-T5='1:56 &ndash; 2:52'
+T5='1:52 &ndash; 2:48'
 # =========================================================================
 # CHAPTER 5 — Giving it a front door  (2:03 – 2:50)
 # =========================================================================
@@ -1278,33 +1278,88 @@ spine(4,'5','Where we are &middot; end of chapter five',T5,
  'Anything can ask it a question now. But only while your laptop is on.',
  '''<b>One more box, and then the honest catch</b><em>"Anything on this network can now reach your agent. But it only runs while your laptop is on, in that folder, with your key loaded in that one window."</em><br><br><b>Set up the last chapter with a question:</b> <em>"So how do I give this to somebody who does not have your laptop, your Python, or your folder?"</em><br><br>That is the last dashed box.''')
 
-T6='2:52 &ndash; 3:50'
+T6='2:48 &ndash; 3:50'
 # =========================================================================
 # CHAPTER 6 — Putting it in a box  (2:50 – 3:50)
 # =========================================================================
-chapter('6','Chapter six','Putting it in a box.',
- 'One file that holds <b>everything it needs</b> — and runs the same on a machine you have never seen.',
- 'about fifty-eight minutes &middot; and it ends with you giving it away',
- '''<b>Open with their own morning as the evidence</b><em>"Getting this running took you twenty minutes this morning, and it still broke for two people. That is the problem this chapter solves."</em><br><br><b>The shape:</b> ten minutes on why, then three toy examples, then their own agent, then <b>they swap containers with a neighbour.</b> That last bit is the payoff for the whole day.''')
+chapter('6','Chapter six','Now give it to somebody else.',
+ 'You have a working service. <b>Your friend wants to run it too.</b> This chapter is about what that actually takes.',
+ 'about an hour &middot; and it ends with you giving it away',
+ r'''<b>Do not mention Docker for the next five minutes</b>The word means nothing yet, and saying it early turns a real problem into a product pitch.<br><br><b>Start with the task instead:</b> <em>"You have just added a door to your agent. The person next to you wants that same working service on their laptop. Go on then &mdash; how?"</em><br><br>Let them answer. <b>Every answer they give is one of the next four slides.</b>''')
 
-tale('6','The problem, in one sentence',T6,
- 'Your service needs <b>Python 3.12</b>, <b>the right libraries</b>, <b>the right folder layout</b>, and <b>a key.</b> The other machine has <span class="q">none of that.</span>',
- '''<b>Count it on your fingers, slowly</b>Four things that all have to be right. <b>They just spent twenty minutes making them right on their own laptop.</b><br><br><em>"Now do that on a machine you cannot see, that you do not own, that might be running a different operating system. Twenty of them."</em><br><br>That is the moment the container idea stops being abstract.''')
+tale('6','A real request',T6,
+ 'Your friend says: <span class="q">"that is great, send it to me."</span>',
+ r'''<b>Ask the room and take three or four answers before showing anything</b>They will say "email the folder", "put it on GitHub", "zip it up". <b>All reasonable. All wrong.</b> Do not correct anybody &mdash; the next slides do it for you.<br><br><b>Keep it concrete:</b> this is the person sitting beside them, on a laptop they can see, who wants the thing that is working right now.''')
 
-sl('6','The idea',T6,
- 'Send the finished set-up, not a list of steps.',
- '''    <div class="thenow">
+sl('6','So you send them the folder',T6,
+ 'Here is the message you have to write with it.',
+ r'''    <div class="body center">
+      <div class="oneline">
+        <div class="lbl">THE EMAIL NOBODY WANTS TO RECEIVE</div>
+        <div class="say2">"Install Python 3.12 &mdash; not 3.11, that breaks. Then <code>pip install</code> these six libraries. Keep the folders exactly as they are. Make a file called <code>.env</code>, put your own key in it, then run <code>set -a && source .env && set +a</code> in the same window. Oh, and are you on Windows?"</div>
+      </div>
+    </div>''',
+ r'''<b>Read that out loud, in full, in one breath</b>It gets a laugh, and the laugh IS the lesson. <b>Every clause in it is something they personally did this morning.</b><br><br><b>Then land it:</b> <em>"That took you twenty minutes, with me in the room, on a laptop you chose. Now send it to a customer."</em><br><br>Do not explain further. The next three slides take the message apart.''')
+
+sl('6','What can go wrong with that',T6,
+ 'Four things, and any one of them breaks it.',
+ r'''    <div class="parts2">
+      <div class="p2"><div class="k2">Python 3.12</div><div class="v2">They have <b>3.11</b>, or none, or three versions and the wrong one is first.</div></div>
+      <div class="p2"><div class="k2">the libraries</div><div class="v2">A newer version of one of them <b>changed something</b>, and now your code breaks.</div></div>
+      <div class="p2"><div class="k2">the folders</div><div class="v2">They unzipped it one level deeper. <b>Nothing can find anything.</b></div></div>
+      <div class="p2"><div class="k2">their operating system</div><div class="v2">Windows, and half your commands <b>do not exist there.</b></div></div>
+    </div>''',
+ r'''<b>Point at each row and ask: did that happen this morning?</b>For most rooms, at least two of them did. <b>Use the actual people</b> &mdash; <em>"remember when yours said command not found?"</em><br><br><b>The honest summary:</b> you are not sending software. <b>You are sending instructions and hoping their machine matches yours.</b><br><br>That sentence is the whole reason this chapter exists.''')
+
+sl('6','And it gets worse tomorrow',T6,
+ 'You fix a bug. They are still running this morning&rsquo;s copy.',
+ r'''    <div class="thenow">
       <div class="col">
-        <div class="lb">what you did this morning</div>
-        <div class="big2">A list of instructions.<br><b>Twenty minutes.<br>Broke for two people.</b></div>
+        <div class="lb">you, tomorrow</div>
+        <div class="big2">You fix something.<br><b>Your copy is correct.</b></div>
+      </div>
+      <div class="mid3">vs</div>
+      <div class="col">
+        <div class="lb">them, tomorrow</div>
+        <div class="big2">Still running yesterday.<br><b>You cannot fix it for them.</b></div>
+      </div>
+    </div>''',
+ r'''<b>This is the problem professionals actually care about</b>The first four were annoying. <b>This one is structural:</b> every copy you send is frozen at the moment you sent it.<br><br><em>"Multiply that by twenty people. Or two thousand. Which version is each of them running? You have no idea."</em><br><br>Now they want a solution, which is the right moment to name one.''')
+
+tale('6','So what would fix it?',T6,
+ 'What if you could send <b>the whole finished set-up</b> &mdash; not the instructions for building it?',
+ r'''<b>Ask it as a genuine question and pause</b>Somebody usually gets close: <em>"send the whole computer"</em>, or <em>"a snapshot"</em>. <b>Both are nearly right</b>, and either is a good thing to build on.<br><br><b>Then say the idea plainly, still without the product name:</b> <em>"One file. Python already in it, the libraries already installed, the folders already right. They run one command and it works, whatever their machine is."</em><br><br><b>Now name it.</b> That thing exists, and the next slide says what it is called.''')
+
+sl('6','That thing is called a container',T6,
+ 'One file with everything already set up inside it.',
+ r'''    <div class="thenow">
+      <div class="col">
+        <div class="lb">what you were sending</div>
+        <div class="big2">A list of instructions<br>and <b>a hope.</b></div>
       </div>
       <div class="mid3">&rarr;</div>
       <div class="col b2">
-        <div class="lb">what a container is</div>
-        <div class="big2">One file with all of it<br><b>already done inside.</b></div>
+        <div class="lb">what you will send instead</div>
+        <div class="big2">One file, with the setup<br><b>already finished inside.</b></div>
+      </div>
+    </div>
+    <div class="punch">They run two commands. Their Python, their OS, their libraries: irrelevant.</div>''',
+ r'''<b>Now the word has somewhere to land</b>They have felt the problem for five minutes. <b>The name arrives as a relief rather than as jargon.</b><br><br><em>"Everything you emailed them in that message &mdash; the Python, the libraries, the folder layout &mdash; is inside the file. Already done. Nobody has to follow any of it."</em><br><br><b>If somebody asks how it differs from a virtual machine:</b> a container shares the host computer&rsquo;s operating system, so it starts in a second and is hundreds of megabytes rather than many gigabytes. One sentence, then move on &mdash; it is not a Week 1 concept.''')
+
+sl('6','And the update problem goes too',T6,
+ 'You rebuild the file. They fetch it again.',
+ r'''    <div class="fig">
+      <div class="box wide" style="padding:18px">
+        <div class="t">you fix a bug</div>
+        <div class="s" style="margin-top:7px">rebuild the file<br><b>one command</b></div>
+      </div>
+      <div class="arr"><div class="line">&rarr;</div><div class="cap">they fetch it</div></div>
+      <div class="box wide g" style="padding:18px">
+        <div class="t">everybody is current</div>
+        <div class="s" style="margin-top:7px">same file<br><b>same behaviour</b></div>
       </div>
     </div>''',
- '''<b>The single sentence for this chapter</b><em>"Instead of telling the other machine how to set it up, you send it something where the setup is already finished."</em><br><br><b>If somebody asks how it differs from a virtual machine:</b> a container shares the host's operating system, so it starts in a second and is a few hundred megabytes rather than many gigabytes. One sentence, then move on — it is not a Week 1 concept.''')
+ r'''<b>Collect the fifth problem, the structural one</b>They fetch the new file and they are current. <b>No instructions to re-follow, nothing to get wrong.</b><br><br><em>"This is why the industry moved to this. Not because it is clever &mdash; because emailing instructions does not work at twenty people, let alone twenty thousand."</em><br><br><b>Then the promise for the chapter:</b> <em>"By ten to four, the person next to you will be running your agent. Two commands. Let me show you how the file is made."</em>''')
 
 sl('6','Two words people mix up',T6,
  'An image is the file. A container is it running.',

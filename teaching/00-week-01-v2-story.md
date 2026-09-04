@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **167 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **172 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -31,19 +31,19 @@ necessary rather than arbitrary.
 
 ```
    0:00   10   1  "It works on my laptop"      three questions, laptops closed
-   0:10   26   2  "Let me show you the thing"  the agent, then run it live
-   0:36   22   3  "Your turn"                  prerequisites, clone, key, prove
-   0:58   10      break
-   1:08   38   4  "Two new skills"             terminal, then the browser -> curl
-   1:46   10      break
-   1:56   56   5  "Giving it a front door"     why, then three endpoints
-   2:52   58   6  "Putting it in a box"        containers, then GIVE IT AWAY
+   0:10   24   2  "Let me show you the thing"  the agent, then run it live
+   0:34   20   3  "Your turn"                  prerequisites, clone, key, prove
+   0:54   10      break
+   1:04   38   4  "Two new skills"             terminal, then the browser -> curl
+   1:42   10      break
+   1:52   56   5  "Giving it a front door"     why, then three endpoints
+   2:48   62   6  "Giving it to somebody else" the problem, Docker, then GIVE IT AWAY
    3:50   10   7  "Look what you did"          the picture, complete
    ────────────
    4:00        exactly four hours, both breaks included
 ```
 
-About **79 seconds a slide** — one idea, said once, then advance.
+About **77 seconds a slide** — one idea, said once, then advance.
 
 ## How the story is told
 
@@ -253,7 +253,7 @@ top of the rail.
 python3 teaching/check-slide-layout.py teaching/week-01-slides-v2.html
 ```
 
-It renders **all 167 slides** in a headless browser and reports any slide whose
+It renders **all 172 slides** in a headless browser and reports any slide whose
 content reaches the bottom rail, passes either side edge, or exceeds the stage.
 Exits non-zero, so it can gate a commit.
 
@@ -262,7 +262,53 @@ Exits non-zero, so it can gate a commit.
 > `slide 30: hits the bottom rail (gap -36px)`. A checker nobody has seen fail
 > is not a checker.
 
-**Both decks pass:** 167/167 here, 218/218 in the other one.
+**Both decks pass:** 172/172 here, 218/218 in the other one.
+
+## Chapter six starts with the problem, not with Docker
+
+**The word "Docker" does not appear on screen for the first seven slides**, and
+that is the point. It used to arrive on slide two of the chapter, which turns a
+real problem into a product pitch.
+
+The chapter now opens on a task they cannot do:
+
+```
+   1  a real request        your friend says "that is great, send it to me"
+   2  so you send it        THE EMAIL NOBODY WANTS TO RECEIVE - read it aloud
+   3  what can go wrong     their Python, the libraries, the folders, their OS
+   4  and worse tomorrow    you fix a bug; they still run this morning's copy
+   5  so what would fix it? ask it, and let them answer
+   6  it is called a container    the name arrives as a RELIEF
+   7  and the update problem goes too
+```
+
+**Slide 2 is the one that does the work.** It is the message they would have to
+send with the folder, written out in full:
+
+> *"Install Python 3.12 — not 3.11, that breaks. Then `pip install` these six
+> libraries. Keep the folders exactly as they are. Make a file called `.env`,
+> put your own key in it, then run `set -a && source .env && set +a` in the same
+> window. Oh, and are you on Windows?"*
+
+> **INSTRUCTOR** · **Read that out loud, in full, in one breath.** It gets a
+> laugh, and the laugh is the lesson — *every clause in it is something they
+> personally did an hour ago.* Then land it: *"That took you twenty minutes,
+> with me in the room, on a laptop you chose. Now send it to a customer."*
+>
+> **Ask the room how they would send it before you show anything.** They will
+> say email the folder, put it on GitHub, zip it up. All reasonable, all wrong,
+> and the next four slides do the correcting for you.
+
+**Slide 4 is the one professionals care about.** The first four problems are
+annoying; that one is structural — every copy you send is frozen at the moment
+you sent it, and you cannot fix it for them. Multiply by twenty people and
+nobody knows which version anybody is running.
+
+Only then does the chapter name the thing, explain what Docker is, and go on to
+the three toys, the Dockerfile line by line, and the swap.
+
+**The chapter is called "Giving it to somebody else"**, not "Putting it in a
+box" — the box is the means, and naming the goal keeps the problem in front.
 
 ## Every command is taken apart on screen
 
@@ -371,12 +417,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 167 slides measured** in a headless browser at the deck's own
+- **All 172 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 167 of 167.
+- **Every slide has a presenter note** — 172 of 172.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 
