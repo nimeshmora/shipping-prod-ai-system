@@ -97,11 +97,11 @@ export MAX_STEPS=2
 make run
 
 # a normal question still works
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' -d '{"message":"where is ORD-1002?"}'
 
 # now ask for something that needs several tool calls in a row
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' \
   -d '{"message":"look up ORD-1001, ORD-1002, ORD-1043 and ORD-1077, then add up the totals"}'
 ```

@@ -22,8 +22,8 @@ gcloud run deploy ship-agent \
   --source . \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars "MODEL=claude-sonnet-5,BASE_URL=https://api.ai.kodekloud.com/v1" \
-  --set-secrets "KODEKEY=kodekey:latest" \
+  --set-env-vars "MODEL=anthropic/claude-sonnet-4.5,BASE_URL=https://openrouter.ai/api/v1" \
+  --set-secrets "OPENROUTER_API_KEY=kodekey:latest" \
   --timeout=3600 --concurrency=80 --min-instances=1
 ```
 
@@ -31,7 +31,7 @@ First, put your key in Secret Manager — **never** in `--set-env-vars`, where i
 shows up in the console, in `gcloud describe` output, and in your shell history:
 
 ```bash
-echo -n "$KODEKEY" | gcloud secrets create kodekey --data-file=-
+echo -n "$OPENROUTER_API_KEY" | gcloud secrets create kodekey --data-file=-
 ```
 
 Those last three flags matter more than they look:
