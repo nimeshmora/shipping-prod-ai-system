@@ -350,13 +350,13 @@ spine(1,'2','Where we are &middot; end of chapter two',T2,
  'You know what it is. It still cannot be reached.',
  '''<b>Same picture, and deliberately unchanged</b>Nothing new is lit up, because <b>knowing what a thing is does not move it anywhere.</b> Say that out loud — it is the setup for the next three hours.<br><br><em>"You now know exactly what is in the green box. It still only runs on my laptop. Everything from here is about the dashed boxes."</em><br><br><b>Next: they get it running on their own machines.</b>''')
 
-T3='0:40 &ndash; 1:00'
+T3='0:40 &ndash; 0:58'
 # =========================================================================
 # CHAPTER 3 — Getting it running  (0:40 – 1:07)
 # =========================================================================
 chapter('3','Chapter three','Your turn.',
  'Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o\'clock.',
- 'about twenty minutes &middot; everybody types',
+ 'about eighteen minutes &middot; everybody types',
  '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody who is still installing when chapter four starts will be lost for the rest of the day, and catching them up costs everyone else.''')
 
 sl('3','Before anything &middot; what you should already have',T3,
@@ -475,13 +475,13 @@ spine(2,'3','Where we are &middot; end of chapter three',T3,
  '''<b>One more box lit up — but be precise about what changed</b><em>"Twenty-seven people now have it running. That is twenty-seven laptops, and still zero strangers."</em><br><br><b>The honest framing:</b> copying it to more laptops is not the same as making it reachable. Every one of those copies has the same problem the first one had.<br><br><b>Now the break.</b> Ten minutes. After it, they learn to drive a computer by typing.''')
 
 
-T4='1:10 &ndash; 1:44'
+T4='1:08 &ndash; 1:46'
 # =========================================================================
 # CHAPTER 4 — Learning to drive  (1:17 – 1:53)
 # =========================================================================
 chapter('4','Chapter four','Learning to drive.',
  'Two tools, practised on toys. <b>Not on the agent</b> — you break a toy and nothing is lost.',
- 'about thirty-four minutes &middot; everybody types',
+ 'about thirty-eight minutes &middot; everybody types',
  '''<b>Say why this comes before the interesting part</b><em>"For the next half hour we are not touching the agent. We are learning to type at a computer, and to send a message to one. Both on things it does not matter if you break."</em><br><br><b>The payoff, promised now:</b> every command they learn here works identically on the rented machine their agent will live on — <b>which has no screen, no mouse and no desktop.</b> Typing is the only way in.''')
 
 sl('4','The window',T4,
@@ -626,66 +626,129 @@ sl('4','That is the whole toolkit',T4,
  '''<b>Leave this up as their reference card</b>It is also in <code>guide/week-01.md</code> — tell them where.<br><br><b>Then the bridge, and it matters:</b> <em>"Notice what all nine have in common. Every single one talks to THIS computer. Nothing we have learned can reach another machine.</em><br><br><em>And your agent's whole problem is that nobody else can reach it. So next: how one computer sends a message to another."</em>''')
 
 tale('4','Second tool',T4,
- 'Now the other half: <b>sending a message to a computer that is not yours.</b>',
- '''<b>Frame it as the second half of driving</b>They can now move around one machine. This is how they reach a different one — <b>and it is the exact command they will use on their own service in an hour.</b><br><br>Still on toys: public practice services, nothing of theirs at stake.''')
+ 'Now the other half: <b>getting information out of a computer that is not yours.</b>',
+ '''<b>Frame it, then start somewhere completely familiar</b>They can move around one machine. This is how they reach a different one.<br><br><b>And we start in the web browser</b>, because every single person in the room has used one. <em>"You have been talking to other people's computers all your life. Let me show you what you were actually doing."</em>''')
 
-sl('4','The agreed way to write data down',T4,
- 'It is called JSON.',
- '''    <pre class="tight">{
-  <span class="hl">"order_id"</span>: <span class="ok">"ORD-1002"</span>,
-  <span class="hl">"item"</span>: <span class="ok">"standing desk"</span>,
-  <span class="hl">"price"</span>: 340.00,
-  <span class="hl">"shipped"</span>: true
-}</pre>
-    <div class="readout">
-      <div class="ln"><div class="n">1</div><div class="txt"><b>A label, a colon, a value.</b> That is the whole idea.</div></div>
-      <div class="ln"><div class="n">2</div><div class="txt">Curly braces wrap a thing. Text gets quotes; numbers and true/false do not.</div></div>
+sl('4','Start with something you do every day',T4,
+ 'You type an address, and a computer somewhere sends you back a page.',
+ '''    <div class="fig">
+      <div class="box wide i" style="padding:18px">
+        <div class="t">your browser</div>
+        <div class="s" style="margin-top:7px">you type<br><b>github.com</b></div>
+      </div>
+      <div class="arr"><div class="line">&rarr;</div><div class="cap">a question</div></div>
+      <div class="box wide g" style="padding:18px">
+        <div class="t">their computer</div>
+        <div class="s" style="margin-top:7px">sends back<br><b>a page</b></div>
+      </div>
+    </div>
+    <div class="punch">That is a question and an answer. You have done it a thousand times.</div>''',
+ '''<b>Say this plainly, because it reframes everything that follows</b><em>"Every time you open a website, your computer asks another computer a question and gets an answer back. That is all a web address is &mdash; a question you can type."</em><br><br><b>Nothing new yet.</b> This is the thing they already know, said out loud, so the next slide can change one detail.''')
+
+sl('4','Now type this address instead',T4,
+ 'Same browser. A different kind of answer.',
+ '''    <div class="body center">
+      <div class="oneline">
+        <div class="lbl">PUT THIS IN YOUR BROWSER, RIGHT NOW</div>
+        <div class="say2">api.github.com/users/<b>torvalds</b></div>
+        <div class="extra">Then try it with <b>your own</b> GitHub username, if you have one.</div>
+      </div>
     </div>''',
- '''<b>Why they need it: two programs have to agree on a format</b><em>"If my program sends data to yours, we both have to write it the same way. JSON is what nearly everything agreed on."</em><br><br><b>Anchor it:</b> they have seen this shape already — <code>{"order_id": "ORD-1002"}</code> was on screen during the demo, in step 2. <b>Point back at it.</b><br><br>Do not teach the edge cases. Label, colon, value.''')
+ '''<b>Everybody does this at the same time. Wait for the room.</b>It is a normal address in a normal browser. <b>No tools, no install, nothing to learn.</b><br><br><b>Then let them react.</b> Somebody will say "it looks broken" or "that's just code". <b>Both are useful</b> &mdash; the next slide names what they are looking at.<br><br><b>Have them try their own username</b> too. Suddenly it is their own data, which is worth thirty seconds of noise.''')
 
-sl('4','Send a message to another computer',T4,
- '<code>curl</code> asks, and prints what comes back.',
- '''    <pre class="tight"><span class="pr">$</span> curl -s https://api.github.com/zen
-<span class="ok">Non-blocking is better than blocking.</span></pre>
-    <div class="punch">You just sent a message across the world and read the reply. One line.</div>''',
- '''<b>Let this land — it is a bigger moment than it looks</b>Somebody in the room has never made a computer talk to another computer before.<br><br><em>"You did not install anything. You did not agree anything with GitHub beforehand. You typed one line and a machine you have never met answered."</em><br><br><b>That is the whole promise of a web service</b>, and they just used one. You collect this in chapter five.''')
-
-sl('4','Ask for something bigger',T4,
- 'Same command. A whole JSON reply.',
- '''    <pre class="tight"><span class="pr">$</span> curl -s https://api.github.com/repos/python/cpython <span class="hl">| jq</span>
-{
-  <span class="hl">"name"</span>: <span class="ok">"cpython"</span>,
-  <span class="hl">"stargazers_count"</span>: 62000,
-  <span class="hl">"language"</span>: <span class="ok">"Python"</span>,
-  ...
+sl('4','What came back',T4,
+ 'Not a page for people. Data for programs.',
+ '''    <pre class="tight">{
+  <span class="hl">"login"</span>: <span class="ok">"torvalds"</span>,
+  <span class="hl">"name"</span>: <span class="ok">"Linus Torvalds"</span>,
+  <span class="hl">"company"</span>: <span class="ok">"Linux Foundation"</span>,
+  <span class="hl">"location"</span>: <span class="ok">"Portland, OR"</span>,
+  <span class="hl">"public_repos"</span>: 12,
+  <span class="hl">"followers"</span>: 320442
 }</pre>
-    <div class="punch"><code>| jq</code> lays JSON out and colours it. Without it, one long unreadable line.</div>''',
- '''<b>Show it both ways — run it once without <code>| jq</code></b>The difference sells itself. <b>The pipe <code>|</code> means "feed the output of the left into the right."</b><br><br>They will use <code>| jq</code> on every JSON reply for the rest of the course.<br><br><b>If somebody has no jq:</b> <code>python3 -m json.tool</code> does the same job.''')
+    <div class="punch">You can read every line of that. So can a program.</div>''',
+ '''<b>Read three lines out loud and let the room notice they understand it</b><em>"Name. Company. Location. Followers. You did not need me to explain any of that."</em><br><br><b>That is the whole point.</b> It looks intimidating for about four seconds, and then it is obvious &mdash; because it was designed to be obvious to both people and programs.<br><br><b>The contrast worth naming:</b> <em>"github.com sends a page, with colours and buttons, for a person to look at. api.github.com sends the same facts with no decoration, for a program to use."</em>''')
 
-sl('4','Make failures happen on purpose',T4,
- 'Same command. Different number back.',
+sl('4','That shape has a name',T4,
+ 'It is called JSON.',
+ '''    <div class="def">
+      <div class="term">JSON</div>
+      <div class="txt">A <b>label, a colon, a value</b> &mdash; one per line, wrapped in curly braces. That is the entire idea.</div>
+    </div>
+    <div class="punch">Text gets quotes. Numbers and true/false do not.</div>''',
+ '''<b>Name it AFTER they have seen one, not before</b>They have now read real JSON in their own browser and understood it. <b>The word is a label for something familiar</b>, which is the easiest possible way to learn a term.<br><br><b>Why it exists:</b> <em>"If my program sends data to yours, we both have to write it the same way. This is what nearly everything agreed on."</em><br><br><b>Point back at the demo</b> in chapter two &mdash; <code>{"order_id": "ORD-1002"}</code> was on screen when the model asked for a tool. <b>Same shape.</b> They just did not have a name for it yet.''')
+
+sl('4','Try a wrong address',T4,
+ 'Even the failure is readable.',
+ '''    <div class="body center">
+      <pre class="tight"><span class="cm">api.github.com/users/<span class="bad">not-a-real-person-xyz</span></span>
+
+{
+  <span class="hl">"message"</span>: <span class="bad">"Not Found"</span>,
+  <span class="hl">"status"</span>: <span class="bad">"404"</span>
+}</pre>
+    </div>''',
+ '''<b>Have them break it on purpose &mdash; it takes ten seconds</b>Change the username to nonsense and reload.<br><br><b>Two things to point at:</b> the message says <em>Not Found</em> in plain English, and <b>there is a number: 404.</b><br><br><em>"You have seen that number before, on a broken website. Now you know it is not decoration &mdash; it is the computer telling you which kind of thing went wrong."</em><br><br>Hold the number. <b>Two slides from now it becomes useful.</b>''')
+
+tale('4','So why not just use the browser?',T4,
+ 'Because you cannot <span class="q">put a browser inside a program.</span>',
+ '''<b>Ask it, and let somebody answer before you do</b>The browser was perfect for looking. <b>It is useless for building.</b><br><br><b>Three reasons, and give them in this order:</b><br><br>&bull; your <b>code</b> cannot open a browser and read the screen<br>&bull; you cannot <b>send</b> anything &mdash; a browser address bar only asks for things<br>&bull; you cannot see the <b>number</b> that came back, only the text<br><br><em>"So we need the same thing as a command. Same question, same answer, but something a program can do."</em>''')
+
+sl('4','The same thing, as a command',T4,
+ 'One word instead of a browser.',
+ '''    <pre class="tight"><span class="cm"># the same address you just typed in the browser</span>
+<span class="pr">$</span> curl -s https://api.github.com/users/torvalds
+{"login":"torvalds","name":"Linus Torvalds",...}</pre>
+    <div class="punch">Identical answer. It just arrived in your terminal instead of a window.</div>''',
+ '''<b>Run it and say the one sentence that matters</b><em>"Same address. Same answer. The only difference is where it landed."</em><br><br><b>That is the whole introduction to curl.</b> Not a new concept &mdash; a different door onto something they did four slides ago.<br><br><b><code>-s</code></b> just means "do not show me a progress bar". Say it once and move on.''')
+
+sl('4','Pick out just the bit you want',T4,
+ '<code>| jq</code> reaches into the answer for you.',
+ '''    <pre class="tight"><span class="cm"># the whole thing is a lot. ask for one line of it:</span>
+
+<span class="pr">$</span> curl -s .../users/torvalds <span class="hl">| jq -r '.name'</span>
+<span class="ok">Linus Torvalds</span>
+
+<span class="pr">$</span> curl -s .../users/torvalds <span class="hl">| jq -r '.followers'</span>
+<span class="ok">320442</span></pre>
+    <div class="punch">The label you saw on screen is the label you ask for.</div>''',
+ '''<b>This is the moment JSON stops being a wall of text</b>They read <code>"name"</code> and <code>"followers"</code> in the browser four slides ago. <b>Now those same labels are how you fetch one value.</b><br><br><em>"That is why the labels matter. A program does not read the whole thing &mdash; it asks for the one line it needs, by name."</em><br><br><b>The pipe <code>|</code></b> means "feed what came out of the left into the right". They will use that shape constantly.<br><br><b>Let them try their own:</b> <code>.location</code>, <code>.company</code>, <code>.public_repos</code>. Two minutes, and JSON is theirs.<br><br><b>Plain <code>| jq</code> with no label</b> just lays the whole thing out neatly &mdash; useful when a service sends one dense line. <b>If somebody has no jq:</b> <code>python3 -m json.tool</code> formats, though it cannot pick fields.''')
+
+sl('4','Now the thing the browser could not do',T4,
+ 'Ask for the number instead of the text.',
  '''    <pre class="tight"><span class="pr">$</span> curl -s -o /dev/null -w <span class="hl">"%{http_code}\\n"</span> \\
-    https://httpbin.org/status/<span class="hl">404</span>
-<span class="bad">404</span>
+    https://api.github.com/users/torvalds
+<span class="ok">200</span>
 
-<span class="cm">Now change 404 to 200. Then to 500.</span></pre>
-    <div class="punch">A practice service. Ask for a number, get that number. Nothing is broken.</div>''',
- '''<b>Have them change the number three times</b>404, 200, 500. <b>Same command, different answer.</b> Requesting failures deliberately is the only safe way to learn what one looks like.<br><br><em>"You will see these three numbers all afternoon. Now they are not a surprise."</em><br><br><b>The two options:</b> <code>-o /dev/null</code> throws the reply body away, <code>-w</code> prints only the status number. <code>/dev/null</code> is the computer's bin.''')
+<span class="pr">$</span> <span class="cm">... same command, nonsense username:</span>
+<span class="bad">404</span></pre>
+    <div class="punch">Remember 404 from the browser? Here it is on its own.</div>''',
+ '''<b>Collect the number they met three slides ago</b>In the browser they saw <code>"status": "404"</code> buried in the text. <b>Now they can get just the number</b>, which is what a program needs.<br><br><b>The two new options:</b> <code>-o /dev/null</code> throws the reply text away, <code>-w</code> prints only the status. <code>/dev/null</code> is the computer's bin.<br><br><b>Have them try a few:</b> a real username, a nonsense one. <b>Same command, different number.</b> That is the habit &mdash; the number tells you what happened before you read a word.''')
 
 sl('4','What those numbers mean',T4,
  'Three you will meet today.',
  '''    <div class="cols c3">
       <div class="card good"><h3>200</h3><p class="dim">Fine. Here is your answer.</p></div>
-      <div class="card warnb"><h3>4xx</h3><p class="dim"><b>You</b> got it wrong. Wrong address, missing data.</p></div>
-      <div class="card" style="border-left:3px solid var(--bad)"><h3>5xx</h3><p class="dim"><b>The service</b> got it wrong. Its problem, not yours.</p></div>
+      <div class="card warnb"><h3>4xx</h3><p class="dim"><b>You</b> asked wrongly. Wrong address, missing data.</p></div>
+      <div class="card" style="border-left:3px solid var(--bad)"><h3>5xx</h3><p class="dim"><b>The service</b> broke. Its problem, not yours.</p></div>
     </div>''',
- '''<b>The 4 versus 5 split is the useful part</b><em>"A number starting with 4 means you asked wrongly. Starting with 5 means it broke. That tells you who has to fix it."</em><br><br>They will see <b>200, 422 and 404</b> from their own service within the hour, and they will already know what each one is telling them.''')
+ '''<b>The 4-versus-5 split is the useful part</b><em>"Starts with 4, you asked wrongly. Starts with 5, it broke. That tells you who has to fix it."</em><br><br>They have already produced a 200 and a 404 with their own hands. <b>They will see 200, 422 and 404 from their own service within the hour</b>, and already know what each is telling them.''')
+
+sl('4','And one thing you will need later',T4,
+ 'You can <b>send</b> data, not just ask for it.',
+ '''    <pre class="tight"><span class="pr">$</span> curl -s -X POST https://httpbin.org/post \\
+    -H <span class="ok">'Content-Type: application/json'</span> \\
+    -d <span class="hl">'{"message": "hello"}'</span> | jq
+
+<span class="cm">... it echoes back what you sent:</span>
+  <span class="hl">"json"</span>: { <span class="hl">"message"</span>: <span class="ok">"hello"</span> }</pre>''',
+ '''<b>This is the exact command they will point at their own agent</b>A practice service that repeats whatever you send it, so they can see their own data arrive.<br><br><b>Three new pieces, one sentence each:</b> <code>-X POST</code> means "I am sending, not fetching". <code>-H</code> says "what I am sending is JSON". <code>-d</code> is the data itself.<br><br><em>"A browser cannot do this. That is why we needed a command."</em><br><br><b>Keep this on screen for a moment.</b> In the next chapter they change the address and it talks to their own service.''')
 
 spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can drive a computer, and reach one.',
  '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for what comes next:</b> <em>"Everything you did with curl, you did to somebody else's service. Next chapter you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
 
-T5='1:54 &ndash; 2:50'
+T5='1:56 &ndash; 2:52'
 # =========================================================================
 # CHAPTER 5 — Giving it a front door  (2:03 – 2:50)
 # =========================================================================
@@ -1185,7 +1248,7 @@ spine(4,'5','Where we are &middot; end of chapter five',T5,
  'It has a front door. But it still only runs where you are sitting.',
  '''<b>One more box, and then the honest catch</b><em>"Anything on this network can now reach your agent. But it only runs while your laptop is on, in that folder, with your key loaded in that one window."</em><br><br><b>Set up the last chapter with a question:</b> <em>"So how do I give this to somebody who does not have your laptop, your Python, or your folder?"</em><br><br>That is the last dashed box.''')
 
-T6='2:50 &ndash; 3:48'
+T6='2:52 &ndash; 3:50'
 # =========================================================================
 # CHAPTER 6 — Putting it in a box  (2:50 – 3:50)
 # =========================================================================
@@ -1589,13 +1652,13 @@ spine(5,'6','Where we are &middot; end of chapter six',T6,
  'A stranger ran it. That was the whole day.',
  '''<b>The full picture, complete, for the first time</b>All five layers. Point at the outermost box: <b>that happened, ten minutes ago, with a real person sitting next to them.</b><br><br><em>"This morning it only ran where you were sitting. Just now, somebody who has never seen your code ran it in two commands."</em><br><br>Let that sit for a moment before the recap.''')
 
-T7='3:48 &ndash; 4:00'
+T7='3:50 &ndash; 4:00'
 # =========================================================================
 # CHAPTER 7 — Look what you did  (3:50 – 4:00)
 # =========================================================================
 chapter('7','Chapter seven','Look what you did.',
  'Four hours ago it only worked on your laptop.',
- 'twelve minutes &middot; then go home',
+ 'ten minutes &middot; then go home',
  '''<b>Slow down for the last ten minutes</b>People underestimate what they did today, and a recap they can feel is what makes them come back next week.<br><br><b>Do not introduce anything new here.</b> One picture, three questions they cannot answer yet, and the homework.''')
 
 sl('7','The whole day, in one line',T7,

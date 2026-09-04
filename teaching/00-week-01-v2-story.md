@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **152 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **158 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -32,18 +32,18 @@ necessary rather than arbitrary.
 ```
    0:00   12   1  "It works on my laptop"      three questions, laptops closed
    0:12   28   2  "Let me show you the thing"  the agent, then run it live
-   0:40   20   3  "Your turn"                  prerequisites, clone, key, prove
-   1:00   10      break
-   1:10   34   4  "Learning to drive"          terminal + curl, on toys
-   1:44   10      break
-   1:54   56   5  "Giving it a front door"     why, then three endpoints
-   2:50   58   6  "Putting it in a box"        containers, then GIVE IT AWAY
-   3:48   12   7  "Look what you did"          the picture, complete
+   0:40   18   3  "Your turn"                  prerequisites, clone, key, prove
+   0:58   10      break
+   1:08   38   4  "Learning to drive"          terminal, then the browser -> curl
+   1:46   10      break
+   1:56   56   5  "Giving it a front door"     why, then three endpoints
+   2:52   58   6  "Putting it in a box"        containers, then GIVE IT AWAY
+   3:50   10   7  "Look what you did"          the picture, complete
    ────────────
    4:00        exactly four hours, both breaks included
 ```
 
-About **87 seconds a slide** — one idea, said once, then advance.
+About **84 seconds a slide** — one idea, said once, then advance.
 
 ## How the story is told
 
@@ -145,6 +145,55 @@ branches.
 `-p 9000:80`) each build and run standalone, before anything of theirs is at
 stake.
 
+## JSON and curl start in the browser
+
+**The old order taught JSON as a format, then curl as a tool.** Both were new
+words arriving before there was anything to attach them to. The new order
+starts with the one thing every person in the room already does daily.
+
+```
+   1  you already do this      type an address, a computer sends back a page
+   2  now type THIS address    api.github.com/users/torvalds   <- in the browser
+   3  what came back           name, company, location, followers - all readable
+   4  that shape has a name    JSON  <- named AFTER they have read one
+   5  try a wrong address      "Not Found", and a number: 404
+   6  so why not the browser?  your CODE cannot read a browser window
+   7  the same thing, a command   curl, same address, same answer
+   8  pick out one bit         | jq -r '.name'  ->  Linus Torvalds
+   9  ask for the number       200, then 404 - what the browser hid
+  10  what the numbers mean    200 / 4xx you asked wrong / 5xx it broke
+  11  and you can SEND too     -X POST, which a browser cannot do
+```
+
+**Why this order works.** Slide 3 is the moment that matters: they look at raw
+JSON in their own browser and realise **they can already read it.** Name,
+company, location. Nobody explains it to them. The word "JSON" then lands on
+slide 4 as a label for something familiar rather than a new concept.
+
+And **curl is introduced as a need, not a tool.** Slide 6 asks *"so why not
+just use the browser?"* and answers it: your code cannot read a browser window,
+you cannot send anything, and you cannot see the number. **Only then** does a
+command appear — as the same thing they just did, in a form a program can use.
+
+> **INSTRUCTOR** · Have everybody type the address at the same time and wait
+> for the room. Somebody will say *"it looks broken"* — that is the reaction
+> you want, because thirty seconds later they are reading it fluently.
+>
+> **Have them try their own GitHub username.** Suddenly it is their own data,
+> which is worth the noise.
+
+**Every command on these slides was run.** `users/torvalds` returns 200;
+a nonsense username returns 404 **with `"status": "404"` in readable JSON**;
+`jq -r '.name'` returns `Linus Torvalds`; and the `httpbin.org/post` example
+echoes back `{"message": "hello"}`.
+
+**One correction worth knowing:** an earlier version of the jq slide claimed
+that without `| jq` you get "one long unreadable line". **GitHub already
+pretty-prints**, so students would have seen that was false the moment they
+ran it. The slide now teaches what jq is actually for — **pulling out one
+field by the label they just read on screen** — which is both true and more
+useful.
+
 ## The teaching added where rooms get stuck
 
 **Docker** — five slides before any Dockerfile is written, because "write a
@@ -208,12 +257,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 152 slides measured** in a headless browser at the deck's own
+- **All 158 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 152 of 152.
+- **Every slide has a presenter note** — 158 of 158.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 
