@@ -123,7 +123,7 @@ an image layer.** Layers are cached, shared, and pushed to registries.
 
 ## First, watch it work
 
-One question, four labelled steps, no key needed:
+One question, four labelled steps, using your key:
 
 ```bash
 python3 -m checks.demo_turn
