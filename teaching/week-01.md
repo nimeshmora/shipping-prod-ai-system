@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 211 slides with a presenter note on 199 of them, and it carries material this
+is 217 slides with a presenter note on 205 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -467,6 +467,21 @@ and item 1 reads *"sent with the question"*.
 
 Then the four steps. It **pauses between them** so the room can read each one
 as it appears.
+
+> **INSTRUCTOR** · **The slides do not explain the pausing, and that is
+> deliberate** — a slide about how the demo will behave is a slide you have to
+> teach instead of teaching the demo. There is **one slide per step**, matching
+> the four boxes on the whiteboard, and nothing in between.
+>
+> Two sentences to say **before** you press Enter, both in the notes on the
+> command slide:
+>
+> 1. *"This is my laptop — I already have the project. You will run this exact
+>    command yourself at 0:46."*
+> 2. *"The question is just words. Nothing in it names a tool. Watch step 2."*
+>
+> **Run it once without commentary**, then advance through steps 1 to 4 and
+> talk over each one.
 
 ```
   The agent can reach for 3 tools:

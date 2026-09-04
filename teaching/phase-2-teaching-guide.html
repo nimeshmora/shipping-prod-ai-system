@@ -738,7 +738,7 @@ ticked so the instructor boxes keep their shading.</p>
 PDF — some instructors prefer to teach from it in a browser tab.</p>
 <hr />
 <h2>Week 1 slides</h2>
-<p><code>teaching/week-01-slides.html</code> is a 211-slide presenter deck for <strong>day one, run
+<p><code>teaching/week-01-slides.html</code> is a 217-slide presenter deck for <strong>day one, run
 as a four-hour session</strong>, in the same house style as this guide. Open it in a
 browser and press <strong>F</strong> for fullscreen.</p>
 <p>The deck deliberately does <strong>not</strong> use the word "beat" or any internal
@@ -786,7 +786,7 @@ clock in the top-right corner of every slide.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Press <code>S</code> before you start.</strong> A hundred and ninety-nine of the slides carry
+<p><strong>Press <code>S</code> before you start.</strong> Two hundred and five of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing <em>not</em> to explain
 yet — in a side panel the room never sees.</p>
 <h3>The four-hour shape</h3>
@@ -806,7 +806,7 @@ yet — in a side panel the room never sees.</p>
    ────────────
    4:00        exactly four hours, including both breaks
 </code></pre>
-<p><strong>211 slides over 220 minutes of content is about 63 seconds each.</strong> That is
+<p><strong>217 slides over 220 minutes of content is about 61 seconds each.</strong> That is
 the intended pace: one idea, one sentence, take a question, advance.</p>
 <blockquote>
 <p><strong>INSTRUCTOR</strong> · Three things about this order, all deliberate.</p>
@@ -1205,40 +1205,84 @@ screen you cannot tell where to start or where to stop.</p>
 <tr>
 <th></th>
 <th>First pass</th>
+<th>Second pass</th>
 <th>Now</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>slides</td>
-<td>168</td>
-<td><strong>211</strong></td>
+<td>147</td>
+<td>211</td>
+<td><strong>217</strong></td>
 </tr>
 <tr>
 <td>slides with 4+ blocks</td>
 <td>24</td>
-<td><strong>0</strong></td>
-</tr>
-<tr>
-<td>slides with 5+ blocks</td>
 <td>0</td>
 <td><strong>0</strong></td>
 </tr>
 <tr>
+<td>slides teaching two things at once</td>
+<td>—</td>
+<td>6</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
 <td>slides that overflow the stage</td>
-<td>3</td>
+<td>—</td>
+<td>0</td>
 <td><strong>0</strong></td>
 </tr>
 </tbody>
 </table>
-<p>The rule now applied: <strong>at most three blocks, and only one of them may be a
-code block or a figure.</strong> A definition, an example and a caveat are three
-slides, not one.</p>
-<p><strong>Verified by rendering, not by eye.</strong> All 211 slides were measured in a
-headless browser at the deck's own 1280×720 stage; none overflow. The two
-deepest zoom slides used to run 774px and 899px tall — those now collapse the
-levels you have already passed, so the current level always fits.</p>
+<p>The rule now applied: <strong>at most three blocks, and only one idea.</strong> A definition,
+an example and a caveat are three slides, not one. Two commands are two slides.
+A code block plus a numbered reading <em>of that same code</em> is still one idea, and
+stays on one slide.</p>
+<p><strong>Verified by rendering, not by eye.</strong> All 217 slides were measured in a
+headless browser at the deck's own 1280×720 stage; none overflow.</p>
+<h3>The demo is the demo, not a description of the demo</h3>
+<p>The third pass removed the scaffolding around the live demo. Three slides had
+been explaining <strong>how the demo would behave</strong> before it ran:</p>
+<table>
+<thead>
+<tr>
+<th>Removed</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>"It pauses between steps. Watch step 2."</em></td>
+<td>meta-commentary; the cue belongs in the notes</td>
+</tr>
+<tr>
+<td><em>"Each step prints, then it pauses."</em></td>
+<td>near-duplicate of the slide above it</td>
+</tr>
+<tr>
+<td>the "this runs on my machine" card</td>
+<td>true and necessary, but it is a <strong>sentence you say</strong>, not a slide</td>
+</tr>
+</tbody>
+</table>
+<p>What is left is the demo itself, one slide per thing that happens:</p>
+<pre><code>   the command          $ python3 -m checks.demo_turn
+   STEP 1               the question, in plain words
+   STEP 2               the model picks a tool          &lt;- the slide to slow on
+   STEP 3               your code runs it
+   STEP 4               the model answers
+   what it kept         four entries in a list
+   and re-sends         the model itself remembers nothing
+</code></pre>
 <blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>Run it once with no commentary</strong> — eight seconds, four
+steps land. Then advance through steps 1 to 4 and talk over each one.</p>
+<p>The two things that used to be slides are now the first two lines of your
+notes on the command slide: <em>"this is my laptop, you will run it at 0:46"</em>
+and <em>"nothing in the question names a tool — watch step 2"</em>. <strong>Say both
+before you press Enter.</strong></p>
 <p><strong>INSTRUCTOR</strong> · This is what makes the deck teachable rather than just
 correct. <strong>Each slide is now one thing you can open, say, and close</strong> — then
 advance and the next one builds on it.</p>
@@ -1928,7 +1972,7 @@ and five labels.</p>
 show the agenda, or the morning feels slow.</p>
 </blockquote>
 <p><strong>The slides are the primary artefact for this week.</strong> <code>teaching/week-01-slides.html</code>
-is 211 slides with a presenter note on 199 of them, and it carries material this
+is 217 slides with a presenter note on 205 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.</p>
@@ -2317,6 +2361,21 @@ costs when it is not."</em></p>
 </blockquote>
 <p>Then the four steps. It <strong>pauses between them</strong> so the room can read each one
 as it appears.</p>
+<blockquote>
+<p><strong>INSTRUCTOR</strong> · <strong>The slides do not explain the pausing, and that is
+deliberate</strong> — a slide about how the demo will behave is a slide you have to
+teach instead of teaching the demo. There is <strong>one slide per step</strong>, matching
+the four boxes on the whiteboard, and nothing in between.</p>
+<p>Two sentences to say <strong>before</strong> you press Enter, both in the notes on the
+command slide:</p>
+<ol>
+<li><em>"This is my laptop — I already have the project. You will run this exact
+   command yourself at 0:46."</em></li>
+<li><em>"The question is just words. Nothing in it names a tool. Watch step 2."</em></li>
+</ol>
+<p><strong>Run it once without commentary</strong>, then advance through steps 1 to 4 and
+talk over each one.</p>
+</blockquote>
 <pre><code>  The agent can reach for 3 tools:
      - lookup_order
      - calculator

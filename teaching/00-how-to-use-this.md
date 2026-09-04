@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 211-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 217-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and ninety-nine of the slides carry
+**Press `S` before you start.** Two hundred and five of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -317,7 +317,7 @@ yet — in a side panel the room never sees.
    4:00        exactly four hours, including both breaks
 ```
 
-**211 slides over 220 minutes of content is about 63 seconds each.** That is
+**217 slides over 220 minutes of content is about 61 seconds each.** That is
 the intended pace: one idea, one sentence, take a question, advance.
 
 > **INSTRUCTOR** · Three things about this order, all deliberate.
@@ -608,21 +608,51 @@ slide carrying **four or more separate blocks** — a definition and an example
 and a caveat and a punchline at once — was split, because with four things on
 screen you cannot tell where to start or where to stop.
 
-| | First pass | Now |
-|---|---|---|
-| slides | 168 | **211** |
-| slides with 4+ blocks | 24 | **0** |
-| slides with 5+ blocks | 0 | **0** |
-| slides that overflow the stage | 3 | **0** |
+| | First pass | Second pass | Now |
+|---|---|---|---|
+| slides | 147 | 211 | **217** |
+| slides with 4+ blocks | 24 | 0 | **0** |
+| slides teaching two things at once | — | 6 | **0** |
+| slides that overflow the stage | — | 0 | **0** |
 
-The rule now applied: **at most three blocks, and only one of them may be a
-code block or a figure.** A definition, an example and a caveat are three
-slides, not one.
+The rule now applied: **at most three blocks, and only one idea.** A definition,
+an example and a caveat are three slides, not one. Two commands are two slides.
+A code block plus a numbered reading *of that same code* is still one idea, and
+stays on one slide.
 
-**Verified by rendering, not by eye.** All 211 slides were measured in a
-headless browser at the deck's own 1280×720 stage; none overflow. The two
-deepest zoom slides used to run 774px and 899px tall — those now collapse the
-levels you have already passed, so the current level always fits.
+**Verified by rendering, not by eye.** All 217 slides were measured in a
+headless browser at the deck's own 1280×720 stage; none overflow.
+
+### The demo is the demo, not a description of the demo
+
+The third pass removed the scaffolding around the live demo. Three slides had
+been explaining **how the demo would behave** before it ran:
+
+| Removed | Why |
+|---|---|
+| *"It pauses between steps. Watch step 2."* | meta-commentary; the cue belongs in the notes |
+| *"Each step prints, then it pauses."* | near-duplicate of the slide above it |
+| the "this runs on my machine" card | true and necessary, but it is a **sentence you say**, not a slide |
+
+What is left is the demo itself, one slide per thing that happens:
+
+```
+   the command          $ python3 -m checks.demo_turn
+   STEP 1               the question, in plain words
+   STEP 2               the model picks a tool          <- the slide to slow on
+   STEP 3               your code runs it
+   STEP 4               the model answers
+   what it kept         four entries in a list
+   and re-sends         the model itself remembers nothing
+```
+
+> **INSTRUCTOR** · **Run it once with no commentary** — eight seconds, four
+> steps land. Then advance through steps 1 to 4 and talk over each one.
+>
+> The two things that used to be slides are now the first two lines of your
+> notes on the command slide: *"this is my laptop, you will run it at 0:46"*
+> and *"nothing in the question names a tool — watch step 2"*. **Say both
+> before you press Enter.**
 
 > **INSTRUCTOR** · This is what makes the deck teachable rather than just
 > correct. **Each slide is now one thing you can open, say, and close** — then
