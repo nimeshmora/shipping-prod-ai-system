@@ -392,6 +392,54 @@ the three toys, the Dockerfile line by line, and the swap.
 **The chapter is called "Giving it to somebody else"**, not "Putting it in a
 box" — the box is the means, and naming the goal keeps the problem in front.
 
+## Every line of code is explained on screen too
+
+**The same rule as commands, applied to code.** A slide that shows a line and
+gives it a headline has not explained it — the headline says what the line is
+*for*, not what its parts *do*.
+
+**The Dockerfile was the worst case.** Eight slides showed the file with one
+line lit and a single sentence above it. Everything else was in the presenter
+notes, where the room never saw it. Each of those eight now carries the file
+*and* a breakdown of the lit line:
+
+```
+   Line 8 of 8 · what to run
+
+   CMD                    Run this every time a container starts —
+                          not now, at build time.
+   uvicorn app.main:app   Start the web service. Find the thing called
+                          app in app/main.py.
+   --host 0.0.0.0         Accept messages from outside the box. The default
+                          only accepts from inside — which is nobody.
+   ${PORT}                Use the setting from line 6, not a hardcoded number.
+```
+
+Three more code slides got the same treatment:
+
+| Slide | Now shows |
+|---|---|
+| `/chat`, the real endpoint | all five lines glossed — *use their ticket, load what was said, ask the agent, save it, hand back both* |
+| the assembled `main.py` | the four shapes labelled: the imports, the `app` object, the request shape, the three doors |
+| `AGENT_NAME` and `/whoami` | what `os.environ.get` does, and **why the fallback matters** |
+
+**23 breakdown blocks and 10 numbered readings across the deck.** Every slide
+that teaches code or a command now explains it where the room can see it.
+
+> **INSTRUCTOR** · The `/chat` slide is the one to slow down on. **Read the five
+> glosses aloud, in order, as one sentence:** *"Use their ticket or make one.
+> Load what was said before. Ask the agent. Save what came back. Return the
+> answer and the ticket."* That is the whole endpoint, and it takes twenty
+> seconds.
+>
+> Then point at `run_turn` — **one line out of five.** Everything else is
+> bookkeeping, which is exactly what this course is about.
+
+**One exception, deliberately.** Toy two shows its four Dockerfile lines with no
+explanation, because **the very next slide reads all four.** Show the shape,
+then explain it — never both on one slide, or the breakdown has to fight the
+code for space.
+
 ## Every command is taken apart on screen
 
 **A command is one intimidating string to somebody who has never used a
