@@ -101,8 +101,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=7000
+EXPOSE 7000
 CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
 ```
 
@@ -112,7 +112,7 @@ Two lines carry the lesson:
 your code first and every one-character edit reinstalls every dependency.
 
 **`--port ${PORT}`** — every container platform tells your service where to
-listen through an environment variable. Hardcode `8080` and you have a service
+listen through an environment variable. Hardcode `7000` and you have a service
 that works locally and fails on deploy.
 
 Also write a `.dockerignore`. Without one you copy `.venv/`, `.git/` and
@@ -130,12 +130,12 @@ make test                 # 10 tests pass: the loop already works
 # ... build main.py, stream.py, Dockerfile ...
 
 make run                  # then, in another terminal:
-curl -s -X POST localhost:8080/chat \
+curl -s -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 
 # watch it stream
-curl -N -X POST localhost:8080/chat/stream \
+curl -N -X POST localhost:7000/chat/stream \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 
@@ -146,7 +146,7 @@ make docker-run           # same thing, in a container
 `curl -N` disables curl's own buffering. Without it you will think your
 streaming is broken when it is fine.
 
-> **The most common error in this course** is `KODEKEY is not set`. It means you
+> **The most common error in this course** is `OPENROUTER_API_KEY is not set`. It means you
 > edited `.env` but did not load it. Run `set -a && source .env && set +a` in the
 > **same terminal** as `make run`, **every time you open a new one**.
 
