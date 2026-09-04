@@ -302,14 +302,14 @@ def test_a_missing_api_key_says_exactly_how_to_fix_it():
     """The most common error in this course. The message has to be the
     instructions, not just the diagnosis."""
     import os
-    saved = os.environ.pop("KODEKEY", None)
+    saved = os.environ.pop("OPENROUTER_API_KEY", None)
     try:
         with pytest.raises(AgentError) as e:
             agent._client()
         assert "source .env" in str(e.value)
     finally:
         if saved is not None:
-            os.environ["KODEKEY"] = saved
+            os.environ["OPENROUTER_API_KEY"] = saved
 
 
 # ---- Week 02: memory that survives a redeploy ------------------------------
