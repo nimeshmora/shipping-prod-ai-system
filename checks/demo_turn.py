@@ -1,7 +1,8 @@
 """Show, step by step, what the agent does with one question.
 
-    python -m checks.demo_turn          # no API key needed
-    python -m checks.demo_turn --real   # uses your key, the real model decides
+    python3 -m checks.demo_turn          # no API key needed
+    python3 -m checks.demo_turn --real   # uses your key, the real model decides
+    python3 -m checks.demo_turn "what is 12 * 41?"   # watch it pick another tool
 
 Prints one labelled step at a time, pausing between them, so a room can follow
 what happens and when. This is a teaching aid, not part of the agent.
@@ -88,7 +89,7 @@ def main(real=False, question=None):
     # tell whether a real model answered or a scripted stand-in did.
     if real:
         print(f"\n  MODE: the real model - {MODEL}")
-        print(f"        reached through {os.environ.get('BASE_URL', 'the course gateway')}")
+        print(f"        reached through {os.environ.get('BASE_URL', 'OpenRouter')}")
         print("        uses your OPENROUTER_API_KEY. Costs a fraction of a cent.")
     else:
         print("\n  MODE: a stand-in for the model - no key, no internet, free")
