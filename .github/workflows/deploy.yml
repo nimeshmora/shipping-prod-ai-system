@@ -74,8 +74,8 @@ jobs:
             --region us-central1 \
             --allow-unauthenticated \
             --revision-suffix "${GITHUB_SHA::7}" \
-            --set-env-vars "MODEL=claude-sonnet-5,BASE_URL=https://api.ai.kodekloud.com/v1,RATE_LIMIT_PER_MIN=20" \
-            --set-secrets "KODEKEY=kodekey:latest,API_KEYS=api-keys:latest" \
+            --set-env-vars "MODEL=anthropic/claude-sonnet-4.5,BASE_URL=https://openrouter.ai/api/v1,RATE_LIMIT_PER_MIN=20" \
+            --set-secrets "OPENROUTER_API_KEY=kodekey:latest,API_KEYS=api-keys:latest" \
             --timeout=3600 --concurrency=80 --min-instances=1
 
       # A deploy that exits 0 is not the same as a service that answers.

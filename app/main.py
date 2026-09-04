@@ -124,6 +124,6 @@ async def chat_stream(req: ChatRequest,
 if __name__ == "__main__":
     import uvicorn
     # PORT comes from the environment because that is how every container
-    # platform tells a service where to listen. Hardcode 8080 and you have a
+    # platform tells a service where to listen. Hardcode 7000 and you have a
     # service that works locally and fails on deploy.
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 7000)))
