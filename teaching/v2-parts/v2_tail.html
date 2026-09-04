@@ -1,0 +1,160 @@
+</div><!-- /stage -->
+
+<div id="notes">
+  <div class="nh"><span>Presenter notes</span><span id="nn"></span></div>
+  <div class="nb" id="nbody"></div>
+</div>
+
+<div id="help">
+  <div class="box3">
+    <h3>Keyboard</h3>
+    <table>
+      <tr><td><kbd>→</kbd> <kbd>space</kbd> <kbd>N</kbd></td><td>next slide</td></tr>
+      <tr><td><kbd>←</kbd> <kbd>P</kbd></td><td>previous slide</td></tr>
+      <tr><td><kbd>S</kbd></td><td>toggle presenter notes</td></tr>
+      <tr><td><kbd>F</kbd></td><td>fullscreen</td></tr>
+      <tr><td><kbd>G</kbd></td><td>go to slide number</td></tr>
+      <tr><td><kbd>1</kbd>…<kbd>9</kbd></td><td>jump to a section of the day</td></tr>
+      <tr><td><kbd>0</kbd></td><td>the later sections (press again to step through)</td></tr>
+      <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>first / last slide</td></tr>
+      <tr><td><kbd>?</kbd></td><td>this help</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="hint">Press <kbd>→</kbd> to advance · <kbd>S</kbd> for notes · <kbd>?</kbd> for keys</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var scaler = document.getElementById("scaler");
+  var hint   = document.getElementById("hint");
+  var nbody  = document.getElementById("nbody");
+  var nn     = document.getElementById("nn");
+  var i = 0;
+
+  var sections = [];
+  slides.forEach(function(s){
+    var k = s.getAttribute("data-sec");
+    if (sections.indexOf(k) === -1) { sections.push(k); }
+  });
+
+  slides.forEach(function(s, idx){
+    var say = s.querySelector(".say");
+    s.__note = say ? say.innerHTML : "";
+    if (say) { say.remove(); }
+
+    var label = s.getAttribute("data-label") || "";
+    if (!s.classList.contains("title-slide") && label) {
+      var si = sections.indexOf(s.getAttribute("data-sec"));
+      var rail = document.createElement("div");
+      rail.className = "rail";
+      var html = '<span class="lab">' + label + '</span>';
+      for (var b = 0; b < sections.length; b++) {
+        var cls = b === si ? "seg here" : (b < si ? "seg done" : "seg");
+        html += '<div class="' + cls + '"></div>';
+      }
+      html += '<span class="pg">' + (idx + 1) + '/' + slides.length + '</span>';
+      rail.innerHTML = html;
+      s.appendChild(rail);
+    }
+  });
+
+  function fit(){
+    var pad = document.body.classList.contains("notes") ? 392 : 0;
+    var k = Math.min((window.innerWidth - pad) / 1280, window.innerHeight / 720);
+    scaler.style.transform = "scale(" + k + ")";
+    scaler.style.marginLeft = pad ? (-pad / 2) + "px" : "0px";
+  }
+
+  function show(n){
+    if (n < 0) { n = 0; }
+    if (n > slides.length - 1) { n = slides.length - 1; }
+    slides[i].classList.remove("on");
+    i = n;
+    slides[i].classList.add("on");
+    nbody.innerHTML = slides[i].__note || '<p class="dim">No notes for this slide.</p>';
+    nn.textContent = (i + 1) + " / " + slides.length;
+    if (location.hash !== "#" + (i + 1)) {
+      history.replaceState(null, "", "#" + (i + 1));
+    }
+    if (i > 0 && hint) { hint.style.opacity = "0"; }
+  }
+
+  function sectionStart(n){
+    var key = sections[n];
+    if (key === undefined) { return -1; }
+    for (var k = 0; k < slides.length; k++) {
+      if (slides[k].getAttribute("data-sec") === key) { return k; }
+    }
+    return -1;
+  }
+
+  document.addEventListener("keydown", function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) { return; }
+    var k = e.key;
+
+    if (document.body.classList.contains("help") && k !== "?") {
+      document.body.classList.remove("help");
+      if (k === "Escape") { e.preventDefault(); return; }
+    }
+
+    if (k === "ArrowRight" || k === " " || k === "n" || k === "N" || k === "PageDown") {
+      e.preventDefault(); show(i + 1);
+    } else if (k === "ArrowLeft" || k === "p" || k === "P" || k === "PageUp") {
+      e.preventDefault(); show(i - 1);
+    } else if (k === "Home") {
+      e.preventDefault(); show(0);
+    } else if (k === "End") {
+      e.preventDefault(); show(slides.length - 1);
+    } else if (k === "s" || k === "S") {
+      e.preventDefault();
+      document.body.classList.toggle("notes");
+      fit();
+    } else if (k === "f" || k === "F") {
+      e.preventDefault();
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    } else if (k === "?") {
+      e.preventDefault(); document.body.classList.toggle("help");
+    } else if (k === "g" || k === "G") {
+      e.preventDefault();
+      var a = prompt("Go to slide (1-" + slides.length + "):");
+      if (a) {
+        var t = parseInt(a, 10);
+        if (t >= 1 && t <= slides.length) { show(t - 1); }
+      }
+    } else if (k >= "1" && k <= "9") {
+      var st = sectionStart(parseInt(k, 10));
+      if (st >= 0) { e.preventDefault(); show(st); }
+    } else if (k === "0") {
+      // 0 steps through whatever sections are past the ninth, wrapping back,
+      // so every part of the day stays reachable from the keyboard.
+      var cur = sections.indexOf(slides[i].getAttribute("data-sec"));
+      var next = (cur >= 10 && cur + 1 < sections.length) ? cur + 1 : 10;
+      var s0 = sectionStart(next);
+      if (s0 >= 0) { e.preventDefault(); show(s0); }
+    }
+  });
+
+  document.getElementById("stage").addEventListener("click", function(e){
+    if (e.target.closest("#notes")) { return; }
+    show(e.clientX < window.innerWidth / 8 ? i - 1 : i + 1);
+  });
+
+  window.addEventListener("resize", fit);
+  window.addEventListener("hashchange", function(){
+    var n = parseInt(location.hash.slice(1), 10);
+    if (n >= 1 && n <= slides.length && n - 1 !== i) { show(n - 1); }
+  });
+
+  fit();
+  var start = parseInt(location.hash.slice(1), 10);
+  show(start >= 1 && start <= slides.length ? start - 1 : 0);
+  setTimeout(function(){ if (hint && i === 0) { hint.style.opacity = "0.55"; } }, 3000);
+})();
+</script>
