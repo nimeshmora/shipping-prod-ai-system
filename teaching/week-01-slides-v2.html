@@ -767,6 +767,35 @@ body.help #help{display:grid;}
 .thenow .col .big2 b{color:#fff;}
 .thenow .mid3{font-family:var(--mono);font-size:26px;color:var(--brand);}
 
+/* --- prerequisite checklist, v2 -------------------------------------------
+   v1's .checks grid reserves a 28px first column for a checkbox. v2 uses a
+   name / command / expected layout instead, so it needs its own grid. Six
+   rows must fit the 720px stage with the heading above them. */
+.plist{display:flex;flex-direction:column;gap:7px;}
+.plist .r2{display:grid;grid-template-columns:1.15fr 1.25fr 0.7fr;gap:16px;
+  align-items:center;background:var(--panel);border:1px solid var(--rule);
+  border-radius:8px;padding:9px 15px;}
+.plist .n3{font-size:17px;font-weight:700;line-height:1.2;}
+.plist .c3{font-family:var(--mono);font-size:14px;color:var(--ok);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.plist .e3{font-family:var(--mono);font-size:13.5px;color:var(--ink-dim);
+  text-align:right;white-space:nowrap;}
+.plist .hd{display:grid;grid-template-columns:1.15fr 1.25fr 0.7fr;gap:16px;
+  padding:0 15px 2px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);}
+.plist .hd div:last-child{text-align:right;}
+
+/* --- the 7-layer zoom needs to fit, and stay readable ---------------------
+   Seven nested rings is one more than the spine ever shows, so tighten the
+   padding and lift the "already established" text off the background. The
+   levels are NESTED, so opacity must never be used - it compounds. */
+.spine .ring{padding:10px 13px 12px;}
+.spine .rt{margin-bottom:5px;font-size:10.5px;}
+.spine .rw{font-size:16px;line-height:1.28;}
+.spine .ring.was > .rw{color:var(--ink-dim);}
+.spine .ring.was > .rw b{color:var(--ink);}
+.spine .ring.was > .rt{color:var(--ink-faint);}
+
 </style>
 
 <div id="stage">
@@ -1169,16 +1198,17 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
   <div class="eyebrow">Before anything &middot; what you should already have<span class="t">0:40 &ndash; 0:58</span></div>
   <h2>Six things you should already have installed.</h2>
   <div class="body">
-    <div class="checks">
-      <div class="row"><div class="name">Python 3.12</div><div class="cmd">python3 --version</div><div class="box">3.12.x</div></div>
-      <div class="row"><div class="name">Git</div><div class="cmd">git --version</div><div class="box">any</div></div>
-      <div class="row"><div class="name">Docker Desktop</div><div class="cmd">docker --version</div><div class="box">running</div></div>
-      <div class="row"><div class="name">An editor</div><div class="cmd">VS Code, or any</div><div class="box">&mdash;</div></div>
-      <div class="row"><div class="name">An OpenRouter key</div><div class="cmd">openrouter.ai</div><div class="box">sk-or-...</div></div>
-      <div class="row"><div class="name">A Docker Hub account</div><div class="cmd">hub.docker.com</div><div class="box">username</div></div>
+    <div class="plist">
+      <div class="hd"><div>what</div><div>check it with</div><div>expect</div></div>
+      <div class="r2"><div class="n3">Python 3.12</div><div class="c3">python3 --version</div><div class="e3">3.12.x</div></div>
+      <div class="r2"><div class="n3">Git</div><div class="c3">git --version</div><div class="e3">any</div></div>
+      <div class="r2"><div class="n3">Docker Desktop</div><div class="c3">docker --version</div><div class="e3">running</div></div>
+      <div class="r2"><div class="n3">An editor</div><div class="c3">VS Code, or any</div><div class="e3">&mdash;</div></div>
+      <div class="r2"><div class="n3">An OpenRouter key</div><div class="c3">openrouter.ai</div><div class="e3">sk-or-&hellip;</div></div>
+      <div class="r2"><div class="n3">A Docker Hub account</div><div class="c3">hub.docker.com</div><div class="e3">a username</div></div>
     </div>
   </div>
-  <div class="say"><b>Run the four commands together, right now, as a group</b>Read each one out and wait. <b>Hands up for anything that errors</b> — you want to know in the next two minutes, not at 3pm.<br><br><b>The two that catch people:</b> Docker <em>installed</em> is not Docker <em>running</em> — the whale has to be in the menu bar. And the last two are accounts, not software: they need them in chapter six to swap containers with a neighbour.</div>
+  <div class="say"><b>Run the first three commands together, right now, as a group</b>Read each one out and wait. <b>Hands up for anything that errors</b> &mdash; you want to know in the next two minutes, not at three o'clock.<br><br><b>The one that catches people:</b> Docker <em>installed</em> is not Docker <em>running</em>. The whale has to be in the menu bar.<br><br><b>The last two are accounts, not software.</b> They need both in chapter six, when they swap containers with a neighbour.</div>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
@@ -1375,14 +1405,12 @@ the loop runs a tool then answers
   <div class="eyebrow">Build this by hand<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Build these six things by typing.</h2>
   <div class="body">
-    <div class="tree">
-      <div class="f">practice/</div>
-      <div class="f">&nbsp;&nbsp;notes.txt</div>
-      <div class="f">&nbsp;&nbsp;src/</div>
-      <div class="f">&nbsp;&nbsp;&nbsp;&nbsp;app.py</div>
-      <div class="f">&nbsp;&nbsp;&nbsp;&nbsp;helper.py</div>
-      <div class="f">&nbsp;&nbsp;data/</div>
-    </div>
+    <div class="tree"><span class="f">practice/</span>
+  <span class="f">notes.txt</span>
+  <span class="f">src/</span>
+      <span class="f">app.py</span>
+      <span class="f">helper.py</span>
+  <span class="f">data/</span></div>
     <div class="punch">Draw this on the board. Tick each one off as it appears.</div>
   </div>
   <div class="say"><b>Put this on the whiteboard and leave it there</b>They are building a target they can see, which turns nine abstract commands into one concrete task.<br><br><b>Tick each item off as somebody's <code>ls</code> shows it.</b> That is what makes this stick — not the commands, the finished shape.<br><br><b>It is scratch work</b>, which is exactly why it is safe to learn <code>rm -r</code> on it at the end.</div>

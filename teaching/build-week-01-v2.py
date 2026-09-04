@@ -361,15 +361,16 @@ chapter('3','Chapter three','Your turn.',
 
 sl('3','Before anything &middot; what you should already have',T3,
  'Six things you should already have installed.',
- '''    <div class="checks">
-      <div class="row"><div class="name">Python 3.12</div><div class="cmd">python3 --version</div><div class="box">3.12.x</div></div>
-      <div class="row"><div class="name">Git</div><div class="cmd">git --version</div><div class="box">any</div></div>
-      <div class="row"><div class="name">Docker Desktop</div><div class="cmd">docker --version</div><div class="box">running</div></div>
-      <div class="row"><div class="name">An editor</div><div class="cmd">VS Code, or any</div><div class="box">&mdash;</div></div>
-      <div class="row"><div class="name">An OpenRouter key</div><div class="cmd">openrouter.ai</div><div class="box">sk-or-...</div></div>
-      <div class="row"><div class="name">A Docker Hub account</div><div class="cmd">hub.docker.com</div><div class="box">username</div></div>
+ '''    <div class="plist">
+      <div class="hd"><div>what</div><div>check it with</div><div>expect</div></div>
+      <div class="r2"><div class="n3">Python 3.12</div><div class="c3">python3 --version</div><div class="e3">3.12.x</div></div>
+      <div class="r2"><div class="n3">Git</div><div class="c3">git --version</div><div class="e3">any</div></div>
+      <div class="r2"><div class="n3">Docker Desktop</div><div class="c3">docker --version</div><div class="e3">running</div></div>
+      <div class="r2"><div class="n3">An editor</div><div class="c3">VS Code, or any</div><div class="e3">&mdash;</div></div>
+      <div class="r2"><div class="n3">An OpenRouter key</div><div class="c3">openrouter.ai</div><div class="e3">sk-or-&hellip;</div></div>
+      <div class="r2"><div class="n3">A Docker Hub account</div><div class="c3">hub.docker.com</div><div class="e3">a username</div></div>
     </div>''',
- '''<b>Run the four commands together, right now, as a group</b>Read each one out and wait. <b>Hands up for anything that errors</b> — you want to know in the next two minutes, not at 3pm.<br><br><b>The two that catch people:</b> Docker <em>installed</em> is not Docker <em>running</em> — the whale has to be in the menu bar. And the last two are accounts, not software: they need them in chapter six to swap containers with a neighbour.''')
+ '''<b>Run the first three commands together, right now, as a group</b>Read each one out and wait. <b>Hands up for anything that errors</b> &mdash; you want to know in the next two minutes, not at three o'clock.<br><br><b>The one that catches people:</b> Docker <em>installed</em> is not Docker <em>running</em>. The whale has to be in the menu bar.<br><br><b>The last two are accounts, not software.</b> They need both in chapter six, when they swap containers with a neighbour.''')
 
 sl('3','What you are about to download',T3,
  'One project. You only ever write in one folder of it.',
@@ -512,14 +513,12 @@ sl('4','The most reassuring rule of the day',T4,
 
 sl('4','Build this by hand',T4,
  'Build these six things by typing.',
- '''    <div class="tree">
-      <div class="f">practice/</div>
-      <div class="f">&nbsp;&nbsp;notes.txt</div>
-      <div class="f">&nbsp;&nbsp;src/</div>
-      <div class="f">&nbsp;&nbsp;&nbsp;&nbsp;app.py</div>
-      <div class="f">&nbsp;&nbsp;&nbsp;&nbsp;helper.py</div>
-      <div class="f">&nbsp;&nbsp;data/</div>
-    </div>
+ '''    <div class="tree"><span class="f">practice/</span>
+  <span class="f">notes.txt</span>
+  <span class="f">src/</span>
+      <span class="f">app.py</span>
+      <span class="f">helper.py</span>
+  <span class="f">data/</span></div>
     <div class="punch">Draw this on the board. Tick each one off as it appears.</div>''',
  '''<b>Put this on the whiteboard and leave it there</b>They are building a target they can see, which turns nine abstract commands into one concrete task.<br><br><b>Tick each item off as somebody's <code>ls</code> shows it.</b> That is what makes this stick — not the commands, the finished shape.<br><br><b>It is scratch work</b>, which is exactly why it is safe to learn <code>rm -r</code> on it at the end.''')
 

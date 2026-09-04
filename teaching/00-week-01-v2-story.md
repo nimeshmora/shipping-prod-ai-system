@@ -234,6 +234,36 @@ vs container, all seven Dockerfile instructions, the build process and caching,
 ports, `.dockerignore`, `--env-file`, Docker Hub push and pull, the swap, the
 recap, homework, and the Week 2 hook.
 
+## Every slide is checked by rendering it, not by measuring it
+
+**A height check is not enough, and two real bugs proved it.**
+
+The prerequisites slide reused a grid from the other deck whose first column is
+a **28px checkbox slot**. The names landed in that column, wrapped to two and
+three lines each, collided with the commands beside them, and pushed the last
+row **under the progress rail**. A `scrollHeight` check saw nothing wrong,
+because the overflow was *inside* the slide's own box.
+
+The practice-folder tree had the same shape of fault: `.tree` is a
+`white-space: pre` block that expects inline `<span>`s, and it had block
+`<div>`s, so every filename became a full-height row and the punchline sat on
+top of the rail.
+
+```bash
+python3 teaching/check-slide-layout.py teaching/week-01-slides-v2.html
+```
+
+It renders **all 158 slides** in a headless browser and reports any slide whose
+content reaches the bottom rail, passes either side edge, or exceeds the stage.
+Exits non-zero, so it can gate a commit.
+
+> **INSTRUCTOR** · The check is **verified against the bug it was written for** —
+> re-inject the old markup and it reports
+> `slide 30: hits the bottom rail (gap -36px)`. A checker nobody has seen fail
+> is not a checker.
+
+**Both decks pass:** 158/158 here, 218/218 in the other one.
+
 ## Plain English on screen, always
 
 The words the room reads are **statements of fact**, not gestures at one. A
