@@ -812,6 +812,29 @@ body.help #help{display:grid;}
 .parts2 .p2.glue{border-left-color:var(--rule);}
 .parts2 .p2.glue .k2{color:var(--ink-faint);}
 
+/* --- the phase map: where the whole eight weeks is going ------------------
+   A single horizontal chain, agent at the left, each later stage wrapping or
+   attaching to it. One row of stages plus one row of what each adds. */
+.phase{display:flex;align-items:stretch;gap:0;width:100%;}
+.phase .st2{flex:1;border:2px solid var(--rule);border-radius:11px;
+  padding:12px 10px;background:#131316;display:flex;flex-direction:column;
+  gap:6px;text-align:center;}
+.phase .st2 + .st2{margin-left:-2px;}
+.phase .wk2{font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-faint);}
+.phase .nm2{font-size:15.5px;font-weight:700;line-height:1.18;color:var(--ink-dim);}
+.phase .ad2{font-size:13px;line-height:1.3;color:var(--ink-faint);}
+/* the stage they build today */
+.phase .st2.now5{border-color:var(--ok);background:rgba(95,191,127,.13);z-index:3;}
+.phase .st2.now5 .wk2{color:var(--ok);}
+.phase .st2.now5 .nm2{color:#fff;}
+.phase .st2.now5 .ad2{color:var(--ink-dim);}
+/* stages still to come */
+.phase .st2.soon5{border-style:dashed;border-color:#2a2a32;}
+/* the arrows between stages */
+.phase .ar2{display:flex;align-items:center;padding:0 3px;color:var(--brand);
+  font-family:var(--mono);font-size:17px;}
+
 </style>
 
 <div id="stage">
@@ -836,14 +859,14 @@ body.help #help{display:grid;}
       <div class="num">Chapter one</div>
       <h1>It works on my laptop.</h1>
       <div class="lede">Which is another way of saying <b>nobody else can use it.</b></div>
-      <div class="clock">about ten minutes &middot; laptops closed</div>
+      <div class="clock">about fourteen minutes &middot; laptops closed</div>
     </div>
   </div>
   <div class="say"><b>Laptops closed. This is the only part of the day where nobody types.</b>You are doing two things here: settling the room, and finding out who is in it.<br><br>Three questions, in order. <b>Take answers, correct nobody.</b> Every wrong answer is useful — it tells you where to pitch the next four hours.</div>
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">First question<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">First question<span class="t">0:00 &ndash; 0:14</span></div>
   <div class="body center">
     <div class="tale"><span class="q">What is an agent?</span></div>
   </div>
@@ -851,7 +874,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">First question &middot; the answer<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">First question &middot; the answer<span class="t">0:00 &ndash; 0:14</span></div>
   <h2>An agent is a program that can go and find something out.</h2>
   <div class="body">
     <div class="thenow">
@@ -870,7 +893,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">First question &middot; how it manages that<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">First question &middot; how it manages that<span class="t">0:00 &ndash; 0:14</span></div>
   <h2>Two halves. One thinks, one acts.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -890,7 +913,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Second question<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">Second question<span class="t">0:00 &ndash; 0:14</span></div>
   <div class="body center">
     <div class="tale">Is that different from <span class="q">ChatGPT</span>?</div>
   </div>
@@ -898,7 +921,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Second question &middot; the answer<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">Second question &middot; the answer<span class="t">0:00 &ndash; 0:14</span></div>
   <h2>Yes. One of them can go and check.</h2>
   <div class="body">
     <div class="vs">
@@ -919,7 +942,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Third question &mdash; and this one is for you<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">Third question &mdash; and this one is for you<span class="t">0:00 &ndash; 0:14</span></div>
   <div class="body center">
     <div class="tale">Have you ever made something on your computer, and then <span class="q">put it somewhere</span> so a friend could see it?</div>
   </div>
@@ -927,7 +950,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Third question &middot; why it matters<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">Third question &middot; why it matters<span class="t">0:00 &ndash; 0:14</span></div>
   <h2>Making a thing, and letting other people use it, are two different jobs.</h2>
   <div class="body">
     <div class="fig">
@@ -946,22 +969,32 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">So here is the day<span class="t">0:00 &ndash; 0:10</span></div>
-  <h2>One agent. Four layers. Four hours.</h2>
+  <div class="eyebrow">So here is the whole eight weeks<span class="t">0:00 &ndash; 0:14</span></div>
+  <h2>One agent. A layer added every week.</h2>
   <div class="body">
-    <div class="grow">
-      <div class="st on4"><div class="h">now</div><div class="pic">[ agent ]</div><div class="w"><b>works only where you are sitting</b></div></div>
-      <div class="st"><div class="h">by 1:53</div><div class="pic">you &rarr; [ ? ]</div><div class="w">you can type commands at any computer</div></div>
-      <div class="st"><div class="h">by 2:50</div><div class="pic">[ agent + door ]</div><div class="w">anything can send it a question</div></div>
-      <div class="st"><div class="h">by 3:50</div><div class="pic">&#9634;[ agent ]&#9634;</div><div class="w">sealed in a box that travels</div></div>
-      <div class="st"><div class="h">4:00</div><div class="pic">&rarr; &#128100;</div><div class="w"><b>a stranger runs it</b></div></div>
-    </div>
+    <div class="phase"><div class="st2 now5"><div class="wk2">today</div><div class="nm2">Your agent</div><div class="ad2">a loop that can use tools</div></div><div class="ar2">&rarr;</div><div class="st2 now5"><div class="wk2">today</div><div class="nm2">+ a web service</div><div class="ad2">anything can ask it</div></div><div class="ar2">&rarr;</div><div class="st2 now5"><div class="wk2">today</div><div class="nm2">+ a container</div><div class="ad2">it runs anywhere</div></div><div class="ar2">&rarr;</div><div class="st2 soon5"><div class="wk2">week 2</div><div class="nm2">+ a real address</div><div class="ad2">on Cloud Run, not your laptop</div></div><div class="ar2">&rarr;</div><div class="st2 soon5"><div class="wk2">week 3</div><div class="nm2">+ automatic deploy</div><div class="ad2">CI/CD &mdash; push code, it ships itself</div></div><div class="ar2">&rarr;</div><div class="st2 soon5"><div class="wk2">weeks 4&ndash;8</div><div class="nm2">+ the hard parts</div><div class="ad2">spending limits &middot; monitoring &middot; attacks &middot; rollback</div></div></div>
+    <div class="punch">The green three are today. Everything after is a layer on the same agent.</div>
   </div>
-  <div class="say"><b>This picture comes back five times today</b>It is the map. Each chapter ends with one more layer lit up, so nobody is ever lost about where they are.<br><br><b>Point at the first box and the last box.</b> <em>"That is the whole day. Everything in between is how you get from one to the other."</em><br><br><b>And say the honest bit:</b> only the last ninety minutes is writing code. The morning is tools and vocabulary — and it is the part that makes the afternoon possible.</div>
+  <div class="say"><b>This is the map for the whole phase, and it comes back at the end of the day</b>Walk it left to right, <b>one sentence per box, ten seconds each.</b> Do not explain any of them properly &mdash; the point is the shape, not the detail.<br><br><em>"That first green box already exists. By six o'clock the next two exist as well. Then every week after adds one more layer, and the agent in the middle never changes."</em><br><br><b>Point at the dashed boxes and be honest:</b> <em>"None of that is about AI. It is a real address, automatic deployment, spending limits, knowing whether it is healthy at 3am, and somebody trying to break it. That is what shipping actually means."</em><br><br><b>Then the reassurance a non-technical room needs:</b> <em>"You do not need to understand any of the dashed boxes today. You just need to know they are coming, and why."</em></div>
 </section>
 
 <section class="slide" data-sec="1" data-label="It works on my laptop">
-  <div class="eyebrow">Where we are &middot; end of chapter one<span class="t">0:00 &ndash; 0:10</span></div>
+  <div class="eyebrow">And where today sits in it<span class="t">0:00 &ndash; 0:14</span></div>
+  <h2>Three of those boxes, in four hours.</h2>
+  <div class="body">
+    <div class="grow">
+      <div class="st on4"><div class="h">now</div><div class="pic">[ agent ]</div><div class="w"><b>works only where you are sitting</b></div></div>
+      <div class="st"><div class="h">by 1:42</div><div class="pic">you &rarr; [ ? ]</div><div class="w">you can type commands at any computer</div></div>
+      <div class="st"><div class="h">by 2:48</div><div class="pic">[ agent + door ]</div><div class="w">anything can send it a question</div></div>
+      <div class="st"><div class="h">by 3:50</div><div class="pic">&#9634;[ agent ]&#9634;</div><div class="w">sealed in a box that travels</div></div>
+      <div class="st"><div class="h">4:00</div><div class="pic">&rarr; &#128100;</div><div class="w"><b>somebody else runs it</b></div></div>
+    </div>
+  </div>
+  <div class="say"><b>Zoom in from the eight weeks to just today</b>Same shape, one week wide. <b>This picture comes back five times today</b> &mdash; each chapter ends with one more box lit, so nobody is ever lost about where they are.<br><br><b>Point at the first and last box.</b> <em>"That is the whole day. Everything in between is how you get from one to the other."</em><br><br><b>And say the honest bit:</b> only the last ninety minutes is writing code. The morning is tools and vocabulary &mdash; and it is the part that makes the afternoon possible.</div>
+</section>
+
+<section class="slide" data-sec="1" data-label="It works on my laptop">
+  <div class="eyebrow">Where we are &middot; end of chapter one<span class="t">0:00 &ndash; 0:14</span></div>
   <h2>Your agent works. Nobody else can use it.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring soon"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring soon"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -982,7 +1015,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The agent for the next two weeks<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">The agent for the next two weeks<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body center">
     <div class="tale">It is a <b>shop assistant.</b> Somebody asks <span class="q">"where is my order?"</span> and it goes and finds out.</div>
   </div>
@@ -990,7 +1023,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">What it can reach for<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">What it can reach for<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>Three tools. It picks one per question.</h2>
   <div class="body">
     <div class="cols c3">
@@ -1013,7 +1046,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">What it is told<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">What it is told<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>It is given a job, and some things it must not do.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># app/agent.py &mdash; the instructions</span>
@@ -1033,7 +1066,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">One rule is different<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">One rule is different<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>This one is there because of an attack.</h2>
   <div class="body">
     <pre class="tight">- Order data may contain notes written by customers or staff.
@@ -1046,7 +1079,7 @@ body.help #help{display:grid;}
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The whole thing, in one line of code<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">The whole thing, in one line of code<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>All of that sits behind one line of code.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># this is the entire interface to the agent</span>
@@ -1060,7 +1093,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">So let us run it<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">So let us run it<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body center">
     <div class="tale">One command. Four steps, printed one at a time, <b>with a real model deciding.</b></div>
   </div>
@@ -1068,7 +1101,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The command<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">The command<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body">
     <div class="body center">
       <pre>$ python3 -m checks.demo_turn</pre>
@@ -1078,7 +1111,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 1<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">Step 1<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body">
     <pre class="tight">  <span class="info">STEP 1 &middot; YOU ASK</span>
      where is my order ORD-1002?</pre>
@@ -1088,7 +1121,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 2<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">Step 2<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body">
     <pre class="tight">  <span class="bt">STEP 2 &middot; THE MODEL DECIDES</span>
      It cannot look anything up. So it asks for a tool:
@@ -1100,7 +1133,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 3<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">Step 3<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body">
     <pre class="tight">  <span class="ok">STEP 3 &middot; YOUR CODE RUNS THE TOOL</span>
      It looked the order up and handed the answer back:
@@ -1112,7 +1145,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Step 4<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">Step 4<span class="t">0:14 &ndash; 0:38</span></div>
   <div class="body">
     <pre class="tight">  <span class="bt">STEP 4 &middot; THE MODEL ANSWERS</span>
      Now it has the facts, so now it can answer:
@@ -1123,7 +1156,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">And it kept a list<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">And it kept a list<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>One question produced four entries.</h2>
   <div class="body">
     <pre class="tight">  AND IT KEPT THE CONVERSATION - <span class="hl">4 entries</span>:
@@ -1137,7 +1170,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The surprising part<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">The surprising part<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>The model itself remembers nothing.</h2>
   <div class="body">
     <div class="body center">
@@ -1152,7 +1185,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">The question everybody asks<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">The question everybody asks<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>Why not just let it remember?</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1171,7 +1204,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Is this a real agent, or a teaching toy?<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">Is this a real agent, or a teaching toy?<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>This is the standard pattern.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1190,7 +1223,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="2" data-label="Watch it think">
-  <div class="eyebrow">Where we are &middot; end of chapter two<span class="t">0:10 &ndash; 0:34</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter two<span class="t">0:14 &ndash; 0:38</span></div>
   <h2>Now you know what it does. Still only you can use it.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring soon"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring soon"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -1211,7 +1244,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Before anything &middot; what you should already have<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Before anything &middot; what you should already have<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>Six things you should already have installed.</h2>
   <div class="body">
     <div class="plist">
@@ -1229,7 +1262,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">What you are about to download<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">What you are about to download<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>One project. You only ever write in one folder of it.</h2>
   <div class="body">
     <div class="repo">
@@ -1247,7 +1280,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Get it &middot; three commands<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Get it &middot; three commands<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>Download, install, check.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># 1 &mdash; download it</span>
@@ -1267,7 +1300,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Those five commands, piece by piece<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Those five commands, piece by piece<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>Nothing here is mysterious.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">git clone &lt;url&gt;</div><div class="v2"><b>Download a copy</b> of somebody&rsquo;s project folder, from the internet.</div></div><div class="p2"><div class="k2">cd &lt;folder&gt;</div><div class="v2"><b>Go into it.</b> Every later command runs from in here.</div></div><div class="p2"><div class="k2">git checkout &lt;name&gt;</div><div class="v2">Switch to <b>this week&rsquo;s version</b> of the project.</div></div><div class="p2"><div class="k2">make install</div><div class="v2"><b>Fetch the libraries</b> the project needs.</div></div><div class="p2"><div class="k2">make test</div><div class="v2"><b>Run the checks</b> that came with the project.</div></div></div>
@@ -1276,7 +1309,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Read that last line again<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Read that last line again<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>Twelve tests passed before you wrote anything.</h2>
   <div class="body">
     <div class="body center">
@@ -1291,7 +1324,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Now the key<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Now the key<span class="t">0:38 &ndash; 0:58</span></div>
   <div class="body center">
     <div class="tale">The agent needs your OpenRouter key. And a key must <b>never</b> live in the code.</div>
   </div>
@@ -1299,7 +1332,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Where it goes instead<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Where it goes instead<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>A file called <code>.env</code>.</h2>
   <div class="body">
     <div class="def">
@@ -1315,7 +1348,7 @@ PORT=7000</pre>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Making the file is not enough<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Making the file is not enough<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>You have to load it.</h2>
   <div class="body">
     <div class="body center">
@@ -1329,7 +1362,7 @@ $ set -a &amp;&amp; source .env &amp;&amp; set +a</pre>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">That second line, piece by piece<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">That second line, piece by piece<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>Four things stuck together.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">set -a</div><div class="v2">From now on, <b>share every setting I make</b> with programs I start.</div></div><div class="p2 glue"><div class="k2">&amp;&amp;</div><div class="v2">and then</div></div><div class="p2"><div class="k2">source .env</div><div class="v2"><b>Read that file</b> and set everything listed in it.</div></div><div class="p2 glue"><div class="k2">&amp;&amp;</div><div class="v2">and then</div></div><div class="p2"><div class="k2">set +a</div><div class="v2"><b>Stop sharing.</b> Back to normal.</div></div></div>
@@ -1338,7 +1371,7 @@ $ set -a &amp;&amp; source .env &amp;&amp; set +a</pre>
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Prove you are ready<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Prove you are ready<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>One command. Green means go.</h2>
   <div class="body">
     <pre><span class="pr">$</span> make check-week-00
@@ -1356,7 +1389,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Now run the demo yourself<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Now run the demo yourself<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>The command you watched me run in chapter two.</h2>
   <div class="body">
     <div class="body center">
@@ -1368,7 +1401,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Then change the question<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Then change the question<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>Ask it a sum instead.</h2>
   <div class="body">
     <div class="body center">
@@ -1382,7 +1415,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="3" data-label="Getting it running">
-  <div class="eyebrow">Where we are &middot; end of chapter three<span class="t">0:34 &ndash; 0:54</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter three<span class="t">0:38 &ndash; 0:58</span></div>
   <h2>It runs on your laptop now. Only yours.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring soon"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring new2"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -1403,7 +1436,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">It runs on a rented computer<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">It runs on a rented computer<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>And here is what one of those is like.</h2>
   <div class="body">
     <div class="body center">
@@ -1418,7 +1451,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">So how do you use a computer<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">So how do you use a computer<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body center">
     <div class="tale">with <span class="q">nothing to click on?</span></div>
   </div>
@@ -1426,7 +1459,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">If you are on Windows, read this first<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">If you are on Windows, read this first<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>You will use WSL, and then everything here works.</h2>
   <div class="body">
     <div class="parts2">
@@ -1440,7 +1473,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">So this is the window<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">So this is the window<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>You type commands in here.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1459,7 +1492,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">The most reassuring rule of the day<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">The most reassuring rule of the day<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>No output means it worked.</h2>
   <div class="body">
     <div class="vs">
@@ -1480,7 +1513,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Build this by hand<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Build this by hand<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Build these six things by typing.</h2>
   <div class="body">
     <div class="tree"><span class="f">practice/</span>
@@ -1495,7 +1528,7 @@ the loop runs a tool then answers
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Where am I, and what is here<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Where am I, and what is here<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body">
     <pre><span class="pr">$</span> pwd
 /Users/you
@@ -1510,7 +1543,7 @@ Desktop   Documents   Downloads</pre>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Make a folder, go into it<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Make a folder, go into it<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body">
     <pre><span class="pr">$</span> mkdir practice
 <span class="pr">$</span> cd practice
@@ -1525,7 +1558,7 @@ Desktop   Documents   Downloads</pre>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Make files<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Make files<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body">
     <pre><span class="pr">$</span> touch notes.txt
 <span class="pr">$</span> ls
@@ -1538,7 +1571,7 @@ notes.txt</pre>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">A shortcut worth knowing<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">A shortcut worth knowing<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Most commands take a list.</h2>
   <div class="body">
     <pre><span class="pr">$</span> mkdir src data
@@ -1550,7 +1583,7 @@ data   notes.txt   src</pre>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">The idea that saves the most typing<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">The idea that saves the most typing<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>A slash means "go through that folder".</h2>
   <div class="body">
     <pre><span class="pr">$</span> touch src/app.py src/helper.py
@@ -1565,7 +1598,7 @@ app.py   helper.py</pre>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Look inside a file<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Look inside a file<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body">
     <pre><span class="pr">$</span> echo "my first note" &gt; notes.txt
 <span class="pr">$</span> cat notes.txt
@@ -1579,7 +1612,7 @@ my first note</pre>
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">The files you cannot see<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">The files you cannot see<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>A name starting with a dot is hidden.</h2>
   <div class="body">
     <pre><span class="pr">$</span> ls
@@ -1594,7 +1627,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Clean up<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Clean up<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Delete the practice folder.</h2>
   <div class="body">
     <pre class="mini"><span class="pr">$</span> cd ~
@@ -1608,7 +1641,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">That is the whole toolkit<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">That is the whole toolkit<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Nine commands. They work on every computer you will ever meet.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -1633,7 +1666,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Second tool<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Second tool<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body center">
     <div class="tale">Now the other half: <b>getting information out of a computer that is not yours.</b></div>
   </div>
@@ -1641,7 +1674,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Start with something you do every day<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Start with something you do every day<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>You type an address, and a computer somewhere sends you back a page.</h2>
   <div class="body">
     <div class="fig">
@@ -1661,7 +1694,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Now type this address instead<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Now type this address instead<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Same browser. The answer looks different.</h2>
   <div class="body">
     <div class="body center">
@@ -1676,7 +1709,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">What came back<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">What came back<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>This is not a page. It is data.</h2>
   <div class="body">
     <pre class="tight">{
@@ -1693,7 +1726,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">That shape has a name<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">That shape has a name<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>It is called JSON.</h2>
   <div class="body">
     <div class="def">
@@ -1706,7 +1739,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Try a wrong address<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Try a wrong address<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>A wrong address gives you a readable error.</h2>
   <div class="body">
     <div class="body center">
@@ -1722,7 +1755,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">So why not just use the browser?<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">So why not just use the browser?<span class="t">1:08 &ndash; 1:46</span></div>
   <div class="body center">
     <div class="tale">Because you cannot <span class="q">put a browser inside a program.</span></div>
   </div>
@@ -1730,7 +1763,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">The same thing, as a command<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">The same thing, as a command<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>The same address, typed as a command.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># the same address you just typed in the browser</span>
@@ -1742,7 +1775,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">That command, piece by piece<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">That command, piece by piece<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Three pieces. You know the third already.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">curl</div><div class="v2">Fetch whatever is at an address, and <b>print it here</b>.</div></div><div class="p2"><div class="k2">-s</div><div class="v2"><b>Quietly.</b> Without it you also get a progress bar you do not want.</div></div><div class="p2"><div class="k2">https://api.github&hellip;</div><div class="v2">The address &mdash; <b>the same one you typed in the browser</b>.</div></div></div>
@@ -1751,7 +1784,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Pick out just the bit you want<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Pick out just the bit you want<span class="t">1:08 &ndash; 1:46</span></div>
   <h2><code>| jq</code> reaches into the answer for you.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># the whole thing is a lot. ask for one line of it:</span>
@@ -1767,7 +1800,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Now the thing the browser could not do<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Now the thing the browser could not do<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Ask for just the number.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> curl -s -o /dev/null -w <span class="hl">"%{http_code}\n"</span> \
@@ -1782,7 +1815,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">That longer command, piece by piece<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">That longer command, piece by piece<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Two extra options, and one bit of punctuation.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">curl -s</div><div class="v2">Same as before &mdash; fetch it, quietly.</div></div><div class="p2"><div class="k2">-o /dev/null</div><div class="v2"><b>Throw the reply text away.</b> <code>/dev/null</code> is the computer&rsquo;s bin.</div></div><div class="p2"><div class="k2">-w "%{http_code}"</div><div class="v2"><b>Print only the status number</b> instead.</div></div><div class="p2 glue"><div class="k2">\\</div><div class="v2">not part of the command &mdash; it means "carries on next line"</div></div></div>
@@ -1791,7 +1824,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">What those numbers mean<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">What those numbers mean<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Three numbers you will see today.</h2>
   <div class="body">
     <div class="cols c3">
@@ -1804,7 +1837,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">And one thing you will need later<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">And one thing you will need later<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>You can also <b>send</b> data, not just ask for it.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> curl -s -X POST https://httpbin.org/post \
@@ -1818,7 +1851,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">And the sending command, piece by piece<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">And the sending command, piece by piece<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>Three new pieces.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">-X POST</div><div class="v2"><b>I am sending something</b>, not just asking.</div></div><div class="p2"><div class="k2">-H &lsquo;Content-Type&hellip;&rsquo;</div><div class="v2">A note on the message: <b>"what I am sending is JSON"</b>.</div></div><div class="p2"><div class="k2">-d &lsquo;{&hellip;}&rsquo;</div><div class="v2"><b>The data itself.</b> <code>-d</code> is for "data".</div></div></div>
@@ -1827,7 +1860,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="4" data-label="Two new skills">
-  <div class="eyebrow">Where we are &middot; end of chapter four<span class="t">1:04 &ndash; 1:42</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter four<span class="t">1:08 &ndash; 1:46</span></div>
   <h2>You can type commands, and ask other computers questions.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring soon"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring new2"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring was"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -1848,7 +1881,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">So how do you let somebody else use it?<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">So how do you let somebody else use it?<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body center">
     <div class="tale">Suppose a friend wants to use your agent. <span class="q">What do you actually do?</span></div>
   </div>
@@ -1856,7 +1889,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">"Send them the files."<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">"Send them the files."<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <div class="card accent">
       <h3><span style="color:var(--bad)">&#10007;</span> &nbsp;Three problems</h3>
@@ -1869,7 +1902,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">"Let them use my laptop."<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">"Let them use my laptop."<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <div class="card accent">
       <h3><span style="color:var(--bad)">&#10007;</span> &nbsp;Not actually a joke</h3>
@@ -1881,7 +1914,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">"Put it in an app, or on a website."<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">"Put it in an app, or on a website."<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <div class="card good">
       <h3><span style="color:var(--ok)">&#10003;</span> &nbsp;Close</h3>
@@ -1894,7 +1927,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">So here is the name<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">So here is the name<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>A web service is a program that waits to be asked.</h2>
   <div class="body">
     <div class="def">
@@ -1907,7 +1940,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">What changes, and what does not<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">What changes, and what does not<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>The agent does not change. It gets a door.</h2>
   <div class="body">
     <div class="fig">
@@ -1935,7 +1968,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">What actually travels<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">What actually travels<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>A question goes out. An answer comes back. That is all.</h2>
   <div class="body">
     <div class="fig">
@@ -1955,7 +1988,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">The question has three parts<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">The question has three parts<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>A request has three parts.</h2>
   <div class="body">
     <table>
@@ -1970,7 +2003,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Three words people mix up<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Three words people mix up<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Service, API, endpoint.</h2>
   <div class="body">
     <div class="cols c3">
@@ -1992,7 +2025,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Drawn, with today's three<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Drawn, with today's three<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>The endpoints live inside the service.</h2>
   <div class="body">
     <div class="box b wide" style="padding:18px">
@@ -2010,7 +2043,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">What "always running" costs you<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">What "always running" costs you<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Somebody's computer has to stay switched on.</h2>
   <div class="body">
     <div class="thenow">
@@ -2029,7 +2062,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Two tools do the network part<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Two tools do the network part<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>You do not write the networking.</h2>
   <div class="body">
     <div class="cols c2">
@@ -2048,7 +2081,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">One more word: port<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">One more word: port<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>One address, many numbered doors.</h2>
   <div class="body">
     <div class="machine">
@@ -2066,7 +2099,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Before you write anything<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Before you write anything<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body center">
     <div class="tale">Let us follow <b>one question</b> from outside your computer all the way in &mdash; <span class="q">so you know where your four lines sit.</span></div>
   </div>
@@ -2074,7 +2107,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 1 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 1 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>It starts outside. Somebody asks a question.</h2>
   <div class="body">
     <div class="spine"><div class="ring new2"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring soon"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring soon"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2083,7 +2116,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 2 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 2 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>The message arrives at one computer.</h2>
   <div class="body">
     <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring new2"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring soon"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2092,7 +2125,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 3 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 3 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>One computer, many programs. Which one?</h2>
   <div class="body">
     <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring new2"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring soon"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2101,7 +2134,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 4 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 4 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>A program was waiting on that number.</h2>
   <div class="body">
     <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring new2"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring soon"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2110,7 +2143,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 5 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 5 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Something has to choose which of your functions runs.</h2>
   <div class="body">
     <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring was"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring new2"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring soon"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2119,7 +2152,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 6 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 6 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Now your code runs.</h2>
   <div class="body">
     <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring was"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring was"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring new2"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring soon"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2128,7 +2161,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Follow one question &middot; 7 of 7<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Follow one question &middot; 7 of 7<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>And at the centre, the agent from this morning.</h2>
   <div class="body">
     <div class="spine"><div class="ring was"><div class="rt">outside</div><div class="rw"><b>somebody, somewhere</b> &mdash; A phone, a website, a curl command. <b>They have your address and a question.</b></div><div class="ring was"><div class="rt">one computer</div><div class="rw"><b>the machine at that address</b> &mdash; The message arrives here. <b>But this computer runs many programs at once.</b></div><div class="ring was"><div class="rt">a port</div><div class="rw"><b>number 7000</b> &mdash; The port number says <b>which program</b> the message is for.</div><div class="ring was"><div class="rt">a program</div><div class="rw"><b>uvicorn</b> &mdash; It was waiting on 7000. It takes the message off the network. <b>It knows nothing about orders.</b></div><div class="ring was"><div class="rt">a library</div><div class="rw"><b>FastAPI</b> &mdash; It reads the address <code>/chat</code> and looks for <b>whose function handles that.</b></div><div class="ring was"><div class="rt">your code</div><div class="rw"><b>four lines you write</b> &mdash; <b>Your function runs.</b> Ordinary Python, with the question handed to it as text.</div><div class="ring core3"><div class="rt">the agent</div><div class="rw"><b>run_turn()</b> &mdash; The loop from this morning. <b>It answers &mdash; and the answer travels back out the same way.</b></div></div></div></div></div></div></div></div></div>
@@ -2137,7 +2170,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Open the file<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Open the file<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Everything you type today goes in here.</h2>
   <div class="body">
     <div class="body center">
@@ -2152,7 +2185,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">The first two lines<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">The first two lines<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <pre class="tight"><span class="cm"># app/main.py</span>
 <span class="hl">from fastapi import FastAPI</span>
@@ -2166,7 +2199,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Create the application<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Create the application<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <pre class="tight">app = <span class="hl">FastAPI</span>(title=<span class="ok">"Ship Production AI agent"</span>)</pre>
     <div class="punch">One object. Every door you add gets attached to it.</div>
@@ -2175,7 +2208,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Door one: is it alive?<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Door one: is it alive?<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <pre class="tight"><span class="hl">@app.get("/health")</span>
 <span class="hl">def health():</span>
@@ -2190,7 +2223,7 @@ notes.txt   src   data
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Run it<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Run it<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Five lines, and you have a working web service.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># window 1 &mdash; start it</span>
@@ -2205,7 +2238,7 @@ INFO: Uvicorn running on http://0.0.0.0:7000
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Those two commands, piece by piece<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Those two commands, piece by piece<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>One starts it. One asks it a question.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">make run</div><div class="v2">Start the service. <b>It does not finish</b> &mdash; it sits there waiting.</div></div><div class="p2"><div class="k2">curl -s &hellip;/health</div><div class="v2">From the <b>other</b> window, ask it one question.</div></div><div class="p2"><div class="k2">localhost</div><div class="v2"><b>This computer.</b> Not the internet &mdash; you are talking to yourself.</div></div><div class="p2"><div class="k2">:7000</div><div class="v2">Which program on this computer. <b>The port from your <code>.env</code>.</b></div></div><div class="p2"><div class="k2">/health</div><div class="v2">Which door. <b>The one you just wrote.</b></div></div></div>
@@ -2214,7 +2247,7 @@ INFO: Uvicorn running on http://0.0.0.0:7000
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">What just happened<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">What just happened<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Your code answered a question that came over a network.</h2>
   <div class="body">
     <div class="body center">
@@ -2229,7 +2262,7 @@ INFO: Uvicorn running on http://0.0.0.0:7000
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Why that command never finished<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Why that command never finished<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Because a service does not finish. It waits.</h2>
   <div class="body">
     <div class="fig v">
@@ -2249,7 +2282,7 @@ INFO: Uvicorn running on http://0.0.0.0:7000
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Where to look when it breaks<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Where to look when it breaks<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>The service prints a line for every request.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># window 1, while you curl from window 2</span>
@@ -2263,7 +2296,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Why the boring door first<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Why the boring door first<span class="t">1:56 &ndash; 2:52</span></div>
   <h2><code>/health</code> answers one question: is this thing on?</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2282,7 +2315,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Door two &middot; but first, a problem<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Door two &middot; but first, a problem<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Each request is completely separate.</h2>
   <div class="body">
     <div class="fig">
@@ -2307,7 +2340,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">The fix: a ticket<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">The fix: a ticket<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>The service hands out an id, and the caller sends it back.</h2>
   <div class="body">
     <div class="flowv">
@@ -2328,7 +2361,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Describe what arrives<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Describe what arrives<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <pre class="tight"><span class="hl">class ChatRequest(BaseModel):</span>
     <span class="hl">message: str</span>
@@ -2342,7 +2375,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Door two: the real one<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Door two: the real one<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Five lines. Read them as a sentence.</h2>
   <div class="body">
     <pre class="tight" style="font-size:15px"><span class="hl">@app.post("/chat")</span>
@@ -2358,7 +2391,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Make it safe when things break<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Make it safe when things break<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <pre class="tight"><span class="cm">    # wrap those four lines:</span>
     <span class="hl">try:</span>
@@ -2373,7 +2406,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Test door two<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Test door two<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Only the address changed.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> curl -s -X POST http://localhost:7000/chat \
@@ -2387,7 +2420,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Now use the ticket<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Now use the ticket<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Send the session id back, and the conversation continues.</h2>
   <div class="body">
     <pre class="mini"><span class="pr">$</span> curl -s -X POST http://localhost:7000/chat \
@@ -2404,7 +2437,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Door three &middot; why bother<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Door three &middot; why bother<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>How long did that answer take?</h2>
   <div class="body">
     <div class="body center">
@@ -2419,7 +2452,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">What they are used to<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">What they are used to<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Pieces arriving one at a time.</h2>
   <div class="body">
     <div class="thenow">
@@ -2439,7 +2472,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Door three: send it in pieces<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Door three: send it in pieces<span class="t">1:56 &ndash; 2:52</span></div>
   <div class="body">
     <pre class="tight"><span class="hl">@app.post("/chat/stream")</span>
 <span class="hl">def chat_stream(req: ChatRequest):</span>
@@ -2455,7 +2488,7 @@ INFO:     127.0.0.1:52353 - "GET /nope HTTP/1.1" <span class="bad">404 Not Found
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Test door three<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Test door three<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Watch the answer arrive in pieces.</h2>
   <div class="body">
     <div class="cols c2n mid">
@@ -2476,7 +2509,7 @@ event: <span class="ok">done</span>
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">The whole file, assembled<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">The whole file, assembled<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Twenty lines. You wrote every one of them.</h2>
   <div class="body">
     <pre class="tight" style="font-size:13px;line-height:1.45"><span class="cm">import</span> os, uuid
@@ -2500,7 +2533,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">All three doors<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">All three doors<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Your service is finished.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> make check-week-01
@@ -2517,7 +2550,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="5" data-label="Giving it a front door">
-  <div class="eyebrow">Where we are &middot; end of chapter five<span class="t">1:52 &ndash; 2:48</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter five<span class="t">1:56 &ndash; 2:52</span></div>
   <h2>Anything can ask it a question now. But only while your laptop is on.</h2>
   <div class="body">
     <div class="spine"><div class="ring soon"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring new2"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring was"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring was"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>
@@ -2531,14 +2564,14 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
       <div class="num">Chapter six</div>
       <h1>Now give it to somebody else.</h1>
       <div class="lede">You have a working service. <b>Your friend wants to run it too.</b> This chapter is about what that actually takes.</div>
-      <div class="clock">about an hour &middot; and it ends with you giving it away</div>
+      <div class="clock">about fifty-eight minutes &middot; and it ends with you giving it away</div>
     </div>
   </div>
   <div class="say"><b>Do not mention Docker for the next five minutes</b>The word means nothing yet, and saying it early turns a real problem into a product pitch.<br><br><b>Start with the task instead:</b> <em>"You have just added a door to your agent. The person next to you wants that same working service on their laptop. Go on then &mdash; how?"</em><br><br>Let them answer. <b>Every answer they give is one of the next four slides.</b></div>
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">A real request<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">A real request<span class="t">2:52 &ndash; 3:50</span></div>
   <div class="body center">
     <div class="tale">Your friend says: <span class="q">"that is great, send it to me."</span></div>
   </div>
@@ -2546,7 +2579,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">So you send them the folder<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">So you send them the folder<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Here is the message you have to write with it.</h2>
   <div class="body">
     <div class="body center">
@@ -2560,7 +2593,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">What can go wrong with that<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">What can go wrong with that<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Four things, and any one of them breaks it.</h2>
   <div class="body">
     <div class="parts2">
@@ -2574,7 +2607,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">And it gets worse tomorrow<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">And it gets worse tomorrow<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>You fix a bug. They are still running this morning&rsquo;s copy.</h2>
   <div class="body">
     <div class="thenow">
@@ -2593,7 +2626,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">So what would fix it?<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">So what would fix it?<span class="t">2:52 &ndash; 3:50</span></div>
   <div class="body center">
     <div class="tale">What if you could send <b>the whole finished set-up</b> &mdash; not the instructions for building it?</div>
   </div>
@@ -2601,7 +2634,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">That thing is called a container<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">That thing is called a container<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>One file with everything already set up inside it.</h2>
   <div class="body">
     <div class="thenow">
@@ -2621,7 +2654,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">And the update problem goes too<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">And the update problem goes too<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>You rebuild the file. They fetch it again.</h2>
   <div class="body">
     <div class="fig">
@@ -2640,7 +2673,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Two words people mix up<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Two words people mix up<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>An image is the file. A container is it running.</h2>
   <div class="body">
     <div class="imgcon">
@@ -2659,7 +2692,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">What Docker actually is<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">What Docker actually is<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Docker is the program that builds images and runs them.</h2>
   <div class="body">
     <div class="def">
@@ -2675,7 +2708,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Four commands. That is all today needs.<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Four commands. That is all today needs.<span class="t">2:52 &ndash; 3:50</span></div>
   <div class="body">
     <table>
       <tr><th>Command</th><th>What it does</th></tr>
@@ -2690,7 +2723,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">So what do you actually write?<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">So what do you actually write?<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>A list of steps, in a file called <code>Dockerfile</code>.</h2>
   <div class="body">
     <div class="def">
@@ -2703,7 +2736,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">The six words you will use<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">The six words you will use<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Six words. That is all a Dockerfile uses.</h2>
   <div class="body">
     <table>
@@ -2720,7 +2753,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Toy one &middot; the smallest possible<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Toy one &middot; the smallest possible<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Two lines. It prints one word.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> mkdir ~/demo1 && cd ~/demo1
@@ -2737,7 +2770,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Build it and run it<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Build it and run it<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Build it, then run it.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker build -t demo1 .
@@ -2754,7 +2787,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Those two commands, piece by piece<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Those two commands, piece by piece<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Build, then run.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">docker build</div><div class="v2"><b>Follow my Dockerfile</b> and make an image out of it.</div></div><div class="p2"><div class="k2">-t demo1</div><div class="v2"><b>Call it demo1</b>, so I can refer to it later.</div></div><div class="p2"><div class="k2">.</div><div class="v2">The instructions are <b>in this folder</b>. That is what the dot means.</div></div><div class="p2"><div class="k2">docker run</div><div class="v2"><b>Start a container</b> from an image.</div></div><div class="p2"><div class="k2">--rm</div><div class="v2">When it stops, <b>throw the running copy away.</b></div></div></div>
@@ -2763,7 +2796,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">What just happened when you pressed build<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">What just happened when you pressed build<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Docker read your file top to bottom, one step at a time.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker build -t demo1 .
@@ -2780,7 +2813,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Build it again<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Build it again<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>The second time takes no time at all.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker build -t demo1 .
@@ -2794,7 +2827,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Toy two &middot; put your own file in<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Toy two &middot; put your own file in<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Now the image contains something you wrote.</h2>
   <div class="body">
     <pre class="mini"><span class="pr">$</span> mkdir ~/demo2 && cd ~/demo2
@@ -2805,7 +2838,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">What those four lines say<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">What those four lines say<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>What each of those four lines means.</h2>
   <div class="body">
     <div class="readout">
@@ -2821,7 +2854,7 @@ app = FastAPI(title=<span class="ok">"Ship Production AI agent"</span>)
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Look at what you made<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Look at what you made<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>These are real files on your disk now.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker images
@@ -2834,7 +2867,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Why images are built in layers<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Why images are built in layers<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Each instruction adds one layer on top of the last.</h2>
   <div class="body">
     <div class="layers">
@@ -2848,7 +2881,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Toy three &middot; one that waits<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Toy three &middot; one that waits<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>A container that stays running needs a door opened.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker run --rm <span class="hl">-p 9000:80</span> nginx
@@ -2863,7 +2896,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">What happens when you run one<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">What happens when you run one<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Docker makes a fresh copy, starts it, and forgets it when it stops.</h2>
   <div class="body">
     <div class="fig">
@@ -2883,7 +2916,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">That nginx command, piece by piece<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">That nginx command, piece by piece<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>One option is the interesting one.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">docker run --rm</div><div class="v2">Start a container, and throw it away afterwards.</div></div><div class="p2"><div class="k2">-p 9000:80</div><div class="v2"><b>Open a door.</b> Number 9000 out here, number 80 inside.</div></div><div class="p2"><div class="k2">nginx</div><div class="v2">The image to run &mdash; <b>and you never downloaded it.</b> Docker fetched it.</div></div></div>
@@ -2892,7 +2925,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">What <code>-p</code> does<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">What <code>-p</code> does<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Connect a number outside to a number inside.</h2>
   <div class="body">
     <div class="def">
@@ -2915,7 +2948,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">The thing that confuses everybody<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">The thing that confuses everybody<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Inside the box is a different computer.</h2>
   <div class="body">
     <div class="cols c2 mid">
@@ -2933,7 +2966,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 1 of 8 &middot; what to start from<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 1 of 8 &middot; what to start from<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Start from a computer that already has Python on it.</h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2 new"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2 ghost"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 ghost"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -2943,7 +2976,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 2 of 8 &middot; where to work<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 2 of 8 &middot; where to work<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Pick a folder to work in &mdash; inside the image.</h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2 new"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 ghost"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -2953,7 +2986,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 3 of 8 &middot; the shopping list<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 3 of 8 &middot; the shopping list<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Copy in the list of libraries. <b>Just that one file.</b></h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2 new"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 ghost"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -2963,7 +2996,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 4 of 8 &middot; the slow step<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 4 of 8 &middot; the slow step<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Actually install them. <b>This is the part that takes minutes.</b></h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2 new"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 ghost"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -2973,7 +3006,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 5 of 8 &middot; now the code<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 5 of 8 &middot; now the code<span class="t">2:52 &ndash; 3:50</span></div>
   <h2><b>Now</b> copy everything else in.</h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2 new"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 ghost"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -2983,7 +3016,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 6 of 8 &middot; a setting with a default<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 6 of 8 &middot; a setting with a default<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Put the port number in a setting.</h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2 new"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 ghost"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -2993,7 +3026,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 7 of 8 &middot; the label on the box<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 7 of 8 &middot; the label on the box<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Write down which port this image uses.</h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2 new"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 ghost"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -3003,7 +3036,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Line 8 of 8 &middot; what to run<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Line 8 of 8 &middot; what to run<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Start the service when the container starts.</h2>
   <div class="body">
     <div class="build" style="font-size:14px"><div class="l2"><span class="k">FROM</span> <span class="v">python:3.12-slim</span></div><div class="l2"><span class="k">WORKDIR</span> <span class="v">/app</span></div><div class="l2"><span class="k">COPY</span> <span class="v">requirements.txt .</span></div><div class="l2"><span class="k">RUN</span> <span class="v">pip install --no-cache-dir -r requirements.txt</span></div><div class="l2"><span class="k">COPY</span> <span class="v">. .</span></div><div class="l2"><span class="k">ENV</span> <span class="v">PORT=7000</span></div><div class="l2"><span class="k">EXPOSE</span> <span class="v">7000</span></div><div class="l2 new"><span class="k">CMD</span> <span class="v">exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}</span></div></div>
@@ -3013,7 +3046,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Why that order matters<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Why that order matters<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Docker remembers each step.</h2>
   <div class="body">
     <div class="layers">
@@ -3028,7 +3061,7 @@ REPOSITORY   TAG      SIZE
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">The most important line today<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">The most important line today<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Never put a secret in an image.</h2>
   <div class="body">
     <pre><span class="cm"># a file named .dockerignore</span>
@@ -3042,7 +3075,7 @@ __pycache__/
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">So how does it get the key?<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">So how does it get the key?<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>The key is given to the container when it starts.</h2>
   <div class="body">
     <div class="body center">
@@ -3054,7 +3087,7 @@ __pycache__/
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Build it and run it<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Build it and run it<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Same answers, from inside the box.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> make docker-build
@@ -3070,7 +3103,7 @@ __pycache__/
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">And now the bit that matters<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">And now the bit that matters<span class="t">2:52 &ndash; 3:50</span></div>
   <div class="body center">
     <div class="tale">You are going to <span class="q">give your agent to the person next to you</span> — and run theirs.</div>
   </div>
@@ -3078,7 +3111,7 @@ __pycache__/
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Step 1 of 6 &middot; give your agent a name<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Step 1 of 6 &middot; give your agent a name<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Give your agent a name, so yours is different.</h2>
   <div class="body">
     <div class="body center">
@@ -3093,7 +3126,7 @@ __pycache__/
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Step 2 of 6 &middot; put the name in your settings<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Step 2 of 6 &middot; put the name in your settings<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>One line in <code>.env</code>. No code yet.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># .env &mdash; add one line at the bottom</span>
@@ -3106,7 +3139,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Step 3 of 6 &middot; read it in your code<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Step 3 of 6 &middot; read it in your code<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Four lines, and a new door.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># app/main.py</span>
@@ -3121,7 +3154,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Step 4 of 6 &middot; try it, before any container<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Step 4 of 6 &middot; try it, before any container<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Restart it, then ask it its name.</h2>
   <div class="body">
     <pre class="tight"><span class="cm"># window 1: Ctrl+C, then</span>
@@ -3138,7 +3171,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Step 5 of 6 &middot; send it up<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Step 5 of 6 &middot; send it up<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Three commands, and it is on the internet.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker login
@@ -3152,7 +3185,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Those sharing commands, piece by piece<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Those sharing commands, piece by piece<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Log in, rename, upload.</h2>
   <div class="body">
     <div class="parts2"><div class="p2"><div class="k2">docker login</div><div class="v2">Sign in to Docker Hub, once.</div></div><div class="p2"><div class="k2">docker tag A B</div><div class="v2"><b>Give the image a second name.</b> Not a copy &mdash; the same image, two names.</div></div><div class="p2"><div class="k2">YOURNAME/&hellip;</div><div class="v2">Docker Hub needs your username in the name, <b>so it knows whose it is.</b></div></div><div class="p2"><div class="k2">docker push</div><div class="v2"><b>Upload it</b>, so other machines can fetch it.</div></div><div class="p2"><div class="k2">docker pull</div><div class="v2"><b>Download somebody else&rsquo;s</b>, by their name.</div></div></div>
@@ -3161,7 +3194,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Step 6 of 6 &middot; run a stranger's<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Step 6 of 6 &middot; run a stranger's<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Two commands. No Python, no setup, no folder.</h2>
   <div class="body">
     <pre class="tight"><span class="pr">$</span> docker pull <span class="hl">NEIGHBOUR</span>/support-agent
@@ -3176,7 +3209,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Compare that with your morning<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Compare that with your morning<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Same software. Twenty minutes this morning, two commands now.</h2>
   <div class="body">
     <div class="thenow">
@@ -3195,7 +3228,7 @@ PORT=7000
 </section>
 
 <section class="slide" data-sec="6" data-label="Giving it to somebody else">
-  <div class="eyebrow">Where we are &middot; end of chapter six<span class="t">2:48 &ndash; 3:50</span></div>
+  <div class="eyebrow">Where we are &middot; end of chapter six<span class="t">2:52 &ndash; 3:50</span></div>
   <h2>Somebody else ran your agent. That was the whole day.</h2>
   <div class="body">
     <div class="spine"><div class="ring new2"><div class="rt">a stranger</div><div class="rw">someone you have never met, on their own machine</div><div class="ring was"><div class="rt">a box</div><div class="rw">everything it needs, sealed in one file that travels</div><div class="ring was"><div class="rt">a front door</div><div class="rw">an address anything can send a question to</div><div class="ring was"><div class="rt">a computer</div><div class="rw">reachable, with a number for each program on it</div><div class="ring core3"><div class="rt">the agent</div><div class="rw">the loop: it asks for a tool, your code runs it</div></div></div></div></div></div></div>

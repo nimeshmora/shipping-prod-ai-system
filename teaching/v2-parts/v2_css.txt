@@ -121,3 +121,26 @@
 /* a piece that is only punctuation or glue, dimmed so it reads as minor */
 .parts2 .p2.glue{border-left-color:var(--rule);}
 .parts2 .p2.glue .k2{color:var(--ink-faint);}
+
+/* --- the phase map: where the whole eight weeks is going ------------------
+   A single horizontal chain, agent at the left, each later stage wrapping or
+   attaching to it. One row of stages plus one row of what each adds. */
+.phase{display:flex;align-items:stretch;gap:0;width:100%;}
+.phase .st2{flex:1;border:2px solid var(--rule);border-radius:11px;
+  padding:12px 10px;background:#131316;display:flex;flex-direction:column;
+  gap:6px;text-align:center;}
+.phase .st2 + .st2{margin-left:-2px;}
+.phase .wk2{font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-faint);}
+.phase .nm2{font-size:15.5px;font-weight:700;line-height:1.18;color:var(--ink-dim);}
+.phase .ad2{font-size:13px;line-height:1.3;color:var(--ink-faint);}
+/* the stage they build today */
+.phase .st2.now5{border-color:var(--ok);background:rgba(95,191,127,.13);z-index:3;}
+.phase .st2.now5 .wk2{color:var(--ok);}
+.phase .st2.now5 .nm2{color:#fff;}
+.phase .st2.now5 .ad2{color:var(--ink-dim);}
+/* stages still to come */
+.phase .st2.soon5{border-style:dashed;border-color:#2a2a32;}
+/* the arrows between stages */
+.phase .ar2{display:flex;align-items:center;padding:0 3px;color:var(--brand);
+  font-family:var(--mono);font-size:17px;}

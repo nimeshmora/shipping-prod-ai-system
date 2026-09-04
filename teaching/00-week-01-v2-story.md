@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **175 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **176 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -30,14 +30,14 @@ necessary rather than arbitrary.
 ## The seven chapters
 
 ```
-   0:00   10   1  "It works on my laptop"      three questions, laptops closed
-   0:10   24   2  "Let me show you the thing"  the agent, then run it live
-   0:34   20   3  "Your turn"                  prerequisites, clone, key, prove
-   0:54   10      break
-   1:04   38   4  "Where will it run?"         terminal, then the browser -> curl
-   1:42   10      break
-   1:52   56   5  "Giving it a front door"     why, then three endpoints
-   2:48   62   6  "Giving it to somebody else" the problem, Docker, then GIVE IT AWAY
+   0:00   14   1  "It works on my laptop"      three questions, then the phase map
+   0:14   24   2  "Let me show you the thing"  the agent, then run it live
+   0:38   20   3  "Your turn"                  prerequisites, clone, key, prove
+   0:58   10      break
+   1:08   38   4  "Where will it run?"         terminal, then the browser -> curl
+   1:46   10      break
+   1:56   56   5  "Giving it a front door"     why, then three endpoints
+   2:52   58   6  "Giving it to somebody else" the problem, Docker, then GIVE IT AWAY
    3:50   10   7  "Look what you did"          the picture, complete
    ────────────
    4:00        exactly four hours, both breaks included
@@ -56,6 +56,45 @@ it?"* on its own slide, and you take answers before showing any.
 **Every technical word arrives as a label for something already done.** They
 curl GitHub in chapter 4; "web service" is defined in chapter 5 as *the name
 for the thing that answered you.* Nothing is named before it is needed.
+
+## The phase map, at 0:07
+
+Right after the third opening question, **two slides zoom out to the whole
+eight weeks and then back in to today.** The room has just been asked whether
+they have ever put something online; this answers *"so where is all this
+going?"* before any technical content starts.
+
+```
+   TODAY          TODAY             TODAY          WEEK 2         WEEK 3          WEEKS 4-8
+   Your agent  →  + a web service → + a container → + a real   →  + automatic  →  + the hard
+   a loop that    anything can      it runs         address       deploy          parts
+   can use tools  ask it            anywhere        on Cloud      CI/CD - push    limits ·
+                                                    Run           and it ships    monitoring ·
+                                                                                  attacks ·
+                                                                                  rollback
+```
+
+The first three boxes are green — **today's work.** The rest are dashed.
+
+> **INSTRUCTOR** · Walk it left to right, **one sentence per box, ten seconds
+> each.** Do not explain any of them properly; the point is the shape.
+>
+> *"That first green box already exists. By six o'clock the next two exist too.
+> Then every week after adds one more layer, and the agent in the middle never
+> changes."*
+>
+> **Then be honest about what the dashed boxes are:** *"None of that is about
+> AI. It is a real address, automatic deployment, spending limits, knowing
+> whether it is healthy at 3am, and somebody trying to break it. That is what
+> shipping actually means."*
+>
+> **And the reassurance a non-technical room needs:** *"You do not need to
+> understand any of the dashed boxes today. You just need to know they are
+> coming, and why."*
+
+The second slide narrows the same shape to the four hours ahead, and **that
+picture is the one that returns at the end of every chapter** — one more box
+lit each time.
 
 ## Follow one question — the seven-layer zoom
 
@@ -253,7 +292,7 @@ top of the rail.
 python3 teaching/check-slide-layout.py teaching/week-01-slides-v2.html
 ```
 
-It renders **all 175 slides** in a headless browser and reports any slide whose
+It renders **all 176 slides** in a headless browser and reports any slide whose
 content reaches the bottom rail, passes either side edge, or exceeds the stage.
 Exits non-zero, so it can gate a commit.
 
@@ -262,7 +301,7 @@ Exits non-zero, so it can gate a commit.
 > `slide 30: hits the bottom rail (gap -36px)`. A checker nobody has seen fail
 > is not a checker.
 
-**Both decks pass:** 175/175 here, 218/218 in the other one.
+**Both decks pass:** 176/176 here, 218/218 in the other one.
 
 ## Windows students use WSL, so the deck has one set of commands
 
@@ -547,12 +586,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 175 slides measured** in a headless browser at the deck's own
+- **All 176 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 175 of 175.
+- **Every slide has a presenter note** — 176 of 176.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 
@@ -578,7 +617,7 @@ make, the thing not to explain yet. Do not read them aloud.
 python3 teaching/slides-to-pdf.py teaching/week-01-slides-v2.html
 ```
 
-Writes `teaching/week-01-slides-v2.pdf` — **one slide per landscape page, 175
+Writes `teaching/week-01-slides-v2.pdf` — **one slide per landscape page, 176
 pages, exactly as the deck looks on screen.** Useful for handing out, printing,
 or reviewing on a plane.
 

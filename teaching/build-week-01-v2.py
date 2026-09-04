@@ -90,13 +90,13 @@ S.append('''<section class="slide title-slide" data-sec="0" data-label="Week 1">
   <div class="say"><b>Read the subtitle out loud before you do anything else</b>That single sentence is the whole day, and it is the promise you are making. <em>"Right now this thing only runs where I am sitting. By four o'clock, a stranger runs it in two commands."</em><br><br><b>Then say what today is not:</b> almost none of it is about AI. It is about everything that has to be true before an AI is useful to anybody but you.<br><br>Laptops closed for the first twelve minutes.</div>
 </section>''')
 
-T1='0:00 &ndash; 0:10'
+T1='0:00 &ndash; 0:14'
 # =========================================================================
 # CHAPTER 1 — It works on my laptop  (0:00 – 0:12)
 # =========================================================================
 chapter('1','Chapter one','It works on my laptop.',
  'Which is another way of saying <b>nobody else can use it.</b>',
- 'about ten minutes &middot; laptops closed',
+ 'about fourteen minutes &middot; laptops closed',
  '''<b>Laptops closed. This is the only part of the day where nobody types.</b>You are doing two things here: settling the room, and finding out who is in it.<br><br>Three questions, in order. <b>Take answers, correct nobody.</b> Every wrong answer is useful — it tells you where to pitch the next four hours.''')
 
 tale('1','First question',T1,
@@ -174,22 +174,29 @@ sl('1','Third question &middot; why it matters',T1,
     </div>''',
  '''<b>The frame for the whole day</b>Anybody who raised a hand for the second question has lived this: the thing worked fine on their laptop, and getting it online was a completely separate struggle.<br><br><b>Say it plainly:</b> <em>"An agent that only runs on your laptop is like a website you never uploaded. It works, and nobody can see it."</em><br><br>That is the one comparison worth using today, because half the room has felt it.''')
 
-sl('1','So here is the day',T1,
- 'One agent. Four layers. Four hours.',
- '''    <div class="grow">
+sl('1','So here is the whole eight weeks',T1,
+ 'One agent. A layer added every week.',
+ r'''    <div class="phase"><div class="st2 now5"><div class="wk2">today</div><div class="nm2">Your agent</div><div class="ad2">a loop that can use tools</div></div><div class="ar2">&rarr;</div><div class="st2 now5"><div class="wk2">today</div><div class="nm2">+ a web service</div><div class="ad2">anything can ask it</div></div><div class="ar2">&rarr;</div><div class="st2 now5"><div class="wk2">today</div><div class="nm2">+ a container</div><div class="ad2">it runs anywhere</div></div><div class="ar2">&rarr;</div><div class="st2 soon5"><div class="wk2">week 2</div><div class="nm2">+ a real address</div><div class="ad2">on Cloud Run, not your laptop</div></div><div class="ar2">&rarr;</div><div class="st2 soon5"><div class="wk2">week 3</div><div class="nm2">+ automatic deploy</div><div class="ad2">CI/CD &mdash; push code, it ships itself</div></div><div class="ar2">&rarr;</div><div class="st2 soon5"><div class="wk2">weeks 4&ndash;8</div><div class="nm2">+ the hard parts</div><div class="ad2">spending limits &middot; monitoring &middot; attacks &middot; rollback</div></div></div>
+    <div class="punch">The green three are today. Everything after is a layer on the same agent.</div>''',
+ r'''<b>This is the map for the whole phase, and it comes back at the end of the day</b>Walk it left to right, <b>one sentence per box, ten seconds each.</b> Do not explain any of them properly &mdash; the point is the shape, not the detail.<br><br><em>"That first green box already exists. By six o'clock the next two exist as well. Then every week after adds one more layer, and the agent in the middle never changes."</em><br><br><b>Point at the dashed boxes and be honest:</b> <em>"None of that is about AI. It is a real address, automatic deployment, spending limits, knowing whether it is healthy at 3am, and somebody trying to break it. That is what shipping actually means."</em><br><br><b>Then the reassurance a non-technical room needs:</b> <em>"You do not need to understand any of the dashed boxes today. You just need to know they are coming, and why."</em>''')
+
+sl('1','And where today sits in it',T1,
+ 'Three of those boxes, in four hours.',
+ r'''    <div class="grow">
       <div class="st on4"><div class="h">now</div><div class="pic">[ agent ]</div><div class="w"><b>works only where you are sitting</b></div></div>
-      <div class="st"><div class="h">by 1:53</div><div class="pic">you &rarr; [ ? ]</div><div class="w">you can type commands at any computer</div></div>
-      <div class="st"><div class="h">by 2:50</div><div class="pic">[ agent + door ]</div><div class="w">anything can send it a question</div></div>
+      <div class="st"><div class="h">by 1:42</div><div class="pic">you &rarr; [ ? ]</div><div class="w">you can type commands at any computer</div></div>
+      <div class="st"><div class="h">by 2:48</div><div class="pic">[ agent + door ]</div><div class="w">anything can send it a question</div></div>
       <div class="st"><div class="h">by 3:50</div><div class="pic">&#9634;[ agent ]&#9634;</div><div class="w">sealed in a box that travels</div></div>
-      <div class="st"><div class="h">4:00</div><div class="pic">&rarr; &#128100;</div><div class="w"><b>a stranger runs it</b></div></div>
+      <div class="st"><div class="h">4:00</div><div class="pic">&rarr; &#128100;</div><div class="w"><b>somebody else runs it</b></div></div>
     </div>''',
- '''<b>This picture comes back five times today</b>It is the map. Each chapter ends with one more layer lit up, so nobody is ever lost about where they are.<br><br><b>Point at the first box and the last box.</b> <em>"That is the whole day. Everything in between is how you get from one to the other."</em><br><br><b>And say the honest bit:</b> only the last ninety minutes is writing code. The morning is tools and vocabulary — and it is the part that makes the afternoon possible.''')
+ r'''<b>Zoom in from the eight weeks to just today</b>Same shape, one week wide. <b>This picture comes back five times today</b> &mdash; each chapter ends with one more box lit, so nobody is ever lost about where they are.<br><br><b>Point at the first and last box.</b> <em>"That is the whole day. Everything in between is how you get from one to the other."</em><br><br><b>And say the honest bit:</b> only the last ninety minutes is writing code. The morning is tools and vocabulary &mdash; and it is the part that makes the afternoon possible.''')
+
 
 spine(1,'1','Where we are &middot; end of chapter one',T1,
  'Your agent works. Nobody else can use it.',
  '''<b>The picture you will grow all day</b>Right now there is one green box, and four dashed ones waiting. <b>Every chapter fills one in.</b><br><br><em>"That green box already works. Twelve tests prove it. Everything we do today wraps around it without changing a line of it."</em><br><br>Open the laptops now.''')
 
-T2='0:10 &ndash; 0:34'
+T2='0:14 &ndash; 0:38'
 # =========================================================================
 # CHAPTER 2 — Watch it think  (0:12 – 0:40)
 # =========================================================================
@@ -350,7 +357,7 @@ spine(1,'2','Where we are &middot; end of chapter two',T2,
  'Now you know what it does. Still only you can use it.',
  '''<b>Same picture, and deliberately unchanged</b>Nothing new is lit up, because <b>knowing what a thing is does not move it anywhere.</b> Say that out loud — it is the setup for the next three hours.<br><br><em>"You now know exactly what is in the green box. It still only runs on my laptop. Everything from here is about the dashed boxes."</em><br><br><b>Next: they get it running on their own machines.</b>''')
 
-T3='0:34 &ndash; 0:54'
+T3='0:38 &ndash; 0:58'
 # =========================================================================
 # CHAPTER 3 — Getting it running  (0:40 – 1:07)
 # =========================================================================
@@ -488,7 +495,7 @@ spine(2,'3','Where we are &middot; end of chapter three',T3,
  '''<b>One more box lit up — but be precise about what changed</b><em>"Twenty-seven people now have it running. That is twenty-seven laptops, and still zero strangers."</em><br><br><b>The honest framing:</b> copying it to more laptops is not the same as making it reachable. Every one of those copies has the same problem the first one had.<br><br><b>Now the break.</b> Ten minutes. After it, they learn to type commands at a computer.''')
 
 
-T4='1:04 &ndash; 1:42'
+T4='1:08 &ndash; 1:46'
 # =========================================================================
 # CHAPTER 4 — Two new skills  (terminal, then the browser and curl)
 # =========================================================================
@@ -805,7 +812,7 @@ spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can type commands, and ask other computers questions.',
  '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for what comes next:</b> <em>"Everything you did with curl, you did to somebody else's service. Next chapter you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
 
-T5='1:52 &ndash; 2:48'
+T5='1:56 &ndash; 2:52'
 # =========================================================================
 # CHAPTER 5 — Giving it a front door  (2:03 – 2:50)
 # =========================================================================
@@ -1311,13 +1318,13 @@ spine(4,'5','Where we are &middot; end of chapter five',T5,
  'Anything can ask it a question now. But only while your laptop is on.',
  '''<b>One more box, and then the honest catch</b><em>"Anything on this network can now reach your agent. But it only runs while your laptop is on, in that folder, with your key loaded in that one window."</em><br><br><b>Set up the last chapter with a question:</b> <em>"So how do I give this to somebody who does not have your laptop, your Python, or your folder?"</em><br><br>That is the last dashed box.''')
 
-T6='2:48 &ndash; 3:50'
+T6='2:52 &ndash; 3:50'
 # =========================================================================
 # CHAPTER 6 — Putting it in a box  (2:50 – 3:50)
 # =========================================================================
 chapter('6','Chapter six','Now give it to somebody else.',
  'You have a working service. <b>Your friend wants to run it too.</b> This chapter is about what that actually takes.',
- 'about an hour &middot; and it ends with you giving it away',
+ 'about fifty-eight minutes &middot; and it ends with you giving it away',
  r'''<b>Do not mention Docker for the next five minutes</b>The word means nothing yet, and saying it early turns a real problem into a product pitch.<br><br><b>Start with the task instead:</b> <em>"You have just added a door to your agent. The person next to you wants that same working service on their laptop. Go on then &mdash; how?"</em><br><br>Let them answer. <b>Every answer they give is one of the next four slides.</b>''')
 
 tale('6','A real request',T6,
