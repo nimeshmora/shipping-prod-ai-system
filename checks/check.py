@@ -416,7 +416,7 @@ def check_03():
         for match in re.finditer(r'--set-env-vars[ =]+"([^"]*)"', text):
             for pair in match.group(1).split(","):
                 key = pair.split("=")[0].strip()
-                if key in ("KODEKEY", "API_KEYS") or "SECRET" in key.upper():
+                if key in ("OPENROUTER_API_KEY", "API_KEYS") or "SECRET" in key.upper():
                     _no(f"{name} passes {key} through --set-env-vars. Env vars "
                         "are visible in the console and in `gcloud describe` "
                         "output - use --set-secrets.")
@@ -886,7 +886,7 @@ def check_07():
          "http://169.254.169.254/computeMetadata/v1/",
          "internal addresses are blocked"),
         ("a file:// url", "file:///etc/passwd", "http and https"),
-        ("localhost", "http://127.0.0.1:8080/admin",
+        ("localhost", "http://127.0.0.1:7000/admin",
          "internal addresses are blocked"),
         ("a private network address", "http://10.0.0.5/",
          "internal addresses are blocked"),

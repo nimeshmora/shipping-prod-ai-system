@@ -122,7 +122,7 @@ def _pct(sorted_values, p):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--url", default="http://localhost:8080")
+    ap.add_argument("--url", default="http://localhost:7000")
     ap.add_argument("--n", type=int, default=50)
     ap.add_argument("--concurrency", type=int, default=10)
     ap.add_argument("--key", default=None, help="x-api-key header")

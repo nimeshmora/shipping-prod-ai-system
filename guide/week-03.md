@@ -125,15 +125,15 @@ to be allowed should cost nothing, and certainly not a model call.
 export API_KEYS=local-dev-key
 make run
 
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -d '{"message":"hi"}'                                  # 401
 
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' -d '{"message":"hi"}'    # 200
 
 # flood it
 for i in $(seq 1 25); do
-  curl -s -o /dev/null -w "%{http_code} " -X POST localhost:8080/chat \
+  curl -s -o /dev/null -w "%{http_code} " -X POST localhost:7000/chat \
     -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
     -d '{"message":"hi"}'
 done; echo                                               # 200s then 429s
