@@ -770,7 +770,7 @@ def test_fetch_url_refuses_other_schemes_and_private_hosts():
     assert "http and https" in run_tool("fetch_url",
                                         {"url": "file:///etc/passwd"})
     assert "internal addresses are blocked" in run_tool(
-        "fetch_url", {"url": "http://127.0.0.1:8080/admin"})
+        "fetch_url", {"url": "http://127.0.0.1:7000/admin"})
     assert "internal addresses are blocked" in run_tool(
         "fetch_url", {"url": "http://10.0.0.5/"})
     assert "not on the allowlist" in run_tool(
@@ -789,7 +789,7 @@ def test_the_judge_never_blocks_a_build_by_failing():
     """A non-deterministic grader that can break the pipeline teaches the team
     to ignore the pipeline."""
     from evals import judge
-    assert judge.grade("q", "a", "check") == (True, "judge unavailable (no KODEKEY)")
+    assert judge.grade("q", "a", "check") == (True, "judge unavailable (no OPENROUTER_API_KEY)")
     assert judge._parse("not json at all")[0] is True
 
 
@@ -804,6 +804,6 @@ def test_the_judge_reads_a_verdict_out_of_fenced_json():
 
 def test_judge_cases_are_skipped_cleanly_when_there_is_no_key(monkeypatch):
     """CI has no key, so the deterministic tier must still gate on its own."""
-    monkeypatch.delenv("KODEKEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     from evals import run_evals
     assert run_evals.run(real=False, use_judge=True) == 0

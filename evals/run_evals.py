@@ -76,7 +76,7 @@ def run(real=False, use_judge=False):
     failures = []
     judged = judging_enabled = use_judge and judge.available()
     if use_judge and not judging_enabled:
-        print("  note: --judge asked for but KODEKEY is not set; skipping it\n")
+        print("  note: --judge asked for but OPENROUTER_API_KEY is not set; skipping it\n")
 
     for c in cases:
         cid, sev = c["id"], c.get("severity", "medium")

@@ -28,9 +28,9 @@ make run
 4. Prove the lock:
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:8080/chat \
+curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' -d '{"message":"hi"}'          # 401
-curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:8080/chat \
+curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' -H 'X-API-Key: my-first-key' \
   -d '{"message":"hi"}'                                              # 200
 ```

@@ -442,14 +442,14 @@ learned in Week 1 against httpbin**, now pointed at their own service:
 
 ```bash
 # no key
-curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:8080/chat \
+curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' -d '{"message":"hi"}'
 # 401
 ```
 
 ```bash
 # with the key
-curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:8080/chat \
+curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
   -d '{"message":"hi"}'
 # 200
@@ -460,7 +460,7 @@ One extra `-H`. That is the whole authentication mechanism.
 ```bash
 # hammer it — the same loop from Beat 2, now aimed at yourself
 for i in $(seq 1 25); do
-  curl -s -o /dev/null -w "%{http_code} " -X POST localhost:8080/chat \
+  curl -s -o /dev/null -w "%{http_code} " -X POST localhost:7000/chat \
     -H 'Content-Type: application/json' -H 'x-api-key: local-dev-key' \
     -d '{"message":"hi"}'
 done; echo

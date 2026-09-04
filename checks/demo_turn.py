@@ -89,7 +89,7 @@ def main(real=False, question=None):
     if real:
         print(f"\n  MODE: the real model - {MODEL}")
         print(f"        reached through {os.environ.get('BASE_URL', 'the course gateway')}")
-        print("        uses your KODEKEY. Costs a fraction of a cent.")
+        print("        uses your OPENROUTER_API_KEY. Costs a fraction of a cent.")
     else:
         print("\n  MODE: a stand-in for the model - no key, no internet, free")
         print("        the LOOP below is the real one")

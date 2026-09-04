@@ -133,7 +133,7 @@ token count on that **single** call.
 
 ```bash
 python -c "print('{\"message\":\"' + 'the quick brown fox '*8000 + '\"}')" > big.json
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' -d @big.json
 ```
 
@@ -449,13 +449,13 @@ In a second terminal:
 
 ```bash
 # a normal question still works
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' -d '{"message":"where is ORD-1002?"}'
 ```
 
 ```bash
 # now something needing several tool calls in a row
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' \
   -d '{"message":"look up ORD-1001, ORD-1002, ORD-1043 and ORD-1077, then add up the totals"}'
 ```
@@ -483,7 +483,7 @@ Hold a conversation for five or six turns with the same `session_id`, then look
 at what memory actually kept:
 
 ```bash
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' \
   -d '{"message":"what was the very first thing I asked you?"}' \
   -d '{"session_id":"PASTE_IT"}'

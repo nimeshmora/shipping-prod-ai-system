@@ -36,7 +36,7 @@ crashes, the answers just quietly get worse.
 `app/monitor.py` keeps the recent turns and `/metrics` reports them:
 
 ```bash
-curl -s localhost:8080/metrics
+curl -s localhost:7000/metrics
 ```
 
 Four signals, and what a bad number means:

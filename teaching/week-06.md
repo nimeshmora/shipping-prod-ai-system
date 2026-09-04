@@ -438,12 +438,12 @@ mistake.
 
 ```bash
 export MODEL=this-model-does-not-exist
-export FALLBACK_MODEL=claude-sonnet-5
+export FALLBACK_MODEL=anthropic/claude-sonnet-4.5
 make run
 ```
 
 ```bash
-curl -s -X POST localhost:8080/chat -H 'Content-Type: application/json' \
+curl -s -X POST localhost:7000/chat -H 'Content-Type: application/json' \
   -H 'x-api-key: local-dev-key' -d '{"message":"where is ORD-1002?"}'
 ```
 
@@ -458,7 +458,7 @@ last week's work pays off again:
   {"provider": "primary",  "attempt": 1, "error": "...", "retryable": true},
   {"provider": "primary",  "attempt": 2, "error": "...", "retryable": true},
   {"provider": "primary",  "attempt": 3, "error": "...", "retryable": true},
-  {"provider": "fallback", "model": "claude-sonnet-5", "attempts": 1}
+  {"provider": "fallback", "model": "anthropic/claude-sonnet-4.5", "attempts": 1}
 ]
 ```
 
@@ -466,7 +466,7 @@ The whole story of the turn, in one field: the primary failing, the retries
 being spent, and the fallback answering.
 
 ```bash
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 ```
 
 `fallback_rate: 1.0`, and an alert saying the primary is struggling.

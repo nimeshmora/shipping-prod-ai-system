@@ -15,7 +15,7 @@ keeps going, and the trace notes which one answered.
    `FALLBACK_MODEL`). Set the backup:
 
 ```bash
-export FALLBACK_MODEL=gpt-oss-120b
+export FALLBACK_MODEL=openai/gpt-4o-mini
 ```
 
 3. Run the outage drill: make the primary fail and confirm the fallback answers.

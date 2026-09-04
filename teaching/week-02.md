@@ -124,7 +124,7 @@ the project. A secret manager is a locked drawer the platform opens for your
 service and nobody else.
 
 ```bash
-echo -n "$KODEKEY" | gcloud secrets create kodekey --data-file=-
+echo -n "$OPENROUTER_API_KEY" | gcloud secrets create kodekey --data-file=-
 ```
 
 Read that command out. The `-n` matters: without it you store a trailing
@@ -150,7 +150,7 @@ gcloud run deploy ship-agent \
   --source . \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-secrets "KODEKEY=kodekey:latest" \
+  --set-secrets "OPENROUTER_API_KEY=kodekey:latest" \
   --timeout=3600 --concurrency=80 --min-instances=1
 ```
 
@@ -501,7 +501,7 @@ gcloud run services update ship-agent --region us-central1 \
   --set-env-vars "REDIS_URL=redis://YOUR_HOST:6379"
 ```
 
-**That setting is an environment variable** — the same idea as `KODEKEY` in
+**That setting is an environment variable** — the same idea as `OPENROUTER_API_KEY` in
 Week 1. Note it is `--set-env-vars`, not `--set-secrets`: a Redis address is not
 a secret in the way an API key is. *"Which of your settings are secrets?"* is a
 question worth asking the room.

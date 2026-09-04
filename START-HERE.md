@@ -35,14 +35,14 @@ make run
 In another terminal:
 
 ```bash
-curl -s -X POST localhost:8080/chat \
+curl -s -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
 
 You get a reply and a `session_id`. **That is the agent you are going to grow.**
 
-> If you see `KODEKEY is not set`, you edited `.env` but did not load it. That
+> If you see `OPENROUTER_API_KEY is not set`, you edited `.env` but did not load it. That
 > `set -a && source .env && set +a` line has to run in the same terminal as
 > `make run`, every time you open a new one. Everybody hits this once.
 

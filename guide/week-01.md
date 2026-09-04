@@ -95,7 +95,7 @@ make run
 2. In another terminal, talk to it:
 
 ```bash
-curl -s -X POST localhost:8080/chat \
+curl -s -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
@@ -153,7 +153,7 @@ command. **Ctrl + C** kills whatever is running.
    leave it alone                  do all your work here
 ```
 
-## When it says `KODEKEY is not set`
+## When it says `OPENROUTER_API_KEY is not set`
 
 An environment variable is a setting that lives outside your code, attached to
 the terminal session. In the **same** terminal as `make run`:

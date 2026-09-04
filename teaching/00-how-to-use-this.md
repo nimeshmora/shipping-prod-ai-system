@@ -127,7 +127,7 @@ Every tool the course introduces gets this treatment:
 | the terminal | `pwd`, `ls`, `mkdir`, `cd` in a scratch folder |
 | folders and paths | build a drawn three-level tree by hand, then `ls -R` it |
 | a process | `sleep 30`, then Ctrl+C |
-| JSON | `echo '{"name":"Ada"}' \| python -m json.tool`, then break it |
+| JSON | `echo '{"name":"Ada"}' \| python3 -m json.tool`, then break it |
 | curl | example.com → GitHub's API → status codes → POST to an echo service |
 | streaming | `curl -N https://httpbin.org/stream/3`, with and without `-N` |
 | Docker | a four-line Dockerfile that prints one sentence |
@@ -161,7 +161,7 @@ did**:
 | status codes | made a 200, a 404 and a 500 appear |
 | method / path / body | typed all three as curl flags |
 | a process | run `sleep 30` and killed it with Ctrl+C |
-| a port, `localhost` | seen the `:8080` shape |
+| a port, `localhost` | seen the `:7000` shape |
 | why sharing a file fails | waited for `make install` to download everything |
 
 > **INSTRUCTOR** · The temptation when you are running late is to cut Ground and
@@ -274,7 +274,7 @@ PDF — some instructors prefer to teach from it in a browser tab.
 
 ## Week 1 slides
 
-`teaching/week-01-slides.html` is a 168-slide presenter deck for **day one, run
+`teaching/week-01-slides.html` is a 179-slide presenter deck for **day one, run
 as a four-hour session**, in the same house style as this guide. Open it in a
 browser and press **F** for fullscreen.
 
@@ -293,7 +293,7 @@ clock in the top-right corner of every slide.
 | `G` | go to a slide number |
 | `?` | show all keys |
 
-**Press `S` before you start.** A hundred and fifty-seven of the slides carry
+**Press `S` before you start.** A hundred and sixty-seven of the slides carry
 a presenter cue — the callback to make, the question to ask, the thing *not* to explain
 yet — in a side panel the room never sees.
 
@@ -303,16 +303,16 @@ yet — in a side panel the room never sees.
    0:00   11   Three questions to the room   settle the room, and read it
    0:11   27   Meet today's agent            described, then RUN step by step
    0:38    8   The project                   a tour BEFORE they download it
-   0:46   16   Set it up, and prove it       .env, the key, then the demo
-   1:02   10   break
-   1:12   21   The terminal                  a real lesson: 9 commands
-   1:33   15   Sending messages              JSON and curl, on public services
-   1:48   10   break
-   1:58   15   What a web service is         the shop story, then the words
-   2:13   20   Addresses, then SIX ZOOMS     one request, internet to code
-   2:33   39   Build the web service         3 endpoints, line by line, tested
-   3:12   32   Build the container           5 examples, then line by line
-   3:44   16   Prove it, and what breaks next
+   0:46   21   Set it up, and prove it       .env, the key, make install, demo
+   1:07   10   break
+   1:17   20   The terminal                  a real lesson: 9 commands
+   1:37   16   Sending messages              JSON, curl and jq
+   1:53   10   break
+   2:03   14   What a web service is         the shop story, then the words
+   2:17   19   Addresses, then SIX ZOOMS     one request, internet to code
+   2:36   38   Build the web service         3 endpoints, line by line, tested
+   3:14   36   Packing it up                 containers, then Docker Hub
+   3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -475,7 +475,7 @@ after they have felt it on their own screen.
 
 ### The key is finished during setup
 
-`KODEKEY is not set` used to appear mid-afternoon, which was confusing — a new
+`OPENROUTER_API_KEY is not set` used to appear mid-afternoon, which was confusing — a new
 concept arriving in the middle of a build. **The whole topic is now closed at
 0:43**, with the `set -a && source .env && set +a` command on the whiteboard
 and a ten-second demo of why:
@@ -547,6 +547,60 @@ run against the real agent: `/health` returns 200, an empty body is refused
 with 422, and two turns with the same session id produce a history that grows
 from four messages to eight. It is not a paraphrase of the answer key.
 
+### The fix list, applied
+
+A batch of corrections that touch the repo as well as the slides:
+
+| Change | Where it landed |
+|---|---|
+| **`python3` everywhere** | the Makefile (`python3 -m`, `pip3 install`), every slide command, both guides |
+| **`make install` explained** | its own slide — `requirements.txt` is the shopping list, `pip3` fetches it, and a slide showing `cat Makefile` so `make` stops being magic |
+| **`set -a && source .env && set +a` explained** | its own slide, taken apart into three parts: turn on sharing, read the file, turn sharing off |
+| **`\| jq` on every JSON curl** | plus a slide teaching it, with the `python3 -m json.tool` fallback for anyone without it |
+| **Logs** | a slide on reading window 1 — who asked, what for, what number came back |
+| **OpenRouter** | `OPENROUTER_API_KEY`, `https://openrouter.ai/api/v1`, vendor-prefixed model ids (`anthropic/claude-sonnet-4.5`), renamed **across all 17 branches** |
+| **Port 7000** | replaces 8080 in the Dockerfile, Makefile, `.env.example`, code, tests and every slide |
+| **`app/main.py` as TODOs** | eight numbered TODOs instead of one long comment block |
+| **Stream command in the README** | already there; now the README also has a second `/chat` call showing the session id, and `\| jq` on the JSON ones |
+| **Docker Hub** | a six-slide activity, and an account added to the prerequisites |
+
+> **INSTRUCTOR** · Two of these change what students type, so check them in the
+> setup email: **an OpenRouter key** (free at openrouter.ai) and **a Docker Hub
+> account** (free at hub.docker.com). The Docker Hub one is only needed at 3:14,
+> but signing up mid-session wastes ten minutes.
+
+### The Docker Hub activity — why containers matter, felt
+
+Six slides at the end of the container section. **This is the payoff for the
+whole section**, and it lands better than any explanation:
+
+```
+   1  add one small endpoint     GET /orders, four lines, same shape as /health
+   2  build and name it          docker build -t <username>/ship-agent:v1 .
+   3  push it                    docker push  -> now it has a public address
+   4  pull a NEIGHBOUR's         docker pull <neighbour>/ship-agent:v1
+                              docker run --rm -p 7000:7000 --env-file .env
+                                 curl -s localhost:7000/orders | jq
+```
+
+Then one slide comparing it with their own morning:
+
+| this morning, at 0:46 | just now |
+|---|---|
+| **twelve minutes** — clone, install, right Python, right libraries, paste a key, *and it still broke for somebody* | **two commands** — pull, run, nothing to set up, *worked first try* |
+
+> **INSTRUCTOR** · **Have everybody write their image name on the whiteboard**
+> as they finish pushing. That is what makes step 4 work.
+>
+> **The line to say at step 4:** *"You did not install their Python. You did
+> not read their requirements file. You did not ask which version of anything
+> they used. You ran two commands."*
+>
+> **Then the honest detail:** they still passed their *own* `.env`. **The code
+> travelled; the key did not.** That is the separation from 0:46 working as
+> designed — and it is worth naming, because it is the thing people get wrong
+> when they first publish an image.
+
 ### One idea per slide
 
 The deck was audited for crowding and rebuilt. **Twelve slides carried five or
@@ -580,7 +634,7 @@ Six slides at 2:13 follow **one question** from a stranger down to the code,
 ```
    1  the internet   someone, somewhere, has your address and a question
    2  one computer   the message arrives at the machine
-   3  a port         which of the running programs is it for?  (8080)
+   3  a port         which of the running programs is it for?  (7000)
    4  a program      uvicorn was waiting there; it takes it off the network
    5  your code      FastAPI hands it to your function - the only layer
                      they write
@@ -622,12 +676,12 @@ command prints them **before** step 1, so nobody has to guess:
            - word_count
 ```
 
-With `--real` the first line reads **`MODE: the real model - claude-sonnet-5`**
+With `--real` the first line reads **`MODE: the real model - anthropic/claude-sonnet-4.5`**
 and item 1 reads **"sent with the question"**.
 
 | The question | The answer |
 |---|---|
-| Which model is underneath? | `claude-sonnet-5`, through the course gateway. **It is a setting in `.env`**, not baked into the code — Week 6 swaps in a second model by changing it. |
+| Which model is underneath? | `anthropic/claude-sonnet-4.5`, through the course gateway. **It is a setting in `.env`**, not baked into the code — Week 6 swaps in a second model by changing it. |
 | Is a key used in the demo? | **No.** The stand-in mode needs no key and no internet, which is why we run it first — every laptop sees the same thing. |
 | Do the rules really go with every question? | **Yes**, and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to — **and the line says so.** |
 
@@ -667,8 +721,8 @@ Fixed in two places:
 **The question is an argument**, so they can poke at the decision from step 2:
 
 ```bash
-python -m checks.demo_turn                        # picks lookup_order
-python -m checks.demo_turn "what is 12 * 41?"     # picks calculator -> 492
+python3 -m checks.demo_turn                        # picks lookup_order
+python3 -m checks.demo_turn "what is 12 * 41?"     # picks calculator -> 492
 ```
 
 That was a false claim on the slide until now — the stand-in model hardcoded
@@ -708,8 +762,8 @@ The section used to describe the agent and never run it. It now ends by
 **watching it work**, through one command:
 
 ```bash
-python -m checks.demo_turn        # no key, no internet, works on any laptop
-python -m checks.demo_turn --real # with a key: the real model decides
+python3 -m checks.demo_turn        # no key, no internet, works on any laptop
+python3 -m checks.demo_turn --real # with a key: the real model decides
 ```
 
 `checks/demo_turn.py` prints **four labelled steps with a pause between each**,
@@ -868,7 +922,7 @@ Twenty-two slides, in this order:
 > images and how many containers?"* One image, three containers.
 >
 > **Do example 3 even if you are running late.** It is the only place `-p` is
-> taught with two *different* numbers. Our agent uses `-p 8080:8080`, where the
+> taught with two *different* numbers. Our agent uses `-p 7000:7000`, where the
 > matching numbers hide the rule — so if you skip example 3, they never learn
 > that the outside number comes first.
 
@@ -880,7 +934,7 @@ mistake costs nothing.
 
 `port` used to be a one-line definition. It is now a drawn machine with four
 numbered programs inside it — a website on 443, a database on 5432, **our
-agent on 8080** highlighted, a dashboard on 3000 — beside the anchor that
+agent on 7000** highlighted, a dashboard on 3000 — beside the anchor that
 Zoom, Chrome and Spotify are all running on their laptop right now, and the
 port number is how a message finds the right one.
 

@@ -29,16 +29,16 @@ building with them.
    0:00   11   Three questions to the room   settle the room, and read it
    0:11   27   Meet today's agent            described, then RUN step by step
    0:38    8   The project                   a tour BEFORE they download it
-   0:46   16   Set it up, and prove it       .env, the key, then the demo
-   1:02   10   break
-   1:12   21   The terminal                  a real lesson: 9 commands
-   1:33   15   Sending messages              JSON and curl, on public services
-   1:48   10   break
-   1:58   15   What a web service is         the shop story, then the words
-   2:13   20   Addresses, then SIX ZOOMS     one request, internet to code
-   2:33   39   Build the web service         3 endpoints, line by line, tested
-   3:12   32   Build the container           5 examples, then line by line
-   3:44   16   Prove it, and what breaks next
+   0:46   21   Set it up, and prove it       .env, the key, make install, demo
+   1:07   10   break
+   1:17   20   The terminal                  a real lesson: 9 commands
+   1:37   16   Sending messages              JSON, curl and jq
+   1:53   10   break
+   2:03   14   What a web service is         the shop story, then the words
+   2:17   19   Addresses, then SIX ZOOMS     one request, internet to code
+   2:36   38   Build the web service         3 endpoints, line by line, tested
+   3:14   36   Packing it up                 containers, then Docker Hub
+   3:50   10   Prove it, and what breaks next
    ────────────
    4:00        exactly four hours, including both breaks
 ```
@@ -59,7 +59,7 @@ building with them.
 > show the agenda, or the morning feels slow.
 
 **The slides are the primary artefact for this week.** `teaching/week-01-slides.html`
-is 168 slides with a presenter note on 157 of them, and it carries material this
+is 179 slides with a presenter note on 167 of them, and it carries material this
 file does not: the eight-week journey map, the repository tour, the shop story,
 and the line-by-line code build. This file is the reference version — read it
 before you teach, and teach from the slides.
@@ -139,7 +139,7 @@ python
 
 ```bash
 make check-week-00
-python -m checks.demo_turn
+python3 -m checks.demo_turn
 ```
 
 ```
@@ -155,7 +155,7 @@ python -m checks.demo_turn
 > **The line that lands:** *"Look at step 2 again. It did not fetch anything.
 > It said 'use lookup_order with ORD-1002' — and then waited for us."*
 >
-> With a key configured, `python -m checks.demo_turn --real` shows the same
+> With a key configured, `python3 -m checks.demo_turn --real` shows the same
 > four steps with the real model deciding for itself. Only the wording of the
 > final answer changes, which is itself worth pointing out.
 
@@ -367,7 +367,7 @@ Describing the agent is not enough. **Run it**, on the projector, and let them
 watch the four steps happen one at a time.
 
 ```bash
-python -m checks.demo_turn
+python3 -m checks.demo_turn
 ```
 
 **It prints its mode first**, so nobody has to guess whether a real model
@@ -391,11 +391,11 @@ That block answers three things a room always wants to know:
 
 | Question | Answer |
 |---|---|
-| Which model is underneath? | `claude-sonnet-5`, through the course gateway — and it is **a setting in `.env`**, not baked into the code. Week 6 swaps a second model in by changing it. |
+| Which model is underneath? | `anthropic/claude-sonnet-4.5`, through the course gateway — and it is **a setting in `.env`**, not baked into the code. Week 6 swaps a second model in by changing it. |
 | Is a key used here? | **No.** Stand-in mode needs no key and no internet, which is why we run it first. |
 | Do the rules really go every time? | **Yes** — and the payload block proves it. In stand-in mode they are not actually sent, because there is no model to send them to, **and the line says so.** |
 
-With `--real` the first line reads `MODE: the real model - claude-sonnet-5`
+With `--real` the first line reads `MODE: the real model - anthropic/claude-sonnet-4.5`
 and item 1 reads *"sent with the question"*.
 
 > **INSTRUCTOR** · **The honesty matters here.** You said at the instructions
@@ -465,7 +465,7 @@ as it appears.
 > **If you have time**, ask it `what is 12 * 41?` and watch step 2 pick
 > `calculator` instead. That is tool choice, visible.
 >
-> With a key configured, `python -m checks.demo_turn --real` runs the same four
+> With a key configured, `python3 -m checks.demo_turn --real` runs the same four
 > steps with the real model deciding for itself.
 
 #### 6 · Is this a real agent? (2 min)
@@ -588,8 +588,8 @@ cat Makefile
 nicknames, and they can read every one:
 
 ```
-   make test    is a nickname for    python -m pytest -q
-   make run     is a nickname for    python -m app.main
+   make test    is a nickname for    python3 -m pytest -q
+   make run     is a nickname for    python3 -m app.main
 ```
 
 > **INSTRUCTOR** · This matters more than it looks. A student who thinks `make`
@@ -630,7 +630,7 @@ Put it next to the earlier check, because the pair is the whole story:
 
 ---
 
-## 4 · Set it up, and prove it (0:46 – 1:02)
+## 4 · Set it up, and prove it (0:46 – 1:07)
 
 > **INSTRUCTOR** · Everyone sitting still, one command at a time, hands up on
 > failure. You are hunting for broken machines now, while it costs the room ten
@@ -660,7 +660,7 @@ docker --version       # and the app must actually be running
 > traceback at import time that never mentions versions at all. A student can
 > lose twenty minutes to it.
 
-### What a settings file is, before we ask for a key (4 min)
+### What a settings file is, before we ask for a key (5 min)
 
 Telling a non-technical room to "put your key in `.env`" means nothing. Build
 it up first — three short ideas.
@@ -681,8 +681,8 @@ it up first — three short ideas.
 
 ```
 # this is a whole .env file
-KODEKEY=sk-your-real-key-here
-PORT=8080
+OPENROUTER_API_KEY=sk-your-real-key-here
+PORT=7000
 ```
 
 That is the entire format — **a name, an equals sign, a value**, one per line.
@@ -712,7 +712,7 @@ different port, and *nothing in the code changes*.
 > the settings instead of a file, and the container at 3:10 must not have the
 > key baked in.
 
-### Three steps (5 min)
+### Three steps, explained (9 min)
 
 ```bash
 git clone https://github.com/BuildrLabs-AI/agentic-ai-cohort-01-phase-02.git
@@ -733,7 +733,7 @@ Phase 1 did that.
 
 ```bash
 cp .env.example .env
-# then edit .env and replace sk-your-kodekey-here with the real key
+# then edit .env and replace sk-or-v1-your-key-here with the real key
 ```
 
 **The key lives outside the code, on purpose.** `.env` is in `.gitignore`, so
@@ -769,7 +769,7 @@ install and the code without spending anything or needing the network.
 | Error | What it means | The fix |
 |---|---|---|
 | `SyntaxError` near `str \| None` | Python older than 3.10 | install 3.12, re-run `make install` |
-| `KODEKEY is not set` | `.env` missing, misnamed, or not loaded in *this* terminal | `set -a && source .env && set +a` |
+| `OPENROUTER_API_KEY is not set` | `.env` missing, misnamed, or not loaded in *this* terminal | `set -a && source .env && set +a` |
 | `Cannot connect to the Docker daemon` | Docker installed but **not running** | open Docker Desktop, wait for the icon to settle |
 | `make: command not found` | common on Windows outside WSL | use WSL, or `cat Makefile` and run the real command |
 
@@ -779,7 +779,7 @@ install and the code without spending anything or needing the network.
 
 ---
 
-## 5–6 · The terminal, then sending messages (1:12 – 1:48)
+## 5–6 · The terminal, then sending messages (1:17 – 1:53)
 
 > **INSTRUCTOR** · *"Hands on keyboards. Everyone open a terminal — the black
 > window."* Then walk the room. Do not stay at the front for this beat; this is
@@ -1078,13 +1078,13 @@ close the terminal, and it is why the memory disappears in Week 2.
 **A port is a numbered door on a computer.**
 
 One computer, many doors. A web server sits behind door `80`, or `443`, or in
-our case `8080`.
+our case `7000`.
 
 ```
         ONE COMPUTER
    ┌───────────────────────┐
    │                       │
-   │   :8080  our agent    │◀── a request knocks
+   │   :7000  our agent    │◀── a request knocks
    │   :5432  a database   │    on ONE numbered door
    │   :3000  a dashboard  │
    │                       │
@@ -1094,7 +1094,7 @@ our case `8080`.
 `localhost` is a special name meaning **this computer, the one I am typing on**.
 
 ```
-   localhost:8080
+   localhost:7000
    ─────────  ────
        │        │
     which     which
@@ -1129,7 +1129,7 @@ Values can be text (in quotes), numbers (no quotes), true/false, or another
 **Run it.** This command reads JSON and prints it back tidily:
 
 ```bash
-echo '{"name":"Ada","age":36}' | python -m json.tool
+echo '{"name":"Ada","age":36}' | python3 -m json.tool
 ```
 
 ```json
@@ -1150,7 +1150,7 @@ echo '{"name":"Ada","age":36}' | python -m json.tool
 in Python and illegal in JSON:
 
 ```bash
-echo "{'name':'Ada'}" | python -m json.tool
+echo "{'name':'Ada'}" | python3 -m json.tool
 ```
 
 ```
@@ -1181,7 +1181,7 @@ first, where nothing else can be the problem.
 > flags are wrong"* from *"our service is broken"*. A student who cannot make
 > that distinction will raise their hand for every failure for eight weeks.
 >
-> If the room has no internet: `python -m http.server 9000` in one terminal and
+> If the room has no internet: `python3 -m http.server 9000` in one terminal and
 > `curl -s localhost:9000` in another covers points one to four.
 
 **One — fetch a web page.**
@@ -1306,7 +1306,7 @@ same method, the same header, the same body shape.
 > That single sentence is what stops FastAPI feeling like magic later.
 
 
-## Break (1:48 – 1:58)
+## Break (1:53 – 2:03)
 
 > **INSTRUCTOR** · Do this on the projector, not on their machines.
 
@@ -1357,7 +1357,7 @@ agents die in notebooks.
 
 ---
 
-## 7–8 · What a web service is, then addresses and messages (1:58 – 2:33)
+## 7–8 · What a web service is, then addresses and messages (2:03 – 2:36)
 
 > **INSTRUCTOR** · Five ideas, and they are deliberately arranged as **one
 > story rather than five topics**. Each answers a question the previous one
@@ -1461,7 +1461,7 @@ about what goes wrong once that is true.
 
 ---
 
-### 2 · Why the agent has to become a web service (13 min)
+### 2 · Why the agent has to become a web service (11 min)
 
 #### Start with the shop, not with HTTP
 
@@ -1785,7 +1785,7 @@ the address needs one more part.
 And when it is running on their own laptop, the same three parts look like this:
 
 ```
-   http://localhost:8080/chat
+   http://localhost:7000/chat
    ────   ─────────  ────  ────
     │         │        │     │
    how      which    which  which
@@ -1794,7 +1794,7 @@ And when it is running on their own laptop, the same three parts look like this:
 ```
 
 **That is the URL they will type in forty minutes.** They already met
-`localhost` and `:8080` in the process slide.
+`localhost` and `:7000` in the process slide.
 
 Ours will have four rooms by the end of the course:
 
@@ -1827,7 +1827,7 @@ non-technical room — do not rush it.
 ```
    1  the internet   someone, somewhere, has your address and a question
    2  one computer   the message arrives at the machine
-   3  a port         which of the running programs is it for?  (8080)
+   3  a port         which of the running programs is it for?  (7000)
    4  a program      uvicorn was waiting there; it takes it off the network
    5  your code      FastAPI hands it to your function
    6  the agent      run_turn(), and the answer travels back out
@@ -1961,7 +1961,7 @@ office uses:
 
 ---
 
-## 9 · Build the web service (2:33 – 3:12)
+## 9 · Build the web service (2:36 – 3:14)
 
 > **INSTRUCTOR** · *"Back on keyboards."* Now walk the room continuously. This
 > is the beat where you find out whether the tools section did its job — and if it did,
@@ -1990,7 +1990,7 @@ build**, because it shows how small their part is:
    YOUR TERMINAL                          THE SERVER PROCESS (make run)
    ┌───────────┐                   ┌────────────────────────────────────────┐
    │           │   POST /chat      │                                        │
-   │  curl ────┼──────────────────▶│  uvicorn   listens on door 8080        │
+   │  curl ────┼──────────────────▶│  uvicorn   listens on door 7000        │
    │           │  {"message":...}  │     │      takes bytes off the network │
    │           │                   │     ▼                                  │
    │           │                   │  FastAPI   reads the JSON              │
@@ -2185,18 +2185,18 @@ server's job is to stay running and wait. **Same as the `sleep 30` from Part
 In the **second** terminal, the easy one first:
 
 ```bash
-curl -s http://localhost:8080/health
+curl -s http://localhost:7000/health
 ```
 
 You should get `{"status":"ok"}`.
 
 **Exactly the same command shape as `curl -s https://example.com`** — just
-pointed at their own machine, on door 8080, instead of out at the internet.
+pointed at their own machine, on door 7000, instead of out at the internet.
 
 Now the real thing:
 
 ```bash
-curl -s -X POST http://localhost:8080/chat \
+curl -s -X POST http://localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
@@ -2208,7 +2208,7 @@ the tools section pays for itself:
 ```
    the curl exercise   curl -s -X POST https://httpbin.org/post \
                              ─────────────────────────
-   now       curl -s -X POST http://localhost:8080/chat \
+   now       curl -s -X POST http://localhost:7000/chat \
                              ──────────────────────────
 
              ...and the -H and -d flags are identical.
@@ -2218,7 +2218,7 @@ the tools section pays for itself:
 Copy the `session_id` from the reply and continue the conversation:
 
 ```bash
-curl -s -X POST http://localhost:8080/chat \
+curl -s -X POST http://localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"and when will it arrive?","session_id":"PASTE_IT_HERE"}'
 ```
@@ -2227,7 +2227,7 @@ curl -s -X POST http://localhost:8080/chat \
 above, running.
 
 > **INSTRUCTOR** · The error you will see most this week — every week, in fact —
-> is `KODEKEY is not set`.
+> is `OPENROUTER_API_KEY is not set`.
 >
 > **What an environment variable is**, since this is the moment they need it: a
 > setting that lives *outside* your code, attached to the terminal session, that
@@ -2240,7 +2240,7 @@ above, running.
 > python -c "import os; print(os.environ.get('NOPE'))"         # None
 > ```
 >
-> Thirty seconds, and `KODEKEY is not set` stops being mysterious — it means
+> Thirty seconds, and `OPENROUTER_API_KEY is not set` stops being mysterious — it means
 > exactly what that second line printed.
 >
 > The fix, in the *same* terminal as `make run`:
@@ -2350,7 +2350,7 @@ is how you tell a proxy not to do it.
 Watch it work:
 
 ```bash
-curl -N -X POST http://localhost:8080/chat/stream \
+curl -N -X POST http://localhost:7000/chat/stream \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
@@ -2358,7 +2358,7 @@ curl -N -X POST http://localhost:8080/chat/stream \
 > **INSTRUCTOR** · Have someone shout when they see text appear in pieces. It is
 > the most satisfying moment of the session — use it.
 
-## 10 · Build the container (3:12 – 3:44)
+## 10 · Build the container (3:14 – 3:50)
 
 Ask: *"What would my colleague need to run your agent?"*
 
@@ -2366,7 +2366,7 @@ The right Python. The right libraries, at the right versions. The right folder
 layout. The right environment variables. **"Works on my machine" is not a
 deployment.**
 
-#### The shop story, one stage later (4 min)
+#### The shop story, one stage later (3 min)
 
 Go back to the sweets. The table works, the sweets sell, and now you want a
 second shop across town:
@@ -2411,7 +2411,7 @@ Hand the box to any computer and it behaves identically.
 > ingredients. A food truck brings the whole kitchen with it and works in any
 > car park.
 
-#### Two words before anything else — image and container (4 min)
+#### Two words before anything else — image and container (3 min)
 
 Beginners conflate these for months, so name them once, plainly:
 
@@ -2466,7 +2466,7 @@ Have them confirm it is alive before you start:
 docker --version
 ```
 
-#### Three toy examples, before our agent (9 min)
+#### Three toy examples, before our agent (7 min)
 
 Do all three. Each takes under a minute, none of them touch the project, and a
 mistake costs nothing.
@@ -2577,7 +2577,7 @@ hello from inside the box
 > single moment explains containers better than any diagram — the box is not
 > pointing at their folder, it *contains* a copy.
 
-#### See what you have made (3 min)
+#### See what you have made (2 min)
 
 Two commands that turn "an image is a package" from a claim into something
 they can look at.
@@ -2657,12 +2657,12 @@ deliberately connecting one number on your machine to one number inside.
 
 > **INSTRUCTOR** · **Do this example even if you are running late**, because it
 > is the only place `-p` appears with two *different* numbers. Our agent uses
-> `-p 8080:8080`, where the matching numbers hide the rule entirely.
+> `-p 7000:7000`, where the matching numbers hide the rule entirely.
 >
 > Say it as a sentence every time, because people flip it: **"outside number,
 > then inside number."**
 
-#### Now the real one — line by line (10 min)
+#### Now the real one — line by line (7 min)
 
 Their `Dockerfile` is the same four ideas plus three lines:
 
@@ -2670,16 +2670,16 @@ Their `Dockerfile` is the same four ideas plus three lines:
 FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 COPY . .
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=7000
+EXPOSE 7000
 CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
 ```
 
 New words: **`RUN`** does something while *building* the box (installing
 libraries), where `CMD` runs when the box *starts*. **`ENV`** sets an environment
-variable — the same thing they met with `KODEKEY`. **`EXPOSE`** documents which
+variable — the same thing they met with `OPENROUTER_API_KEY`. **`EXPOSE`** documents which
 door the thing inside listens on.
 
 Read it line by line. **Two lines carry the whole lesson:**
@@ -2691,15 +2691,15 @@ and redoes every step after the first thing that changed:
    THE ORDER WE USE                   THE OBVIOUS-LOOKING ORDER
    ────────────────                   ─────────────────────────
    COPY requirements.txt              COPY . .          ← your code
-   RUN pip install      ← slow        RUN pip install   ← slow
+   RUN pip3 install      ← slow        RUN pip3 install   ← slow
    COPY . .             ← your code
 
    edit one line of code:             edit one line of code:
-   pip install is CACHED              pip install RUNS AGAIN
+   pip3 install is CACHED              pip3 install RUNS AGAIN
    rebuild: 3 seconds                 rebuild: 3 minutes
 ```
 
-**`--port ${PORT}`, not `--port 8080`** — every hosting platform tells your
+**`--port ${PORT}`, not `--port 7000`** — every hosting platform tells your
 service which door to use, through a setting. Hardcode the number and you have a
 service that works on your laptop and fails the moment you deploy it.
 
@@ -2748,7 +2748,68 @@ inside a box that could run anywhere.**
 
 ---
 
-## 11 · Prove it, and what breaks next (3:44 – 4:00)
+### Activity · publish it, and run a classmate's (12 min)
+
+The payoff for the whole container section. **This lands better than any
+explanation of why containers matter.**
+
+**1 · Add one small endpoint**, so their image differs from everyone else's:
+
+```python
+@app.get("/orders")
+def list_orders():
+    from app.orders import all_ids
+    return {"orders": all_ids()}
+```
+
+Same shape as `/health` — a label, a function, a return. Test it before
+pushing: `curl -s localhost:7000/orders | jq` should list the four ids.
+
+**2 · Build and name it.** The name is the address on Docker Hub:
+
+```bash
+docker login                                   # once
+docker build -t <your-username>/ship-agent:v1 .
+```
+
+**3 · Push it.**
+
+```bash
+docker push <your-username>/ship-agent:v1
+```
+
+> **INSTRUCTOR** · **Have everybody write their image name on the whiteboard**
+> as they finish. That is what makes step 4 work, and it takes five seconds
+> each. The first push takes a minute or two — warn them.
+
+**4 · Pull a neighbour's and run it.**
+
+```bash
+docker pull <neighbour>/ship-agent:v1
+docker run --rm -p 7000:7000 --env-file .env <neighbour>/ship-agent:v1
+curl -s localhost:7000/orders | jq
+```
+
+**Their code. Your laptop. Two commands. It works.**
+
+> **INSTRUCTOR** · **The line to say:** *"You did not install their Python. You
+> did not read their requirements file. You did not ask which version of
+> anything they used. You ran two commands."*
+>
+> **Then the honest detail:** they still passed their *own* `.env`. **The code
+> travelled; the key did not.** That is the separation from 0:46 working as
+> designed, and it is the thing people get wrong when they first publish an
+> image.
+>
+> **Close by comparing with their own morning:** setup took twelve minutes with
+> you teaching it and still broke for somebody. This took two commands. *"That
+> is why containers matter — not because they are clever, but because the
+> alternative is that twelve minutes, every time, for every person."*
+>
+> **Forward hook:** *"Next week we hand that image to a computer that is always
+> on, instead of to a neighbour."*
+
+## 11 · Prove it, and what breaks next (3:50 – 4:00)
 
 ```bash
 make check-week-01
@@ -2768,7 +2829,7 @@ head-down in files for forty-five minutes:
    answers after 8 silent seconds   answers in pieces, from 0.4s
    runs where Python is set up      runs in a box, on any computer
 
-   run_turn()                       http://localhost:8080/chat
+   run_turn()                       http://localhost:7000/chat
                                     ...and only the address is
                                     still missing. That is next week.
 ```
@@ -2812,10 +2873,10 @@ Real money, at the model provider, on your card.
   `lookup_order`. **That is tool selection, happening in front of them.**
 - Have them break their own service: return the wrong status code from
   `/health`, then watch `make check-week-01` catch it.
-- Point `curl` at a URL that does not exist — `curl -s -i http://localhost:8080/nope`
+- Point `curl` at a URL that does not exist — `curl -s -i http://localhost:7000/nope`
   — and read the 404 together. They built that without writing it.
 - Send a body with no `message` field at all:
-  `curl -s -X POST http://localhost:8080/chat -H 'Content-Type: application/json' -d '{}'`
+  `curl -s -X POST http://localhost:7000/chat -H 'Content-Type: application/json' -d '{}'`
   — a `422` comes back, from the `ChatRequest` shape alone. **A guardrail they
   got for free by declaring the shape.**
 - Have them add a second file to the `~/box` toy, rebuild, and watch only the

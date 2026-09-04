@@ -503,7 +503,7 @@ Ask, pointing at a real line:
 Then the aggregate:
 
 ```bash
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 ```
 
 ### Then break it and watch it get noticed
@@ -518,7 +518,7 @@ make run
 ```
 
 ```bash
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 ```
 
 `"status": "degraded"`, and an alert in plain English:
@@ -604,7 +604,7 @@ do not skip it for time.
 Have them look at real token counts from their own turns:
 
 ```bash
-curl -s localhost:8080/metrics | python -m json.tool
+curl -s localhost:7000/metrics | python -m json.tool
 # and scroll back through the trace lines in the run terminal
 ```
 

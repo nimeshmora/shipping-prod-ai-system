@@ -61,7 +61,7 @@ make run
 Then in a second terminal:
 
 ```bash
-curl -s -X POST localhost:8080/chat \
+curl -s -X POST localhost:7000/chat \
   -H 'Content-Type: application/json' \
   -d '{"message":"where is my order ORD-1002?"}'
 ```
@@ -69,7 +69,7 @@ curl -s -X POST localhost:8080/chat \
 You get a reply and a `session_id`. Send that id back on the next call to
 continue the same conversation.
 
-> **The most common error in this course** is `KODEKEY is not set`. It means you
+> **The most common error in this course** is `OPENROUTER_API_KEY is not set`. It means you
 > edited `.env` but did not load it. That `set -a && source .env && set +a` line
 > must run in the **same terminal** as `make run`, **every time you open a new
 > one**.
@@ -83,7 +83,7 @@ Try these too — `ORD-1001`, `ORD-1077`, and an id that does not exist. Then tr
 
 ```bash
 make install          # install dependencies
-make run              # start the agent on http://localhost:8080
+make run              # start the agent on http://localhost:7000
 make test             # unit tests (fake model, no key needed)
 make eval             # the Week 08 eval gate (fake model, no key needed)
 make eval-judge       # + the quality tier, graded by a model (needs a key)
@@ -169,8 +169,8 @@ to `main` — after the gate passes. To do it by hand once (Week 02):
 ```bash
 gcloud run deploy ship-agent \
   --source . --region us-central1 --allow-unauthenticated \
-  --set-env-vars "MODEL=claude-sonnet-5,BASE_URL=https://api.ai.kodekloud.com/v1,RATE_LIMIT_PER_MIN=20" \
-  --set-secrets "KODEKEY=kodekey:latest" \
+  --set-env-vars "MODEL=anthropic/claude-sonnet-4.5,BASE_URL=https://openrouter.ai/api/v1,RATE_LIMIT_PER_MIN=20" \
+  --set-secrets "OPENROUTER_API_KEY=kodekey:latest" \
   --timeout=3600 --concurrency=80 --min-instances=1
 ```
 
