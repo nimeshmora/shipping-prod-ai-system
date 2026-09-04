@@ -572,6 +572,26 @@ make, the thing not to explain yet. Do not read them aloud.
 > installed. Check `docker --version` at the start of the chapter — it catches
 > anyone who restarted their laptop over lunch.
 
+## A PDF of the deck
+
+```bash
+python3 teaching/slides-to-pdf.py teaching/week-01-slides-v2.html
+```
+
+Writes `teaching/week-01-slides-v2.pdf` — **one slide per landscape page, 175
+pages, exactly as the deck looks on screen.** Useful for handing out, printing,
+or reviewing on a plane.
+
+The deck is a JS slideshow: only the current slide is visible and a transform
+scales it to the window. The tool overrides both for print — every slide
+visible at its true 1280×720, one per page — so the PDF is the deck rather than
+a reflowed version of it.
+
+**Presenter notes are excluded**, which is the point: the PDF is what the room
+sees. Press `S` in the browser if you want the notes.
+
+Same tool works on the other deck (`week-01-slides.html` → 218 pages).
+
 ## Rebuilding
 
 The deck is generated, so edits go in the builder:
