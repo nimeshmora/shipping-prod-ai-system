@@ -99,7 +99,7 @@ chapter('1','Chapter one','It works on my laptop.',
  'about twelve minutes &middot; laptops closed',
  '''<b>Laptops closed. This is the only part of the day where nobody types.</b>You are doing two things here: settling the room, and finding out who is in it.<br><br>Three questions, in order. <b>Take answers, correct nobody.</b> Every wrong answer is useful — it tells you where to pitch the next four hours.''')
 
-tale('1','First question','0:00 &ndash; 0:12',
+tale('1','First question',T1,
  'So &mdash; <span class="q">what is an agent?</span>',
  '''<b>Ask it, then be quiet for a moment</b>Let two or three people answer. <b>Do not correct anybody.</b><br><br>You are listening for anything close to <em>"it does something"</em> or <em>"it looks things up"</em>. Either is a good start, and the next slide gives them the sentence.''')
 
@@ -134,7 +134,7 @@ sl('1','First question &middot; how it manages that',T1,
     </div>''',
  '''<b>The one distinction the whole day rests on</b><em>"The clever half cannot actually touch anything. It can only ask the other half to."</em><br><br><b>Why they should care:</b> everything they build in eight weeks lives in the second half. Not in the model. In their code.<br><br>Say that now and the afternoon makes sense.''')
 
-tale('1','Second question','0:00 &ndash; 0:12',
+tale('1','Second question',T1,
  'Is that different from <span class="q">ChatGPT</span>?',
  '''<b>The question everybody is already holding</b>Most of the room has used it, so it is the one example they all share. <b>Use it rather than avoiding it.</b><br><br>Listen for <em>"it looks things up"</em> — that is the right answer in their own words.''')
 
@@ -155,7 +155,7 @@ sl('1','Second question &middot; the answer',T1,
     </div>''',
  '''<b>Keep this to a minute</b>They will <b>feel</b> the difference in twenty minutes when the real thing runs in front of them. Right now, one comparison is enough.<br><br><b>A keeper they can use outside the room:</b> <em>"Ask it something that only became true this morning. It can only answer if something went and looked."</em>''')
 
-tale('1','Third question &mdash; and this one is for you','0:00 &ndash; 0:12',
+tale('1','Third question &mdash; and this one is for you',T1,
  'Have you ever made something on your computer, and then <span class="q">put it somewhere</span> so a friend could see it?',
  '''<b>This question is for you, not them</b>It tells you who is in the room, and it takes thirty seconds.<br><br><b>Three shows of hands:</b> made a web page or document &middot; <b>put it somewhere</b> a friend could open &middot; had to <b>keep it working</b> afterwards.<br><br><b>Mostly first hands only?</b> Genuine beginner room — go slowly in chapter 4 and say "no output means it worked" twice. <b>Many second hands?</b> They have felt the problem; ask what they had to do and let them tell it. <b>Any third hands?</b> Those are your helpers — call on them by name later.''')
 
@@ -198,7 +198,7 @@ chapter('2','Chapter two','Let me show you the thing.',
  'about twenty-eight minutes &middot; you watch, I type',
  '''<b>You drive this chapter; they watch</b>Nothing for them to install yet — that is chapter three. This is you on the projector, and it is worth taking your time over.<br><br><b>The order is deliberate:</b> what it does &rarr; what it can reach for &rarr; what it is told &rarr; then run it. By the time it runs, every label on screen is one they have already met.''')
 
-tale('2','The agent for the next two weeks','0:12 &ndash; 0:40',
+tale('2','The agent for the next two weeks',T2,
  'It is a <b>shop assistant.</b> Somebody asks <span class="q">"where is my order?"</span> and it goes and finds out.',
  '''<b>Introduce it as a companion, not a throwaway</b><em>"This is the agent for the next two weeks. It is small on purpose — small enough that you can hold all of it in your head while we learn everything that wraps around it."</em><br><br><b>Then say where it goes:</b> once the wrapping is second nature, we point it at bigger things. Later in the course, at more than one agent at a time.<br><br>That answers <em>"why aren't we using what I built with Isuru?"</em> before it becomes a distraction.''')
 
@@ -256,7 +256,7 @@ reply, history = <span class="hl">run_turn</span>(<span class="ok">"where is my 
     <div class="punch">You call this from your own code this afternoon. It does not change.</div>''',
  '''<b>This is the handle they will hold all day</b>Everything on the last four slides — the tools, the rules, the loop — is behind that one name.<br><br><em>"You are not going to modify the agent today. You are going to give it a way to be reached. This function is where your code meets it."</em><br><br><b>Point at the two things coming back:</b> a reply, and a history. The second one matters in about fifteen minutes.''')
 
-tale('2','So let us run it','0:12 &ndash; 0:40',
+tale('2','So let us run it',T2,
  'One command. Four steps, printed one at a time, <b>with a real model deciding.</b>',
  '''<b>Two sentences before you press Enter</b>1. <em>"This is my laptop, because I already have the project. You will run this exact command yourself in about half an hour."</em><br>2. <em>"The question is just words. Nothing in it names a tool. Watch step two."</em><br><br><b>Then run it once and say nothing.</b> Eight seconds. Then advance and walk the four steps.<br><br><b>Before class:</b> run it once. It is live now, so it needs the network. If OpenRouter is down, add <code>--offline</code>.''')
 
@@ -350,13 +350,13 @@ spine(1,'2','Where we are &middot; end of chapter two',T2,
  'You know what it is. It still cannot be reached.',
  '''<b>Same picture, and deliberately unchanged</b>Nothing new is lit up, because <b>knowing what a thing is does not move it anywhere.</b> Say that out loud — it is the setup for the next three hours.<br><br><em>"You now know exactly what is in the green box. It still only runs on my laptop. Everything from here is about the dashed boxes."</em><br><br><b>Next: they get it running on their own machines.</b>''')
 
-T3='0:40 &ndash; 1:02'
+T3='0:40 &ndash; 1:00'
 # =========================================================================
 # CHAPTER 3 — Getting it running  (0:40 – 1:07)
 # =========================================================================
 chapter('3','Chapter three','Your turn.',
  'Same agent, <b>on your machine.</b> This is the part where broken laptops surface — better now than at three o\'clock.',
- 'about twenty-two minutes &middot; everybody types',
+ 'about twenty minutes &middot; everybody types',
  '''<b>Walk the room for all of this. Do not present it from the front.</b>This is the biggest drop-off point of the day, and the only cure is being physically next to people.<br><br><b>The rule:</b> nobody moves past the checkpoint with a hand up. Somebody who is still installing when chapter four starts will be lost for the rest of the day, and catching them up costs everyone else.''')
 
 sl('3','Before anything &middot; what you should already have',T3,
@@ -475,13 +475,13 @@ spine(2,'3','Where we are &middot; end of chapter three',T3,
  '''<b>One more box lit up — but be precise about what changed</b><em>"Twenty-seven people now have it running. That is twenty-seven laptops, and still zero strangers."</em><br><br><b>The honest framing:</b> copying it to more laptops is not the same as making it reachable. Every one of those copies has the same problem the first one had.<br><br><b>Now the break.</b> Ten minutes. After it, they learn to drive a computer by typing.''')
 
 
-T4='1:12 &ndash; 1:48'
+T4='1:10 &ndash; 1:44'
 # =========================================================================
 # CHAPTER 4 — Learning to drive  (1:17 – 1:53)
 # =========================================================================
 chapter('4','Chapter four','Learning to drive.',
  'Two tools, practised on toys. <b>Not on the agent</b> — you break a toy and nothing is lost.',
- 'about thirty-six minutes &middot; everybody types',
+ 'about thirty-four minutes &middot; everybody types',
  '''<b>Say why this comes before the interesting part</b><em>"For the next half hour we are not touching the agent. We are learning to type at a computer, and to send a message to one. Both on things it does not matter if you break."</em><br><br><b>The payoff, promised now:</b> every command they learn here works identically on the rented machine their agent will live on — <b>which has no screen, no mouse and no desktop.</b> Typing is the only way in.''')
 
 sl('4','The window',T4,
@@ -685,13 +685,13 @@ spine(3,'4','Where we are &middot; end of chapter four',T4,
  'You can drive a computer, and reach one.',
  '''<b>Two more boxes, and name what they just gained</b><em>"You can now find your way around any computer by typing — including one with no screen. And you can send a message to a machine anywhere in the world and read the reply."</em><br><br><b>Then the setup for what comes next:</b> <em>"Everything you did with curl, you did to somebody else's service. Next chapter you build your own — and send that exact command to it."</em><br><br><b>Ten minutes.</b>''')
 
-T5='1:58 &ndash; 2:50'
+T5='1:54 &ndash; 2:50'
 # =========================================================================
 # CHAPTER 5 — Giving it a front door  (2:03 – 2:50)
 # =========================================================================
 chapter('5','Chapter five','Giving it a front door.',
  'You just sent a message to a stranger\'s computer. <b>Now build the thing that answers one.</b>',
- 'about fifty-two minutes &middot; the first code you write',
+ 'about fifty-six minutes &middot; the first code you write',
  '''<b>Collect the curl moment first — it is the bridge into everything here</b><em>"In the last chapter you sent a question to GitHub's computer and got an answer. Somebody built the thing that answered you. Today you are that somebody."</em><br><br><b>The shape of this chapter:</b> ten minutes on why, then you type for thirty-five. And they test after every single endpoint.''')
 
 tale('5','So how do you let somebody else use it?',T5,
@@ -757,6 +757,33 @@ sl('5','What changes, and what does not',T5,
     </div>''',
  '''<b>Point at the green box and say it plainly</b><em>"That is the agent from this morning. Not one line of it changes today. Everything we build goes around it."</em><br><br><b>Four different askers on the left, and none of them are Python.</b> A phone app, a website, another company's server. They need a URL, not your language.<br><br><b>Three things you get:</b> one copy (fix it once, everyone has the fix), your key stays put (askers never see it), and nobody needs to agree anything with you first.''')
 
+sl('5','What actually travels',T5,
+ 'A question goes out. An answer comes back. That is all.',
+ '''    <div class="fig">
+      <div class="box wide i" style="padding:18px">
+        <div class="t">the question</div>
+        <div class="s" style="margin-top:7px;font-family:var(--mono);font-size:14px">POST /chat<br>{"message": "where is ORD-1002?"}</div>
+      </div>
+      <div class="arr"><div class="line">&rarr;</div></div>
+      <div class="box wide g" style="padding:18px">
+        <div class="t">the answer</div>
+        <div class="s" style="margin-top:7px;font-family:var(--mono);font-size:14px">200 OK<br>{"reply": "Arrives Thursday."}</div>
+      </div>
+    </div>
+    <div class="punch">Both are just text. Nothing clever is travelling.</div>''',
+ '''<b>Demystify this early &mdash; people imagine something magical</b><em>"What goes across the network is text. A line saying what you want, and some data. What comes back is a number and some more text."</em><br><br><b>They have already seen both halves.</b> In chapter four they typed a question and read an answer. <b>This slide is only giving the two halves their names.</b>''')
+
+sl('5','The question has three parts',T5,
+ 'What you want, where, and any data.',
+ '''    <table>
+      <tr><th>Part</th><th>In plain words</th><th>Ours</th></tr>
+      <tr><td><b>method</b></td><td>am I fetching, or sending?</td><td class="mono">GET / POST</td></tr>
+      <tr><td><b>path</b></td><td>which door?</td><td class="mono">/chat</td></tr>
+      <tr><td><b>body</b></td><td>the data you are sending</td><td class="mono">{"message": ...}</td></tr>
+    </table>
+    <div class="punch"><b>GET</b> = "give me something". <b>POST</b> = "here, take this".</div>''',
+ '''<b>GET and POST is the only pair they need today</b>Resist listing the others. <em>"Fetching or sending. That is the whole distinction."</em><br><br><b>They typed all three parts in chapter four</b> without knowing the names: <code>curl</code> defaulted to GET, the address was the path, and <code>-d</code> was the body. <b>Point that out</b> &mdash; it turns three new words into three labels.''')
+
 sl('5','Three words people mix up',T5,
  'Service, API, endpoint.',
  '''    <div class="cols c3">
@@ -789,6 +816,21 @@ sl('5','Drawn, with today\'s three',T5,
     </div>''',
  '''<b>This is the build plan</b>Three doors, and they build them in this order — <b>simplest first, testing each one</b> before starting the next.<br><br><em>"By ten to three, all three of those work on your laptop."</em><br><br>That is a concrete promise, and you keep it.''')
 
+sl('5','What "always running" costs you',T5,
+ 'Somebody\'s computer has to stay switched on.',
+ '''    <div class="thenow">
+      <div class="col">
+        <div class="lb">a program you run</div>
+        <div class="big2">Starts when you want it.<br><b>Costs nothing while off.</b></div>
+      </div>
+      <div class="mid3">vs</div>
+      <div class="col b2">
+        <div class="lb">a service</div>
+        <div class="big2">On at 3am, waiting.<br><b>Somebody pays for that.</b></div>
+      </div>
+    </div>''',
+ '''<b>Non-technical people ask this, and it is a good question</b><em>"If it has to answer whenever anyone asks, it has to be on all the time. Which means a computer somewhere is switched on, doing nothing, most of the time."</em><br><br><b>That is what you rent when you deploy</b> &mdash; next week. And it is why Week 5 cares whether it is healthy at 3am, and Week 4 cares what it costs.<br><br>Today it runs on their laptop, which is free and switched off at six. <b>Say that plainly so next week has a reason to exist.</b>''')
+
 sl('5','Two tools do the network part',T5,
  'You do not write the networking.',
  '''    <div class="cols c2">
@@ -803,6 +845,20 @@ sl('5','Two tools do the network part',T5,
     </div>
     <div class="punch">uvicorn listens. FastAPI decides who answers. You write the answering.</div>''',
  '''<b>The distinction that confuses everybody</b><b>uvicorn you start</b> — it is what <code>make run</code> runs, and it sits there waiting. <b>FastAPI you import</b> — you never start it; uvicorn calls into it.<br><br><em>"uvicorn is the person standing at the counter waiting for customers. FastAPI is the order pad — it works out what was asked and passes it to the kitchen. You are the kitchen."</em><br><br><b>Say the punchline:</b> neither of them knows anything about orders. That is your job, and it is four lines.''')
+
+sl('5','One more word: port',T5,
+ 'One address, many numbered doors.',
+ '''    <div class="machine">
+      <div class="mtop">one computer &middot; one address</div>
+      <div class="doors">
+        <div class="door"><div class="num2">443</div><div class="what2">a website</div></div>
+        <div class="door"><div class="num2">22</div><div class="what2">remote login</div></div>
+        <div class="door on2"><div class="num2">7000</div><div class="what2"><b>your agent</b></div></div>
+        <div class="door"><div class="num2">5432</div><div class="what2">a database</div></div>
+      </div>
+    </div>
+    <div class="punch">The address finds the computer. The port finds the program.</div>''',
+ '''<b>Thirty seconds, and it unlocks the rest of the day</b><em>"A computer has one address but runs many programs. The port number says which program the message is for."</em><br><br><b>Theirs is 7000</b> &mdash; they set it in <code>.env</code> in chapter three, and they will meet it again in the Dockerfile and in <code>-p 7000:7000</code>. <b>Same number, three places.</b><br><br>If somebody asks why 7000: nothing special. <b>It was free.</b> Below 1024 needs special permission, so ordinary programs use higher numbers.''')
 
 tale('5','Before you write anything',T5,
  'Let us follow <b>one question</b> from outside your computer all the way in &mdash; <span class="q">so you know where your four lines sit.</span>',
@@ -1129,16 +1185,16 @@ spine(4,'5','Where we are &middot; end of chapter five',T5,
  'It has a front door. But it still only runs where you are sitting.',
  '''<b>One more box, and then the honest catch</b><em>"Anything on this network can now reach your agent. But it only runs while your laptop is on, in that folder, with your key loaded in that one window."</em><br><br><b>Set up the last chapter with a question:</b> <em>"So how do I give this to somebody who does not have your laptop, your Python, or your folder?"</em><br><br>That is the last dashed box.''')
 
-T6='2:50 &ndash; 3:50'
+T6='2:50 &ndash; 3:48'
 # =========================================================================
 # CHAPTER 6 — Putting it in a box  (2:50 – 3:50)
 # =========================================================================
 chapter('6','Chapter six','Putting it in a box.',
  'One file that holds <b>everything it needs</b> — and runs the same on a machine you have never seen.',
- 'about sixty minutes &middot; and it ends with you giving it away',
+ 'about fifty-eight minutes &middot; and it ends with you giving it away',
  '''<b>Open with their own morning as the evidence</b><em>"Getting this running took you twenty minutes this morning, and it still broke for two people. That is the problem this chapter solves."</em><br><br><b>The shape:</b> ten minutes on why, then three toy examples, then their own agent, then <b>they swap containers with a neighbour.</b> That last bit is the payoff for the whole day.''')
 
-tale('6','The problem, in one sentence','2:50 &ndash; 3:50',
+tale('6','The problem, in one sentence',T6,
  'Your service needs <b>Python 3.12</b>, <b>the right libraries</b>, <b>the right folder layout</b>, and <b>a key.</b> The other machine has <span class="q">none of that.</span>',
  '''<b>Count it on your fingers, slowly</b>Four things that all have to be right. <b>They just spent twenty minutes making them right on their own laptop.</b><br><br><em>"Now do that on a machine you cannot see, that you do not own, that might be running a different operating system. Twenty of them."</em><br><br>That is the moment the container idea stops being abstract.''')
 
@@ -1194,6 +1250,28 @@ sl('6','Four commands. That is all today needs.',T6,None,
     </table>
     <div class="punch quiet">Two make things happen. Two show you things.</div>''',
  '''<b>Say the grouping — it makes four commands feel like two</b><em>"Two of these do something: build and run. The other two just show you what you have."</em><br><br>People are intimidated by Docker because they have seen pages of commands. <b>Four is manageable, and four is genuinely enough for today.</b>''')
+
+sl('6','So what do you actually write?',T6,
+ 'A list of steps, in a file called <code>Dockerfile</code>.',
+ '''    <div class="def">
+      <div class="term">Dockerfile</div>
+      <div class="txt">A plain text file. <b>One instruction per line</b>, each one a step Docker performs in order, top to bottom.</div>
+    </div>
+    <div class="punch">No brackets, no punctuation. A word, then what it applies to.</div>''',
+ '''<b>Set the expectation before they see one</b>People brace for something complicated. <b>It is a list of steps in a text file</b>, and today they use six instructions in total.<br><br><b>Say the naming rule now, because it catches somebody every cohort:</b> the file is called <code>Dockerfile</code> &mdash; capital D, <b>no extension.</b> Not <code>dockerfile</code>, not <code>Dockerfile.txt</code>. Editors love to add <code>.txt</code>, and <code>ls -la</code> is how you catch it.''')
+
+sl('6','The six words you will use',T6,
+ 'That is the whole vocabulary.',
+ '''    <table>
+      <tr><th>Word</th><th>What it means</th></tr>
+      <tr><td class="mono">FROM</td><td>start from somebody else's image</td></tr>
+      <tr><td class="mono">WORKDIR</td><td>work in this folder, inside the image</td></tr>
+      <tr><td class="mono">COPY</td><td>put a file from my machine into the image</td></tr>
+      <tr><td class="mono">RUN</td><td>run a command <b>while building</b></td></tr>
+      <tr><td class="mono">ENV</td><td>set a setting inside the image</td></tr>
+      <tr><td class="mono">CMD</td><td>what to run <b>when it starts</b></td></tr>
+    </table>''',
+ '''<b>Point at RUN and CMD together &mdash; that pair confuses everybody</b><b><code>RUN</code> happens once, while building.</b> Installing libraries. The result is baked into the file.<br><br><b><code>CMD</code> happens every time a container starts.</b> Nothing is baked; it just runs.<br><br><em>"RUN is 'do this while making the box'. CMD is 'do this when somebody opens the box'."</em><br><br>Leave this up. They see all six in the next twenty minutes.''')
 
 sl('6','Toy one &middot; the smallest possible',T6,
  'Two lines. It prints one word.',
@@ -1272,6 +1350,16 @@ REPOSITORY   TAG      SIZE
     <div class="punch">Not ideas. Files. You can copy them, send them, delete them.</div>''',
  '''<b>This makes the abstract concrete, cheaply</b>They have been told "an image is a package" twice. <b>Now they can see the list, with sizes.</b><br><br><b>The sizes tell a story:</b> <code>demo1</code> started from a tiny system; <code>demo2</code> had to include the whole of Python. <b>Their agent's image will be a few hundred MB</b> — mostly Python and libraries, <em>not</em> their code. Say that, or somebody thinks they wrote something bloated.<br><br>To delete one: <code>docker rmi demo1</code>.''')
 
+sl('6','Why images are built in layers',T6,
+ 'Each instruction adds one layer on top of the last.',
+ '''    <div class="layers">
+      <div class="lay base"><div class="c">FROM python:3.12-slim</div><div class="tagy">a base somebody published</div></div>
+      <div class="lay"><div class="c">+ your requirements installed</div><div class="tagy">layer 2</div></div>
+      <div class="lay"><div class="c">+ your code</div><div class="tagy">layer 3</div></div>
+    </div>
+    <div class="punch">Stacked, like sheets of tracing paper. The image is all of them.</div>''',
+ '''<b>This idea makes both caching and sharing make sense</b><em>"Every line in your file adds one layer. Docker keeps each one separately."</em><br><br><b>Two things follow, and both land later today:</b><br><br>&bull; <b>Unchanged layers are reused</b> &mdash; which is why the second build was instant.<br>&bull; <b>Shared layers download once.</b> When their neighbour pulls their image, the Python layer is probably already on that machine, so only the small top layer travels.<br><br>That is how a few hundred megabytes can arrive in seconds.''')
+
 sl('6','Toy three &middot; one that waits',T6,
  'A container that stays running needs a door opened.',
  '''    <pre class="tight"><span class="pr">$</span> docker run --rm <span class="hl">-p 9000:80</span> nginx
@@ -1282,6 +1370,22 @@ sl('6','Toy three &middot; one that waits',T6,
 <span class="ok">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span></pre>
     <div class="punch">You did not install nginx. Docker fetched it, ran it, and you asked it a question.</div>''',
  '''<b>Run it and let them see a real server appear from nothing</b>No install, no setup, no configuration. One command.<br><br><b>And they used their own curl on it</b> — the command from chapter four, pointed at a container. Three chapters connecting.<br><br>The interesting part is <code>-p 9000:80</code>, and that gets the next slide.''')
+
+sl('6','What happens when you run one',T6,
+ 'Docker makes a fresh copy, starts it, and forgets it when it stops.',
+ '''    <div class="fig">
+      <div class="box wide" style="padding:16px">
+        <div class="t">the image</div>
+        <div class="s" style="margin-top:6px">on disk<br><b>never changes</b></div>
+      </div>
+      <div class="arr"><div class="line">&rarr;</div><div class="cap">docker run<br>makes a copy</div></div>
+      <div class="box wide b" style="padding:16px">
+        <div class="t">a container</div>
+        <div class="s" style="margin-top:6px">running<br><b>throwaway</b></div>
+      </div>
+    </div>
+    <div class="punch"><code>--rm</code> means "delete the copy when it stops".</div>''',
+ '''<b>The word "copy" is doing the work here</b><em>"Running an image never touches it. Docker takes a copy and runs that. Stop it, and the copy is gone &mdash; the image is exactly as it was."</em><br><br><b>Which is why anything a container writes disappears when it stops.</b> Plant it now: <em>"So where would your conversations go, if you kept them inside the container?"</em> <b>That is next week's problem, and they are about to feel it.</b><br><br><code>docker ps</code> shows what is running. Worth demonstrating once.''')
 
 sl('6','What <code>-p</code> does',T6,
  'Connect a number outside to a number inside.',
@@ -1301,6 +1405,20 @@ sl('6','What <code>-p</code> does',T6,
       </div>
     </div>''',
  '''<b>A container is sealed by default — this is you opening one door</b>Nothing outside can reach in unless you say so.<br><br><b>The order matters and people flip it.</b> Say it as a sentence every time: <em>"outside number, then inside number."</em><br><br>Their agent uses <code>-p 7000:7000</code> — same on both sides, convenient, but it hides the rule. <b>That is exactly why we teach it here, where the numbers differ.</b>''')
+
+sl('6','The thing that confuses everybody',T6,
+ 'Inside the box is a different computer.',
+ '''    <div class="cols c2 mid">
+      <div class="card warnb">
+        <h3>Its own folders</h3>
+        <p class="dim"><code>/app</code> inside the container has <b>nothing to do</b> with any folder on your laptop.</p>
+      </div>
+      <div class="card info">
+        <h3>Its own network</h3>
+        <p class="dim"><code>localhost</code> inside the container means <b>the container itself</b>, not your machine.</p>
+      </div>
+    </div>''',
+ '''<b>Say both of these out loud, slowly. They cause most Docker confusion.</b><b>Folders:</b> <code>COPY</code> exists precisely because the container cannot see their laptop. <em>"Change a file on your machine and the running container knows nothing about it. You have to build again."</em><br><br><b>Network:</b> this is why the Dockerfile will say <code>--host 0.0.0.0</code>. The default means "only accept connections from inside this box" &mdash; and inside the box, that is nobody.<br><br><em>"Think of the container as a separate computer that happens to be sitting inside yours."</em>''')
 
 sl('6','Line 1 &middot; what to start from',T6,
  'Start from a computer that already has Python.',
@@ -1383,24 +1501,54 @@ sl('6','Build it and run it',T6,
 { "status": <span class="ok">"ok"</span> }</pre>''',
  '''<b>Two warnings before they press Enter</b>1. <b>The first build takes a few minutes and looks frozen.</b> Say so, or six hands go up at once.<br>2. <b>Every build prints a warning</b> about JSON arguments and shutdown signals. <b>Safe to ignore</b> — our <code>exec</code> handles it, the tool cannot tell.<br><br><b>Then the observation that is the whole point:</b> <em>"Your curl did not change at all. The thing answering it changed completely."</em>''')
 
-tale('6','And now the bit that matters','2:50 &ndash; 3:50',
+tale('6','And now the bit that matters',T6,
  'You are going to <span class="q">give your agent to the person next to you</span> — and run theirs.',
  '''<b>This is the payoff for the entire day. Give it room.</b>Everything since nine o'clock has been building to a moment where somebody else runs their thing.<br><br><b>Pair them up now</b>, before the mechanics. And tell them what they are about to prove: <em>"You will run a container built by somebody else, on your machine, with your key, in two commands. No Python, no setup, no folder."</em>''')
 
-sl('6','Step one &middot; make it yours',T6,
- 'Add a door nobody else has.',
- '''    <pre class="tight"><span class="cm"># app/main.py &mdash; add these four lines</span>
-<span class="hl">from app.orders import all_ids</span>
+sl('6','Step 1 of 6 &middot; give your agent a name',T6,
+ 'So yours is not the same as anybody else\'s.',
+ '''    <div class="body center">
+      <div class="oneline">
+        <div class="lbl">PICK ONE NOW</div>
+        <div class="say2">"Nimesha's Order Helper" &middot; "Desk Detective" &middot; "Order Bot 3000"</div>
+        <div class="extra">Anything you like. <b>You are about to hand this to the person next to you</b>, and it should be obvious whose it is.</div>
+      </div>
+    </div>''',
+ '''<b>Sixty seconds, and it makes the swap worth doing</b>If every container in the room were identical, running a neighbour's would prove nothing. <b>A name makes the difference visible the moment it answers.</b><br><br>Let them be silly about it. <b>Ownership is the point</b>, and people remember the thing they named.''')
 
-<span class="hl">@app.get("/orders")</span>
-<span class="hl">def orders():</span>
-    <span class="hl">return {"order_ids": all_ids()}</span></pre>
-    <pre class="mini"><span class="pr">$</span> curl -s localhost:7000/orders | jq
-{ "order_ids": [<span class="ok">"ORD-1001"</span>, <span class="ok">"ORD-1002"</span>,
-                <span class="ok">"ORD-1043"</span>, <span class="ok">"ORD-1077"</span>] }</pre>''',
- '''<b>Four lines, and it uses the same pattern as <code>/health</code></b>A label, a function, a return. <b>They have written this shape twice already today.</b><br><br><code>all_ids()</code> is already in <code>app/orders.py</code> &mdash; it returns the four order ids. <em>"You are not writing new logic. You are opening a new door onto something that already exists."</em><br><br><b>Restart the service</b> (Ctrl+C in window 1, then <code>make run</code>) and curl it. <b>Then rebuild the image</b>, because <code>COPY</code> took a copy &mdash; the running container still has the old code.<br><br><b>Let them pick their own</b> if they want. Anything that returns something. Five minutes of ownership pays for itself &mdash; and it makes the swap in two slides actually mean something.''')
+sl('6','Step 2 of 6 &middot; put the name in your settings',T6,
+ 'One line in <code>.env</code>. No code yet.',
+ '''    <pre class="tight"><span class="cm"># .env &mdash; add one line at the bottom</span>
+OPENROUTER_API_KEY=sk-or-v1-...
+PORT=7000
+<span class="hl">AGENT_NAME=Nimesha's Order Helper</span></pre>
+    <div class="punch">Same format as every other line. A name, an equals sign, a value.</div>''',
+ '''<b>They already know this file, so this is a two-line slide</b>They created <code>.env</code> in chapter three and put their key in it. <b>This is the same file, one line longer.</b><br><br><b>The point worth making:</b> a name is a <em>setting</em>, not code. <em>"You are about to see why that matters &mdash; because settings can be different on every machine, and code cannot."</em><br><br>Reload it: <code>set -a && source .env && set +a</code>.''')
 
-sl('6','Step two &middot; send it up',T6,
+sl('6','Step 3 of 6 &middot; read it in your code',T6,
+ 'Four lines, and a new door.',
+ '''    <pre class="tight"><span class="cm"># app/main.py</span>
+<span class="hl">AGENT_NAME = os.environ.get("AGENT_NAME", "Support Agent")</span>
+
+<span class="hl">@app.get("/whoami")</span>
+<span class="hl">def whoami():</span>
+    <span class="hl">return {"agent": AGENT_NAME, "orders": all_ids()}</span></pre>''',
+ '''<b>Read the first line out loud, because it is a pattern they will use forever</b><em>"Get the setting called AGENT_NAME. If nobody set one, use 'Support Agent' instead."</em> <b>That fallback is why the service still starts for somebody who forgot.</b><br><br><b>The door itself is the same shape as the other three:</b> a label, a function, a return. They have now written this four times.<br><br><code>all_ids()</code> is already in <code>app/orders.py</code> &mdash; it hands back the four order ids. <em>"You are not writing new logic. You are opening a new door onto something that already exists."</em>''')
+
+sl('6','Step 4 of 6 &middot; try it, before any container',T6,
+ 'Restart, then ask it who it is.',
+ '''    <pre class="tight"><span class="cm"># window 1: Ctrl+C, then</span>
+<span class="pr">$</span> make run
+
+<span class="cm"># window 2:</span>
+<span class="pr">$</span> curl -s localhost:7000/whoami | jq
+{
+  "agent": <span class="ok">"Nimesha's Order Helper"</span>,
+  "order_ids": [<span class="ok">"ORD-1001"</span>, <span class="ok">"ORD-1002"</span>, ...]
+}</pre>''',
+ '''<b>Everybody in the room now sees a different name. Say that.</b><em>"Twenty of you just built twenty different services. Same code, different setting."</em><br><br><b>Why restart:</b> the service read your file when it started. <b>Change the file, and you have to start it again</b> for it to notice. That trips people once and then never again.<br><br><b>If somebody sees "Support Agent"</b> instead of their name: they edited <code>.env</code> but did not reload it. <code>set -a && source .env && set +a</code>, then restart.''')
+
+sl('6','Step 5 of 6 &middot; send it up',T6,
  'Three commands, and it is on the internet.',
  '''    <pre class="tight"><span class="pr">$</span> docker login
 <span class="pr">$</span> docker tag support-agent <span class="hl">YOURNAME</span>/support-agent
@@ -1410,15 +1558,17 @@ sl('6','Step two &middot; send it up',T6,
     </div>''',
  '''<b>Have them write their Docker Hub username on a sticky note</b>Their neighbour needs it, and shouting it across the room wastes five minutes.<br><br><b>The tag step confuses people:</b> <code>docker tag</code> is renaming, not copying. <em>"Docker Hub needs the image to be called yourname/something, so it knows whose it is."</em><br><br>The push takes a minute or two. <b>Fill it by asking what they think is being uploaded</b> — the answer is the code and Python, and <b>not the key.</b>''')
 
-sl('6','Step three &middot; run a stranger\'s',T6,
+sl('6','Step 6 of 6 &middot; run a stranger\'s',T6,
  'Two commands. No Python, no setup, no folder.',
  '''    <pre class="tight"><span class="pr">$</span> docker pull <span class="hl">NEIGHBOUR</span>/support-agent
 <span class="pr">$</span> docker run --rm -p 7000:7000 <span class="hl">--env-file .env</span> \\
     <span class="hl">NEIGHBOUR</span>/support-agent
 
-<span class="cm"># and now ask THEIR agent, with YOUR key:</span>
-<span class="pr">$</span> curl -s localhost:7000/orders | jq</pre>''',
- '''<b>Stop and let the room notice what just happened</b><em>"You are running code you have never seen, that you did not install, on a machine it was never built on. Two commands."</em><br><br><b>Then point at <code>--env-file .env</code>:</b> that is their own key going in at run time. <b>Their neighbour's key never left their neighbour's laptop.</b> This is the <code>.dockerignore</code> lesson, proven.<br><br><b>Ask somebody to describe their neighbour's extra endpoint out loud.</b> That is the moment it lands.''')
+<span class="cm"># now ask THEIR agent, running with YOUR key:</span>
+<span class="pr">$</span> curl -s localhost:7000/whoami | jq
+{ "agent": <span class="ok">"Desk Detective"</span>, ... }</pre>''',
+ '''<b>Stop, and let the room notice what just happened</b>That name on screen is <b>not the one they chose.</b> It is their neighbour's, and it is proof the whole thing worked.<br><br><em>"You are running code you have never seen, that you did not install, on a machine it was never built on. Two commands."</em><br><br><b>Then point at <code>--env-file .env</code>:</b> that is their own key going in at run time. <b>Their neighbour's key never left their neighbour's laptop</b> &mdash; the <code>.dockerignore</code> lesson, proven with their own hands.<br><br><b>Ask two people to read out the name they got.</b> That is the moment the day lands.''')
+
 
 sl('6','Compare that with your morning',T6,
  'Same software. Twenty minutes, or two commands.',
@@ -1439,13 +1589,13 @@ spine(5,'6','Where we are &middot; end of chapter six',T6,
  'A stranger ran it. That was the whole day.',
  '''<b>The full picture, complete, for the first time</b>All five layers. Point at the outermost box: <b>that happened, ten minutes ago, with a real person sitting next to them.</b><br><br><em>"This morning it only ran where you were sitting. Just now, somebody who has never seen your code ran it in two commands."</em><br><br>Let that sit for a moment before the recap.''')
 
-T7='3:50 &ndash; 4:00'
+T7='3:48 &ndash; 4:00'
 # =========================================================================
 # CHAPTER 7 — Look what you did  (3:50 – 4:00)
 # =========================================================================
 chapter('7','Chapter seven','Look what you did.',
  'Four hours ago it only worked on your laptop.',
- 'ten minutes &middot; then go home',
+ 'twelve minutes &middot; then go home',
  '''<b>Slow down for the last ten minutes</b>People underestimate what they did today, and a recap they can feel is what makes them come back next week.<br><br><b>Do not introduce anything new here.</b> One picture, three questions they cannot answer yet, and the homework.''')
 
 sl('7','The whole day, in one line',T7,

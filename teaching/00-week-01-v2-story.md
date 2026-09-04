@@ -1,6 +1,6 @@
 # Week 1 — the story deck
 
-`teaching/week-01-slides-v2.html` — **140 slides, four hours**, told as one
+`teaching/week-01-slides-v2.html` — **152 slides, four hours**, told as one
 continuous story. Written for a room that includes people who have never
 opened a terminal.
 
@@ -32,18 +32,18 @@ necessary rather than arbitrary.
 ```
    0:00   12   1  "It works on my laptop"      three questions, laptops closed
    0:12   28   2  "Let me show you the thing"  the agent, then run it live
-   0:40   22   3  "Your turn"                  prerequisites, clone, key, prove
-   1:02   10      break
-   1:12   36   4  "Learning to drive"          terminal + curl, on toys
-   1:48   10      break
-   1:58   52   5  "Giving it a front door"     why, then three endpoints
-   2:50   60   6  "Putting it in a box"        containers, then GIVE IT AWAY
-   3:50   10   7  "Look what you did"          the picture, complete
+   0:40   20   3  "Your turn"                  prerequisites, clone, key, prove
+   1:00   10      break
+   1:10   34   4  "Learning to drive"          terminal + curl, on toys
+   1:44   10      break
+   1:54   56   5  "Giving it a front door"     why, then three endpoints
+   2:50   58   6  "Putting it in a box"        containers, then GIVE IT AWAY
+   3:48   12   7  "Look what you did"          the picture, complete
    ────────────
    4:00        exactly four hours, both breaks included
 ```
 
-About **95 seconds a slide** — one idea, said once, then advance.
+About **87 seconds a slide** — one idea, said once, then advance.
 
 ## How the story is told
 
@@ -110,17 +110,69 @@ a fourth door" feel true — which is exactly what they do in chapter 6.
 Every code slide matches `week-01-solution` exactly, including
 `uuid.uuid4().hex` and the two-branch `except`.
 
-## The extra tasks are real, and they were run
+## Everybody's agent has a different name
 
-- **`/orders`** uses `all_ids()` from `app/orders.py` — a function that exists.
-  Verified against `week-01-solution`: returns
-  `{"order_ids": ["ORD-1001","ORD-1002","ORD-1043","ORD-1077"]}` with a 200.
-- **The three toys** in chapter 6 (`alpine` → your own file → `nginx` with
-  `-p 9000:80`) each build and run on their own, before anything of theirs is
-  at stake.
-- **The swap** at the end: add `/orders`, push to Docker Hub, pull a
-  neighbour's, run it with **your** key. That last part proves the
-  `.dockerignore` lesson — their neighbour's key never left their laptop.
+The sharing activity is **six numbered steps**, and the first four exist so that
+no two containers in the room are the same:
+
+| Step | What they do |
+|---|---|
+| 1 | **Pick a name.** "Desk Detective", "Order Bot 3000" — anything |
+| 2 | **Put it in `.env`** — one line, `AGENT_NAME=...`. No code yet |
+| 3 | **Read it in code** — `os.environ.get("AGENT_NAME", "Support Agent")` and a `/whoami` door |
+| 4 | **Try it** — restart, curl `/whoami`, see your own name come back |
+| 5 | **Push it** to Docker Hub |
+| 6 | **Pull a neighbour's and run it** — and *their* name appears |
+
+**Step 6 is the payoff, and the name is the proof.** The name on screen is not
+the one they chose. It came from somebody else's image, running on their
+machine, with their own key.
+
+> **INSTRUCTOR** · Ask two people to read out the name they got. That is the
+> moment the day lands — and it beats any explanation of why containers matter.
+
+**Why a name and not an extra endpoint:** a name is a *setting*, so it teaches
+the thing that makes the swap work — **code travels in the image, settings are
+handed in at run time.** That is the same idea as the key, proven twice.
+
+**Verified against a real clone** of `week-01-solution`: with no `AGENT_NAME`
+set it returns `{"agent": "Support Agent", "orders": [...]}`; with
+`AGENT_NAME="Nimesha's Order Helper"` it returns that name. `all_ids()` exists
+in `app/orders.py`. `AGENT_NAME` is now in `.env.example` on all sixteen week
+branches.
+
+**The three toys** in chapter six (`alpine` → your own file → `nginx` with
+`-p 9000:80`) each build and run standalone, before anything of theirs is at
+stake.
+
+## The teaching added where rooms get stuck
+
+**Docker** — five slides before any Dockerfile is written, because "write a
+Dockerfile" means nothing until these are true:
+
+| Slide | The one thing it teaches |
+|---|---|
+| So what do you actually write? | it is a text file, one instruction per line — and the naming trap |
+| The six words you will use | `FROM WORKDIR COPY RUN ENV CMD`, and **`RUN` builds, `CMD` starts** |
+| Why images are built in layers | stacked like tracing paper — which explains caching *and* fast pulls |
+| What happens when you run one | `docker run` takes a **copy**; `--rm` throws it away |
+| Inside the box is a different computer | its own folders, its own `localhost` — the single biggest confusion |
+
+That last one is why `COPY` has to exist and why `--host 0.0.0.0` is needed.
+**Teach it before the Dockerfile, not after.**
+
+**Web service** — four slides for the same reason:
+
+| Slide | The one thing it teaches |
+|---|---|
+| What actually travels | a question out, an answer back. **Both are just text** |
+| The question has three parts | method, path, body — GET fetches, POST sends |
+| What "always running" costs you | somebody's computer is on at 3am, and somebody pays |
+| One address, many numbered doors | what a **port** is, drawn on a computer |
+
+The port slide matters most for a non-technical room: **7000 appears in `.env`,
+in the Dockerfile, and in `-p 7000:7000`** — same number, three places, and it
+is meaningless until they have seen this picture.
 
 ## Coverage
 
@@ -156,12 +208,12 @@ Chapter names cannot drift. If you add slides, the callbacks stay true.
 
 ## Verified, not assumed
 
-- **All 140 slides measured** in a headless browser at the deck's own
+- **All 152 slides measured** in a headless browser at the deck's own
   1280×720 stage — **none overflow**.
 - **Max three blocks per slide**, one idea each.
 - **Exactly 220 teaching minutes + two ten-minute breaks = 4:00.** One clock
   label per chapter, checked mechanically.
-- **Every slide has a presenter note** — 140 of 140.
+- **Every slide has a presenter note** — 152 of 152.
 - Code checked against `week-01-solution`; `/orders` executed against a real
   clone.
 
